@@ -307,3 +307,32 @@ peptides/{peptideId}  (global collection)
 - Churn rate by month (target: <8% monthly after month 3)
 - Revenue per user
 - App Store rating (target: 4.7+)
+
+---
+
+## Features Borrowed from Shotsy (Market Leader)
+
+Shotsy is the #1 GLP-1 tracker (~1M downloads, $2.25M raised, $49.99/year). These features are proven:
+
+### Adopted Features
+1. **Estimated Medication Levels Chart** — visualise drug concentration curve based on half-life. Extended to ALL peptides in stack, not just GLP-1.
+2. **Metric Trends Colour-Coded by Dosage** — see which dose changes correlate with outcome changes. Extended to all tracked metrics (pain, energy, sleep, body comp).
+3. **Apple Health Auto-Import** — weight, calories, protein, water pulled automatically. Zero manual entry.
+4. **PDF Export for Healthcare Providers** — shareable protocol history + progress report for doctor visits.
+5. **Single-Tap Dose Logging** — one tap to mark a dose as taken. Zero friction daily action.
+6. **Home Screen Widgets** — next dose countdown, estimated levels, adherence streak.
+7. **Multi-Route Support** — oral, subcutaneous, intramuscular, nasal. Not just injections.
+8. **Maintenance Mode** — explicit support for transitioning to maintenance dose (maps to our taper phase).
+
+### Our Differentiators vs Shotsy
+| Feature | Shotsy | PeptideOS |
+|---------|--------|-----------|
+| Scope | GLP-1 only | All 50+ peptides |
+| Reconstitution | No (pre-filled pens only) | Visual calculator + camera scan |
+| Stacking | No | Multi-peptide protocol builder |
+| AI Insights | Basic charts | Accumulating mentor + weekly reports |
+| Community | No | Shared protocols |
+| Education | No | 50+ profiles with evidence ratings |
+| Vial Inventory | No | Tracking + expiration alerts |
+| Blood Work | No | Upload + biomarker charts |
+| Injection Map | Basic | Interactive body map |
