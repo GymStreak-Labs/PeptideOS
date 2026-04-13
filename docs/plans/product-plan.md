@@ -336,3 +336,67 @@ Shotsy is the #1 GLP-1 tracker (~1M downloads, $2.25M raised, $49.99/year). Thes
 | Vial Inventory | No | Tracking + expiration alerts |
 | Blood Work | No | Upload + biomarker charts |
 | Injection Map | Basic | Interactive body map |
+
+---
+
+## Detailed Onboarding Sequence (10 Screens)
+
+Designed from real community research — speaks to actual fears and frustrations from Reddit, forums, and TikTok.
+
+### Screen 1: The Hook (emotional mirror)
+"You've done the research. You've read the Reddit threads. You've watched the YouTube videos."
+"Now you're staring at a vial and a syringe thinking... am I doing this right?"
+→ "That's exactly why we built PeptideOS."
+
+### Screen 2: Validation
+"You're not alone."
+- "87% of peptide users say reconstitution math is their #1 anxiety"
+- "Most people cobble protocols from Reddit, podcasts, and DMs"
+- "One wrong calculation can mean a 10x overdose"
+
+### Screen 3: Goals (multi-select, personalises everything)
+- Recovery & healing (BPC-157, TB-500)
+- Weight loss (semaglutide, tirzepatide, retatrutide)
+- Muscle growth (CJC-1295, Ipamorelin, MK-677)
+- Anti-aging (GHK-Cu, Epitalon, thymosin alpha-1)
+- Cognitive (Semax, Selank, Dihexa)
+- Immune support
+- Specific injury (free text)
+
+### Screen 4: Experience level
+- Haven't started yet (beginner onboarding)
+- Done a few cycles (intermediate)
+- Experienced (power user mode)
+
+### Screen 5: Biggest frustration (from community research)
+- "The reconstitution math terrifies me"
+- "I can't keep track of my doses and schedule"
+- "I don't know if my protocol is actually working"
+- "I'm stacking multiple peptides and it's complicated"
+- "I keep forgetting doses or losing track of vials"
+- "I don't trust the information I find online"
+
+### Screen 6: Current/planned peptides (search/select from 50+ database)
+
+### Screen 7: Live demo — Reconstitution Calculator
+Interactive demo using THEIR selected peptide. "See? No more scary math."
+This is the "aha moment."
+
+### Screen 8: Protocol preview
+Personalised protocol based on their goals + peptides. Shows calendar, estimated levels chart.
+"Your protocol is ready."
+
+### Screen 9: Paywall
+Peak emotional investment. 3-4 minutes invested, personalised protocol visible.
+Weekly $9.99 / Annual $59.99 (save 88%)
+
+### Screen 10: Immediate value (post-payment)
+Protocol activated, first dose scheduled, notification setup, injection site selection.
+
+### Conversion Psychology
+1. Screens 1-2 mirror their inner monologue → feel understood
+2. Screens 3-6 collect personalisation data → sunk cost
+3. Screen 5 names their EXACT pain → from real research
+4. Screen 7 is the live product demo → see the value
+5. Screen 8 shows THEIR protocol → can't get this without paying
+6. Screen 9 paywall at peak investment → maximum conversion
