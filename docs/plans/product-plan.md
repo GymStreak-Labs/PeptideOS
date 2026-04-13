@@ -341,3 +341,31 @@ Shotsy is the #1 GLP-1 tracker (~1M downloads, $2.25M raised, $49.99/year). Thes
 
 ## Onboarding section moved to docs/plans/onboarding.md for detailed reference.
 
+
+---
+
+## App Store Compliance Checklist (Rejection Prevention)
+
+Based on research of real rejection reasons from Apple Developer Forums and health app guidelines.
+
+### Critical: Guideline 1.4.2 — Drug Dosage Calculators
+Apple requires dose calculators come from pharma/hospital/university/FDA. Our calculator is framed as a "unit conversion tool" that does arithmetic (mg → mcg → syringe units). User inputs ALL values. App never determines or recommends dosages.
+
+### Submission Checklist
+1. Calculator framed as "unit conversion tool" not "dosage calculator"
+2. Calculator disclaimer on-screen: "Verify with healthcare provider"
+3. No medical claims anywhere in app or metadata
+4. Protocol templates labelled "community-reported" not "recommended"
+5. AI insights labelled "AI-generated, not medical advice"
+6. Evidence ratings cite sources factually (e.g., "3 animal studies, 0 human RCTs")
+7. Privacy consent before health data collection
+8. Health data encrypted, never used for ads
+9. HealthKit data stays on-device
+10. App Privacy label 100% accurate
+11. 18+ age gate as first screen
+12. Medical disclaimer in onboarding
+13. "Not medical advice" in App Store description
+14. "Consult healthcare provider" in App Store description
+15. AI features disclosed in app description
+16. Subscription value clearly described on paywall
+17. App Review Notes: "educational tracker, not medical device, unit conversion not dosage calculation"
