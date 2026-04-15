@@ -6,11 +6,11 @@ import 'typography.dart';
 import 'spacing.dart';
 
 /// Builds the unified PeptideOS [ThemeData].
-/// One theme, identical on iOS and Android.
+/// "Clinical Cyberpunk" — one theme, identical on iOS and Android.
 abstract final class AppTheme {
   static ThemeData get dark {
-    // Apply Inter globally via google_fonts.
-    final textTheme = GoogleFonts.interTextTheme(ThemeData.dark().textTheme);
+    // Space Grotesk for body, JetBrains Mono loaded per-widget for data.
+    final textTheme = GoogleFonts.spaceGroteskTextTheme(ThemeData.dark().textTheme);
 
     return ThemeData(
       useMaterial3: true,
@@ -22,12 +22,12 @@ abstract final class AppTheme {
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
         onPrimary: AppColors.textInverse,
-        secondary: AppColors.peptide,
-        onSecondary: AppColors.textInverse,
+        secondary: AppColors.secondary,
+        onSecondary: AppColors.textPrimary,
         surface: AppColors.surface,
         onSurface: AppColors.textPrimary,
         error: AppColors.danger,
-        onError: AppColors.textPrimary,
+        onError: AppColors.textInverse,
       ),
 
       // ── App bar (rarely used — we have custom headers) ─────────

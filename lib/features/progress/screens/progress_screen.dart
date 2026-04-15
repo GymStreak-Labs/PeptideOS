@@ -21,12 +21,9 @@ class ProgressScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text('SYS.PROGRESS // BIOMETRICS', style: AppTypography.systemLabel),
+                const SizedBox(height: AppSpacing.sm),
                 Text('Progress', style: AppTypography.h1),
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  'Track your journey over time',
-                  style: AppTypography.bodyMedium,
-                ),
               ],
             ),
           ),
@@ -39,16 +36,22 @@ class ProgressScreen extends StatelessWidget {
               horizontal: AppSpacing.screenHorizontal,
             ),
             child: AppCard(
+              borderColor: AppColors.borderCyan,
               child: Row(
                 children: [
-                  // Ring placeholder
+                  // Ring with cyan glow
                   SizedBox(
                     width: 80,
                     height: 80,
                     child: CustomPaint(
                       painter: _AdherenceRingPainter(progress: 0.85),
                       child: Center(
-                        child: Text('85%', style: AppTypography.heroSmall),
+                        child: Text(
+                          '85',
+                          style: AppTypography.heroSmall.copyWith(
+                            color: AppColors.primary,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -57,18 +60,37 @@ class ProgressScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Weekly Adherence', style: AppTypography.labelLarge),
+                        Text('ADHERENCE', style: AppTypography.systemLabel),
                         const SizedBox(height: AppSpacing.xs),
                         Text(
-                          '12 of 14 doses taken on time',
+                          '12 of 14 doses on schedule',
                           style: AppTypography.bodySmall,
                         ),
                         const SizedBox(height: AppSpacing.xs),
-                        Text(
-                          '🔥 7 day streak',
-                          style: AppTypography.labelMedium.copyWith(
-                            color: AppColors.warning,
-                          ),
+                        Row(
+                          children: [
+                            Container(
+                              width: 6,
+                              height: 6,
+                              decoration: BoxDecoration(
+                                color: AppColors.secondary,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppColors.secondary.withValues(alpha: 0.5),
+                                    blurRadius: 4,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: AppSpacing.sm),
+                            Text(
+                              '7 DAY STREAK',
+                              style: AppTypography.systemLabel.copyWith(
+                                color: AppColors.secondary,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -88,7 +110,7 @@ class ProgressScreen extends StatelessWidget {
               AppSpacing.screenHorizontal,
               AppSpacing.sm,
             ),
-            child: Text('How are you feeling today?', style: AppTypography.h3),
+            child: Text('BIOMETRICS // LOG', style: AppTypography.systemLabel),
           ),
         ),
 
@@ -102,10 +124,10 @@ class ProgressScreen extends StatelessWidget {
             mainAxisSpacing: AppSpacing.cardGap,
             childAspectRatio: 1.8,
             children: const [
-              _WellnessMetric(label: 'Energy', value: 4, icon: Icons.bolt_rounded),
-              _WellnessMetric(label: 'Sleep', value: 3, icon: Icons.bedtime_rounded),
-              _WellnessMetric(label: 'Pain', value: 2, icon: Icons.healing_rounded),
-              _WellnessMetric(label: 'Mood', value: 4, icon: Icons.emoji_emotions_rounded),
+              _WellnessMetric(label: 'ENERGY', value: 4, icon: Icons.bolt_rounded),
+              _WellnessMetric(label: 'SLEEP', value: 3, icon: Icons.bedtime_rounded),
+              _WellnessMetric(label: 'PAIN', value: 2, icon: Icons.healing_rounded),
+              _WellnessMetric(label: 'MOOD', value: 4, icon: Icons.emoji_emotions_rounded),
             ],
           ),
         ),
@@ -123,24 +145,31 @@ class ProgressScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Pain Trend', style: AppTypography.labelLarge),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    'Last 30 days',
-                    style: AppTypography.bodySmall,
+                  Row(
+                    children: [
+                      Text('PAIN.TREND', style: AppTypography.systemLabel),
+                      const Spacer(),
+                      Text('30D', style: AppTypography.tabular.copyWith(
+                        fontSize: 12,
+                        color: AppColors.textTertiary,
+                      )),
+                    ],
                   ),
                   const SizedBox(height: AppSpacing.base),
-                  // Chart placeholder
+                  // Chart placeholder with scan-line effect
                   Container(
                     height: 160,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(AppSpacing.sm),
                       color: AppColors.inputFill,
+                      border: Border.all(color: AppColors.border),
                     ),
                     child: Center(
                       child: Text(
-                        'Chart coming soon',
-                        style: AppTypography.bodySmall,
+                        '[ AWAITING DATA ]',
+                        style: AppTypography.systemLabel.copyWith(
+                          color: AppColors.textDisabled,
+                        ),
                       ),
                     ),
                   ),
@@ -183,11 +212,24 @@ class _WellnessMetric extends StatelessWidget {
             children: [
               Icon(icon, size: AppSpacing.iconMedium, color: AppColors.primary),
               const Spacer(),
-              Text('$value/5', style: AppTypography.heroSmall),
+              Text(
+                '$value',
+                style: AppTypography.heroSmall.copyWith(
+                  color: AppColors.primary,
+                ),
+              ),
+              Text(
+                '/5',
+                style: AppTypography.unit,
+              ),
             ],
           ),
           const SizedBox(height: AppSpacing.xs),
-          Text(label, style: AppTypography.labelMedium),
+          Text(label, style: AppTypography.systemLabel.copyWith(
+            color: AppColors.textSecondary,
+            letterSpacing: 1.2,
+            fontSize: 10,
+          )),
         ],
       ),
     );
@@ -203,34 +245,39 @@ class _AdherenceRingPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 6;
-    const strokeWidth = 6.0;
+    const strokeWidth = 4.0;
 
     // Background ring
     final bgPaint = Paint()
-      ..color = AppColors.inputFill
+      ..color = const Color(0xFF1E2740)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
 
     canvas.drawCircle(center, radius, bgPaint);
 
-    // Progress ring
+    // Progress ring — cyan with glow
     final progressPaint = Paint()
-      ..color = AppColors.success
+      ..color = const Color(0xFF05D9E8)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
 
+    // Glow ring
+    final glowPaint = Paint()
+      ..color = const Color(0xFF05D9E8).withValues(alpha: 0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth + 4
+      ..strokeCap = StrokeCap.round
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+
     const startAngle = -1.5708; // -π/2 (top)
     final sweepAngle = 2 * 3.14159 * progress;
+    final rect = Rect.fromCircle(center: center, radius: radius);
 
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      startAngle,
-      sweepAngle,
-      false,
-      progressPaint,
-    );
+    // Draw glow first, then solid
+    canvas.drawArc(rect, startAngle, sweepAngle, false, glowPaint);
+    canvas.drawArc(rect, startAngle, sweepAngle, false, progressPaint);
   }
 
   @override

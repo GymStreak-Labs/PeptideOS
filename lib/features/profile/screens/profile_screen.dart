@@ -21,6 +21,8 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text('SYS.USER // PROFILE', style: AppTypography.systemLabel),
+                const SizedBox(height: AppSpacing.sm),
                 Text('You', style: AppTypography.h1),
               ],
             ),
@@ -39,13 +41,11 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text('Vial Inventory', style: AppTypography.labelLarge),
+                      Text('VIAL.INVENTORY', style: AppTypography.systemLabel),
                       const Spacer(),
                       Text(
-                        'Manage',
-                        style: AppTypography.labelMedium.copyWith(
-                          color: AppColors.primary,
-                        ),
+                        'MANAGE',
+                        style: AppTypography.systemLabel,
                       ),
                     ],
                   ),

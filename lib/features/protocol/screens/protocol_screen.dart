@@ -3,6 +3,7 @@ import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 
 /// Protocol tab — today's doses, next up, completion status.
+/// "Clinical Cyberpunk" — HUD-style data readout meets health tracker.
 class ProtocolScreen extends StatelessWidget {
   const ProtocolScreen({super.key});
 
@@ -22,48 +23,65 @@ class ProtocolScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Good morning', style: AppTypography.bodyMedium),
-                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  'SYS.PROTOCOL // ACTIVE',
+                  style: AppTypography.systemLabel,
+                ),
+                const SizedBox(height: AppSpacing.sm),
                 Text('Your Protocol', style: AppTypography.h1),
               ],
             ),
           ),
         ),
 
-        // ── One Big Thing — next dose card ───────────────────────────
+        // ── One Big Thing — next dose card (cyberpunk HUD style) ─────
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.screenHorizontal,
             ),
             child: AppCard(
-              glowColor: AppColors.primary,
+              borderColor: AppColors.borderCyan,
+              glowColor: AppColors.primaryGlow,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
+                      // Pulsing status dot
                       Container(
                         width: 8,
                         height: 8,
-                        decoration: const BoxDecoration(
-                          color: AppColors.success,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
                           shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.6),
+                              blurRadius: 8,
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(width: AppSpacing.sm),
-                      Text('NEXT DOSE', style: AppTypography.labelSmall),
+                      Text('NEXT DOSE', style: AppTypography.systemLabel),
                       const Spacer(),
-                      Text('8:00 AM', style: AppTypography.tabular),
+                      Text('08:00', style: AppTypography.tabular),
                     ],
                   ),
-                  const SizedBox(height: AppSpacing.base),
+                  const SizedBox(height: AppSpacing.lg),
+                  // Hero dose number
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
                     children: [
-                      Text('250', style: AppTypography.heroLarge),
-                      const SizedBox(width: AppSpacing.xs),
+                      Text(
+                        '250',
+                        style: AppTypography.heroLarge.copyWith(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
                       Text('mcg', style: AppTypography.unit),
                     ],
                   ),
@@ -73,11 +91,11 @@ class ProtocolScreen extends StatelessWidget {
                     style: AppTypography.bodySmall,
                   ),
                   const SizedBox(height: AppSpacing.base),
-                  // ── Syringe visual placeholder ─────────────────────
+                  // ── Syringe fill bar (cyan glow) ───────────────────
                   Container(
-                    height: 6,
+                    height: 4,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3),
+                      borderRadius: BorderRadius.circular(2),
                       color: AppColors.inputFill,
                     ),
                     child: FractionallySizedBox(
@@ -85,20 +103,26 @@ class ProtocolScreen extends StatelessWidget {
                       widthFactor: 0.4,
                       child: Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(3),
+                          borderRadius: BorderRadius.circular(2),
                           color: AppColors.primary,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.5),
+                              blurRadius: 8,
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.xs),
+                  const SizedBox(height: AppSpacing.sm),
                   Text(
-                    '10 units on syringe · 0.5ml',
+                    '10 units · 0.5ml',
                     style: AppTypography.disclaimer,
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   PrimaryButton(
-                    label: 'Mark as Taken',
+                    label: 'ADMINISTER',
                     icon: Icons.check_rounded,
                     onPressed: () {
                       // TODO: dose logging with haptic feedback
@@ -119,7 +143,10 @@ class ProtocolScreen extends StatelessWidget {
               AppSpacing.screenHorizontal,
               AppSpacing.sm,
             ),
-            child: Text("Today's Schedule", style: AppTypography.h3),
+            child: Text(
+              'SCHEDULE // TODAY',
+              style: AppTypography.systemLabel,
+            ),
           ),
         ),
 
@@ -133,36 +160,45 @@ class ProtocolScreen extends StatelessWidget {
                 const SizedBox(height: AppSpacing.cardGap),
             itemBuilder: (context, index) {
               final doses = [
-                _DosePreview('BPC-157', '250 mcg', '8:00 AM', true),
-                _DosePreview('TB-500', '750 mcg', '8:00 AM', false),
-                _DosePreview('BPC-157', '250 mcg', '8:00 PM', false),
+                _DosePreview('BPC-157', '250 mcg', '08:00', true),
+                _DosePreview('TB-500', '750 mcg', '08:00', false),
+                _DosePreview('BPC-157', '250 mcg', '20:00', false),
               ];
               final dose = doses[index];
 
               return AppCard(
-                glowColor: dose.taken ? AppColors.successGlow : null,
+                borderColor: dose.taken ? AppColors.borderCyan : null,
                 child: Row(
                   children: [
-                    // Status indicator
+                    // Status indicator — cyberpunk hollow circle / filled
                     Container(
                       width: 32,
                       height: 32,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: dose.taken
-                            ? AppColors.success.withValues(alpha: 0.15)
-                            : AppColors.inputFill,
+                            ? AppColors.primary.withValues(alpha: 0.12)
+                            : Colors.transparent,
                         border: Border.all(
                           color: dose.taken
-                              ? AppColors.success
+                              ? AppColors.primary
                               : AppColors.border,
+                          width: dose.taken ? 1.5 : 1,
                         ),
+                        boxShadow: dose.taken
+                            ? [
+                                BoxShadow(
+                                  color: AppColors.primary.withValues(alpha: 0.3),
+                                  blurRadius: 8,
+                                ),
+                              ]
+                            : null,
                       ),
                       child: dose.taken
                           ? const Icon(
                               Icons.check_rounded,
                               size: 16,
-                              color: AppColors.success,
+                              color: AppColors.primary,
                             )
                           : null,
                     ),
@@ -173,7 +209,12 @@ class ProtocolScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(dose.name, style: AppTypography.labelLarge),
-                          Text(dose.amount, style: AppTypography.bodySmall),
+                          Text(
+                            dose.amount,
+                            style: AppTypography.bodySmall.copyWith(
+                              fontFamily: 'JetBrainsMono',
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -185,7 +226,7 @@ class ProtocolScreen extends StatelessWidget {
           ),
         ),
 
-        // ── AI Insight ───────────────────────────────────────────────
+        // ── AI Insight (purple glow) ─────────────────────────────────
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(
@@ -195,7 +236,7 @@ class ProtocolScreen extends StatelessWidget {
               AppSpacing.sm,
             ),
             child: AppCard(
-              borderColor: AppColors.aiInsight.withValues(alpha: 0.3),
+              borderColor: AppColors.aiInsightBright.withValues(alpha: 0.3),
               glowColor: AppColors.aiInsightGlow,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,13 +249,16 @@ class ProtocolScreen extends StatelessWidget {
                           vertical: AppSpacing.xs,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.aiInsight.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(6),
+                          color: AppColors.aiInsightBright.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(
+                            color: AppColors.aiInsightBright.withValues(alpha: 0.3),
+                          ),
                         ),
                         child: Text(
-                          'AI INSIGHT',
-                          style: AppTypography.labelSmall.copyWith(
-                            color: AppColors.aiInsight,
+                          'AI.INSIGHT',
+                          style: AppTypography.systemLabel.copyWith(
+                            color: AppColors.aiInsightBright,
                           ),
                         ),
                       ),
@@ -222,7 +266,7 @@ class ProtocolScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpacing.md),
                   Text(
-                    'Your joint pain scores have dropped 40% in the 2 weeks since starting BPC-157. Keep going — most users see peak results around week 4.',
+                    'Your joint pain scores have dropped 40% in the 2 weeks since starting BPC-157. Peak results typically occur around week 4.',
                     style: AppTypography.bodyMedium,
                   ),
                   const SizedBox(height: AppSpacing.sm),

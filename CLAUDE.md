@@ -66,14 +66,21 @@ docs/
 └── reference/
 ```
 
-## Design System
-- **Dark-mode-first** — `#121212` background, never pure black
+## Design System — "Clinical Cyberpunk"
+- **Aesthetic**: Refined cyberpunk — sophistication over spectacle. Deus Ex, not Saints Row
+- **Deep navy-black base** — `#0B0C10` background (not pure black, not neutral gray)
+- **Electric cyan primary** — `#05D9E8` with glow effects for active/on-track states
+- **Hot pink warning** — `#FF2A6D` for attention signals
+- **Acid yellow danger** — `#FCEE0A` for expired/missed states
+- **Deep purple AI** — `#7700A6` / `#BB44FF` for AI insight cards
+- **Dual font strategy**: Space Grotesk (body) + JetBrains Mono (data numbers, system labels)
+- **HUD-style system labels**: `SYS.PROTOCOL // ACTIVE` — monospace, tracked-out, cyan
+- **Glowing borders** — buttons and active cards have neon glow halos
 - **Unified design language** — identical on iOS and Android, no platform splits
 - **Custom components** — no Material/Cupertino defaults for UI
-- **Accent colours**: Primary `#64B5F6`, Success `#81C784`, Warning `#FFB74D`, Danger `#E57373`, AI `#CE93D8`, Peptide `#4DD0E1`
-- **Glassmorphism** — `BackdropFilter` + blur for floating surfaces
+- **Glassmorphism** — `BackdropFilter` + blur with cyan tinting
 - **Haptic feedback** on all primary interactions
-- **Animation tokens** defined in `durations.dart` — purposeful, not decorative
+- **Sharper corners** — 12px card radius, 8px button radius (more technical feel)
 
 ## Commands
 ```bash
@@ -86,12 +93,14 @@ flutter analyze                  # Lint & analyze
 ```
 
 ## Key Design Decisions
-1. One design language everywhere — brand IS the design system
-2. Inter font (google_fonts) — not SF Pro (Apple-only)
-3. Custom icons — not SF Symbols or Material Icons
-4. No ripple/splash effects — custom press animations instead
-5. Floating glass tab bar — signature navigation element
-6. Portrait-locked — peptide tracking is a focused one-hand experience
+1. "Clinical Cyberpunk" aesthetic — biohacking IS cyberpunk, own it
+2. One design language everywhere — brand IS the design system
+3. Dual fonts: Space Grotesk (body) + JetBrains Mono (data) via google_fonts
+4. Custom icons — not SF Symbols or Material Icons
+5. No ripple/splash effects — custom scale animations + glow borders instead
+6. Floating dark glass tab bar with cyan active indicator — signature navigation element
+7. Portrait-locked — peptide tracking is a focused one-hand experience
+8. Neon accents used surgically — only on actionable/status elements, never decorative
 
 ## Environment Variables
 (To be filled during development)

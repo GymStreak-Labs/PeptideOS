@@ -21,6 +21,8 @@ class LibraryScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text('SYS.DATABASE // COMPOUNDS', style: AppTypography.systemLabel),
+                const SizedBox(height: AppSpacing.sm),
                 Text('Library', style: AppTypography.h1),
                 const SizedBox(height: AppSpacing.md),
                 // Search bar
@@ -98,11 +100,11 @@ class LibraryScreen extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Text('Peptide Database', style: AppTypography.h3),
+                Text('COMPOUND.DB', style: AppTypography.systemLabel),
                 const Spacer(),
                 Text(
-                  'See all',
-                  style: AppTypography.labelMedium.copyWith(
+                  'VIEW ALL',
+                  style: AppTypography.systemLabel.copyWith(
                     color: AppColors.primary,
                   ),
                 ),
@@ -164,13 +166,17 @@ class LibraryScreen extends StatelessWidget {
                         vertical: AppSpacing.xs,
                       ),
                       decoration: BoxDecoration(
-                        color: peptide.evidenceColor.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(6),
+                        color: peptide.evidenceColor.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
+                          color: peptide.evidenceColor.withValues(alpha: 0.3),
+                        ),
                       ),
                       child: Text(
-                        peptide.evidence,
-                        style: AppTypography.labelSmall.copyWith(
+                        peptide.evidence.toUpperCase(),
+                        style: AppTypography.systemLabel.copyWith(
                           color: peptide.evidenceColor,
+                          fontSize: 9,
                         ),
                       ),
                     ),

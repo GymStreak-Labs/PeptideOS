@@ -79,8 +79,23 @@ class _PrimaryButtonState extends State<PrimaryButton>
             horizontal: AppSpacing.buttonHorizontalPadding,
           ),
           decoration: BoxDecoration(
-            color: enabled ? bgColor : bgColor.withValues(alpha: 0.4),
+            color: enabled
+                ? bgColor.withValues(alpha: 0.15)
+                : bgColor.withValues(alpha: 0.06),
             borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
+            border: Border.all(
+              color: enabled ? bgColor : bgColor.withValues(alpha: 0.3),
+              width: 1.5,
+            ),
+            boxShadow: enabled
+                ? [
+                    BoxShadow(
+                      color: bgColor.withValues(alpha: 0.25),
+                      blurRadius: 12,
+                      spreadRadius: 0,
+                    ),
+                  ]
+                : null,
           ),
           child: Center(
             child: widget.isLoading
@@ -89,7 +104,7 @@ class _PrimaryButtonState extends State<PrimaryButton>
                     height: 20,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      color: AppColors.textInverse,
+                      color: AppColors.textPrimary,
                     ),
                   )
                 : Row(
@@ -101,14 +116,14 @@ class _PrimaryButtonState extends State<PrimaryButton>
                         Icon(
                           widget.icon,
                           size: AppSpacing.iconMedium,
-                          color: AppColors.textInverse,
+                          color: AppColors.textPrimary,
                         ),
                         const SizedBox(width: AppSpacing.sm),
                       ],
                       Text(
                         widget.label,
                         style: AppTypography.button.copyWith(
-                          color: AppColors.textInverse,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                     ],

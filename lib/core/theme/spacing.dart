@@ -18,15 +18,15 @@ abstract final class AppSpacing {
   static const double screenTop = 16;
   static const double screenBottom = 100; // room for floating tab bar
 
-  // ── Card ──────────────────────────────────────────────────────────────
+  // ── Card (slightly sharper corners = more technical/cyberpunk feel) ───
   static const double cardPadding = 16;
   static const double cardGap = 12; // gap between cards in a list
-  static const double cardRadius = 16;
+  static const double cardRadius = 12; // sharper than the clinical 16
 
   // ── Button ────────────────────────────────────────────────────────────
   static const double buttonHeight = 52;
   static const double buttonSmallHeight = 40;
-  static const double buttonRadius = 14;
+  static const double buttonRadius = 8; // sharp, technical buttons
   static const double buttonHorizontalPadding = 24;
 
   // ── Input ─────────────────────────────────────────────────────────────

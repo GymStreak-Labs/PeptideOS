@@ -16,8 +16,8 @@ class GlassTabItem {
   final String label;
 }
 
-/// Custom floating frosted-glass tab bar.
-/// Identical appearance on iOS and Android.
+/// Custom floating cyberpunk glass tab bar.
+/// Deep navy base with cyan border glow on active state.
 class GlassTabBar extends StatelessWidget {
   const GlassTabBar({
     super.key,
@@ -39,7 +39,7 @@ class GlassTabBar extends StatelessWidget {
       right: AppSpacing.screenHorizontal,
       bottom: bottomPadding + AppSpacing.sm,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppSpacing.xl),
+        borderRadius: BorderRadius.circular(AppSpacing.base),
         child: BackdropFilter(
           filter: ImageFilter.blur(
             sigmaX: AppSpacing.tabBarBlur,
@@ -48,9 +48,18 @@ class GlassTabBar extends StatelessWidget {
           child: Container(
             height: AppSpacing.tabBarHeight,
             decoration: BoxDecoration(
-              color: AppColors.surface.withValues(alpha: 0.85),
-              borderRadius: BorderRadius.circular(AppSpacing.xl),
-              border: Border.all(color: AppColors.glassBorder, width: 1),
+              color: AppColors.glassNavBar,
+              borderRadius: BorderRadius.circular(AppSpacing.base),
+              border: Border.all(color: AppColors.border, width: 1),
+              // Subtle cyan glow underneath
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.08),
+                  blurRadius: 20,
+                  spreadRadius: 0,
+                  offset: const Offset(0, -2),
+                ),
+              ],
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -99,6 +108,25 @@ class _TabItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // Active indicator line above icon
+          AnimatedContainer(
+            duration: AppDurations.fast,
+            width: isActive ? 20 : 0,
+            height: 2,
+            margin: const EdgeInsets.only(bottom: AppSpacing.xs),
+            decoration: BoxDecoration(
+              color: isActive ? AppColors.primary : Colors.transparent,
+              borderRadius: BorderRadius.circular(1),
+              boxShadow: isActive
+                  ? [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.6),
+                        blurRadius: 6,
+                      ),
+                    ]
+                  : null,
+            ),
+          ),
           AnimatedSwitcher(
             duration: AppDurations.fast,
             child: Icon(
@@ -110,10 +138,9 @@ class _TabItem extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            item.label,
+            item.label.toUpperCase(),
             style: AppTypography.tabLabel.copyWith(
               color: isActive ? AppColors.primary : AppColors.textTertiary,
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
             ),
           ),
         ],
