@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import 'reconstitution_screen.dart';
 
 /// Library tab — peptide database, community protocols, reconstitution calculator.
 class LibraryScreen extends StatelessWidget {
@@ -72,7 +73,13 @@ class LibraryScreen extends StatelessWidget {
                     icon: Icons.science_rounded,
                     label: 'Reconstitution\nCalculator',
                     color: AppColors.peptide,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const ReconstitutionScreen(),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(width: AppSpacing.cardGap),
