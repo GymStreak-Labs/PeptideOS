@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'core/theme/theme.dart';
-import 'app_shell.dart';
+import 'features/onboarding/screens/onboarding_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +33,8 @@ class PeptideOSApp extends StatelessWidget {
       title: 'PeptideOS',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
-      home: const AppShell(),
+      // TODO: check if user has completed onboarding + has subscription
+      home: const OnboardingScreen(),
     );
   }
 }
