@@ -3,24 +3,27 @@ import '../../../core/theme/theme.dart';
 import '../widgets/age_gate_page.dart';
 import '../widgets/hook_page.dart';
 import '../widgets/onboarding_page.dart';
+import '../widgets/social_proof_page.dart';
 import '../widgets/goals_page.dart';
 import '../widgets/experience_page.dart';
 import '../widgets/frustration_page.dart';
 import '../widgets/peptide_select_page.dart';
 import '../widgets/calculator_demo_page.dart';
+import '../widgets/review_gate_page.dart';
+import '../widgets/processing_page.dart';
 import '../widgets/protocol_preview_page.dart';
+import '../widgets/results_summary_page.dart';
 import '../widgets/feature_showcase_page.dart';
-import '../widgets/notification_page.dart';
 import '../widgets/paywall_page.dart';
 import '../../../app_shell.dart';
 
-/// Full 12-screen onboarding flow — rejection-proofed.
+/// Full 15-screen onboarding flow — conversion-optimised v2.
 ///
-/// Phase 1 — Emotional Mirror:   Age Gate → Hook → Disclaimer
+/// Phase 1 — Emotional Mirror:   Age Gate → Hook → Social Proof → Disclaimer
 /// Phase 2 — Personalisation:    Goals → Experience → Frustration → Peptides
-/// Phase 3 — Product Demo:       Calculator Demo → Protocol Preview → Features
-/// Phase 4 — Permissions:        Notifications
-/// Phase 5 — Convert:            Paywall
+/// Phase 3 — Aha Moment:         Calculator Demo → Review Gate
+/// Phase 4 — Reveal:             Processing → Protocol Preview → Results Summary
+/// Phase 5 — Features & Convert: Feature Showcase → Paywall
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -31,7 +34,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
   int _currentPage = 0;
-  static const _totalPages = 12;
+  static const _totalPages = 15;
 
   // Collected data
   final Set<String> _selectedGoals = {};
@@ -89,7 +92,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               // 1: The Hook
               HookPage(onNext: _nextPage),
 
-              // 2: Medical Disclaimer (early — before personalisation)
+              // 2: Social Proof
+              SocialProofPage(onNext: _nextPage),
+
+              // 3: Medical Disclaimer (early — before personalisation)
               OnboardingPage(
                 systemLabel: 'SYS.LEGAL // DISCLAIMER',
                 title: 'Important\nDisclaimer',
@@ -103,7 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // ── Phase 2: Personalisation (sunk cost) ──────────────
 
-              // 3: Goals
+              // 4: Goals
               GoalsPage(
                 selectedGoals: _selectedGoals,
                 onToggle: (goal) {
@@ -118,7 +124,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 4: Experience Level
+              // 5: Experience Level
               ExperiencePage(
                 selected: _experienceLevel,
                 onSelect: (level) {
@@ -127,14 +133,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 5: Biggest Frustration
+              // 6: Biggest Frustration
               FrustrationPage(
                 selected: _frustration,
                 onSelect: (f) => setState(() => _frustration = f),
                 onNext: _nextPage,
               ),
 
-              // 6: Current/Planned Peptides
+              // 7: Current/Planned Peptides
               PeptideSelectPage(
                 selectedPeptides: _selectedPeptides,
                 onToggle: (p) {
@@ -149,31 +155,47 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // ── Phase 3: Product Demo (see the value) ─────────────
+              // ── Phase 3: Aha Moment ───────────────────────────────
 
-              // 7: Unit Converter Demo
+              // 8: Unit Converter Demo
               CalculatorDemoPage(
                 peptideName: _firstPeptide,
                 onNext: _nextPage,
               ),
 
-              // 8: Protocol Preview
+              // 9: Review Request Gate
+              ReviewGatePage(onNext: _nextPage),
+
+              // ── Phase 4: Reveal ───────────────────────────────────
+
+              // 10: Building Your Protocol (processing)
+              ProcessingPage(
+                onNext: _nextPage,
+                selectedPeptides: _selectedPeptides,
+                selectedGoals: _selectedGoals,
+              ),
+
+              // 11: Protocol Preview
               ProtocolPreviewPage(
                 peptides: _selectedPeptides,
                 onNext: _nextPage,
               ),
 
-              // 9: Feature Showcase
+              // 12: Personalised Results Summary
+              ResultsSummaryPage(
+                selectedGoals: _selectedGoals,
+                experienceLevel: _experienceLevel,
+                frustration: _frustration,
+                selectedPeptides: _selectedPeptides,
+                onNext: _nextPage,
+              ),
+
+              // ── Phase 5: Features & Convert ───────────────────────
+
+              // 13: Feature Showcase
               FeatureShowcasePage(onNext: _nextPage),
 
-              // ── Phase 4: Permissions ───────────────────────────────
-
-              // 10: Notification Permission
-              NotificationPage(onNext: _nextPage),
-
-              // ── Phase 5: Convert ──────────────────────────────────
-
-              // 11: Paywall
+              // 14: Paywall
               PaywallPage(
                 onSubscribe: _completeOnboarding,
                 onRestore: _completeOnboarding,
@@ -181,7 +203,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ],
           ),
 
-          // ── Progress bar (screens 1-10, hidden on age gate & paywall)
+          // ── Progress bar (hidden on age gate & paywall)
           if (_currentPage > 0 && _currentPage < _totalPages - 1)
             Positioned(
               top: MediaQuery.of(context).padding.top + AppSpacing.sm,

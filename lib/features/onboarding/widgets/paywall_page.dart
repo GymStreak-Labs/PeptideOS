@@ -196,10 +196,10 @@ class _PaywallPageState extends State<PaywallPage>
                 }
               },
               child: Text(
-                'Unlock\nPeptideOS',
+                'Start your optimised\nprotocol today',
                 style: AppTypography.h1.copyWith(
-                  fontSize: 36,
-                  height: 1.05,
+                  fontSize: 32,
+                  height: 1.1,
                   shadows: [
                     Shadow(
                       color: AppColors.primary.withValues(alpha: 0.4),
@@ -379,6 +379,62 @@ class _PaywallPageState extends State<PaywallPage>
                 );
               },
             ),
+            // Reservation narrative tie-in
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 10, 14, 0),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.lock_clock_rounded,
+                    size: 11,
+                    color: AppColors.primary.withValues(alpha: 0.7),
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      'YOUR PERSONALISED PROTOCOL IS RESERVED FOR',
+                      style: AppTypography.systemLabel.copyWith(
+                        fontSize: 9,
+                        letterSpacing: 1.4,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ),
+                  // Countdown timer
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 3,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.background,
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.timer_outlined,
+                          size: 10,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: 3),
+                        Text(
+                          _countdownFormatted,
+                          style: AppTypography.tabular.copyWith(
+                            fontSize: 10,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
             // Content
             Padding(
               padding: const EdgeInsets.all(14),
@@ -390,49 +446,12 @@ class _PaywallPageState extends State<PaywallPage>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Best Value',
-                              style: AppTypography.labelLarge.copyWith(
-                                color: AppColors.primary,
-                                letterSpacing: 1,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            // Countdown timer
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 3,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.background,
-                                borderRadius: BorderRadius.circular(4),
-                                border: Border.all(
-                                  color: AppColors.primary.withValues(alpha: 0.3),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.timer_outlined,
-                                    size: 10,
-                                    color: AppColors.primary,
-                                  ),
-                                  const SizedBox(width: 3),
-                                  Text(
-                                    _countdownFormatted,
-                                    style: AppTypography.tabular.copyWith(
-                                      fontSize: 10,
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                        Text(
+                          'Best Value',
+                          style: AppTypography.labelLarge.copyWith(
+                            color: AppColors.primary,
+                            letterSpacing: 1,
+                          ),
                         ),
                         const SizedBox(height: 2),
                         Text(

@@ -45,7 +45,26 @@ lib/
 │   ├── progress/       # 📊 Progress tab
 │   ├── library/        # 🧪 Library tab
 │   ├── profile/        # ⚙️ You tab
-│   ├── onboarding/     # Onboarding flow (not yet built)
+│   ├── onboarding/     # 15-screen onboarding + hard paywall
+│   │   ├── screens/
+│   │   │   └── onboarding_screen.dart   # PageView shell, 15 pages
+│   │   └── widgets/
+│   │       ├── age_gate_page.dart       # 1. 18+ age gate
+│   │       ├── hook_page.dart           # 2. Emotional hook
+│   │       ├── social_proof_page.dart   # 3. Testimonials + stats (NEW)
+│   │       ├── onboarding_page.dart     # 4. Generic page (disclaimer uses this)
+│   │       ├── goals_page.dart          # 5. Goal multi-select
+│   │       ├── experience_page.dart     # 6. Experience level
+│   │       ├── frustration_page.dart    # 7. Biggest frustration
+│   │       ├── peptide_select_page.dart # 8. Peptide multi-select
+│   │       ├── calculator_demo_page.dart # 9. Unit converter demo (aha moment)
+│   │       ├── review_gate_page.dart    # 10. in_app_review prompt (NEW)
+│   │       ├── processing_page.dart     # 11. HUD radar processing (NEW)
+│   │       ├── protocol_preview_page.dart # 12. Personalised protocol card
+│   │       ├── results_summary_page.dart # 13. Inputs summary + data tiles (NEW)
+│   │       ├── feature_showcase_page.dart # 14. Swipeable feature cards
+│   │       ├── paywall_page.dart        # 15. Hard paywall (3 plans, countdown)
+│   │       └── notification_page.dart   # (retained — not in current flow)
 │   └── auth/           # Authentication (not yet built)
 ├── routing/
 ├── services/
@@ -101,6 +120,21 @@ flutter analyze                  # Lint & analyze
 6. Floating dark glass tab bar with cyan active indicator — signature navigation element
 7. Portrait-locked — peptide tracking is a focused one-hand experience
 8. Neon accents used surgically — only on actionable/status elements, never decorative
+
+## Onboarding Flow (15 screens — conversion-optimised v2)
+1. Age Gate → 2. Hook → 3. Social Proof → 4. Disclaimer →
+5. Goals → 6. Experience → 7. Frustration → 8. Peptides →
+9. Calculator Demo (aha moment) → 10. Review Gate (`in_app_review`) →
+11. Processing (HUD radar, auto-advances at 100%) → 12. Protocol Preview →
+13. Results Summary → 14. Feature Showcase → 15. Paywall
+
+Notification permission is no longer requested inline — ask for it elsewhere.
+
+Paywall narrative: the processing screen sets up "we reserved a protocol for you", then the paywall countdown ties back with `YOUR PERSONALISED PROTOCOL IS RESERVED FOR [15:00]` above the Best Value card. Hero headline: "Start your optimised protocol today".
+
+## Key Dependencies
+- `google_fonts: ^6.2.1` — Space Grotesk + JetBrains Mono
+- `in_app_review: ^2.0.10` — native review prompt on the Review Gate screen
 
 ## Environment Variables
 (To be filled during development)
