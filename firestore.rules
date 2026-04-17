@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Per-user data — everything under users/{uid} is locked to the owner.
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+      match /{path=**} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+
+    // Global peptide library — readable by any authed user, unwritable from
+    // the client. Seeding runs from an admin-privileged console or a Cloud
+    // Function; the Flutter client's seedIfEmpty() is a local-dev convenience
+    // and will no-op once prod rules are deployed.
+    match /peptideLibrary/{slug} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+  }
+}

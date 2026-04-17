@@ -1,72 +1,139 @@
-import 'package:isar/isar.dart';
-
-part 'protocol.g.dart';
-
 /// Lifecycle status of a protocol.
 enum ProtocolStatus { active, paused, ended }
 
-/// A named multi-peptide regimen tracked by the user.
-@collection
+/// A named multi-peptide regimen tracked by the user. Stored in Firestore at
+/// `users/{uid}/protocols/{uuid}`.
 class Protocol {
-  Id id = Isar.autoIncrement;
+  Protocol({
+    required this.uuid,
+    required this.name,
+    required this.startDate,
+    required this.status,
+    required this.peptides,
+    required this.createdAt,
+    this.endDate,
+  });
 
-  /// Stable UUID string — used to reference from DoseLog without depending on
-  /// autoIncrement Isar ids.
-  @Index(unique: true, replace: true)
-  late String uuid;
-
-  late String name;
-
-  late DateTime startDate;
-
+  /// Stable UUID string — used as the Firestore doc ID and referenced from
+  /// dose logs. Keeps IDs opaque so they survive any future migrations.
+  String uuid;
+  String name;
+  DateTime startDate;
   DateTime? endDate;
+  ProtocolStatus status;
 
-  @Enumerated(EnumType.name)
-  late ProtocolStatus status;
+  /// Embedded peptide entries (one per peptide in this protocol). Stored as a
+  /// nested array on the protocol document — matches the UI usage and keeps
+  /// a single document read per protocol.
+  List<ProtocolPeptide> peptides;
+  DateTime createdAt;
 
-  /// Embedded peptide entries (one per peptide in this protocol).
-  List<ProtocolPeptide> peptides = <ProtocolPeptide>[];
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'uuid': uuid,
+        'name': name,
+        'startDate': startDate.toIso8601String(),
+        'endDate': endDate?.toIso8601String(),
+        'status': status.name,
+        'peptides': peptides.map((p) => p.toMap()).toList(),
+        'createdAt': createdAt.toIso8601String(),
+      };
 
-  late DateTime createdAt;
+  factory Protocol.fromMap(String id, Map<String, dynamic> data) {
+    return Protocol(
+      uuid: (data['uuid'] as String?) ?? id,
+      name: (data['name'] as String?) ?? 'My Protocol',
+      startDate: _parseDate(data['startDate']) ?? DateTime.now(),
+      endDate: _parseDate(data['endDate']),
+      status: _parseStatus(data['status'] as String?),
+      peptides: (data['peptides'] as List<dynamic>? ?? const [])
+          .map((e) => ProtocolPeptide.fromMap(
+              Map<String, dynamic>.from(e as Map<dynamic, dynamic>)))
+          .toList(),
+      createdAt: _parseDate(data['createdAt']) ?? DateTime.now(),
+    );
+  }
 
-  Protocol();
+  static ProtocolStatus _parseStatus(String? raw) {
+    for (final s in ProtocolStatus.values) {
+      if (s.name == raw) return s;
+    }
+    return ProtocolStatus.active;
+  }
+}
+
+DateTime? _parseDate(Object? raw) {
+  if (raw == null) return null;
+  if (raw is DateTime) return raw;
+  if (raw is String) return DateTime.tryParse(raw);
+  // Firestore Timestamp arrives as a dynamic object with toDate() — handle via
+  // dynamic dispatch without importing cloud_firestore in the model layer.
+  try {
+    final dynamic d = raw;
+    final result = d.toDate();
+    if (result is DateTime) return result;
+  } catch (_) {}
+  return null;
 }
 
 /// A single peptide within a protocol — dose, frequency, cycle info.
-@embedded
 class ProtocolPeptide {
-  /// UUID — used to correlate dose logs back to the specific protocol entry.
-  String uuid = '';
+  ProtocolPeptide({
+    this.uuid = '',
+    this.peptideSlug = '',
+    this.peptideName = '',
+    this.dosePerInjection = 0,
+    this.doseUnit = 'mcg',
+    this.frequency = 'daily',
+    this.route = 'subcutaneous',
+    this.cycleWeeks = 0,
+    List<String>? injectionSites,
+    List<String>? scheduledTimes,
+  })  : injectionSites = injectionSites ?? <String>[],
+        scheduledTimes = scheduledTimes ?? <String>['08:00'];
 
-  /// Reference to the library Peptide (slug).
-  String peptideSlug = '';
+  String uuid;
+  String peptideSlug;
+  String peptideName;
+  double dosePerInjection;
+  String doseUnit;
+  String frequency;
+  String route;
+  int cycleWeeks;
+  List<String> injectionSites;
+  List<String> scheduledTimes;
 
-  /// Cached display name so the UI doesn't need to hit the library each render.
-  String peptideName = '';
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'uuid': uuid,
+        'peptideSlug': peptideSlug,
+        'peptideName': peptideName,
+        'dosePerInjection': dosePerInjection,
+        'doseUnit': doseUnit,
+        'frequency': frequency,
+        'route': route,
+        'cycleWeeks': cycleWeeks,
+        'injectionSites': injectionSites,
+        'scheduledTimes': scheduledTimes,
+      };
 
-  /// Dose amount per injection.
-  double dosePerInjection = 0;
-
-  /// Dose unit: `mcg` or `mg`.
-  String doseUnit = 'mcg';
-
-  /// Frequency key: `daily`, `eod`, `twice_weekly`, `weekly`, `as_needed`.
-  String frequency = 'daily';
-
-  /// Administration route: `subcutaneous`, `intramuscular`, `oral`, `nasal`.
-  String route = 'subcutaneous';
-
-  /// Cycle length in weeks (0 = continuous).
-  int cycleWeeks = 0;
-
-  /// Injection site rotation list (`left-abdomen`, `right-abdomen`, `left-thigh`,
-  /// `right-thigh`, `left-delt`, `right-delt`). Empty = no rotation.
-  List<String> injectionSites = <String>[];
-
-  /// Preferred times for this peptide on its dosing days, as "HH:mm" strings.
-  List<String> scheduledTimes = <String>['08:00'];
-
-  ProtocolPeptide();
+  factory ProtocolPeptide.fromMap(Map<String, dynamic> data) {
+    return ProtocolPeptide(
+      uuid: (data['uuid'] as String?) ?? '',
+      peptideSlug: (data['peptideSlug'] as String?) ?? '',
+      peptideName: (data['peptideName'] as String?) ?? '',
+      dosePerInjection: (data['dosePerInjection'] as num?)?.toDouble() ?? 0,
+      doseUnit: (data['doseUnit'] as String?) ?? 'mcg',
+      frequency: (data['frequency'] as String?) ?? 'daily',
+      route: (data['route'] as String?) ?? 'subcutaneous',
+      cycleWeeks: (data['cycleWeeks'] as num?)?.toInt() ?? 0,
+      injectionSites: (data['injectionSites'] as List<dynamic>? ?? const [])
+          .map((e) => e.toString())
+          .toList(),
+      scheduledTimes: (data['scheduledTimes'] as List<dynamic>? ??
+              const ['08:00'])
+          .map((e) => e.toString())
+          .toList(),
+    );
+  }
 }
 
 extension ProtocolStatusLabel on ProtocolStatus {

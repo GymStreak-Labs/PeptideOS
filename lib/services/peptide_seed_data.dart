@@ -8,23 +8,23 @@ class PeptideSeedData {
       'For educational reference only. Not medical advice. Research peptides are not approved for human use in most jurisdictions — always consult a qualified healthcare provider.';
 
   static List<Peptide> build() {
-    return _entries.map((e) {
-      final p = Peptide()
-        ..slug = e.slug
-        ..name = e.name
-        ..category = e.category
-        ..description = e.description
-        ..typicalDose = e.typicalDose
-        ..defaultDoseMcg = e.defaultDoseMcg
-        ..defaultFrequency = e.defaultFrequency
-        ..halfLife = e.halfLife
-        ..typicalCycleWeeks = e.cycleWeeks
-        ..defaultRoute = e.route
-        ..commonStack = List<String>.from(e.stack)
-        ..notes = e.notes
-        ..disclaimer = _stdDisclaimer;
-      return p;
-    }).toList();
+    return _entries
+        .map((e) => Peptide(
+              slug: e.slug,
+              name: e.name,
+              category: e.category,
+              description: e.description,
+              typicalDose: e.typicalDose,
+              defaultDoseMcg: e.defaultDoseMcg,
+              defaultFrequency: e.defaultFrequency,
+              halfLife: e.halfLife,
+              typicalCycleWeeks: e.cycleWeeks,
+              defaultRoute: e.route,
+              commonStack: List<String>.from(e.stack),
+              notes: e.notes,
+              disclaimer: _stdDisclaimer,
+            ))
+        .toList();
   }
 
   static const _entries = <_Seed>[
