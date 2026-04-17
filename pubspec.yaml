@@ -1,7 +1,7 @@
 name: peptide_os
 description: "Intelligent peptide protocol manager — track doses, calculate reconstitution, manage protocols."
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.11.1
@@ -12,10 +12,27 @@ dependencies:
   google_fonts: ^6.2.1
   in_app_review: ^2.0.10
 
+  # ── Data layer ───────────────────────────────────────────────────────
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
+  path_provider: ^2.1.5
+  uuid: ^4.5.1
+
+  # ── State management ─────────────────────────────────────────────────
+  provider: ^6.1.2
+
+  # ── Charts ───────────────────────────────────────────────────────────
+  fl_chart: ^0.69.0
+
+  # ── Notifications (scaffolding — wired in Phase 2) ───────────────────
+  flutter_local_notifications: ^17.2.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  build_runner: ^2.4.13
+  isar_generator: ^3.1.0+1
 
 flutter:
   uses-material-design: true
