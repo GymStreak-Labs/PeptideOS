@@ -1,56 +1,85 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
-import 'package:isar/isar.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../data/repositories/dose_log_repository.dart';
 import '../../../models/dose_log.dart';
-import '../../../services/database_service.dart';
 
-/// Reads + mutates DoseLog entries. The schedule generator lives in
-/// ProtocolProvider — this class is purely about "what's on the board
-/// right now, and how the user interacts with individual doses".
+/// Reactive view over today + last-30-day dose logs. Reads from Firestore via
+/// the repo; writes mutate the document and rely on the stream to notify.
 class DoseLogProvider extends ChangeNotifier {
-  DoseLogProvider(this._db) {
-    _load();
+  DoseLogProvider(this._repo, {required String uid}) : _uid = uid {
+    _subscribe();
   }
 
-  final DatabaseService _db;
+  final DoseLogRepository _repo;
   final _uuid = const Uuid();
+  String _uid;
+
+  StreamSubscription<List<DoseLog>>? _todaySub;
+  StreamSubscription<List<DoseLog>>? _rangeSub;
 
   List<DoseLog> _today = <DoseLog>[];
-  List<DoseLog> _recent30 = <DoseLog>[]; // last 30 days, for charts
+  List<DoseLog> _recent30 = <DoseLog>[];
   bool _loading = true;
 
   List<DoseLog> get today => _today;
   List<DoseLog> get recent30 => _recent30;
   bool get isLoading => _loading;
 
-  Future<void> _load() async {
+  void setUid(String uid) {
+    if (_uid == uid) return;
+    _uid = uid;
+    _loading = true;
+    _today = <DoseLog>[];
+    _recent30 = <DoseLog>[];
+    _subscribe();
+  }
+
+  void _subscribe() {
+    _todaySub?.cancel();
+    _rangeSub?.cancel();
+    if (_uid.isEmpty) {
+      _loading = false;
+      notifyListeners();
+      return;
+    }
     final now = DateTime.now();
     final startToday = DateTime(now.year, now.month, now.day);
     final endToday = startToday.add(const Duration(days: 1));
     final start30 = startToday.subtract(const Duration(days: 30));
 
-    try {
-      _today = await _db.doseLogs
-          .filter()
-          .scheduledAtBetween(startToday, endToday)
-          .sortByScheduledAt()
-          .findAll();
-      _recent30 = await _db.doseLogs
-          .filter()
-          .scheduledAtBetween(start30, endToday)
-          .sortByScheduledAt()
-          .findAll();
-    } catch (e) {
-      debugPrint('DoseLogProvider load failed: $e');
-      _today = [];
-      _recent30 = [];
-    }
-    _loading = false;
-    notifyListeners();
+    _todaySub = _repo.watchRange(_uid, startToday, endToday).listen(
+      (items) {
+        _today = items;
+        _loading = false;
+        notifyListeners();
+      },
+      onError: (Object e, StackTrace st) {
+        debugPrint('DoseLogProvider today stream failed: $e');
+        _today = <DoseLog>[];
+        _loading = false;
+        notifyListeners();
+      },
+    );
+    _rangeSub = _repo.watchRange(_uid, start30, endToday).listen(
+      (items) {
+        _recent30 = items;
+        notifyListeners();
+      },
+      onError: (Object e, StackTrace st) {
+        debugPrint('DoseLogProvider 30d stream failed: $e');
+        _recent30 = <DoseLog>[];
+        notifyListeners();
+      },
+    );
   }
 
-  Future<void> refresh() => _load();
+  Future<void> refresh() async {
+    // Streams self-refresh — kept for API compatibility.
+    notifyListeners();
+  }
 
   // ── Stats ────────────────────────────────────────────────────────────────
   int get takenToday => _today.where((d) => d.isTaken).length;
@@ -60,7 +89,6 @@ class DoseLogProvider extends ChangeNotifier {
     return (takenToday / totalToday) * 100;
   }
 
-  /// Adherence over the last 30 days (excludes skipped, excludes future).
   double get adherence30dPct {
     final now = DateTime.now();
     final scheduled =
@@ -70,12 +98,12 @@ class DoseLogProvider extends ChangeNotifier {
     return (taken / scheduled) * 100;
   }
 
-  /// Consecutive days (ending today) where adherence was >= 100%.
   int get currentStreak {
     final now = DateTime.now();
     final byDay = <DateTime, List<DoseLog>>{};
     for (final d in _recent30) {
-      final day = DateTime(d.scheduledAt.year, d.scheduledAt.month, d.scheduledAt.day);
+      final day =
+          DateTime(d.scheduledAt.year, d.scheduledAt.month, d.scheduledAt.day);
       byDay.putIfAbsent(day, () => []).add(d);
     }
 
@@ -84,8 +112,8 @@ class DoseLogProvider extends ChangeNotifier {
     while (true) {
       final doses = byDay[cursor];
       if (doses == null || doses.isEmpty) break;
-      final everyTaken = doses.every((d) => d.isTaken || d.skipped == false && d.isPending);
-      // A day counts toward the streak only if every scheduled dose was taken.
+      final everyTaken =
+          doses.every((d) => d.isTaken || (!d.skipped && d.isPending));
       final taken = doses.every((d) => d.isTaken);
       if (!everyTaken || !taken) break;
       streak++;
@@ -126,17 +154,14 @@ class DoseLogProvider extends ChangeNotifier {
   }
 
   Future<void> _save(DoseLog dose) async {
+    if (_uid.isEmpty) return;
     try {
-      await _db.isar.writeTxn(() async {
-        await _db.doseLogs.put(dose);
-      });
-      await _load();
+      await _repo.upsert(_uid, dose);
     } catch (e) {
       debugPrint('doseLog save failed: $e');
     }
   }
 
-  /// Log an ad-hoc dose that wasn't on the schedule (e.g., "as needed" peptides).
   Future<void> logAdHoc({
     required String protocolUuid,
     required String protocolPeptideUuid,
@@ -147,17 +172,25 @@ class DoseLogProvider extends ChangeNotifier {
     String notes = '',
   }) async {
     final now = DateTime.now();
-    final dose = DoseLog()
-      ..uuid = _uuid.v4()
-      ..protocolUuid = protocolUuid
-      ..protocolPeptideUuid = protocolPeptideUuid
-      ..peptideName = peptideName
-      ..scheduledAt = now
-      ..takenAt = now
-      ..amountTaken = amount
-      ..units = units
-      ..injectionSite = injectionSite
-      ..notes = notes;
+    final dose = DoseLog(
+      uuid: _uuid.v4(),
+      protocolUuid: protocolUuid,
+      protocolPeptideUuid: protocolPeptideUuid,
+      peptideName: peptideName,
+      scheduledAt: now,
+      takenAt: now,
+      amountTaken: amount,
+      units: units,
+      injectionSite: injectionSite,
+      notes: notes,
+    );
     await _save(dose);
+  }
+
+  @override
+  void dispose() {
+    _todaySub?.cancel();
+    _rangeSub?.cancel();
+    super.dispose();
   }
 }

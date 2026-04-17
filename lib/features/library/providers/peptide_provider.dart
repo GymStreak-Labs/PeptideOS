@@ -1,16 +1,22 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
-import 'package:isar/isar.dart';
 
+import '../../../data/repositories/peptide_library_repository.dart';
 import '../../../models/peptide.dart';
-import '../../../services/database_service.dart';
 
-/// Read-only view of the seeded peptide library with search + filter helpers.
+/// Reactive view of the global peptide library (`peptideLibrary/*`).
+///
+/// Library data is read-only per user — seeding happens at app bootstrap.
+/// The provider subscribes to a Firestore stream so offline-cached data
+/// renders instantly while remote updates arrive asynchronously.
 class PeptideProvider extends ChangeNotifier {
-  PeptideProvider(this._db) {
-    _load();
+  PeptideProvider(this._repo) {
+    _subscribe();
   }
 
-  final DatabaseService _db;
+  final PeptideLibraryRepository _repo;
+  StreamSubscription<List<Peptide>>? _sub;
 
   List<Peptide> _all = <Peptide>[];
   bool _loading = true;
@@ -20,20 +26,35 @@ class PeptideProvider extends ChangeNotifier {
   bool get isLoading => _loading;
   String? get error => _error;
 
-  Future<void> _load() async {
+  void _subscribe() {
+    _sub?.cancel();
+    _sub = _repo.watchAll().listen(
+      (items) {
+        _all = items;
+        _loading = false;
+        _error = null;
+        notifyListeners();
+      },
+      onError: (Object e, StackTrace st) {
+        debugPrint('PeptideProvider stream failed: $e');
+        _loading = false;
+        _error = 'Failed to load peptide library.';
+        notifyListeners();
+      },
+    );
+  }
+
+  Future<void> refresh() async {
     try {
-      _all = await _db.peptides.filter().nameIsNotEmpty().sortByName().findAll();
+      _all = await _repo.fetchAllOnce();
       _loading = false;
       _error = null;
-    } catch (e, st) {
-      debugPrint('PeptideProvider load failed: $e\n$st');
-      _loading = false;
+    } catch (e) {
+      debugPrint('PeptideProvider refresh failed: $e');
       _error = 'Failed to load peptide library.';
     }
     notifyListeners();
   }
-
-  Future<void> refresh() => _load();
 
   Peptide? findBySlug(String slug) {
     for (final p in _all) {
@@ -52,5 +73,11 @@ class PeptideProvider extends ChangeNotifier {
           p.description.toLowerCase().contains(q) ||
           p.category.label.toLowerCase().contains(q);
     }).toList();
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
   }
 }

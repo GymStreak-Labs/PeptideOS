@@ -1,23 +1,33 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
-import 'package:isar/isar.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../data/repositories/dose_log_repository.dart';
+import '../../../data/repositories/protocol_repository.dart';
 import '../../../models/dose_log.dart';
 import '../../../models/protocol.dart';
-import '../../../services/database_service.dart';
+import '../../../services/notification_service.dart';
 
 /// Owns CRUD for [Protocol] plus generation of upcoming [DoseLog] entries.
 ///
 /// Dose log generation runs whenever a protocol is created or the user taps
 /// "refresh schedule" — it materialises the next [scheduleHorizonDays] days
-/// of doses so the Today view can read from a single table.
+/// of doses so the Today view can read from a single Firestore collection.
 class ProtocolProvider extends ChangeNotifier {
-  ProtocolProvider(this._db) {
-    _load();
+  ProtocolProvider(
+    this._protocolRepo,
+    this._doseLogRepo, {
+    required String uid,
+  }) : _uid = uid {
+    _subscribe();
   }
 
-  final DatabaseService _db;
+  final ProtocolRepository _protocolRepo;
+  final DoseLogRepository _doseLogRepo;
   final _uuid = const Uuid();
+  String _uid;
+  StreamSubscription<List<Protocol>>? _sub;
 
   /// How far ahead we pre-compute dose entries.
   static const int scheduleHorizonDays = 7;
@@ -32,43 +42,68 @@ class ProtocolProvider extends ChangeNotifier {
       _protocols.where((p) => p.status != ProtocolStatus.active).toList();
   bool get isLoading => _loading;
   bool get hasActive => active.isNotEmpty;
+  String get uid => _uid;
 
-  Future<void> _load() async {
-    try {
-      _protocols =
-          await _db.protocols.filter().nameIsNotEmpty().sortByCreatedAtDesc().findAll();
-    } catch (e) {
-      debugPrint('ProtocolProvider load failed: $e');
-      _protocols = [];
+  void setUid(String uid) {
+    if (_uid == uid) return;
+    _uid = uid;
+    _loading = true;
+    _protocols = <Protocol>[];
+    _subscribe();
+  }
+
+  void _subscribe() {
+    _sub?.cancel();
+    if (_uid.isEmpty) {
+      _loading = false;
+      notifyListeners();
+      return;
     }
-    _loading = false;
+    _sub = _protocolRepo.watchAll(_uid).listen(
+      (items) {
+        _protocols = items;
+        _loading = false;
+        notifyListeners();
+      },
+      onError: (Object e, StackTrace st) {
+        debugPrint('ProtocolProvider stream failed: $e');
+        _loading = false;
+        _protocols = <Protocol>[];
+        notifyListeners();
+      },
+    );
+  }
+
+  Future<void> refresh() async {
+    if (_uid.isEmpty) return;
+    try {
+      _protocols = await _protocolRepo.fetchAllOnce(_uid);
+      _loading = false;
+    } catch (e) {
+      debugPrint('ProtocolProvider refresh failed: $e');
+    }
     notifyListeners();
   }
 
-  Future<void> refresh() => _load();
-
-  /// Creates and persists a new protocol, then generates its dose logs.
   Future<Protocol> createProtocol({
     required String name,
     required DateTime startDate,
     required List<ProtocolPeptide> peptides,
   }) async {
     final now = DateTime.now();
-    final uuid = _uuid.v4();
-    final p = Protocol()
-      ..uuid = uuid
-      ..name = name.isEmpty ? 'My Protocol' : name
-      ..startDate = startDate
-      ..status = ProtocolStatus.active
-      ..peptides = peptides
-      ..createdAt = now;
+    final p = Protocol(
+      uuid: _uuid.v4(),
+      name: name.isEmpty ? 'My Protocol' : name,
+      startDate: startDate,
+      status: ProtocolStatus.active,
+      peptides: peptides,
+      createdAt: now,
+    );
 
+    if (_uid.isEmpty) return p;
     try {
-      await _db.isar.writeTxn(() async {
-        await _db.protocols.put(p);
-      });
+      await _protocolRepo.upsert(_uid, p);
       await _generateDoseLogs(p);
-      await _load();
     } catch (e) {
       debugPrint('createProtocol failed: $e');
       rethrow;
@@ -76,84 +111,77 @@ class ProtocolProvider extends ChangeNotifier {
     return p;
   }
 
-  /// Pause an active protocol (no new doses generated, existing ones kept).
   Future<void> pauseProtocol(Protocol p) async {
-    await _writeStatus(p, ProtocolStatus.paused);
+    p.status = ProtocolStatus.paused;
+    await _persist(p);
   }
 
   Future<void> resumeProtocol(Protocol p) async {
-    await _writeStatus(p, ProtocolStatus.active);
+    p.status = ProtocolStatus.active;
+    await _persist(p);
     await _generateDoseLogs(p);
   }
 
   Future<void> endProtocol(Protocol p) async {
     p.endDate = DateTime.now();
-    await _writeStatus(p, ProtocolStatus.ended);
-    // Remove any future scheduled (unlogged) doses — past logs remain for history.
+    p.status = ProtocolStatus.ended;
+    await _persist(p);
+
+    if (_uid.isEmpty) return;
     try {
       final now = DateTime.now();
-      final future = await _db.doseLogs
-          .filter()
-          .protocolUuidEqualTo(p.uuid)
-          .skippedEqualTo(false)
-          .takenAtIsNull()
-          .scheduledAtGreaterThan(now)
-          .findAll();
-      await _db.isar.writeTxn(() async {
-        for (final d in future) {
-          await _db.doseLogs.delete(d.id);
+      final logs = await _doseLogRepo.fetchByProtocol(_uid, p.uuid);
+      final toDelete = <String>[];
+      for (final d in logs) {
+        if (d.takenAt == null &&
+            !d.skipped &&
+            d.scheduledAt.isAfter(now)) {
+          toDelete.add(d.uuid);
+          await NotificationService.instance.cancelDoseReminder(d.uuid);
         }
-      });
+      }
+      await _doseLogRepo.deleteMany(_uid, toDelete);
     } catch (e) {
       debugPrint('endProtocol cleanup failed: $e');
     }
   }
 
   Future<void> deleteProtocol(Protocol p) async {
+    if (_uid.isEmpty) return;
     try {
-      final logs = await _db.doseLogs
-          .filter()
-          .protocolUuidEqualTo(p.uuid)
-          .findAll();
-      await _db.isar.writeTxn(() async {
-        for (final d in logs) {
-          await _db.doseLogs.delete(d.id);
-        }
-        await _db.protocols.delete(p.id);
-      });
-      await _load();
+      final logs = await _doseLogRepo.fetchByProtocol(_uid, p.uuid);
+      for (final d in logs) {
+        await NotificationService.instance.cancelDoseReminder(d.uuid);
+      }
+      await _doseLogRepo.deleteMany(_uid, logs.map((d) => d.uuid).toList());
+      await _protocolRepo.delete(_uid, p.uuid);
     } catch (e) {
       debugPrint('deleteProtocol failed: $e');
     }
   }
 
-  Future<void> _writeStatus(Protocol p, ProtocolStatus status) async {
-    p.status = status;
+  Future<void> _persist(Protocol p) async {
+    if (_uid.isEmpty) return;
     try {
-      await _db.isar.writeTxn(() async {
-        await _db.protocols.put(p);
-      });
-      await _load();
+      await _protocolRepo.upsert(_uid, p);
     } catch (e) {
-      debugPrint('status write failed: $e');
+      debugPrint('Protocol persist failed: $e');
     }
   }
 
   /// Generate DoseLog rows for the next [scheduleHorizonDays] days from now.
   /// Existing (takenAt != null or skipped) logs are left untouched.
   Future<void> _generateDoseLogs(Protocol p) async {
+    if (_uid.isEmpty) return;
     if (p.status != ProtocolStatus.active) return;
 
     final now = DateTime.now();
     final start = DateTime(now.year, now.month, now.day);
     final end = start.add(const Duration(days: scheduleHorizonDays));
 
-    final existing = await _db.doseLogs
-        .filter()
-        .protocolUuidEqualTo(p.uuid)
-        .scheduledAtBetween(start, end)
-        .findAll();
+    final existing = await _doseLogRepo.fetchRange(_uid, start, end);
     final existingKeys = existing
+        .where((d) => d.protocolUuid == p.uuid)
         .map((e) => '${e.protocolPeptideUuid}|${e.scheduledAt.toIso8601String()}')
         .toSet();
 
@@ -163,9 +191,10 @@ class ProtocolProvider extends ChangeNotifier {
       final date = start.add(Duration(days: day));
       for (final pp in p.peptides) {
         if (!_isDosingDay(pp.frequency, p.startDate, date)) continue;
-        for (final timeStr in pp.scheduledTimes.isEmpty
+        final times = pp.scheduledTimes.isEmpty
             ? const ['08:00']
-            : pp.scheduledTimes) {
+            : pp.scheduledTimes;
+        for (final timeStr in times) {
           final parts = timeStr.split(':');
           if (parts.length != 2) continue;
           final hour = int.tryParse(parts[0]) ?? 8;
@@ -177,28 +206,29 @@ class ProtocolProvider extends ChangeNotifier {
 
           final site = pp.injectionSites.isEmpty
               ? ''
-              : pp.injectionSites[(day) % pp.injectionSites.length];
+              : pp.injectionSites[day % pp.injectionSites.length];
 
-          toInsert.add(
-            DoseLog()
-              ..uuid = _uuid.v4()
-              ..protocolUuid = p.uuid
-              ..protocolPeptideUuid = pp.uuid
-              ..peptideName = pp.peptideName
-              ..scheduledAt = scheduledAt
-              ..amountTaken = pp.dosePerInjection
-              ..units = pp.doseUnit
-              ..injectionSite = site,
-          );
+          toInsert.add(DoseLog(
+            uuid: _uuid.v4(),
+            protocolUuid: p.uuid,
+            protocolPeptideUuid: pp.uuid,
+            peptideName: pp.peptideName,
+            scheduledAt: scheduledAt,
+            amountTaken: pp.dosePerInjection,
+            units: pp.doseUnit,
+            injectionSite: site,
+          ));
         }
       }
     }
 
     if (toInsert.isEmpty) return;
     try {
-      await _db.isar.writeTxn(() async {
-        await _db.doseLogs.putAll(toInsert);
-      });
+      await _doseLogRepo.upsertMany(_uid, toInsert);
+      // Fire notifications for future doses only — respect user setting.
+      for (final d in toInsert) {
+        unawaited(NotificationService.instance.scheduleDoseReminder(d));
+      }
     } catch (e) {
       debugPrint('generateDoseLogs failed: $e');
     }
@@ -209,13 +239,14 @@ class ProtocolProvider extends ChangeNotifier {
       case 'daily':
         return true;
       case 'eod':
-        final diff = day.difference(DateTime(start.year, start.month, start.day)).inDays;
+        final diff =
+            day.difference(DateTime(start.year, start.month, start.day)).inDays;
         return diff.isEven;
       case 'twice_weekly':
-        // Mon & Thu (1 & 4). Adjustable in future.
         return day.weekday == DateTime.monday || day.weekday == DateTime.thursday;
       case 'weekly':
-        final diff = day.difference(DateTime(start.year, start.month, start.day)).inDays;
+        final diff =
+            day.difference(DateTime(start.year, start.month, start.day)).inDays;
         return diff % 7 == 0;
       case 'as_needed':
       default:
@@ -223,8 +254,6 @@ class ProtocolProvider extends ChangeNotifier {
     }
   }
 
-  /// Re-generate dose logs for all active protocols — call after significant
-  /// changes (e.g. opening the app after a long gap).
   Future<void> regenerateSchedules() async {
     for (final p in active) {
       await _generateDoseLogs(p);
@@ -243,16 +272,23 @@ class ProtocolProvider extends ChangeNotifier {
     List<String>? times,
     List<String>? sites,
   }) {
-    return ProtocolPeptide()
-      ..uuid = _uuid.v4()
-      ..peptideSlug = slug
-      ..peptideName = name
-      ..dosePerInjection = dose
-      ..doseUnit = unit
-      ..frequency = frequency
-      ..route = route
-      ..cycleWeeks = cycleWeeks
-      ..scheduledTimes = times ?? ['08:00']
-      ..injectionSites = sites ?? [];
+    return ProtocolPeptide(
+      uuid: _uuid.v4(),
+      peptideSlug: slug,
+      peptideName: name,
+      dosePerInjection: dose,
+      doseUnit: unit,
+      frequency: frequency,
+      route: route,
+      cycleWeeks: cycleWeeks,
+      scheduledTimes: times ?? const ['08:00'],
+      injectionSites: sites ?? const [],
+    );
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
   }
 }
