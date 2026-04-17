@@ -7,6 +7,8 @@ import '../../../core/widgets/widgets.dart';
 import '../../../models/peptide.dart';
 import '../../../models/protocol.dart';
 import '../../library/providers/peptide_provider.dart';
+import '../../subscription/providers/subscription_provider.dart';
+import '../../subscription/screens/soft_paywall_sheet.dart';
 import '../providers/dose_log_provider.dart';
 import '../providers/protocol_provider.dart';
 
@@ -32,6 +34,22 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
     _pageController.dispose();
     _nameController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleAddPeptide(ProtocolPeptide p) async {
+    final sub = context.read<SubscriptionProvider>();
+    if (!sub.canAddPeptide(_peptides.length)) {
+      final purchased = await showSoftPaywall(
+        context,
+        source: 'peptide_limit',
+        reason:
+            'Free plan is limited to one peptide per protocol. Upgrade to '
+            'stack multiple compounds.',
+      );
+      if (!purchased) return;
+      if (!mounted) return;
+    }
+    setState(() => _peptides.add(p));
   }
 
   void _next() {
@@ -180,7 +198,7 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
                   ),
                   _Step2Peptides(
                     peptides: _peptides,
-                    onAdd: (p) => setState(() => _peptides.add(p)),
+                    onAdd: _handleAddPeptide,
                     onRemove: (p) =>
                         setState(() => _peptides.remove(p)),
                     onEdit: (index, p) => setState(() => _peptides[index] = p),
@@ -986,17 +1004,19 @@ class _Chip extends StatelessWidget {
 /// Not currently used — here to explicitly satisfy linter if extended later.
 // ignore: unused_element
 Peptide _fallbackPeptide() {
-  return Peptide()
-    ..slug = 'custom'
-    ..name = 'Custom'
-    ..category = PeptideCategory.other
-    ..description = ''
-    ..typicalDose = ''
-    ..defaultDoseMcg = 250
-    ..defaultFrequency = 'daily'
-    ..halfLife = ''
-    ..typicalCycleWeeks = 0
-    ..defaultRoute = 'subcutaneous'
-    ..notes = ''
-    ..disclaimer = '';
+  return Peptide(
+    slug: 'custom',
+    name: 'Custom',
+    category: PeptideCategory.other,
+    description: '',
+    typicalDose: '',
+    defaultDoseMcg: 250,
+    defaultFrequency: 'daily',
+    halfLife: '',
+    typicalCycleWeeks: 0,
+    defaultRoute: 'subcutaneous',
+    notes: '',
+    disclaimer: '',
+    commonStack: const <String>[],
+  );
 }

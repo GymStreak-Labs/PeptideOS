@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/dose_log.dart';
+import '../../subscription/providers/subscription_provider.dart';
+import '../../subscription/screens/soft_paywall_sheet.dart';
 import '../providers/dose_log_provider.dart';
 import '../providers/protocol_provider.dart';
 import '../widgets/empty_state.dart';
@@ -74,11 +76,7 @@ class ProtocolHomeScreen extends StatelessWidget {
                     icon: Icons.add_rounded,
                     onTap: () {
                       HapticFeedback.lightImpact();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const CreateProtocolScreen(),
-                        ),
-                      );
+                      _onCreateProtocol(context);
                     },
                   ),
                 ],
@@ -277,13 +275,7 @@ class _NoProtocolView extends StatelessWidget {
                   description:
                       'Create your first protocol to start tracking doses and building adherence.',
                   actionLabel: 'START FIRST PROTOCOL',
-                  onAction: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const CreateProtocolScreen(),
-                      ),
-                    );
-                  },
+                  onAction: () => _onCreateProtocol(context),
                 ),
               ),
             ),
@@ -293,6 +285,27 @@ class _NoProtocolView extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Free-tier gate before pushing CreateProtocolScreen. Shows the soft paywall
+/// if the user already has a protocol and is still on the free plan.
+Future<void> _onCreateProtocol(BuildContext context) async {
+  final sub = context.read<SubscriptionProvider>();
+  final protocols = context.read<ProtocolProvider>();
+  if (!sub.canAddProtocol(protocols.all.length)) {
+    final purchased = await showSoftPaywall(
+      context,
+      source: 'protocol_limit',
+      reason:
+          'Free plan is limited to one protocol. Upgrade to Premium to run '
+          'multiple stacks at once.',
+    );
+    if (!purchased) return;
+    if (!context.mounted) return;
+  }
+  Navigator.of(context).push(
+    MaterialPageRoute(builder: (_) => const CreateProtocolScreen()),
+  );
 }
 
 // ── Today hero card ──────────────────────────────────────────────────────────

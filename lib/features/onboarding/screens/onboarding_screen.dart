@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/services/analytics_service.dart';
 import '../../../core/theme/theme.dart';
 import '../../../models/protocol.dart';
 import '../../library/providers/peptide_provider.dart';
 import '../../protocol/providers/dose_log_provider.dart';
 import '../../protocol/providers/protocol_provider.dart';
 import '../../profile/providers/settings_provider.dart';
+import '../../subscription/providers/subscription_provider.dart';
 import '../widgets/age_gate_page.dart';
 import '../widgets/hook_page.dart';
 import '../widgets/onboarding_page.dart';
@@ -123,6 +125,55 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   String get _firstPeptide =>
       _selectedPeptides.isNotEmpty ? _selectedPeptides.first : 'BPC-157';
+
+  Future<void> _handleSubscribe() async {
+    final sub = context.read<SubscriptionProvider>();
+    AnalyticsService().logPaywallViewed('onboarding');
+
+    if (!sub.isLoadingOfferings && sub.offerings == null) {
+      await sub.loadOfferings();
+    }
+    if (!mounted) return;
+
+    final offerings = sub.offerings;
+    // If RC is not configured yet (TODO keys), skip straight to post-onboarding
+    // so testers can still reach the app shell. Real purchase flow will light
+    // up once SubscriptionService.configure() succeeds.
+    final pkg = offerings?.current?.availablePackages.isNotEmpty == true
+        ? offerings!.current!.availablePackages.first
+        : null;
+
+    if (pkg == null) {
+      await _completeOnboarding();
+      return;
+    }
+
+    AnalyticsService().logPurchaseInitiated(pkg.identifier);
+    final result = await sub.purchase(pkg);
+    if (!mounted) return;
+    if (result.success || result.cancelled) {
+      await _completeOnboarding();
+    } else if (result.error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result.error!)),
+      );
+    }
+  }
+
+  Future<void> _handleRestore() async {
+    final sub = context.read<SubscriptionProvider>();
+    final result = await sub.restore();
+    if (!mounted) return;
+    if (result.success && result.isPremium) {
+      await _completeOnboarding();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result.error ?? 'No purchases found to restore.'),
+        ),
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -255,12 +306,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // 14: Paywall
               PaywallPage(
-                onSubscribe: () {
-                  _completeOnboarding();
-                },
-                onRestore: () {
-                  _completeOnboarding();
-                },
+                onSubscribe: _handleSubscribe,
+                onRestore: _handleRestore,
               ),
             ],
           ),
