@@ -6,11 +6,16 @@ Intelligent peptide protocol manager. Track doses, calculate reconstitution, man
 ## Tech Stack
 - **Framework**: Flutter 3.41.4
 - **Platform**: iOS + Android (unified design — no platform-adaptive widgets)
-- **Font**: Inter via `google_fonts` package
-- **Backend**: Firebase (Auth, Firestore, Cloud Functions, FCM) — not yet integrated
-- **AI**: Claude API for the intelligent mentor — not yet integrated
-- **Subscriptions**: RevenueCat — not yet integrated
-- **Analytics**: Firebase Analytics + Crashlytics — not yet integrated
+- **Fonts**: Space Grotesk (body) + JetBrains Mono (data) via `google_fonts`
+- **Local data (Phase 1)**: Isar 3.1 (NoSQL) via `isar` + `isar_flutter_libs` + `path_provider`
+- **State management**: `provider` 6.1 — one ChangeNotifier per feature
+- **Charts**: `fl_chart` 0.69 (bar charts for adherence, line charts for body metrics)
+- **IDs**: `uuid` 4.5 — stable UUIDs cross-reference Protocol ↔ ProtocolPeptide ↔ DoseLog
+- **Notifications**: `flutter_local_notifications` 17.2 — scaffolded only (Phase 2 will wire permissions + schedule)
+- **Backend (Phase 2)**: Firebase (Auth, Firestore) replaces Isar — AppRefer + RevenueCat + FB App Events
+- **AI (Phase 2)**: Claude API for the intelligent mentor
+- **Subscriptions**: RevenueCat — not yet integrated (UI pill hard-coded FREE)
+- **Analytics (Phase 2)**: Firebase Analytics + Crashlytics
 
 ## Bundle ID
 - iOS: `com.gymstreaklabs.peptideOs`
@@ -39,12 +44,28 @@ lib/
 ├── features/
 │   ├── protocol/       # 💉 Protocol tab (home)
 │   │   ├── screens/
+│   │   │   ├── protocol_home_screen.dart         # Today hero, next dose, schedule
+│   │   │   ├── create_protocol_screen.dart       # 3-step wizard
+│   │   │   └── active_protocol_detail_screen.dart # Manage / pause / end
 │   │   ├── widgets/
-│   │   ├── models/
+│   │   │   ├── log_dose_sheet.dart               # Bottom sheet for logging
+│   │   │   └── empty_state.dart                  # Shared empty-state tile
 │   │   └── providers/
+│   │       ├── protocol_provider.dart            # CRUD + dose schedule gen
+│   │       └── dose_log_provider.dart            # log/skip/undo + stats
 │   ├── progress/       # 📊 Progress tab
+│   │   ├── screens/progress_screen.dart          # 30d adherence + weight trend
+│   │   ├── widgets/log_metric_sheet.dart
+│   │   └── providers/body_metric_provider.dart
 │   ├── library/        # 🧪 Library tab
+│   │   ├── screens/
+│   │   │   ├── library_screen.dart               # Search + category filter
+│   │   │   ├── peptide_detail_screen.dart        # Inline reconstitution calc
+│   │   │   └── reconstitution_screen.dart        # Standalone calc (retained)
+│   │   └── providers/peptide_provider.dart
 │   ├── profile/        # ⚙️ You tab
+│   │   ├── screens/profile_screen.dart
+│   │   └── providers/settings_provider.dart
 │   ├── onboarding/     # 15-screen onboarding + hard paywall
 │   │   ├── screens/
 │   │   │   └── onboarding_screen.dart   # PageView shell, 15 pages
@@ -68,9 +89,17 @@ lib/
 │   └── auth/           # Authentication (not yet built)
 ├── routing/
 ├── services/
-├── models/
-├── app_shell.dart      # Main shell with glass tab bar
-└── main.dart           # Entry point
+│   ├── database_service.dart     # Isar init + seed + clearAllUserData
+│   ├── peptide_seed_data.dart    # 20 real peptides seeded on first launch
+│   └── notification_service.dart # Phase 2 stub (scheduleDoseReminder / cancelAll)
+├── models/                       # Isar collections
+│   ├── peptide.dart              # Library row (read-only at runtime)
+│   ├── protocol.dart             # Protocol + embedded ProtocolPeptide
+│   ├── dose_log.dart             # Scheduled/taken/skipped doses
+│   ├── body_metric.dart          # Weight + body fat + measurements
+│   └── user_settings.dart        # Singleton (id == 1)
+├── app_shell.dart      # Main shell with glass tab bar (Protocol / Progress / Library / You)
+└── main.dart           # Entry — opens Isar, regenerates schedules, routes onboarding vs shell
 
 assets/
 ├── icons/
@@ -109,7 +138,38 @@ flutter build ipa                # iOS release build
 flutter build appbundle          # Android release build
 flutter test                     # Run tests
 flutter analyze                  # Lint & analyze
+dart run build_runner build --delete-conflicting-outputs  # Regenerate Isar *.g.dart
 ```
+
+## Data Architecture (Phase 1)
+
+### Isar Collections
+- `Peptide` — library entries, unique slug, seeded once on first launch (`PeptideSeedData.build()`)
+- `Protocol` — user regimen with embedded `ProtocolPeptide` list + stable UUID
+- `DoseLog` — one row per scheduled (or ad-hoc) dose — keys on `protocolUuid` + `protocolPeptideUuid` + `scheduledAt`
+- `BodyMetric` — weight / body fat / embedded `MeasurementEntry` list
+- `UserSettings` — singleton (`id == 1`)
+
+### Provider topology (wired in `main.dart` via `MultiProvider`)
+- `PeptideProvider` — read-only library w/ search + `findBySlug`
+- `ProtocolProvider` — CRUD + `_generateDoseLogs` materialises the next 7 days of schedule rows on create / resume / app-open (`scheduleHorizonDays = 7`)
+- `DoseLogProvider` — today + recent30, adherence% today, adherence% 30d, currentStreak, totalLogged, mutations log/skip/undo/logAdHoc
+- `BodyMetricProvider` — CRUD for weight/BF/measurements
+- `SettingsProvider` — reactive wrapper around the `UserSettings` singleton, `completeOnboarding({goals, experience, frustration})`, `resetAll()` which wipes user data (preserves seeded library)
+
+### Isar extension imports
+Any file calling `.filter()`, `.sortByX()`, `.findAll()` MUST import `package:isar/isar.dart` directly — extensions are only visible when the defining package is imported in the consumer file. Providers already do this.
+
+### Frequency schedule rules
+`frequency` key on `ProtocolPeptide` drives `_isDosingDay`:
+- `daily` — every day
+- `eod` — every other day from start
+- `twice_weekly` — Mon & Thu
+- `weekly` — every 7 days from start
+- `as_needed` — never auto-scheduled (log ad-hoc)
+
+### Routing
+`_AppRoot` in `main.dart` listens to `SettingsProvider`. If `settings.onboardingCompleted` is false it renders `OnboardingScreen`, else `AppShell`. Onboarding's final paywall CTA calls `SettingsProvider.completeOnboarding(...)` AND auto-creates a first protocol by matching picked peptides (case-insensitive) against the seeded library.
 
 ## Key Design Decisions
 1. "Clinical Cyberpunk" aesthetic — biohacking IS cyberpunk, own it
