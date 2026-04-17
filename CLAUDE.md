@@ -7,15 +7,25 @@ Intelligent peptide protocol manager. Track doses, calculate reconstitution, man
 - **Framework**: Flutter 3.41.4
 - **Platform**: iOS + Android (unified design — no platform-adaptive widgets)
 - **Fonts**: Space Grotesk (body) + JetBrains Mono (data) via `google_fonts`
-- **Local data (Phase 1)**: Isar 3.1 (NoSQL) via `isar` + `isar_flutter_libs` + `path_provider`
-- **State management**: `provider` 6.1 — one ChangeNotifier per feature
-- **Charts**: `fl_chart` 0.69 (bar charts for adherence, line charts for body metrics)
-- **IDs**: `uuid` 4.5 — stable UUIDs cross-reference Protocol ↔ ProtocolPeptide ↔ DoseLog
-- **Notifications**: `flutter_local_notifications` 17.2 — scaffolded only (Phase 2 will wire permissions + schedule)
-- **Backend (Phase 2)**: Firebase (Auth, Firestore) replaces Isar — AppRefer + RevenueCat + FB App Events
-- **AI (Phase 2)**: Claude API for the intelligent mentor
-- **Subscriptions**: RevenueCat — not yet integrated (UI pill hard-coded FREE)
-- **Analytics (Phase 2)**: Firebase Analytics + Crashlytics
+- **Backend**: Firebase (Auth, Firestore) — Phase 2, replaces Isar. Firestore offline persistence enabled.
+- **Auth**: Firebase Auth — Apple (iOS), Google, Email/password. Anonymous mode is intentionally disabled so AppRefer attribution survives cross-device.
+- **Subscriptions**: RevenueCat (`purchases_flutter` 8.x), entitlement `premium`. Keys are TODO until the RC project is created.
+- **Attribution**: AppRefer Flutter SDK 0.4.1 (`configure` on app start with API key + advanced matching on sign-in).
+- **Ad events**: Facebook App Events + App Tracking Transparency (ATT prompt deferred to post first-frame).
+- **Notifications**: `flutter_local_notifications` 18.x + `timezone` + `flutter_timezone` — real scheduling wired in Phase 2.
+- **State management**: `provider` 6.1 — one ChangeNotifier per feature, UID-aware via `setUid()`.
+- **Charts**: `fl_chart` 0.69
+- **IDs**: `uuid` 4.5 — Firestore doc IDs + DoseLog cross-reference keys.
+
+## Phase 2 credential placeholders (search for these before release)
+All live in source code for visibility. Replace with real values once the
+backing services are provisioned.
+- `lib/data/services/subscription_service.dart` — `TODO_RC_IOS_KEY`, `TODO_RC_ANDROID_KEY`
+- `lib/main.dart` — `APPREFER_API_KEY`, `FACEBOOK_APP_ID` (read via `--dart-define`)
+- `ios/Runner/Info.plist` — `TODO_FB_APP_ID`, `TODO_FB_CLIENT_TOKEN`, `TODO_FB_URL_SCHEME`
+- No TODOs for Firebase — using the pre-existing `gymstreak-labs` project (iOS + Android apps already registered).
+
+Use `--dart-define=FORCE_PREMIUM=true` to bypass RC for testing while keys are still TODO.
 
 ## Bundle ID
 - iOS: `com.gymstreaklabs.peptideOs`
@@ -138,8 +148,53 @@ flutter build ipa                # iOS release build
 flutter build appbundle          # Android release build
 flutter test                     # Run tests
 flutter analyze                  # Lint & analyze
-dart run build_runner build --delete-conflicting-outputs  # Regenerate Isar *.g.dart
+firebase deploy --only firestore:rules   # Push rules after edits
 ```
+
+## Firestore layout
+```
+users/{uid}                              # User doc (email, displayName, createdAt, lastLoginAt)
+  settings/profile                       # UserSettings — onboarding flags, preferences, subscriptionState
+  protocols/{protocolId}                 # Protocol (name, status, startDate, peptides[])
+  doseLogs/{doseId}                      # DoseLog (scheduledAt as ISO-8601 string, denormalised peptideName)
+  bodyMetrics/{entryId}                  # BodyMetric (weight, body fat, measurements, date)
+
+peptideLibrary/{slug}                    # Shared reference peptides — read-authed, write-none
+                                         # Seeded via `PeptideLibraryRepository.seedIfEmpty()` on first authed launch.
+```
+
+Security rules at `firestore.rules` — `users/{uid}/**` is owner-only, library is read-authed.
+
+## App init order (lib/main.dart)
+Essential (awaited, pre-`runApp`):
+1. `WidgetsFlutterBinding.ensureInitialized()` + portrait lock + status bar style
+2. `initializeFirebase()` — also enables offline persistence
+3. `FlutterError.onError` → Crashlytics
+4. `SubscriptionService.configure()` — safe no-op if RC key still TODO
+5. `AppReferSDK.configure()` — safe no-op if API key still TODO
+6. `AnalyticsService().initializeIdentity()` — stable install ID stamped on Crashlytics / Analytics / RC / AppRefer
+7. `PeptideLibraryRepository().seedIfEmpty()` — fire-and-forget
+8. `runApp(PeptideOSApp())`
+
+Deferred (post-first-frame):
+- `NotificationService.initialize()`
+- Facebook App Events + ATT prompt (iOS only)
+
+## Auth gate flow (lib/main.dart `_AppRoot`)
+1. `AuthProvider.isInitialized == false` → splash
+2. User not signed in **and** onboarding not yet completed → `OnboardingScreen`
+3. User not signed in → `AuthScreen` (Apple / Google / Email)
+4. Signed in + onboarded → `AppShell`
+
+Providers own the UID swap: every user-scoped provider has `setUid(String)` and
+a `ChangeNotifierProxyProvider<AuthProvider, T>` in `PeptideOSApp` triggers it
+on auth state change. One provider instance survives sign-in / sign-out.
+
+## Free tier gating
+`SubscriptionProvider` exposes `canAddProtocol(count)` and `canAddPeptide(count)`:
+- Free plan: 1 protocol, 1 peptide per protocol.
+- `showSoftPaywall(ctx, source, reason)` (`features/subscription/screens/soft_paywall_sheet.dart`) presents an upgrade sheet and returns `true` on successful purchase.
+- Wired at `protocol_home_screen.dart` (create button) and `create_protocol_screen.dart` (add peptide button).
 
 ## Data Architecture (Phase 1)
 
