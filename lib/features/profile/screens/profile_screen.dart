@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/user_settings.dart';
+import '../../auth/providers/auth_provider.dart';
 import '../../protocol/providers/dose_log_provider.dart';
 import '../../protocol/providers/protocol_provider.dart';
 import '../../progress/providers/body_metric_provider.dart';
@@ -336,9 +337,42 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Future<void> _signOut(BuildContext context) async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Sign-in coming soon.')),
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surfaceContainer,
+        title: Text('Sign out?', style: AppTypography.h3),
+        content: Text(
+          'Your protocols stay saved and sync back when you sign in again.',
+          style: AppTypography.bodyMedium
+              .copyWith(color: AppColors.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text('Cancel',
+                style: AppTypography.labelMedium
+                    .copyWith(color: AppColors.textTertiary)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text('Sign out',
+                style: AppTypography.labelMedium
+                    .copyWith(color: AppColors.warning)),
+          ),
+        ],
+      ),
     );
+    if (ok != true) return;
+    if (!context.mounted) return;
+    try {
+      await context.read<AuthProvider>().signOut();
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sign out failed: $e')),
+      );
+    }
   }
 
   void _showLegal(BuildContext context, String title, String body) {
