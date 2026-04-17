@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../../../core/theme/theme.dart';
+import '../../../models/protocol.dart';
+import '../../library/providers/peptide_provider.dart';
+import '../../protocol/providers/dose_log_provider.dart';
+import '../../protocol/providers/protocol_provider.dart';
+import '../../profile/providers/settings_provider.dart';
 import '../widgets/age_gate_page.dart';
 import '../widgets/hook_page.dart';
 import '../widgets/onboarding_page.dart';
@@ -15,7 +22,6 @@ import '../widgets/protocol_preview_page.dart';
 import '../widgets/results_summary_page.dart';
 import '../widgets/feature_showcase_page.dart';
 import '../widgets/paywall_page.dart';
-import '../../../app_shell.dart';
 
 /// Full 15-screen onboarding flow — conversion-optimised v2.
 ///
@@ -55,12 +61,64 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     setState(() => _currentPage = page);
   }
 
-  void _completeOnboarding() {
-    // TODO: save onboarding data, check subscription
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const AppShell()),
-      (route) => false,
-    );
+  Future<void> _completeOnboarding() async {
+    // Persist onboarding data and seed a first protocol from the user's picks.
+    final settings = context.read<SettingsProvider>();
+    final protocols = context.read<ProtocolProvider>();
+    final doseLogs = context.read<DoseLogProvider>();
+    final library = context.read<PeptideProvider>();
+
+    try {
+      await settings.completeOnboarding(
+        goals: _selectedGoals.toList(),
+        experience: _experienceLevel,
+        frustration: _frustration,
+      );
+
+      if (_selectedPeptides.isNotEmpty) {
+        // Match onboarding names to library peptides (case-insensitive).
+        final matched = <String, String>{};
+        for (final name in _selectedPeptides) {
+          for (final p in library.all) {
+            if (p.name.toLowerCase() == name.toLowerCase() ||
+                p.slug.toLowerCase() == name.toLowerCase()) {
+              matched[p.slug] = p.name;
+              break;
+            }
+          }
+        }
+
+        final peptideEntries = <ProtocolPeptide>[];
+        for (final slug in matched.keys) {
+          final lib = library.findBySlug(slug);
+          if (lib == null) continue;
+          peptideEntries.add(
+            protocols.buildPeptide(
+              slug: lib.slug,
+              name: lib.name,
+              dose: lib.defaultDoseMcg,
+              frequency: lib.defaultFrequency,
+              route: lib.defaultRoute,
+              cycleWeeks: lib.typicalCycleWeeks,
+            ),
+          );
+        }
+
+        if (peptideEntries.isNotEmpty) {
+          await protocols.createProtocol(
+            name: 'My Protocol',
+            startDate: DateTime.now(),
+            peptides: peptideEntries,
+          );
+          await doseLogs.refresh();
+        }
+      }
+    } catch (e) {
+      debugPrint('completeOnboarding failed: $e');
+    }
+
+    // The _AppRoot widget will re-render and show AppShell once
+    // onboardingCompleted flips to true.
   }
 
   String get _firstPeptide =>
@@ -197,8 +255,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // 14: Paywall
               PaywallPage(
-                onSubscribe: _completeOnboarding,
-                onRestore: _completeOnboarding,
+                onSubscribe: () {
+                  _completeOnboarding();
+                },
+                onRestore: () {
+                  _completeOnboarding();
+                },
               ),
             ],
           ),
