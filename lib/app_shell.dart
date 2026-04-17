@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'core/widgets/widgets.dart';
-import 'features/protocol/screens/protocol_screen.dart';
-import 'features/progress/screens/progress_screen.dart';
 import 'features/library/screens/library_screen.dart';
 import 'features/profile/screens/profile_screen.dart';
+import 'features/progress/screens/progress_screen.dart';
+import 'features/protocol/screens/protocol_home_screen.dart';
 
 /// Main app shell with floating glass tab bar and tab content.
 class AppShell extends StatefulWidget {
@@ -40,7 +40,7 @@ class _AppShellState extends State<AppShell> {
   ];
 
   static const _screens = [
-    ProtocolScreen(),
+    ProtocolHomeScreen(),
     ProgressScreen(),
     LibraryScreen(),
     ProfileScreen(),
