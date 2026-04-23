@@ -6,6 +6,8 @@ enum UnitSystem { metric, imperial }
 class UserSettings {
   UserSettings({
     this.name = 'Biohacker',
+    this.firstName = '',
+    this.birthDate = '',
     this.units = UnitSystem.metric,
     this.notificationsEnabled = false,
     this.onboardingCompleted = false,
@@ -18,6 +20,10 @@ class UserSettings {
 
   /// Display name — defaults to "Biohacker" if nothing supplied in onboarding.
   String name;
+  String firstName;
+
+  /// ISO-8601 date only (`yyyy-MM-dd`) captured during onboarding.
+  String birthDate;
   UnitSystem units;
   bool notificationsEnabled;
   bool onboardingCompleted;
@@ -32,6 +38,8 @@ class UserSettings {
 
   UserSettings copyWith({
     String? name,
+    String? firstName,
+    String? birthDate,
     UnitSystem? units,
     bool? notificationsEnabled,
     bool? onboardingCompleted,
@@ -43,6 +51,8 @@ class UserSettings {
   }) {
     return UserSettings(
       name: name ?? this.name,
+      firstName: firstName ?? this.firstName,
+      birthDate: birthDate ?? this.birthDate,
       units: units ?? this.units,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
@@ -55,20 +65,24 @@ class UserSettings {
   }
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-        'name': name,
-        'units': units.name,
-        'notificationsEnabled': notificationsEnabled,
-        'onboardingCompleted': onboardingCompleted,
-        'darkMode': darkMode,
-        'subscriptionState': subscriptionState,
-        'selectedGoals': selectedGoals,
-        'experience': experience,
-        'frustration': frustration,
-      };
+    'name': name,
+    'firstName': firstName,
+    'birthDate': birthDate,
+    'units': units.name,
+    'notificationsEnabled': notificationsEnabled,
+    'onboardingCompleted': onboardingCompleted,
+    'darkMode': darkMode,
+    'subscriptionState': subscriptionState,
+    'selectedGoals': selectedGoals,
+    'experience': experience,
+    'frustration': frustration,
+  };
 
   factory UserSettings.fromMap(Map<String, dynamic> data) {
     return UserSettings(
       name: (data['name'] as String?) ?? 'Biohacker',
+      firstName: (data['firstName'] as String?) ?? '',
+      birthDate: (data['birthDate'] as String?) ?? '',
       units: _parseUnits(data['units'] as String?),
       notificationsEnabled: (data['notificationsEnabled'] as bool?) ?? false,
       onboardingCompleted: (data['onboardingCompleted'] as bool?) ?? false,

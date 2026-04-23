@@ -9,9 +9,11 @@ import '../../protocol/providers/dose_log_provider.dart';
 import '../../protocol/providers/protocol_provider.dart';
 import '../../profile/providers/settings_provider.dart';
 import '../../subscription/providers/subscription_provider.dart';
+import '../services/onboarding_draft_service.dart';
 import '../widgets/age_gate_page.dart';
 import '../widgets/hook_page.dart';
 import '../widgets/onboarding_page.dart';
+import '../widgets/profile_identity_page.dart';
 import '../widgets/social_proof_page.dart';
 import '../widgets/goals_page.dart';
 import '../widgets/experience_page.dart';
@@ -25,10 +27,10 @@ import '../widgets/results_summary_page.dart';
 import '../widgets/feature_showcase_page.dart';
 import '../widgets/paywall_page.dart';
 
-/// Full 15-screen onboarding flow — conversion-optimised v2.
+/// Full 16-screen onboarding flow — conversion-optimised v2.
 ///
 /// Phase 1 — Emotional Mirror:   Age Gate → Hook → Social Proof → Disclaimer
-/// Phase 2 — Personalisation:    Goals → Experience → Frustration → Peptides
+/// Phase 2 — Personalisation:    Profile → Goals → Experience → Frustration → Peptides
 /// Phase 3 — Aha Moment:         Calculator Demo → Review Gate
 /// Phase 4 — Reveal:             Processing → Protocol Preview → Results Summary
 /// Phase 5 — Features & Convert: Feature Showcase → Paywall
@@ -42,9 +44,11 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
   int _currentPage = 0;
-  static const _totalPages = 15;
+  static const _totalPages = 16;
 
   // Collected data
+  String _firstName = '';
+  String _birthDate = '';
   final Set<String> _selectedGoals = {};
   String _experienceLevel = '';
   String _frustration = '';
@@ -71,7 +75,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final library = context.read<PeptideProvider>();
 
     try {
+      final draft = OnboardingDraft(
+        firstName: _firstName,
+        birthDate: _birthDate,
+        goals: _selectedGoals.toList(),
+        experience: _experienceLevel,
+        frustration: _frustration,
+        selectedPeptides: _selectedPeptides.toList(),
+      );
+      await OnboardingDraftService.save(draft);
+
       await settings.completeOnboarding(
+        name: _firstName,
+        birthDate: _birthDate,
         goals: _selectedGoals.toList(),
         experience: _experienceLevel,
         frustration: _frustration,
@@ -115,6 +131,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           await doseLogs.refresh();
         }
       }
+
+      if (settings.uid.isNotEmpty) {
+        await OnboardingDraftService.clear();
+      }
     } catch (e) {
       debugPrint('completeOnboarding failed: $e');
     }
@@ -154,9 +174,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (result.success || result.cancelled) {
       await _completeOnboarding();
     } else if (result.error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result.error!)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(result.error!)));
     }
   }
 
@@ -218,7 +238,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // ── Phase 2: Personalisation (sunk cost) ──────────────
 
-              // 4: Goals
+              // 4: Profile identity
+              ProfileIdentityPage(
+                firstName: _firstName,
+                birthDate: _birthDate,
+                onFirstNameChanged: (value) {
+                  setState(() => _firstName = value);
+                },
+                onBirthDateChanged: (value) {
+                  setState(() => _birthDate = value);
+                },
+                onNext: _nextPage,
+              ),
+
+              // 5: Goals
               GoalsPage(
                 selectedGoals: _selectedGoals,
                 onToggle: (goal) {
@@ -233,7 +266,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 5: Experience Level
+              // 6: Experience Level
               ExperiencePage(
                 selected: _experienceLevel,
                 onSelect: (level) {
@@ -242,14 +275,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 6: Biggest Frustration
+              // 7: Biggest Frustration
               FrustrationPage(
                 selected: _frustration,
                 onSelect: (f) => setState(() => _frustration = f),
                 onNext: _nextPage,
               ),
 
-              // 7: Current/Planned Peptides
+              // 8: Current/Planned Peptides
               PeptideSelectPage(
                 selectedPeptides: _selectedPeptides,
                 onToggle: (p) {
@@ -266,31 +299,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // ── Phase 3: Aha Moment ───────────────────────────────
 
-              // 8: Unit Converter Demo
-              CalculatorDemoPage(
-                peptideName: _firstPeptide,
-                onNext: _nextPage,
-              ),
+              // 9: Unit Converter Demo
+              CalculatorDemoPage(peptideName: _firstPeptide, onNext: _nextPage),
 
-              // 9: Review Request Gate
+              // 10: Review Request Gate
               ReviewGatePage(onNext: _nextPage),
 
               // ── Phase 4: Reveal ───────────────────────────────────
 
-              // 10: Building Your Protocol (processing)
+              // 11: Building Your Protocol (processing)
               ProcessingPage(
                 onNext: _nextPage,
                 selectedPeptides: _selectedPeptides,
                 selectedGoals: _selectedGoals,
               ),
 
-              // 11: Protocol Preview
+              // 12: Protocol Preview
               ProtocolPreviewPage(
                 peptides: _selectedPeptides,
                 onNext: _nextPage,
               ),
 
-              // 12: Personalised Results Summary
+              // 13: Personalised Results Summary
               ResultsSummaryPage(
                 selectedGoals: _selectedGoals,
                 experienceLevel: _experienceLevel,
@@ -301,10 +331,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // ── Phase 5: Features & Convert ───────────────────────
 
-              // 13: Feature Showcase
+              // 14: Feature Showcase
               FeatureShowcasePage(onNext: _nextPage),
 
-              // 14: Paywall
+              // 15: Paywall
               PaywallPage(
                 onSubscribe: _handleSubscribe,
                 onRestore: _handleRestore,

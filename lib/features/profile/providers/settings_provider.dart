@@ -42,18 +42,20 @@ class SettingsProvider extends ChangeNotifier {
       notifyListeners();
       return;
     }
-    _sub = _repo.watch(_uid).listen(
-      (s) {
-        _settings = s;
-        _loading = false;
-        notifyListeners();
-      },
-      onError: (Object e, StackTrace st) {
-        debugPrint('SettingsProvider stream failed: $e');
-        _loading = false;
-        notifyListeners();
-      },
-    );
+    _sub = _repo
+        .watch(_uid)
+        .listen(
+          (s) {
+            _settings = s;
+            _loading = false;
+            notifyListeners();
+          },
+          onError: (Object e, StackTrace st) {
+            debugPrint('SettingsProvider stream failed: $e');
+            _loading = false;
+            notifyListeners();
+          },
+        );
   }
 
   /// Apply a mutation locally then persist the entire doc. We keep the
@@ -71,11 +73,16 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   Future<void> completeOnboarding({
+    required String name,
+    required String birthDate,
     required List<String> goals,
     required String experience,
     required String frustration,
   }) async {
     await update((s) {
+      s.name = name.isEmpty ? s.name : name;
+      s.firstName = name;
+      s.birthDate = birthDate;
       s.selectedGoals = goals;
       s.experience = experience;
       s.frustration = frustration;

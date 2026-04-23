@@ -38,8 +38,7 @@ class AnalyticsService {
         await FirebaseCrashlytics.instance.setUserIdentifier(_installId!);
       } catch (_) {}
       try {
-        await _analytics.setUserProperty(
-            name: 'install_id', value: _installId);
+        await _analytics.setUserProperty(name: 'install_id', value: _installId);
       } catch (_) {}
       try {
         await Purchases.setAttributes({'install_id': _installId!});
@@ -58,14 +57,15 @@ class AnalyticsService {
     required String userId,
     required String email,
     String? displayName,
+    String? firstName,
+    String? dateOfBirth,
     String? subscriptionTier,
   }) async {
     try {
       await _analytics.setUserId(id: userId);
     } catch (_) {}
     try {
-      await _analytics.setUserProperty(
-          name: 'install_id', value: _installId);
+      await _analytics.setUserProperty(name: 'install_id', value: _installId);
     } catch (_) {}
 
     try {
@@ -91,7 +91,22 @@ class AnalyticsService {
       await AppReferSDK.setUserId(userId);
       await AppReferSDK.setAdvancedMatching(
         email: email,
-        firstName: displayName,
+        firstName: firstName ?? _firstToken(displayName),
+        dateOfBirth: dateOfBirth,
+      );
+    } catch (_) {}
+  }
+
+  Future<void> sendAppReferAdvancedMatching({
+    required String email,
+    String? firstName,
+    String? dateOfBirth,
+  }) async {
+    try {
+      await AppReferSDK.setAdvancedMatching(
+        email: email,
+        firstName: firstName,
+        dateOfBirth: dateOfBirth,
       );
     } catch (_) {}
   }
@@ -145,4 +160,10 @@ class AnalyticsService {
   Future<void> logDoseLogged(String peptideName) =>
       logEvent('dose_logged', {'peptide_name': peptideName});
   Future<void> logBodyMetricLogged() => logEvent('body_metric_logged');
+
+  String? _firstToken(String? value) {
+    final trimmed = value?.trim();
+    if (trimmed == null || trimmed.isEmpty) return null;
+    return trimmed.split(RegExp(r'\s+')).first;
+  }
 }

@@ -23,6 +23,7 @@ import 'data/services/subscription_service.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/screens/auth_screen.dart';
 import 'features/library/providers/peptide_provider.dart';
+import 'features/onboarding/services/onboarding_draft_service.dart';
 import 'features/onboarding/screens/onboarding_screen.dart';
 import 'features/profile/providers/settings_provider.dart';
 import 'features/progress/providers/body_metric_provider.dart';
@@ -37,76 +38,83 @@ import 'services/notification_service.dart';
 /// skipped and the app continues in "free tier only" mode.
 ///
 /// See CLAUDE.md for the per-SDK credential rollout plan.
-const String _appReferApiKey =
-    String.fromEnvironment('APPREFER_API_KEY', defaultValue: 'TODO_APPREFER_API_KEY');
-const String _facebookAppId =
-    String.fromEnvironment('FACEBOOK_APP_ID', defaultValue: 'TODO_FB_APP_ID');
+const String _appReferApiKey = String.fromEnvironment(
+  'APPREFER_API_KEY',
+  defaultValue: 'TODO_APPREFER_API_KEY',
+);
+const String _facebookAppId = String.fromEnvironment(
+  'FACEBOOK_APP_ID',
+  defaultValue: 'TODO_FB_APP_ID',
+);
 
 Future<void> main() async {
   // Capture uncaught errors and ship them to Crashlytics once Firebase is up.
-  runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
+  runZonedGuarded<Future<void>>(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
 
-    // Lock to portrait — peptide tracking is a focused, one-hand experience.
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+      // Lock to portrait — peptide tracking is a focused, one-hand experience.
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
 
-    // Dark status bar icons on dark background.
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: Brightness.dark,
-      systemNavigationBarColor: AppColors.background,
-      systemNavigationBarIconBrightness: Brightness.light,
-    ));
+      // Dark status bar icons on dark background.
+      SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.dark,
+          systemNavigationBarColor: AppColors.background,
+          systemNavigationBarIconBrightness: Brightness.light,
+        ),
+      );
 
-    // ── Essential init (awaited, pre-runApp) ───────────────────────────────
-    await initializeFirebase();
+      // ── Essential init (awaited, pre-runApp) ───────────────────────────────
+      await initializeFirebase();
 
-    // Forward Flutter framework errors to Crashlytics.
-    FlutterError.onError = (FlutterErrorDetails details) {
-      FlutterError.presentError(details);
-      try {
-        FirebaseCrashlytics.instance.recordFlutterFatalError(details);
-      } catch (_) {}
-    };
+      // Forward Flutter framework errors to Crashlytics.
+      FlutterError.onError = (FlutterErrorDetails details) {
+        FlutterError.presentError(details);
+        try {
+          FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+        } catch (_) {}
+      };
 
-    // RevenueCat — safe no-op if key still TODO.
-    await SubscriptionService.instance.configure();
+      // RevenueCat — safe no-op if key still TODO.
+      await SubscriptionService.instance.configure();
 
-    // AppRefer — safe no-op if key still TODO.
-    if (!_appReferApiKey.startsWith('TODO_')) {
-      try {
-        await AppReferSDK.configure(
-          AppReferConfig(apiKey: _appReferApiKey),
-        );
-      } catch (e) {
-        debugPrint('AppRefer init failed: $e');
+      // AppRefer — safe no-op if key still TODO.
+      if (!_appReferApiKey.startsWith('TODO_')) {
+        try {
+          await AppReferSDK.configure(AppReferConfig(apiKey: _appReferApiKey));
+        } catch (e) {
+          debugPrint('AppRefer init failed: $e');
+        }
       }
-    }
 
-    // Stable install ID on Crashlytics / Analytics / RC / AppRefer.
-    await AnalyticsService().initializeIdentity();
+      // Stable install ID on Crashlytics / Analytics / RC / AppRefer.
+      await AnalyticsService().initializeIdentity();
 
-    // Seed the peptide library on first authenticated launch. Idempotent —
-    // safe to call even when the collection is already populated.
-    unawaited(PeptideLibraryRepository().seedIfEmpty());
+      // Seed the peptide library on first authenticated launch. Idempotent —
+      // safe to call even when the collection is already populated.
+      unawaited(PeptideLibraryRepository().seedIfEmpty());
 
-    runApp(const PeptideOSApp());
+      runApp(const PeptideOSApp());
 
-    // ── Deferred init (post-first-frame, non-blocking) ─────────────────────
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      unawaited(NotificationService.instance.initialize());
-      unawaited(_initFacebookEvents());
-      unawaited(_requestTrackingPermission());
-    });
-  }, (error, stack) {
-    try {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    } catch (_) {}
-  });
+      // ── Deferred init (post-first-frame, non-blocking) ─────────────────────
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        unawaited(NotificationService.instance.initialize());
+        unawaited(_initFacebookEvents());
+        unawaited(_requestTrackingPermission());
+      });
+    },
+    (error, stack) {
+      try {
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      } catch (_) {}
+    },
+  );
 }
 
 Future<void> _initFacebookEvents() async {
@@ -123,8 +131,7 @@ Future<void> _initFacebookEvents() async {
 Future<void> _requestTrackingPermission() async {
   if (!defaultTargetPlatform.name.contains('iOS')) return;
   try {
-    final status =
-        await AppTrackingTransparency.trackingAuthorizationStatus;
+    final status = await AppTrackingTransparency.trackingAuthorizationStatus;
     if (status == TrackingStatus.notDetermined) {
       await AppTrackingTransparency.requestTrackingAuthorization();
     }
@@ -146,20 +153,14 @@ class PeptideOSApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         // ── Auth & identity ────────────────────────────────────────────────
-        ChangeNotifierProvider<AuthProvider>(
-          create: (_) => AuthProvider(),
-        ),
+        ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
         // ── Subscription (depends on settings so it can mirror tier) ───────
         ChangeNotifierProxyProvider<AuthProvider, SettingsProvider>(
-          create: (_) => SettingsProvider(
-            UserSettingsRepository(),
-            uid: '',
-          ),
+          create: (_) => SettingsProvider(UserSettingsRepository(), uid: ''),
           update: (_, auth, previous) {
-            final prov = previous ?? SettingsProvider(
-              UserSettingsRepository(),
-              uid: auth.uid,
-            );
+            final prov =
+                previous ??
+                SettingsProvider(UserSettingsRepository(), uid: auth.uid);
             prov.setUid(auth.uid);
             return prov;
           },
@@ -168,8 +169,7 @@ class PeptideOSApp extends StatelessWidget {
           create: (ctx) => SubscriptionProvider(
             settingsProvider: ctx.read<SettingsProvider>(),
           ),
-          update: (_, __, previous) =>
-              previous ?? SubscriptionProvider(),
+          update: (_, __, previous) => previous ?? SubscriptionProvider(),
         ),
         // ── User-scoped data providers ─────────────────────────────────────
         ChangeNotifierProxyProvider<AuthProvider, PeptideProvider>(
@@ -184,7 +184,8 @@ class PeptideOSApp extends StatelessWidget {
             uid: '',
           ),
           update: (_, auth, previous) {
-            final prov = previous ??
+            final prov =
+                previous ??
                 ProtocolProvider(
                   ProtocolRepository(),
                   DoseLogRepository(),
@@ -197,8 +198,8 @@ class PeptideOSApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AuthProvider, DoseLogProvider>(
           create: (_) => DoseLogProvider(DoseLogRepository(), uid: ''),
           update: (_, auth, previous) {
-            final prov = previous ??
-                DoseLogProvider(DoseLogRepository(), uid: auth.uid);
+            final prov =
+                previous ?? DoseLogProvider(DoseLogRepository(), uid: auth.uid);
             prov.setUid(auth.uid);
             return prov;
           },
@@ -206,7 +207,8 @@ class PeptideOSApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AuthProvider, BodyMetricProvider>(
           create: (_) => BodyMetricProvider(BodyMetricRepository(), uid: ''),
           update: (_, auth, previous) {
-            final prov = previous ??
+            final prov =
+                previous ??
                 BodyMetricProvider(BodyMetricRepository(), uid: auth.uid);
             prov.setUid(auth.uid);
             return prov;
@@ -243,6 +245,8 @@ class _AppRoot extends StatefulWidget {
 
 class _AppRootState extends State<_AppRoot> {
   bool _firstFrameRefresh = false;
+  bool _onboardingReplayAttempted = false;
+  bool _replayingOnboardingDraft = false;
 
   @override
   Widget build(BuildContext context) {
@@ -260,6 +264,11 @@ class _AppRootState extends State<_AppRoot> {
         );
       });
     }
+    if (!auth.isSignedIn) {
+      _firstFrameRefresh = false;
+      _onboardingReplayAttempted = false;
+      _replayingOnboardingDraft = false;
+    }
 
     if (!auth.isInitialized) return const _Splash();
 
@@ -273,6 +282,22 @@ class _AppRootState extends State<_AppRoot> {
     if (!auth.isSignedIn) return const AuthScreen();
 
     if (!settings.settings.onboardingCompleted) {
+      if (!_onboardingReplayAttempted && !_replayingOnboardingDraft) {
+        _onboardingReplayAttempted = true;
+        _replayingOnboardingDraft = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          await OnboardingDraftService.replayAfterAuth(
+            email: auth.currentUser?.email ?? '',
+            settings: context.read<SettingsProvider>(),
+            protocols: context.read<ProtocolProvider>(),
+            doseLogs: context.read<DoseLogProvider>(),
+            library: context.read<PeptideProvider>(),
+          );
+          if (!mounted) return;
+          setState(() => _replayingOnboardingDraft = false);
+        });
+      }
+      if (_replayingOnboardingDraft) return const _Splash();
       return const OnboardingScreen();
     }
 
