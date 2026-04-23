@@ -13,7 +13,8 @@ import '../services/onboarding_draft_service.dart';
 import '../widgets/age_gate_page.dart';
 import '../widgets/hook_page.dart';
 import '../widgets/onboarding_page.dart';
-import '../widgets/profile_identity_page.dart';
+import '../widgets/birth_date_page.dart';
+import '../widgets/first_name_page.dart';
 import '../widgets/social_proof_page.dart';
 import '../widgets/goals_page.dart';
 import '../widgets/experience_page.dart';
@@ -27,10 +28,10 @@ import '../widgets/results_summary_page.dart';
 import '../widgets/feature_showcase_page.dart';
 import '../widgets/paywall_page.dart';
 
-/// Full 16-screen onboarding flow — conversion-optimised v2.
+/// Full 17-screen onboarding flow — conversion-optimised v2.
 ///
 /// Phase 1 — Emotional Mirror:   Age Gate → Hook → Social Proof → Disclaimer
-/// Phase 2 — Personalisation:    Profile → Goals → Experience → Frustration → Peptides
+/// Phase 2 — Personalisation:    Name → Birth Date → Goals → Experience → Frustration → Peptides
 /// Phase 3 — Aha Moment:         Calculator Demo → Review Gate
 /// Phase 4 — Reveal:             Processing → Protocol Preview → Results Summary
 /// Phase 5 — Features & Convert: Feature Showcase → Paywall
@@ -44,7 +45,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
   int _currentPage = 0;
-  static const _totalPages = 16;
+  static const _totalPages = 17;
 
   // Collected data
   String _firstName = '';
@@ -238,20 +239,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // ── Phase 2: Personalisation (sunk cost) ──────────────
 
-              // 4: Profile identity
-              ProfileIdentityPage(
+              // 4: First name
+              FirstNamePage(
                 firstName: _firstName,
-                birthDate: _birthDate,
-                onFirstNameChanged: (value) {
+                onChanged: (value) {
                   setState(() => _firstName = value);
                 },
-                onBirthDateChanged: (value) {
+                onNext: _nextPage,
+              ),
+
+              // 5: Birth date
+              BirthDatePage(
+                birthDate: _birthDate,
+                onChanged: (value) {
                   setState(() => _birthDate = value);
                 },
                 onNext: _nextPage,
               ),
 
-              // 5: Goals
+              // 6: Goals
               GoalsPage(
                 selectedGoals: _selectedGoals,
                 onToggle: (goal) {
@@ -266,7 +272,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 6: Experience Level
+              // 7: Experience Level
               ExperiencePage(
                 selected: _experienceLevel,
                 onSelect: (level) {
@@ -275,14 +281,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 7: Biggest Frustration
+              // 8: Biggest Frustration
               FrustrationPage(
                 selected: _frustration,
                 onSelect: (f) => setState(() => _frustration = f),
                 onNext: _nextPage,
               ),
 
-              // 8: Current/Planned Peptides
+              // 9: Current/Planned Peptides
               PeptideSelectPage(
                 selectedPeptides: _selectedPeptides,
                 onToggle: (p) {
@@ -299,28 +305,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // ── Phase 3: Aha Moment ───────────────────────────────
 
-              // 9: Unit Converter Demo
+              // 10: Unit Converter Demo
               CalculatorDemoPage(peptideName: _firstPeptide, onNext: _nextPage),
 
-              // 10: Review Request Gate
+              // 11: Review Request Gate
               ReviewGatePage(onNext: _nextPage),
 
               // ── Phase 4: Reveal ───────────────────────────────────
 
-              // 11: Building Your Protocol (processing)
+              // 12: Building Your Protocol (processing)
               ProcessingPage(
                 onNext: _nextPage,
                 selectedPeptides: _selectedPeptides,
                 selectedGoals: _selectedGoals,
               ),
 
-              // 12: Protocol Preview
+              // 13: Protocol Preview
               ProtocolPreviewPage(
                 peptides: _selectedPeptides,
                 onNext: _nextPage,
               ),
 
-              // 13: Personalised Results Summary
+              // 14: Personalised Results Summary
               ResultsSummaryPage(
                 selectedGoals: _selectedGoals,
                 experienceLevel: _experienceLevel,
@@ -331,10 +337,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // ── Phase 5: Features & Convert ───────────────────────
 
-              // 14: Feature Showcase
+              // 15: Feature Showcase
               FeatureShowcasePage(onNext: _nextPage),
 
-              // 15: Paywall
+              // 16: Paywall
               PaywallPage(
                 onSubscribe: _handleSubscribe,
                 onRestore: _handleRestore,

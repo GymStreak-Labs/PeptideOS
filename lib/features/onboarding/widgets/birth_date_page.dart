@@ -4,30 +4,24 @@ import 'package:flutter/services.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 
-/// Capture identity fields before the paywall so they can be replayed after
-/// auth and sent to AppRefer advanced matching.
-class ProfileIdentityPage extends StatefulWidget {
-  const ProfileIdentityPage({
+/// Collects date of birth for age confirmation and profile continuity.
+class BirthDatePage extends StatefulWidget {
+  const BirthDatePage({
     super.key,
-    required this.firstName,
     required this.birthDate,
-    required this.onFirstNameChanged,
-    required this.onBirthDateChanged,
+    required this.onChanged,
     required this.onNext,
   });
 
-  final String firstName;
   final String birthDate;
-  final ValueChanged<String> onFirstNameChanged;
-  final ValueChanged<String> onBirthDateChanged;
+  final ValueChanged<String> onChanged;
   final VoidCallback onNext;
 
   @override
-  State<ProfileIdentityPage> createState() => _ProfileIdentityPageState();
+  State<BirthDatePage> createState() => _BirthDatePageState();
 }
 
-class _ProfileIdentityPageState extends State<ProfileIdentityPage> {
-  late final TextEditingController _firstNameController;
+class _BirthDatePageState extends State<BirthDatePage> {
   late final TextEditingController _yearController;
   late final TextEditingController _monthController;
   late final TextEditingController _dayController;
@@ -35,7 +29,6 @@ class _ProfileIdentityPageState extends State<ProfileIdentityPage> {
   @override
   void initState() {
     super.initState();
-    _firstNameController = TextEditingController(text: widget.firstName);
     final parts = widget.birthDate.split('-');
     _yearController = TextEditingController(
       text: parts.length == 3 ? parts[0] : '',
@@ -50,7 +43,6 @@ class _ProfileIdentityPageState extends State<ProfileIdentityPage> {
 
   @override
   void dispose() {
-    _firstNameController.dispose();
     _yearController.dispose();
     _monthController.dispose();
     _dayController.dispose();
@@ -62,7 +54,7 @@ class _ProfileIdentityPageState extends State<ProfileIdentityPage> {
     final month = _monthController.text.trim().padLeft(2, '0');
     final day = _dayController.text.trim().padLeft(2, '0');
     final candidate = '$year-$month-$day';
-    widget.onBirthDateChanged(_isValidDate(candidate) ? candidate : '');
+    widget.onChanged(_isValidDate(candidate) ? candidate : '');
     setState(() {});
   }
 
@@ -85,13 +77,11 @@ class _ProfileIdentityPageState extends State<ProfileIdentityPage> {
     return !eighteenthBirthday.isAfter(now);
   }
 
-  bool get _canContinue =>
-      _firstNameController.text.trim().isNotEmpty &&
-      _isValidDate(
-        '${_yearController.text.trim()}-'
-        '${_monthController.text.trim().padLeft(2, '0')}-'
-        '${_dayController.text.trim().padLeft(2, '0')}',
-      );
+  bool get _canContinue => _isValidDate(
+    '${_yearController.text.trim()}-'
+    '${_monthController.text.trim().padLeft(2, '0')}-'
+    '${_dayController.text.trim().padLeft(2, '0')}',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -104,30 +94,18 @@ class _ProfileIdentityPageState extends State<ProfileIdentityPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: AppSpacing.huge),
-            Text('SYS.PROFILE // IDENTITY', style: AppTypography.systemLabel),
+            Text('SYS.PROFILE // AGE', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Let’s personalise\nyour protocol',
+              'When were\nyou born?',
               style: AppTypography.h1.copyWith(fontSize: 28),
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(
-              'This helps us personalise your profile and improve attribution matching after sign-in.',
+              'PeptideOS is built for adults only. Your birth date also keeps your profile consistent after sign-in.',
               style: AppTypography.bodySmall,
             ),
             const SizedBox(height: AppSpacing.xl),
-            _CyberInput(
-              controller: _firstNameController,
-              label: 'FIRST NAME',
-              hint: 'Joe',
-              keyboardType: TextInputType.name,
-              textCapitalization: TextCapitalization.words,
-              onChanged: (value) {
-                widget.onFirstNameChanged(value.trim());
-                setState(() {});
-              },
-            ),
-            const SizedBox(height: AppSpacing.lg),
             Text(
               'DATE OF BIRTH',
               style: AppTypography.systemLabel.copyWith(
@@ -145,8 +123,6 @@ class _ProfileIdentityPageState extends State<ProfileIdentityPage> {
                     label: 'YEAR',
                     hint: '1990',
                     maxLength: 4,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: (_) => _syncBirthDate(),
                   ),
                 ),
@@ -157,8 +133,6 @@ class _ProfileIdentityPageState extends State<ProfileIdentityPage> {
                     label: 'MM',
                     hint: '04',
                     maxLength: 2,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: (_) => _syncBirthDate(),
                   ),
                 ),
@@ -169,8 +143,6 @@ class _ProfileIdentityPageState extends State<ProfileIdentityPage> {
                     label: 'DD',
                     hint: '23',
                     maxLength: 2,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: (_) => _syncBirthDate(),
                   ),
                 ),
@@ -179,7 +151,7 @@ class _ProfileIdentityPageState extends State<ProfileIdentityPage> {
             const SizedBox(height: AppSpacing.md),
             Text(
               _canContinue
-                  ? 'Stored as encrypted account profile data after sign-in.'
+                  ? 'Thanks. Your profile is ready to personalise.'
                   : 'Enter a valid 18+ birth date to continue.',
               style: AppTypography.disclaimer.copyWith(
                 color: _canContinue ? AppColors.primary : AppColors.warning,
@@ -204,28 +176,21 @@ class _CyberInput extends StatelessWidget {
     required this.label,
     required this.hint,
     required this.onChanged,
-    this.keyboardType,
-    this.textCapitalization = TextCapitalization.none,
-    this.inputFormatters,
-    this.maxLength,
+    required this.maxLength,
   });
 
   final TextEditingController controller;
   final String label;
   final String hint;
   final ValueChanged<String> onChanged;
-  final TextInputType? keyboardType;
-  final TextCapitalization textCapitalization;
-  final List<TextInputFormatter>? inputFormatters;
-  final int? maxLength;
+  final int maxLength;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
-      keyboardType: keyboardType,
-      textCapitalization: textCapitalization,
-      inputFormatters: inputFormatters,
+      keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       maxLength: maxLength,
       onChanged: onChanged,
       cursorColor: AppColors.primary,
