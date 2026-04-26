@@ -2,9 +2,10 @@ import 'package:apprefer/apprefer.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../data/services/subscription_service.dart';
 
 /// Analytics singleton — wraps Firebase Analytics + stamps a stable install ID
 /// on Crashlytics, RC, and AppRefer so attribution can tie installs to users.
@@ -41,7 +42,9 @@ class AnalyticsService {
         await _analytics.setUserProperty(name: 'install_id', value: _installId);
       } catch (_) {}
       try {
-        await Purchases.setAttributes({'install_id': _installId!});
+        await SubscriptionService.instance.setAttributes({
+          'install_id': _installId!,
+        });
       } catch (_) {}
       try {
         await AppReferSDK.setUserId(_installId!);
@@ -79,7 +82,7 @@ class AnalyticsService {
     } catch (_) {}
 
     try {
-      await Purchases.setAttributes({
+      await SubscriptionService.instance.setAttributes({
         '\$email': email,
         '\$displayName': displayName ?? '',
         'install_id': _installId ?? 'unknown',

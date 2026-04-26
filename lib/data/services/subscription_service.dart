@@ -102,6 +102,19 @@ class SubscriptionService {
     }
   }
 
+  /// Attach RevenueCat subscriber attributes only after the SDK is configured.
+  /// The Purchases Flutter plugin can hard-fail natively if called before
+  /// configure(), so all app code should route attribute writes through here
+  /// instead of calling [Purchases.setAttributes] directly.
+  Future<void> setAttributes(Map<String, String> attributes) async {
+    if (!_configured) return;
+    try {
+      await Purchases.setAttributes(attributes);
+    } catch (e) {
+      debugPrint('[SubscriptionService] setAttributes failed: $e');
+    }
+  }
+
   Future<PurchaseResult> purchasePackage(Package package) async {
     if (!_configured) {
       return PurchaseResult(
@@ -193,11 +206,7 @@ class PurchaseResult {
 }
 
 class RestoreResult {
-  RestoreResult({
-    required this.success,
-    required this.isPremium,
-    this.error,
-  });
+  RestoreResult({required this.success, required this.isPremium, this.error});
 
   final bool success;
   final bool isPremium;
