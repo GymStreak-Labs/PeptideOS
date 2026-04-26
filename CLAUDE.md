@@ -17,15 +17,14 @@ Intelligent peptide protocol manager. Track doses, calculate reconstitution, man
 - **Charts**: `fl_chart` 0.69
 - **IDs**: `uuid` 4.5 — Firestore doc IDs + DoseLog cross-reference keys.
 
-## Phase 2 credential placeholders (search for these before release)
-All live in source code for visibility. Replace with real values once the
-backing services are provisioned.
-- `lib/data/services/subscription_service.dart` — `TODO_RC_IOS_KEY`, `TODO_RC_ANDROID_KEY`
+## Credential placeholders (search for these before release)
+RevenueCat public SDK keys are live in `lib/data/services/subscription_service.dart`.
+The remaining placeholders live in source code for visibility:
 - `lib/main.dart` — `APPREFER_API_KEY`, `FACEBOOK_APP_ID` (read via `--dart-define`)
 - `ios/Runner/Info.plist` — `TODO_FB_APP_ID`, `TODO_FB_CLIENT_TOKEN`, `TODO_FB_URL_SCHEME`
 - No TODOs for Firebase — using the pre-existing `gymstreak-labs` project (iOS + Android apps already registered).
 
-Use `--dart-define=FORCE_PREMIUM=true` to bypass RC for testing while keys are still TODO.
+Use `--dart-define=FORCE_PREMIUM=true` to bypass RC for internal testing.
 
 ## Bundle ID
 - iOS: `com.gymstreaklabs.peptideOs`

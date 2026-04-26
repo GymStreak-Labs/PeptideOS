@@ -8,12 +8,11 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../models/app_user.dart';
 
-/// Thin wrapper over Firebase Auth — mirrors the GymLevels pattern so the rest
-/// of the app has a consistent interface regardless of which sign-in provider
-/// is used.
+/// Thin wrapper over Firebase Auth so the rest of the app has a consistent
+/// interface regardless of which sign-in provider is used.
 class AuthService {
   AuthService({FirebaseAuth? firebaseAuth})
-      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
+    : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
   final FirebaseAuth _firebaseAuth;
 
@@ -73,13 +72,13 @@ class AuthService {
         nonce: nonce,
       );
 
-      final oauthCredential = OAuthProvider('apple.com').credential(
-        idToken: appleCredential.identityToken,
-        rawNonce: rawNonce,
-      );
+      final oauthCredential = OAuthProvider(
+        'apple.com',
+      ).credential(idToken: appleCredential.identityToken, rawNonce: rawNonce);
 
-      final userCredential =
-          await _firebaseAuth.signInWithCredential(oauthCredential);
+      final userCredential = await _firebaseAuth.signInWithCredential(
+        oauthCredential,
+      );
 
       if (appleCredential.givenName != null ||
           appleCredential.familyName != null) {
@@ -161,10 +160,9 @@ class AuthService {
         scopes: [AppleIDAuthorizationScopes.email],
         nonce: nonce,
       );
-      final oauth = OAuthProvider('apple.com').credential(
-        idToken: appleCredential.identityToken,
-        rawNonce: rawNonce,
-      );
+      final oauth = OAuthProvider(
+        'apple.com',
+      ).credential(idToken: appleCredential.identityToken, rawNonce: rawNonce);
       await user.reauthenticateWithCredential(oauth);
     } else if (providerIds.contains('google.com')) {
       final googleUser = await GoogleSignIn().signIn();
@@ -240,10 +238,7 @@ class AuthService {
           message: 'Password is too weak. Use at least 6 characters.',
         );
       case 'invalid-email':
-        return AuthException(
-          code: e.code,
-          message: 'Invalid email address.',
-        );
+        return AuthException(code: e.code, message: 'Invalid email address.');
       default:
         return AuthException(
           code: e.code,

@@ -49,9 +49,7 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
     }
     if (!mounted) return;
 
-    final pkg = sub.offerings?.current?.availablePackages.isNotEmpty == true
-        ? sub.offerings!.current!.availablePackages.first
-        : null;
+    final pkg = sub.defaultUpgradePackage;
 
     if (pkg == null) {
       setState(() => _busy = false);
@@ -75,9 +73,9 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
     } else if (result.cancelled) {
       // user backed out — leave the sheet open
     } else if (result.error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result.error!)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(result.error!)));
     }
   }
 
@@ -125,22 +123,30 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
               height: AppSpacing.sheetHandleHeight,
               decoration: BoxDecoration(
                 color: AppColors.border,
-                borderRadius:
-                    BorderRadius.circular(AppSpacing.sheetHandleHeight),
+                borderRadius: BorderRadius.circular(
+                  AppSpacing.sheetHandleHeight,
+                ),
               ),
             ),
           ),
           const SizedBox(height: AppSpacing.xl),
-          Text('SYS.UPGRADE // PREMIUM',
-              style: AppTypography.systemLabel, textAlign: TextAlign.center),
+          Text(
+            'SYS.UPGRADE // PREMIUM',
+            style: AppTypography.systemLabel,
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: AppSpacing.sm),
-          Text('Unlock the full protocol',
-              style: AppTypography.h2, textAlign: TextAlign.center),
+          Text(
+            'Unlock the full protocol',
+            style: AppTypography.h2,
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: AppSpacing.sm),
           Text(
             widget.reason,
-            style: AppTypography.bodyMedium
-                .copyWith(color: AppColors.textSecondary),
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppSpacing.xl),
@@ -157,9 +163,12 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
           const SizedBox(height: AppSpacing.sm),
           TextButton(
             onPressed: _busy ? null : _restore,
-            child: Text('Restore purchases',
-                style: AppTypography.bodySmall
-                    .copyWith(color: AppColors.textSecondary)),
+            child: Text(
+              'Restore purchases',
+              style: AppTypography.bodySmall.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
           ),
           TextButton(
             onPressed: _busy
@@ -168,9 +177,12 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
                     HapticFeedback.selectionClick();
                     Navigator.of(context).pop(false);
                   },
-            child: Text('Not right now',
-                style: AppTypography.bodySmall
-                    .copyWith(color: AppColors.textTertiary)),
+            child: Text(
+              'Not right now',
+              style: AppTypography.bodySmall.copyWith(
+                color: AppColors.textTertiary,
+              ),
+            ),
           ),
         ],
       ),
@@ -188,13 +200,19 @@ class _Feature extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Row(
         children: [
-          const Icon(Icons.check_circle_rounded,
-              color: AppColors.primary, size: AppSpacing.iconMedium),
+          const Icon(
+            Icons.check_circle_rounded,
+            color: AppColors.primary,
+            size: AppSpacing.iconMedium,
+          ),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
-            child: Text(label,
-                style: AppTypography.bodyMedium
-                    .copyWith(color: AppColors.textPrimary)),
+            child: Text(
+              label,
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.textPrimary,
+              ),
+            ),
           ),
         ],
       ),

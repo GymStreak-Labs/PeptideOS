@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/theme.dart';
 
-/// Hard paywall — GymLevels-quality design adapted to PeptideOS cyberpunk.
+/// Hard paywall — premium conversion design adapted to PeptideOS cyberpunk.
 ///
 /// Layout: Hero headline → Pricing cards (special offer + annual + weekly)
 ///         → "WHAT YOU GET" divider → Feature showcases → Fixed CTA
@@ -14,7 +14,7 @@ class PaywallPage extends StatefulWidget {
     required this.onRestore,
   });
 
-  final VoidCallback onSubscribe;
+  final Future<void> Function(int selectedPlan) onSubscribe;
   final VoidCallback onRestore;
 
   @override
@@ -192,7 +192,7 @@ class _PaywallPageState extends State<PaywallPage>
                 if (_secretTapCount >= 7) {
                   _secretTapCount = 0;
                   HapticFeedback.heavyImpact();
-                  widget.onSubscribe(); // Secret reviewer bypass
+                  unawaited(widget.onSubscribe(_selectedPlan));
                 }
               },
               child: Text(
@@ -317,7 +317,9 @@ class _PaywallPageState extends State<PaywallPage>
                     gradient: LinearGradient(
                       begin: Alignment(-1.0 + _shimmerController.value * 3, 0),
                       end: Alignment(
-                          -1.0 + _shimmerController.value * 3 + 1, 0),
+                        -1.0 + _shimmerController.value * 3 + 1,
+                        0,
+                      ),
                       colors: [
                         AppColors.primary.withValues(alpha: 0.1),
                         AppColors.primary.withValues(alpha: 0.25),
@@ -342,8 +344,9 @@ class _PaywallPageState extends State<PaywallPage>
                           margin: const EdgeInsets.only(right: 3),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: AppColors.primary
-                                .withValues(alpha: 0.6 - (i * 0.15)),
+                            color: AppColors.primary.withValues(
+                              alpha: 0.6 - (i * 0.15),
+                            ),
                           ),
                         ),
                       ),
@@ -456,9 +459,7 @@ class _PaywallPageState extends State<PaywallPage>
                         const SizedBox(height: 2),
                         Text(
                           'Just \$2.50/mo',
-                          style: AppTypography.bodySmall.copyWith(
-                            fontSize: 11,
-                          ),
+                          style: AppTypography.bodySmall.copyWith(fontSize: 11),
                         ),
                       ],
                     ),
@@ -834,7 +835,11 @@ class _PaywallPageState extends State<PaywallPage>
   // ═══════════════════════════════════════════════════════
 
   Widget _buildFixedCta(double bottomPadding) {
-    final planLabels = ['ACTIVATE PRO — \$29.99/year', 'START FREE TRIAL', 'SUBSCRIBE — \$9.99/week'];
+    final planLabels = [
+      'ACTIVATE PRO — \$29.99/year',
+      'START FREE TRIAL',
+      'SUBSCRIBE — \$9.99/week',
+    ];
     final label = planLabels[_selectedPlan];
 
     return AnimatedOpacity(
@@ -866,17 +871,14 @@ class _PaywallPageState extends State<PaywallPage>
           child: GestureDetector(
             onTap: () {
               HapticFeedback.mediumImpact();
-              widget.onSubscribe();
+              unawaited(widget.onSubscribe(_selectedPlan));
             },
             child: Container(
               height: AppSpacing.buttonHeight + 4,
               decoration: BoxDecoration(
                 color: AppColors.primary.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
-                border: Border.all(
-                  color: AppColors.primary,
-                  width: 1.5,
-                ),
+                border: Border.all(color: AppColors.primary, width: 1.5),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.primary.withValues(alpha: 0.4),

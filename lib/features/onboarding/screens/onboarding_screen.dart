@@ -147,7 +147,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   String get _firstPeptide =>
       _selectedPeptides.isNotEmpty ? _selectedPeptides.first : 'BPC-157';
 
-  Future<void> _handleSubscribe() async {
+  Future<void> _handleSubscribe(int selectedPlan) async {
     final sub = context.read<SubscriptionProvider>();
     AnalyticsService().logPaywallViewed('onboarding');
 
@@ -157,12 +157,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (!mounted) return;
 
     final offerings = sub.offerings;
-    // If RC is not configured yet (TODO keys), skip straight to post-onboarding
-    // so testers can still reach the app shell. Real purchase flow will light
-    // up once SubscriptionService.configure() succeeds.
-    final pkg = offerings?.current?.availablePackages.isNotEmpty == true
-        ? offerings!.current!.availablePackages.first
-        : null;
+    // If RC offerings are unavailable, skip straight to post-onboarding so
+    // internal testers can still reach the app shell.
+    final pkg = offerings == null
+        ? null
+        : sub.packageForOnboardingPlan(selectedPlan);
 
     if (pkg == null) {
       await _completeOnboarding();

@@ -15,9 +15,9 @@ class SubscriptionProvider extends ChangeNotifier {
     SubscriptionService? service,
     SettingsProvider? settingsProvider,
     AnalyticsService? analytics,
-  })  : _service = service ?? SubscriptionService.instance,
-        _settingsProvider = settingsProvider,
-        _analytics = analytics ?? AnalyticsService() {
+  }) : _service = service ?? SubscriptionService.instance,
+       _settingsProvider = settingsProvider,
+       _analytics = analytics ?? AnalyticsService() {
     _isPremium = _service.lastKnownPremium;
     _sub = _service.premiumStatusStream.listen(_handleUpdate);
     unawaited(refresh());
@@ -39,6 +39,41 @@ class SubscriptionProvider extends ChangeNotifier {
   bool get isLoadingOfferings => _loadingOfferings;
   Offerings? get offerings => _offerings;
   String? get offeringsError => _offeringsError;
+
+  /// Onboarding paywall plan index:
+  /// 0 = special annual, 1 = annual, 2 = weekly.
+  Package? packageForOnboardingPlan(int planIndex) {
+    return switch (planIndex) {
+      0 =>
+        _packageByIdentifier(SubscriptionService.specialAnnualPackageId) ??
+            _packageByIdentifier(SubscriptionService.annualPackageId),
+      1 => _packageByIdentifier(SubscriptionService.annualPackageId),
+      2 => _packageByIdentifier(SubscriptionService.weeklyPackageId),
+      _ => defaultUpgradePackage,
+    };
+  }
+
+  Package? get defaultUpgradePackage {
+    return _packageByIdentifier(SubscriptionService.specialAnnualPackageId) ??
+        _packageByIdentifier(SubscriptionService.annualPackageId) ??
+        _packageByIdentifier(SubscriptionService.weeklyPackageId) ??
+        _firstAvailablePackage;
+  }
+
+  Package? _packageByIdentifier(String identifier) {
+    final packages = _offerings?.current?.availablePackages;
+    if (packages == null) return null;
+    for (final package in packages) {
+      if (package.identifier == identifier) return package;
+    }
+    return null;
+  }
+
+  Package? get _firstAvailablePackage {
+    final packages = _offerings?.current?.availablePackages;
+    if (packages == null || packages.isEmpty) return null;
+    return packages.first;
+  }
 
   /// Per-free-user hard limits. Enforced by the UI through [canAddPeptide] /
   /// [canAddProtocol] before calling into the data providers.
@@ -89,11 +124,16 @@ class SubscriptionProvider extends ChangeNotifier {
     final result = await _service.purchasePackage(package);
     if (result.success) {
       final product = package.storeProduct;
-      unawaited(_analytics.logPurchaseCompleted(
-          package.identifier, product.price));
+      unawaited(
+        _analytics.logPurchaseCompleted(package.identifier, product.price),
+      );
     } else if (!result.cancelled) {
-      unawaited(_analytics.logPurchaseFailed(
-          package.identifier, result.error ?? 'unknown'));
+      unawaited(
+        _analytics.logPurchaseFailed(
+          package.identifier,
+          result.error ?? 'unknown',
+        ),
+      );
     }
     return result;
   }

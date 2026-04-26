@@ -4,8 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-/// Wraps RevenueCat. Mirrors GymLevels' service API with PeptideOS-specific
-/// API keys + entitlement.
+/// Wraps RevenueCat with PeptideOS-specific API keys + entitlement.
 ///
 /// Configure with [configure] once at app startup (in main.dart essential init).
 class SubscriptionService {
@@ -17,12 +16,15 @@ class SubscriptionService {
   /// the RC dashboard issues for the PeptideOS project.
   static const String entitlementId = 'premium';
 
-  // TODO_RC_IOS_KEY — replace with the real iOS RC public key once the
-  // RevenueCat project is created. Never reuse GymLevels' keys.
-  static const String _iosKey = 'TODO_RC_IOS_KEY';
+  // PeptideOS RevenueCat public SDK keys. These are app-specific public keys
+  // from the PeptideOS RevenueCat project.
+  static const String _iosKey = 'appl_XKNkSMbIyAVTRVSBAbNmGqTdllb';
 
-  // TODO_RC_ANDROID_KEY — replace with the real Android RC key.
-  static const String _androidKey = 'TODO_RC_ANDROID_KEY';
+  static const String _androidKey = 'goog_vMyLzNLVaxLKmngFQFYgbMFgSzS';
+
+  static const String specialAnnualPackageId = 'special_annual';
+  static const String annualPackageId = r'$rc_annual';
+  static const String weeklyPackageId = r'$rc_weekly';
 
   /// Build-time override: bypass RC and treat the user as premium. Set via
   /// `--dart-define=FORCE_PREMIUM=true` for internal test builds.

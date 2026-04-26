@@ -4,9 +4,8 @@ import 'package:flutter/foundation.dart';
 
 import '../../firebase_options.dart';
 
-/// Initialises Firebase + enables Firestore offline persistence. Mirrors
-/// GymLevels' essential-init flow so the rest of the app can assume Firebase
-/// is ready once this completes.
+/// Initialises Firebase + enables Firestore offline persistence so the rest of
+/// the app can assume Firebase is ready once this completes.
 Future<void> initializeFirebase() async {
   try {
     await Firebase.initializeApp(
