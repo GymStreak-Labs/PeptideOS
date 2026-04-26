@@ -26,6 +26,9 @@ The remaining placeholders live in source code for visibility:
 
 Use `--dart-define=FORCE_PREMIUM=true` to bypass RC for internal testing.
 
+## Provisioned third-party app IDs
+- AppRefer app: `app_74601f5191f` (GymStreak Labs org). Live/test SDK keys are stored in Mission Control vault as `peptideos-apprefer-api-key` and `peptideos-apprefer-test-api-key`.
+
 ## Bundle ID
 - iOS: `com.gymstreaklabs.peptideOs`
 - Android: `com.gymstreaklabs.peptide_os`
