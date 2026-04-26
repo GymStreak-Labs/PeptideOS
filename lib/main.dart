@@ -32,10 +32,11 @@ import 'features/protocol/providers/protocol_provider.dart';
 import 'features/subscription/providers/subscription_provider.dart';
 import 'services/notification_service.dart';
 
-/// Credentials still pending — search for TODO_ in this file when wiring up
-/// RevenueCat / AppRefer / Facebook App Events. None of these blocks short-
-/// circuit app start; if the keys are still placeholders the SDK init is
-/// skipped and the app continues in "free tier only" mode.
+/// AppRefer is injected via --dart-define so test/live keys can stay out of
+/// source. RevenueCat and Meta App Events use public SDK/app identifiers in
+/// source. None of these blocks short-circuit app start; if AppRefer is still
+/// a placeholder the SDK init is skipped and attribution continues with the
+/// remaining installed SDKs.
 ///
 /// See CLAUDE.md for the per-SDK credential rollout plan.
 const String _appReferApiKey = String.fromEnvironment(
@@ -44,7 +45,7 @@ const String _appReferApiKey = String.fromEnvironment(
 );
 const String _facebookAppId = String.fromEnvironment(
   'FACEBOOK_APP_ID',
-  defaultValue: 'TODO_FB_APP_ID',
+  defaultValue: '1657843155413563',
 );
 
 Future<void> main() async {

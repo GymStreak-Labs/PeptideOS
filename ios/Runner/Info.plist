@@ -72,11 +72,11 @@
 	<!-- Encryption export compliance (no custom crypto beyond HTTPS). -->
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<!-- Facebook App Events — TODO replace placeholders before App Store build. -->
+	<!-- Facebook App Events. -->
 	<key>FacebookAppID</key>
-	<string>TODO_FB_APP_ID</string>
+	<string>1657843155413563</string>
 	<key>FacebookClientToken</key>
-	<string>TODO_FB_CLIENT_TOKEN</string>
+	<string>3901cdf2fd04a827584b731278d182a8</string>
 	<key>FacebookDisplayName</key>
 	<string>PeptideOS</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -89,8 +89,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<!-- TODO_FB_URL_SCHEME: replace with fb<FACEBOOK_APP_ID>. -->
-				<string>fbTODO_FB_APP_ID</string>
+				<string>fb1657843155413563</string>
 			</array>
 		</dict>
 	</array>

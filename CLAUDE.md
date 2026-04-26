@@ -9,7 +9,7 @@ Intelligent peptide protocol manager. Track doses, calculate reconstitution, man
 - **Fonts**: Space Grotesk (body) + JetBrains Mono (data) via `google_fonts`
 - **Backend**: Firebase (Auth, Firestore) — Phase 2, replaces Isar. Firestore offline persistence enabled.
 - **Auth**: Firebase Auth — Apple (iOS), Google, Email/password. Anonymous mode is intentionally disabled so AppRefer attribution survives cross-device.
-- **Subscriptions**: RevenueCat (`purchases_flutter` 8.x), entitlement `premium`. Keys are TODO until the RC project is created.
+- **Subscriptions**: RevenueCat (`purchases_flutter` 8.x), entitlement `premium`. Public SDK keys are live in source.
 - **Attribution**: AppRefer Flutter SDK 0.4.1 (`configure` on app start with API key + advanced matching on sign-in).
 - **Ad events**: Facebook App Events + App Tracking Transparency (ATT prompt deferred to post first-frame).
 - **Notifications**: `flutter_local_notifications` 18.x + `timezone` + `flutter_timezone` — real scheduling wired in Phase 2.
@@ -18,16 +18,16 @@ Intelligent peptide protocol manager. Track doses, calculate reconstitution, man
 - **IDs**: `uuid` 4.5 — Firestore doc IDs + DoseLog cross-reference keys.
 
 ## Credential placeholders (search for these before release)
-RevenueCat public SDK keys are live in `lib/data/services/subscription_service.dart`.
-The remaining placeholders live in source code for visibility:
-- `lib/main.dart` — `APPREFER_API_KEY`, `FACEBOOK_APP_ID` (read via `--dart-define`)
-- `ios/Runner/Info.plist` — `TODO_FB_APP_ID`, `TODO_FB_CLIENT_TOKEN`, `TODO_FB_URL_SCHEME`
+RevenueCat public SDK keys and Meta App Events identifiers are live in source.
+The remaining placeholder lives in source code for visibility:
+- `lib/main.dart` — `APPREFER_API_KEY` (read via `--dart-define`; live/test values are stored in Mission Control vault)
 - No TODOs for Firebase — using the pre-existing `gymstreak-labs` project (iOS + Android apps already registered).
 
 Use `--dart-define=FORCE_PREMIUM=true` to bypass RC for internal testing.
 
 ## Provisioned third-party app IDs
 - AppRefer app: `app_74601f5191f` (GymStreak Labs org). Live/test SDK keys are stored in Mission Control vault as `peptideos-apprefer-api-key` and `peptideos-apprefer-test-api-key`.
+- Meta app: `1657843155413563` (GymStreak business portfolio). Client token and URL scheme are stored in Mission Control vault as `peptideos-meta-client-token` and `peptideos-meta-url-scheme`; source is also configured for Facebook App Events on iOS + Android.
 
 ## Bundle ID
 - iOS: `com.gymstreaklabs.peptideOs`
