@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-/// Wraps RevenueCat with PeptideOS-specific API keys + entitlement.
+/// Wraps RevenueCat with PepMod-specific API keys + entitlement.
 ///
 /// Configure with [configure] once at app startup (in main.dart essential init).
 class SubscriptionService {
@@ -13,11 +13,11 @@ class SubscriptionService {
   static final SubscriptionService instance = SubscriptionService._();
 
   /// RevenueCat entitlement granted to premium users. Matches the identifier
-  /// the RC dashboard issues for the PeptideOS project.
+  /// the RC dashboard issues for the PepMod project.
   static const String entitlementId = 'premium';
 
-  // PeptideOS RevenueCat public SDK keys. These are app-specific public keys
-  // from the PeptideOS RevenueCat project.
+  // PepMod RevenueCat public SDK keys. These are app-specific public keys
+  // from the PepMod RevenueCat project.
   static const String _iosKey = 'appl_XKNkSMbIyAVTRVSBAbNmGqTdllb';
 
   static const String _androidKey = 'goog_vMyLzNLVaxLKmngFQFYgbMFgSzS';

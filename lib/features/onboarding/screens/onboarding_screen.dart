@@ -229,7 +229,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 systemLabel: 'SYS.LEGAL // DISCLAIMER',
                 title: 'Important\nDisclaimer',
                 body:
-                    'PeptideOS is a tracking and educational tool only. It does not provide medical advice, diagnosis, or treatment.\n\nAlways consult a qualified healthcare provider before starting any peptide regimen.\n\nBy continuing, you acknowledge this is not a medical device.',
+                    'PepMod is a tracking and educational tool only. It does not provide medical advice, diagnosis, or treatment.\n\nAlways consult a qualified healthcare provider before starting any peptide regimen.\n\nBy continuing, you acknowledge this is not a medical device.',
                 icon: Icons.shield_rounded,
                 iconColor: AppColors.warning,
                 buttonLabel: 'I UNDERSTAND',

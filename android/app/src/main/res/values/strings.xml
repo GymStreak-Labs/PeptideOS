@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PeptideOS</string>
+    <string name="app_name">PepMod</string>
     <string name="facebook_app_id">1657843155413563</string>
     <string name="facebook_client_token">3901cdf2fd04a827584b731278d182a8</string>
     <string name="fb_login_protocol_scheme">fb1657843155413563</string>

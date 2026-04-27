@@ -598,7 +598,7 @@ class _LegalSheet extends StatelessWidget {
 }
 
 const _termsText =
-    'PeptideOS is provided "as is" for educational and tracking purposes only. '
+    'PepMod is provided "as is" for educational and tracking purposes only. '
     'By using this app you agree that no information provided constitutes medical advice. '
     'You are responsible for your own research and consultation with qualified healthcare providers. '
     'We reserve the right to update these terms at any time.\n\n'
@@ -606,13 +606,13 @@ const _termsText =
     'Use at your own risk.';
 
 const _privacyText =
-    'PeptideOS stores all your data locally on your device. Nothing is transmitted to our servers by default. '
+    'PepMod stores all your data locally on your device. Nothing is transmitted to our servers by default. '
     'If optional cloud sync is enabled in the future, data is encrypted in transit. '
     'We do not sell, rent, or share your data with third parties. '
     'You can delete all your data at any time from the Profile tab.';
 
 const _disclaimerText =
-    'PeptideOS is a wellness and tracking tool — NOT a medical device. '
+    'PepMod is a wellness and tracking tool — NOT a medical device. '
     'Nothing in this app constitutes medical advice, diagnosis, prescription, or treatment recommendation. '
     'Peptides described in the library are for educational purposes only. '
     'Always consult a qualified healthcare provider before starting, changing, or stopping any regimen. '

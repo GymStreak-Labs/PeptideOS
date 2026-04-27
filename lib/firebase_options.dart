@@ -1,4 +1,4 @@
-// File generated for PeptideOS (gymstreak-labs Firebase project).
+// File generated for PepMod (gymstreak-labs Firebase project).
 //
 // Mirrors the shape of `flutterfire configure` output so the usage site remains
 // `Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)`.
@@ -15,7 +15,7 @@ class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       throw UnsupportedError(
-        'PeptideOS does not support Firebase on web. Run on iOS or Android.',
+        'PepMod does not support Firebase on web. Run on iOS or Android.',
       );
     }
     switch (defaultTargetPlatform) {
@@ -28,7 +28,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.linux:
       case TargetPlatform.fuchsia:
         throw UnsupportedError(
-          'PeptideOS does not support Firebase on '
+          'PepMod does not support Firebase on '
           '${defaultTargetPlatform.name}.',
         );
     }

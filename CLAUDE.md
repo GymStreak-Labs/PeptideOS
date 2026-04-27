@@ -1,7 +1,9 @@
-# PeptideOS
+# PepMod
 
 ## Overview
 Intelligent peptide protocol manager. Track doses, calculate reconstitution, manage protocols, and optimise your peptide journey with AI-powered insights.
+
+Public app name: **PepMod**. Historical internal package/bundle identifiers still use `peptide_os` / `peptideOs`; do not rename those unless Firebase, RevenueCat, AppRefer, Meta, App Store, and Play Console integrations are migrated together.
 
 ## Tech Stack
 - **Framework**: Flutter 3.41.4
@@ -176,7 +178,7 @@ Essential (awaited, pre-`runApp`):
 5. `AppReferSDK.configure()` — safe no-op if API key still TODO
 6. `AnalyticsService().initializeIdentity()` — stable install ID stamped on Crashlytics / Analytics / RC / AppRefer
 7. `PeptideLibraryRepository().seedIfEmpty()` — fire-and-forget
-8. `runApp(PeptideOSApp())`
+8. `runApp(PepModApp())`
 
 Deferred (post-first-frame):
 - `NotificationService.initialize()`
@@ -189,7 +191,7 @@ Deferred (post-first-frame):
 4. Signed in + onboarded → `AppShell`
 
 Providers own the UID swap: every user-scoped provider has `setUid(String)` and
-a `ChangeNotifierProxyProvider<AuthProvider, T>` in `PeptideOSApp` triggers it
+a `ChangeNotifierProxyProvider<AuthProvider, T>` in `PepModApp` triggers it
 on auth state change. One provider instance survives sign-in / sign-out.
 
 ## Free tier gating

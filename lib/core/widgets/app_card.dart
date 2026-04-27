@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 
-/// Standard content card for PeptideOS.
+/// Standard content card for PepMod.
 /// Dark surface with subtle border, no shadow. Press state lightens.
 class AppCard extends StatefulWidget {
   const AppCard({

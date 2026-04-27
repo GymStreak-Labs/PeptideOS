@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-/// PeptideOS — "Clinical Cyberpunk" colour system.
+/// PepMod — "Clinical Cyberpunk" colour system.
 /// Deep navy-black base, electric neon accents used surgically.
 /// Sophistication over spectacle. Deus Ex, not Saints Row.
 abstract final class AppColors {

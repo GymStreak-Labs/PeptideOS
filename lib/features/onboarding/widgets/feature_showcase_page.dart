@@ -20,7 +20,7 @@ class _FeatureShowcasePageState extends State<FeatureShowcasePage> {
     _Feature(
       'AI.INSIGHT',
       'Accumulating\nIntelligence',
-      'The longer you use PeptideOS, the smarter it gets. Your AI mentor correlates protocol changes with outcomes — surfacing patterns you\'d never spot yourself.',
+      'The longer you use PepMod, the smarter it gets. Your AI mentor correlates protocol changes with outcomes — surfacing patterns you\'d never spot yourself.',
       Icons.auto_awesome_rounded,
       AppColors.aiInsightBright,
     ),

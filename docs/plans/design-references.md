@@ -1,13 +1,13 @@
-# PeptideOS — Design Reference Guide
+# PepMod — Design Reference Guide
 
 ## Design Vision
-PeptideOS should feel like an Apple Design Award winner — modern, data-rich but never cluttered, dark-mode-first, with purposeful animations and a calming-yet-premium aesthetic. We're building a tool that handles complex medical data but presents it with the warmth and clarity of the best health apps.
+PepMod should feel like an Apple Design Award winner — modern, data-rich but never cluttered, dark-mode-first, with purposeful animations and a calming-yet-premium aesthetic. We're building a tool that handles complex medical data but presents it with the warmth and clarity of the best health apps.
 
 ---
 
-## 0. Unified Design Language — "PeptideOS Design System"
+## 0. Unified Design Language — "PepMod Design System"
 
-PeptideOS has **one design language** — identical on iOS and Android. No platform-adaptive widgets, no Cupertino-on-iOS / Material-on-Android split. The app looks, feels, and behaves the same everywhere, like Oura, Calm, or Headspace.
+PepMod has **one design language** — identical on iOS and Android. No platform-adaptive widgets, no Cupertino-on-iOS / Material-on-Android split. The app looks, feels, and behaves the same everywhere, like Oura, Calm, or Headspace.
 
 ### Why One Language
 - Premium apps own their identity — the *brand* is the design language, not the platform
@@ -19,7 +19,7 @@ PeptideOS has **one design language** — identical on iOS and Android. No platf
 - **All custom widgets** — no `Material` or `Cupertino` defaults for core UI
 - **Custom `ThemeData`** built from our own design tokens (colours, typography, spacing, radii)
 - **Custom bottom nav bar** — our own floating glass-style tab bar, not `BottomNavigationBar` or `CupertinoTabBar`
-- **Custom cards, buttons, inputs, sheets** — all bespoke, matching the PeptideOS identity
+- **Custom cards, buttons, inputs, sheets** — all bespoke, matching the PepMod identity
 - **Custom icon set** — consistent across both platforms (not SF Symbols, not Material Icons)
 - **One font family** — Inter or a similar cross-platform geometric sans-serif (not SF Pro, which is Apple-only)
 - **Platform-specific only where mandatory**: status bar style, notification channels, health data APIs (HealthKit / Health Connect), camera permissions. Nothing the user sees differs.
@@ -32,13 +32,13 @@ PeptideOS has **one design language** — identical on iOS and Android. No platf
 **What makes it great:**
 - **Activity Path** — a single visual that reframes fitness data into "in range / above / below" zones. Simplifies complexity into an intuitive glanceable format
 - **Mascot-driven UX** (Yorhart) — abstract character that provides emotional connection without being childish. Creates a "soft environment" that feels pleasant and frictionless
-- **Perceived Exertion slider** — enriches objective data with personal context, featuring micro-animations. Brilliant for PeptideOS symptom logging
+- **Perceived Exertion slider** — enriches objective data with personal context, featuring micro-animations. Brilliant for PepMod symptom logging
 - **Non-judgmental tone** — every piece of copy validates the user's effort. No guilt, no comparison
 - **Warm color palette** — soft blues and greens, soothing tones. Smooth transitions between screens
 - **Monthly Summary** — focuses on personal progress, not comparison to others
 - **Revenue**: ~$55K/month, 4.7 stars, soft paywall with 50% OFF timer after onboarding
 
-**Steal for PeptideOS:**
+**Steal for PepMod:**
 - Activity Path concept → "Protocol Health" visualization showing adherence zones
 - Perceived Exertion slider → daily symptom logging with micro-animations
 - Warm, encouraging tone for AI mentor copy
@@ -53,7 +53,7 @@ PeptideOS has **one design language** — identical on iOS and Android. No platf
 - **SF Symbols** used extensively (called "the single greatest contribution to design Apple has ever made")
 - **Collectible medals** — time-based and achievement-driven engagement
 
-**Steal for PeptideOS:**
+**Steal for PepMod:**
 - Data-as-art approach for progress visualizations and weekly reports
 - Metal/shader-style gradient backgrounds for dashboard
 - Shareable protocol summary cards (for sharing stacks with friends)
@@ -66,7 +66,7 @@ PeptideOS has **one design language** — identical on iOS and Android. No platf
 - **Physical metaphor** (sticker peeling) — grounds digital interaction in real-world familiarity
 - **Purpose-aligned delight** — every animation serves the core purpose, nothing is decorative fluff
 
-**Steal for PeptideOS:**
+**Steal for PepMod:**
 - Micro-animations during reconstitution calculation (syringe filling animation while computing)
 - Multi-sensory dose logging (satisfying haptic + subtle sound when marking dose complete)
 - Physical metaphors: syringe filling, vial liquid levels, injection site body map interactions
@@ -78,7 +78,7 @@ PeptideOS has **one design language** — identical on iOS and Android. No platf
 - **Liquid Glass integration** (updated for iOS 26) — soft transparency, smooth reflections
 - **Core interaction satisfaction** — logging a drink visually fills the character. Instant gratification
 
-**Steal for PeptideOS:**
+**Steal for PepMod:**
 - Visual feedback on dose logging (vial level decreasing, adherence ring filling)
 - Satisfying core interaction for the most frequent action (marking dose as taken)
 
@@ -89,7 +89,7 @@ PeptideOS has **one design language** — identical on iOS and Android. No platf
 - **600+ task icons** — visual identity for each habit
 - **Gets out of the way** — minimal UI, maximum focus
 
-**Steal for PeptideOS:**
+**Steal for PepMod:**
 - One-tap dose completion (tap and hold = satisfying)
 - Colour themes for personalization
 - Minimal chrome, maximum content
@@ -105,7 +105,7 @@ PeptideOS has **one design language** — identical on iOS and Android. No platf
 - **Long-term trend graphs** — slow-moving metrics visualized to show trajectory
 - **Vitals quick-glance** — core health pillars at a glance, anchored to personal baselines
 
-**Steal for PeptideOS:**
+**Steal for PepMod:**
 - Color-coded protocol status (on track = green glow, missed dose = amber, overdue = red)
 - "One Big Thing" for today's dashboard — next dose + most important insight
 - Personal baseline tracking for symptoms (energy, pain relative to YOUR normal)
@@ -132,7 +132,7 @@ Apple's iOS 26 "Liquid Glass" introduced translucency, depth, and floating contr
 - **FotMob**: Toolbar buttons adapt tint to content colour palettes
 - **Le Monde**: Fluid translucent nav bars; floating tab bar recedes with scroll
 
-### How PeptideOS Uses Glass & Depth
+### How PepMod Uses Glass & Depth
 - Custom floating bottom tab bar with frosted glass effect
 - Protocol dashboard: content fills the screen, controls float over it
 - Reconstitution calculator: glass-style input panels over syringe visualization
@@ -141,7 +141,7 @@ Apple's iOS 26 "Liquid Glass" introduced translucency, depth, and floating contr
 
 ---
 
-## 4. Dark Mode Design System (PeptideOS Default)
+## 4. Dark Mode Design System (PepMod Default)
 
 ### Background Hierarchy
 | Surface | Color | Usage |
@@ -210,7 +210,7 @@ Alternative options: Plus Jakarta Sans (warmer), Outfit (rounder/friendlier), DM
 3. **Physical metaphors** — syringe filling, liquid levels, body map touch responses
 4. **Multi-sensory feedback** — haptic + visual + (optional) audio for key actions
 
-### Key Animations for PeptideOS
+### Key Animations for PepMod
 | Action | Animation | Duration |
 |--------|-----------|----------|
 | Mark dose taken | Satisfying pulse + haptic + checkmark morph | 300ms |
@@ -330,7 +330,7 @@ Alternative options: Plus Jakarta Sans (warmer), Outfit (rounder/friendlier), DM
 
 ## 11. Key Design Principles Summary
 
-1. **One design, every device** — singular custom design language. PeptideOS looks identical on iOS and Android. The brand IS the design system
+1. **One design, every device** — singular custom design language. PepMod looks identical on iOS and Android. The brand IS the design system
 2. **Dark-mode-first** — design in dark mode, adapt to light. Premium, calming, easy on eyes during early-morning/late-night dose times
 3. **Data as story, not spreadsheet** — every number needs context ("Your pain dropped 40% since starting BPC-157" not "Pain: 2/5")
 4. **One Big Thing** — dashboard shows what matters NOW, not everything at once

@@ -1,4 +1,4 @@
-/// PeptideOS core widget library — barrel export.
+/// PepMod core widget library — barrel export.
 library;
 
 export 'glass_container.dart';

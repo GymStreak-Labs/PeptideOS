@@ -1,4 +1,4 @@
-/// PeptideOS animation duration tokens.
+/// PepMod animation duration tokens.
 /// Purposeful animation — every motion serves a function.
 abstract final class AppDurations {
   // ── Interaction feedback ──────────────────────────────────────────────

@@ -1,17 +1,8 @@
-# peptide_os
+# PepMod
 
-A new Flutter project.
+Clinical-cyberpunk peptide protocol tracker for iOS and Android.
 
-## Getting Started
+PepMod helps users track peptide protocols, log doses, manage vials, use a unit-conversion tool, and monitor progress with a single unified Flutter design language.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+> Public app name: **PepMod**  
+> Internal package / bundle identifiers intentionally remain `peptide_os` / `com.gymstreaklabs.peptideOs` / `com.gymstreaklabs.peptide_os` so Firebase, RevenueCat, AppRefer, and Meta integrations stay stable.

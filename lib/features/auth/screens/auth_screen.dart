@@ -149,7 +149,7 @@ class _AuthScreenState extends State<AuthScreen> {
               const SizedBox(height: AppSpacing.lg),
               Text(
                 'By continuing you accept our Terms and Privacy Policy. '
-                'PeptideOS is an educational tool — not medical advice.',
+                'PepMod is an educational tool — not medical advice.',
                 style: AppTypography.disclaimer,
                 textAlign: TextAlign.center,
               ),

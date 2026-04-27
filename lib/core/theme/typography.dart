@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'colors.dart';
 
-/// PeptideOS "Clinical Cyberpunk" type system.
+/// PepMod "Clinical Cyberpunk" type system.
 ///
 /// Dual-font strategy:
 /// - **Space Grotesk** — geometric sans-serif for headings & body. Modern, slightly technical.

@@ -1,7 +1,7 @@
-# PeptideOS — Product Plan
+# PepMod — Product Plan
 
 ## App Name
-**PeptideOS** — "Your peptide protocol, intelligently managed."
+**PepMod** — "Your peptide protocol, intelligently managed."
 
 ## Business
 GymStreak Labs
@@ -285,7 +285,7 @@ peptides/{peptideId}  (global collection)
 
 ## Competitive Advantages Over Existing Apps
 
-| Feature | PepTracker | SHOTLOG | PeptIQ | PeptideOS |
+| Feature | PepTracker | SHOTLOG | PeptIQ | PepMod |
 |---------|-----------|---------|--------|-----------|
 | Reconstitution calc | Basic | Yes | Yes | **Visual + camera scan + reverse calc** |
 | Protocol builder | No | Basic | No | **Drag-drop + stacks + phases + AI checks** |
@@ -325,7 +325,7 @@ Shotsy is the #1 GLP-1 tracker (~1M downloads, $2.25M raised, $49.99/year). Thes
 8. **Maintenance Mode** — explicit support for transitioning to maintenance dose (maps to our taper phase).
 
 ### Our Differentiators vs Shotsy
-| Feature | Shotsy | PeptideOS |
+| Feature | Shotsy | PepMod |
 |---------|--------|-----------|
 | Scope | GLP-1 only | All 50+ peptides |
 | Reconstitution | No (pre-filled pens only) | Visual calculator + camera scan |

@@ -19,7 +19,7 @@ class NotificationService {
 
   static final NotificationService instance = NotificationService._();
 
-  static const String _channelId = 'peptide_os_dose_reminders';
+  static const String _channelId = 'pepmod_dose_reminders';
   static const String _channelName = 'Dose Reminders';
   static const String _channelDescription =
       'Scheduled reminders for your active peptide protocol doses.';

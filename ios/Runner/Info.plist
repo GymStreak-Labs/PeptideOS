@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Peptide Os</string>
+	<string>PepMod</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>peptide_os</string>
+	<string>PepMod</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -68,7 +68,7 @@
 	</array>
 	<!-- App Tracking Transparency prompt (shown on first app open). -->
 	<key>NSUserTrackingUsageDescription</key>
-	<string>We use this to measure the effectiveness of our ads so we can keep PeptideOS free to try.</string>
+	<string>We use this to measure the effectiveness of our ads so we can keep PepMod free to try.</string>
 	<!-- Encryption export compliance (no custom crypto beyond HTTPS). -->
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
@@ -78,7 +78,7 @@
 	<key>FacebookClientToken</key>
 	<string>3901cdf2fd04a827584b731278d182a8</string>
 	<key>FacebookDisplayName</key>
-	<string>PeptideOS</string>
+	<string>PepMod</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>

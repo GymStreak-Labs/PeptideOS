@@ -1,4 +1,4 @@
-/// PeptideOS Design System — barrel export.
+/// PepMod Design System — barrel export.
 library;
 
 export 'colors.dart';

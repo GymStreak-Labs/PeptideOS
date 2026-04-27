@@ -92,7 +92,7 @@ class NotificationPage extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              'PeptideOS',
+                              'PepMod',
                               style: AppTypography.labelMedium.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),

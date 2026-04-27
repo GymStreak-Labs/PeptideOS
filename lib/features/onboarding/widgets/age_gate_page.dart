@@ -58,7 +58,7 @@ class AgeGatePage extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
 
             Text(
-              'PeptideOS is designed for adults aged 18 and over. By continuing, you confirm that you are at least 18 years old.',
+              'PepMod is designed for adults aged 18 and over. By continuing, you confirm that you are at least 18 years old.',
               style: AppTypography.bodyMedium,
               textAlign: TextAlign.center,
             ),
@@ -80,7 +80,7 @@ class AgeGatePage extends StatelessWidget {
                   builder: (ctx) => AlertDialog(
                     title: const Text('Age Requirement'),
                     content: const Text(
-                      'PeptideOS requires users to be 18 years or older. '
+                      'PepMod requires users to be 18 years or older. '
                       'Please consult a healthcare provider for peptide guidance.',
                     ),
                     actions: [

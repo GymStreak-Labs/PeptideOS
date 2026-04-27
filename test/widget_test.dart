@@ -8,7 +8,7 @@ void main() {
   // environments without extra plumbing. Once we add an in-memory DB harness
   // (Phase 2), this file will be rewritten to cover app startup, onboarding
   // routing, and the Protocol home screen.
-  test('PeptideOS test harness boots', () {
+  test('PepMod test harness boots', () {
     expect(2 + 2, equals(4));
   });
 }

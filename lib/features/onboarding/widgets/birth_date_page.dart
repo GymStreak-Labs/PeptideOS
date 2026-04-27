@@ -102,7 +102,7 @@ class _BirthDatePageState extends State<BirthDatePage> {
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(
-              'PeptideOS is built for adults only. Your birth date also keeps your profile consistent after sign-in.',
+              'PepMod is built for adults only. Your birth date also keeps your profile consistent after sign-in.',
               style: AppTypography.bodySmall,
             ),
             const SizedBox(height: AppSpacing.xl),

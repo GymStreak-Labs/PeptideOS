@@ -4,7 +4,7 @@ import 'package:in_app_review/in_app_review.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 
-/// Screen 10: Review Request Gate — "Enjoying PeptideOS so far?"
+/// Screen 10: Review Request Gate — "Enjoying PepMod so far?"
 /// Triggers native review on "LOVE IT", falls through to onNext either way.
 class ReviewGatePage extends StatelessWidget {
   const ReviewGatePage({super.key, required this.onNext});
@@ -99,7 +99,7 @@ class ReviewGatePage extends StatelessWidget {
             const SizedBox(height: AppSpacing.md),
 
             Text(
-              'Enjoying PeptideOS\nso far?',
+              'Enjoying PepMod\nso far?',
               style: AppTypography.h1.copyWith(fontSize: 30),
               textAlign: TextAlign.center,
             ),

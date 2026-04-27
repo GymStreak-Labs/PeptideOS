@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/theme.dart';
 
-/// Hard paywall — premium conversion design adapted to PeptideOS cyberpunk.
+/// Hard paywall — premium conversion design adapted to PepMod cyberpunk.
 ///
 /// Layout: Hero headline → Pricing cards (special offer + annual + weekly)
 ///         → "WHAT YOU GET" divider → Feature showcases → Fixed CTA

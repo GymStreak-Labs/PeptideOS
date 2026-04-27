@@ -75,7 +75,7 @@ class HookPage extends StatelessWidget {
             const SizedBox(height: AppSpacing.xxxl),
 
             Text(
-              "That's exactly why\nwe built PeptideOS.",
+              "That's exactly why\nwe built PepMod.",
               style: AppTypography.h2.copyWith(
                 color: AppColors.textPrimary,
               ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 
 /// A frosted-glass surface container.
-/// Core building block of the PeptideOS glassmorphism design.
+/// Core building block of the PepMod glassmorphism design.
 class GlassContainer extends StatelessWidget {
   const GlassContainer({
     super.key,

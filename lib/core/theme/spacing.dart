@@ -1,4 +1,4 @@
-/// PeptideOS spacing & sizing tokens.
+/// PepMod spacing & sizing tokens.
 /// 4pt base grid system.
 abstract final class AppSpacing {
   // ── Base grid (4pt) ──────────────────────────────────────────────────

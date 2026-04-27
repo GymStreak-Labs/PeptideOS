@@ -5,7 +5,7 @@ import 'colors.dart';
 import 'typography.dart';
 import 'spacing.dart';
 
-/// Builds the unified PeptideOS [ThemeData].
+/// Builds the unified PepMod [ThemeData].
 /// "Clinical Cyberpunk" — one theme, identical on iOS and Android.
 abstract final class AppTheme {
   static ThemeData get dark {

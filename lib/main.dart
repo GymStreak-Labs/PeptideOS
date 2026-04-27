@@ -101,7 +101,7 @@ Future<void> main() async {
       // safe to call even when the collection is already populated.
       unawaited(PeptideLibraryRepository().seedIfEmpty());
 
-      runApp(const PeptideOSApp());
+      runApp(const PepModApp());
 
       // ── Deferred init (post-first-frame, non-blocking) ─────────────────────
       WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -143,8 +143,8 @@ Future<void> _requestTrackingPermission() async {
 
 /// Top-level app widget — hosts the MultiProvider scope and swaps the root
 /// view based on auth + onboarding state.
-class PeptideOSApp extends StatelessWidget {
-  const PeptideOSApp({super.key});
+class PepModApp extends StatelessWidget {
+  const PepModApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -221,7 +221,7 @@ class PeptideOSApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'PeptideOS',
+        title: 'PepMod',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.dark,
         home: const _AppRoot(),
