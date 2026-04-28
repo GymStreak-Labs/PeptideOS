@@ -10,7 +10,7 @@ GymStreak Labs
 Premium only — no free tier.
 - Weekly: $9.99
 - Annual: $59.99
-- Hard paywall after onboarding quiz + protocol builder demo
+- Hard paywall after onboarding quiz + protocol builder demo + Firebase auth
 
 ## Target Audience
 - Biohackers / longevity enthusiasts (Silicon Valley crowd)
@@ -216,7 +216,7 @@ Access to shared protocols from other users. Leave the app, lose access to the p
 
 ### Subscriptions: RevenueCat
 - Weekly $9.99, Annual $59.99
-- Hard paywall after onboarding
+- Hard paywall after onboarding and Firebase auth
 - Trial: none (the onboarding IS the demo)
 
 ### Data Model (Firestore)

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../core/theme/theme.dart';
 import '../services/onboarding_draft_service.dart';
@@ -7,7 +8,6 @@ import '../widgets/hook_page.dart';
 import '../widgets/onboarding_page.dart';
 import '../widgets/birth_date_page.dart';
 import '../widgets/first_name_page.dart';
-import '../widgets/social_proof_page.dart';
 import '../widgets/goals_page.dart';
 import '../widgets/experience_page.dart';
 import '../widgets/frustration_page.dart';
@@ -19,13 +19,13 @@ import '../widgets/protocol_preview_page.dart';
 import '../widgets/results_summary_page.dart';
 import '../widgets/feature_showcase_page.dart';
 
-/// Full 16-screen onboarding flow — conversion-optimised v2.
+/// Full 18-screen onboarding flow — conversion-optimised v3.
 ///
-/// Phase 1 — Emotional Mirror:   Age Gate → Hook → Social Proof → Disclaimer
+/// Phase 1 — Emotional Mirror:   Age Gate → Hook → Disclaimer
 /// Phase 2 — Personalisation:    Name → Birth Date → Goals → Experience → Frustration → Peptides
-/// Phase 3 — Aha Moment:         Calculator Demo → Review Gate
+/// Phase 3 — Aha Moment:         Calculator Demo
 /// Phase 4 — Reveal:             Processing → Protocol Preview → Results Summary
-/// Phase 5 — Features & Handoff: Feature Showcase → Auth → Paywall
+/// Phase 5 — Value & Handoff:    Feature Showcase → Value Screens → Review → Auth → Paywall
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key, this.onReadyForAuth});
 
@@ -40,7 +40,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
   int _currentPage = 0;
-  static const _totalPages = 16;
+  static const _totalPages = 18;
 
   // Collected data
   String _firstName = '';
@@ -57,6 +57,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     }
+  }
+
+  void _previousPage() {
+    if (_currentPage <= 0) return;
+    HapticFeedback.selectionClick();
+    _pageController.previousPage(
+      duration: AppDurations.pageTransition,
+      curve: Curves.easeInOut,
+    );
   }
 
   void _onPageChanged(int page) {
@@ -112,10 +121,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               // 1: The Hook
               HookPage(onNext: _nextPage),
 
-              // 2: Social Proof
-              SocialProofPage(onNext: _nextPage),
-
-              // 3: Medical Disclaimer (early — before personalisation)
+              // 2: Medical Disclaimer (early — before personalisation)
               OnboardingPage(
                 systemLabel: 'SYS.LEGAL // DISCLAIMER',
                 title: 'Important\nDisclaimer',
@@ -129,7 +135,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // ── Phase 2: Personalisation (sunk cost) ──────────────
 
-              // 4: First name
+              // 3: First name
               FirstNamePage(
                 firstName: _firstName,
                 onChanged: (value) {
@@ -138,7 +144,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 5: Birth date
+              // 4: Birth date
               BirthDatePage(
                 birthDate: _birthDate,
                 onChanged: (value) {
@@ -147,7 +153,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 6: Goals
+              // 5: Goals
               GoalsPage(
                 selectedGoals: _selectedGoals,
                 onToggle: (goal) {
@@ -162,7 +168,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 7: Experience Level
+              // 6: Experience Level
               ExperiencePage(
                 selected: _experienceLevel,
                 onSelect: (level) {
@@ -171,14 +177,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 8: Biggest Frustration
+              // 7: Biggest Frustration
               FrustrationPage(
                 selected: _frustration,
                 onSelect: (f) => setState(() => _frustration = f),
                 onNext: _nextPage,
               ),
 
-              // 9: Current/Planned Peptides
+              // 8: Current/Planned Peptides
               PeptideSelectPage(
                 selectedPeptides: _selectedPeptides,
                 onToggle: (p) {
@@ -195,28 +201,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // ── Phase 3: Aha Moment ───────────────────────────────
 
-              // 10: Unit Converter Demo
+              // 9: Unit Converter Demo
               CalculatorDemoPage(peptideName: _firstPeptide, onNext: _nextPage),
-
-              // 11: Review Request Gate
-              ReviewGatePage(onNext: _nextPage),
 
               // ── Phase 4: Reveal ───────────────────────────────────
 
-              // 12: Building Your Protocol (processing)
+              // 10: Building Your Protocol (processing)
               ProcessingPage(
                 onNext: _nextPage,
                 selectedPeptides: _selectedPeptides,
                 selectedGoals: _selectedGoals,
               ),
 
-              // 13: Protocol Preview
+              // 11: Protocol Preview
               ProtocolPreviewPage(
                 peptides: _selectedPeptides,
                 onNext: _nextPage,
               ),
 
-              // 14: Personalised Results Summary
+              // 12: Personalised Results Summary
               ResultsSummaryPage(
                 selectedGoals: _selectedGoals,
                 experienceLevel: _experienceLevel,
@@ -225,11 +228,50 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // ── Phase 5: Features & Convert ───────────────────────
+              // ── Phase 5: Value & Handoff ─────────────────────────
 
-              // 15: Feature Showcase → Auth handoff. Paywall is post-auth so
-              // RevenueCat/AppRefer can attach purchase events to Firebase UID.
-              FeatureShowcasePage(onNext: _handoffToAuth),
+              // 13: Feature Showcase
+              FeatureShowcasePage(onNext: _nextPage),
+
+              // 14: Value screen — protocol organization
+              OnboardingPage(
+                systemLabel: 'SYS.VALUE // PROTOCOL',
+                title: 'Everything stays\nin one protocol.',
+                body:
+                    'Track what you planned, what you actually logged, and what is coming next — without digging through notes, screenshots, or group chats.',
+                icon: Icons.view_timeline_rounded,
+                iconColor: AppColors.primary,
+                buttonLabel: 'CONTINUE',
+                onNext: _nextPage,
+              ),
+
+              // 15: Value screen — unit conversion
+              OnboardingPage(
+                systemLabel: 'SYS.VALUE // CONVERT',
+                title: 'Unit conversion\nwithout second guessing.',
+                body:
+                    'Use the built-in converter to translate vial, water, and dose inputs into clear syringe units for your own records.',
+                icon: Icons.straighten_rounded,
+                iconColor: AppColors.secondary,
+                buttonLabel: 'CONTINUE',
+                onNext: _nextPage,
+              ),
+
+              // 16: Value screen — trend tracking
+              OnboardingPage(
+                systemLabel: 'SYS.VALUE // SIGNAL',
+                title: 'See your tracking\ndata over time.',
+                body:
+                    'Adherence, logs, metrics, and vial history build a cleaner picture of your routine — no promises, just better records.',
+                icon: Icons.query_stats_rounded,
+                iconColor: AppColors.aiInsightBright,
+                buttonLabel: 'CONTINUE',
+                onNext: _nextPage,
+              ),
+
+              // 17: Review request at the end → Auth handoff. Paywall is
+              // post-auth so RevenueCat/AppRefer attach events to Firebase UID.
+              ReviewGatePage(onNext: _handoffToAuth),
             ],
           ),
 
@@ -237,14 +279,56 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           if (_currentPage > 0 && _currentPage < _totalPages - 1)
             Positioned(
               top: MediaQuery.of(context).padding.top + AppSpacing.sm,
-              left: AppSpacing.screenHorizontal,
+              left: AppSpacing.screenHorizontal + 52,
               right: AppSpacing.screenHorizontal,
               child: _ProgressBar(
                 current: _currentPage,
                 total: _totalPages - 1,
               ),
             ),
+
+          // ── Back button (hidden only on first page)
+          if (_currentPage > 0)
+            Positioned(
+              top: MediaQuery.of(context).padding.top + AppSpacing.sm - 19,
+              left: AppSpacing.screenHorizontal,
+              child: _BackButton(onPressed: _previousPage),
+            ),
         ],
+      ),
+    );
+  }
+}
+
+class _BackButton extends StatelessWidget {
+  const _BackButton({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onPressed,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainer.withValues(alpha: 0.88),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.24)),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primary.withValues(alpha: 0.12),
+              blurRadius: 14,
+            ),
+          ],
+        ),
+        child: const Icon(
+          Icons.arrow_back_rounded,
+          color: AppColors.textPrimary,
+          size: AppSpacing.iconMedium,
+        ),
       ),
     );
   }
