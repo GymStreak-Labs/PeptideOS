@@ -35,8 +35,7 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('SYS.USER // PROFILE',
-                    style: AppTypography.systemLabel),
+                Text('SYS.USER // PROFILE', style: AppTypography.systemLabel),
                 const SizedBox(height: AppSpacing.sm),
                 Text('You', style: AppTypography.h1),
               ],
@@ -48,7 +47,8 @@ class ProfileScreen extends StatelessWidget {
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.screenHorizontal),
+              horizontal: AppSpacing.screenHorizontal,
+            ),
             child: _AvatarCard(
               settings: settings,
               onEdit: () => _editName(context, settings.name),
@@ -84,10 +84,11 @@ class ProfileScreen extends StatelessWidget {
           label: 'Units',
           value: settings.units == UnitSystem.metric ? 'Metric' : 'Imperial',
           onTap: () {
-            settingsProvider.update((s) => s.units =
-                s.units == UnitSystem.metric
-                    ? UnitSystem.imperial
-                    : UnitSystem.metric);
+            settingsProvider.update(
+              (s) => s.units = s.units == UnitSystem.metric
+                  ? UnitSystem.imperial
+                  : UnitSystem.metric,
+            );
           },
         ),
         _Tile(
@@ -99,8 +100,7 @@ class ProfileScreen extends StatelessWidget {
             activeThumbColor: AppColors.primary,
             onChanged: (v) async {
               HapticFeedback.selectionClick();
-              await settingsProvider
-                  .update((s) => s.notificationsEnabled = v);
+              await settingsProvider.update((s) => s.notificationsEnabled = v);
             },
           ),
         ),
@@ -136,8 +136,7 @@ class ProfileScreen extends StatelessWidget {
         _Tile(
           icon: Icons.shield_outlined,
           label: 'Medical disclaimer',
-          onTap: () =>
-              _showLegal(context, 'Disclaimer', _disclaimerText),
+          onTap: () => _showLegal(context, 'Disclaimer', _disclaimerText),
         ),
 
         // ── About ──────────────────────────────────────────────────────
@@ -164,7 +163,8 @@ class ProfileScreen extends StatelessWidget {
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.screenHorizontal),
+              horizontal: AppSpacing.screenHorizontal,
+            ),
             child: Text(
               'Educational tracking only. Not medical advice.',
               style: AppTypography.disclaimer,
@@ -174,7 +174,8 @@ class ProfileScreen extends StatelessWidget {
         ),
 
         const SliverToBoxAdapter(
-            child: SizedBox(height: AppSpacing.screenBottom)),
+          child: SizedBox(height: AppSpacing.screenBottom),
+        ),
       ],
     );
   }
@@ -194,23 +195,26 @@ class ProfileScreen extends StatelessWidget {
           controller: controller,
           autofocus: true,
           style: AppTypography.bodyLarge,
-          decoration: const InputDecoration(
-            border: UnderlineInputBorder(),
-          ),
+          decoration: const InputDecoration(border: UnderlineInputBorder()),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: Text('Cancel',
-                style: AppTypography.labelMedium
-                    .copyWith(color: AppColors.textTertiary)),
+            child: Text(
+              'Cancel',
+              style: AppTypography.labelMedium.copyWith(
+                color: AppColors.textTertiary,
+              ),
+            ),
           ),
           TextButton(
-            onPressed: () =>
-                Navigator.of(ctx).pop(controller.text.trim()),
-            child: Text('Save',
-                style: AppTypography.labelMedium
-                    .copyWith(color: AppColors.primary)),
+            onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
+            child: Text(
+              'Save',
+              style: AppTypography.labelMedium.copyWith(
+                color: AppColors.primary,
+              ),
+            ),
           ),
         ],
       ),
@@ -218,9 +222,7 @@ class ProfileScreen extends StatelessWidget {
     controller.dispose();
     if (!context.mounted) return;
     if (name != null && name.isNotEmpty) {
-      await context
-          .read<SettingsProvider>()
-          .update((s) => s.name = name);
+      await context.read<SettingsProvider>().update((s) => s.name = name);
     }
   }
 
@@ -232,52 +234,60 @@ class ProfileScreen extends StatelessWidget {
     final payload = {
       'exportedAt': DateTime.now().toIso8601String(),
       'protocols': protocols
-          .map((p) => {
-                'uuid': p.uuid,
-                'name': p.name,
-                'status': p.status.name,
-                'startDate': p.startDate.toIso8601String(),
-                'endDate': p.endDate?.toIso8601String(),
-                'peptides': p.peptides
-                    .map((pp) => {
-                          'uuid': pp.uuid,
-                          'slug': pp.peptideSlug,
-                          'name': pp.peptideName,
-                          'dose': pp.dosePerInjection,
-                          'unit': pp.doseUnit,
-                          'frequency': pp.frequency,
-                          'route': pp.route,
-                          'cycleWeeks': pp.cycleWeeks,
-                          'scheduledTimes': pp.scheduledTimes,
-                        })
-                    .toList(),
-              })
+          .map(
+            (p) => {
+              'uuid': p.uuid,
+              'name': p.name,
+              'status': p.status.name,
+              'startDate': p.startDate.toIso8601String(),
+              'endDate': p.endDate?.toIso8601String(),
+              'peptides': p.peptides
+                  .map(
+                    (pp) => {
+                      'uuid': pp.uuid,
+                      'slug': pp.peptideSlug,
+                      'name': pp.peptideName,
+                      'dose': pp.dosePerInjection,
+                      'unit': pp.doseUnit,
+                      'frequency': pp.frequency,
+                      'route': pp.route,
+                      'cycleWeeks': pp.cycleWeeks,
+                      'scheduledTimes': pp.scheduledTimes,
+                    },
+                  )
+                  .toList(),
+            },
+          )
           .toList(),
       'doseLogs': logs
-          .map((d) => {
-                'uuid': d.uuid,
-                'protocolUuid': d.protocolUuid,
-                'peptideName': d.peptideName,
-                'scheduledAt': d.scheduledAt.toIso8601String(),
-                'takenAt': d.takenAt?.toIso8601String(),
-                'amount': d.amountTaken,
-                'units': d.units,
-                'site': d.injectionSite,
-                'skipped': d.skipped,
-                'notes': d.notes,
-              })
+          .map(
+            (d) => {
+              'uuid': d.uuid,
+              'protocolUuid': d.protocolUuid,
+              'peptideName': d.peptideName,
+              'scheduledAt': d.scheduledAt.toIso8601String(),
+              'takenAt': d.takenAt?.toIso8601String(),
+              'amount': d.amountTaken,
+              'units': d.units,
+              'site': d.injectionSite,
+              'skipped': d.skipped,
+              'notes': d.notes,
+            },
+          )
           .toList(),
       'bodyMetrics': metrics
-          .map((m) => {
-                'uuid': m.uuid,
-                'date': m.date.toIso8601String(),
-                'weightKg': m.weightKg,
-                'bodyFatPct': m.bodyFatPct,
-                'measurements': m.measurements
-                    .map((e) => {'key': e.key, 'valueCm': e.valueCm})
-                    .toList(),
-                'notes': m.notes,
-              })
+          .map(
+            (m) => {
+              'uuid': m.uuid,
+              'date': m.date.toIso8601String(),
+              'weightKg': m.weightKg,
+              'bodyFatPct': m.bodyFatPct,
+              'measurements': m.measurements
+                  .map((e) => {'key': e.key, 'valueCm': e.valueCm})
+                  .toList(),
+              'notes': m.notes,
+            },
+          )
           .toList(),
     };
 
@@ -285,9 +295,9 @@ class ProfileScreen extends StatelessWidget {
     await Clipboard.setData(ClipboardData(text: json));
     if (!context.mounted) return;
     HapticFeedback.mediumImpact();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Data copied to clipboard.')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Data copied to clipboard.')));
   }
 
   Future<void> _confirmClearData(BuildContext context) async {
@@ -307,15 +317,21 @@ class ProfileScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text('Cancel',
-                style: AppTypography.labelMedium
-                    .copyWith(color: AppColors.textTertiary)),
+            child: Text(
+              'Cancel',
+              style: AppTypography.labelMedium.copyWith(
+                color: AppColors.textTertiary,
+              ),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text('Clear',
-                style: AppTypography.labelMedium
-                    .copyWith(color: AppColors.warning)),
+            child: Text(
+              'Clear',
+              style: AppTypography.labelMedium.copyWith(
+                color: AppColors.warning,
+              ),
+            ),
           ),
         ],
       ),
@@ -331,9 +347,9 @@ class ProfileScreen extends StatelessWidget {
     if (!context.mounted) return;
     await context.read<BodyMetricProvider>().refresh();
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('All data cleared.')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('All data cleared.')));
   }
 
   Future<void> _signOut(BuildContext context) async {
@@ -344,21 +360,28 @@ class ProfileScreen extends StatelessWidget {
         title: Text('Sign out?', style: AppTypography.h3),
         content: Text(
           'Your protocols stay saved and sync back when you sign in again.',
-          style: AppTypography.bodyMedium
-              .copyWith(color: AppColors.textSecondary),
+          style: AppTypography.bodyMedium.copyWith(
+            color: AppColors.textSecondary,
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text('Cancel',
-                style: AppTypography.labelMedium
-                    .copyWith(color: AppColors.textTertiary)),
+            child: Text(
+              'Cancel',
+              style: AppTypography.labelMedium.copyWith(
+                color: AppColors.textTertiary,
+              ),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text('Sign out',
-                style: AppTypography.labelMedium
-                    .copyWith(color: AppColors.warning)),
+            child: Text(
+              'Sign out',
+              style: AppTypography.labelMedium.copyWith(
+                color: AppColors.warning,
+              ),
+            ),
           ),
         ],
       ),
@@ -369,9 +392,9 @@ class ProfileScreen extends StatelessWidget {
       await context.read<AuthProvider>().signOut();
     } catch (e) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Sign out failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Sign out failed: $e')));
     }
   }
 
@@ -393,7 +416,8 @@ class _AvatarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPro = settings.subscriptionState == 'pro' ||
+    final isPro =
+        settings.subscriptionState == 'pro' ||
         settings.subscriptionState == 'active';
     return AppCard(
       onTap: onEdit,
@@ -415,8 +439,11 @@ class _AvatarCard extends StatelessWidget {
                 ),
               ],
             ),
-            child: Icon(Icons.person_rounded,
-                color: AppColors.primary, size: AppSpacing.iconXLarge),
+            child: Icon(
+              Icons.person_rounded,
+              color: AppColors.primary,
+              size: AppSpacing.iconXLarge,
+            ),
           ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
@@ -427,23 +454,23 @@ class _AvatarCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.sm, vertical: 2),
+                    horizontal: AppSpacing.sm,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: (isPro ? AppColors.primary : AppColors.textTertiary)
                         .withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(4),
                     border: Border.all(
-                      color: (isPro
-                              ? AppColors.primary
-                              : AppColors.textTertiary)
-                          .withValues(alpha: 0.5),
+                      color:
+                          (isPro ? AppColors.primary : AppColors.textTertiary)
+                              .withValues(alpha: 0.5),
                     ),
                   ),
                   child: Text(
                     isPro ? 'PRO' : 'FREE',
                     style: AppTypography.systemLabel.copyWith(
-                      color:
-                          isPro ? AppColors.primary : AppColors.textTertiary,
+                      color: isPro ? AppColors.primary : AppColors.textTertiary,
                       fontSize: 9,
                     ),
                   ),
@@ -451,8 +478,11 @@ class _AvatarCard extends StatelessWidget {
               ],
             ),
           ),
-          Icon(Icons.edit_rounded,
-              color: AppColors.textTertiary, size: AppSpacing.iconMedium),
+          Icon(
+            Icons.edit_rounded,
+            color: AppColors.textTertiary,
+            size: AppSpacing.iconMedium,
+          ),
         ],
       ),
     );
@@ -511,9 +541,11 @@ class _Tile extends StatelessWidget {
           onTap: onTap,
           child: Row(
             children: [
-              Icon(icon,
-                  color: iconColor ?? AppColors.primary,
-                  size: AppSpacing.iconDefault),
+              Icon(
+                icon,
+                color: iconColor ?? AppColors.primary,
+                size: AppSpacing.iconDefault,
+              ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
@@ -522,9 +554,12 @@ class _Tile extends StatelessWidget {
                     Text(label, style: AppTypography.labelLarge),
                     if (value != null) ...[
                       const SizedBox(height: 2),
-                      Text(value!,
-                          style: AppTypography.bodySmall
-                              .copyWith(fontFamily: 'JetBrainsMono')),
+                      Text(
+                        value!,
+                        style: AppTypography.bodySmall.copyWith(
+                          fontFamily: 'JetBrainsMono',
+                        ),
+                      ),
                     ],
                   ],
                 ),
@@ -532,9 +567,11 @@ class _Tile extends StatelessWidget {
               if (trailing != null)
                 trailing!
               else if (onTap != null)
-                Icon(Icons.chevron_right_rounded,
-                    color: AppColors.textTertiary,
-                    size: AppSpacing.iconMedium),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppColors.textTertiary,
+                  size: AppSpacing.iconMedium,
+                ),
             ],
           ),
         ),
@@ -573,8 +610,9 @@ class _LegalSheet extends StatelessWidget {
                     height: AppSpacing.sheetHandleHeight,
                     decoration: BoxDecoration(
                       color: AppColors.border,
-                      borderRadius:
-                          BorderRadius.circular(AppSpacing.sheetHandleHeight),
+                      borderRadius: BorderRadius.circular(
+                        AppSpacing.sheetHandleHeight,
+                      ),
                     ),
                   ),
                 ),
@@ -598,18 +636,15 @@ class _LegalSheet extends StatelessWidget {
 }
 
 const _termsText =
-    'PepMod is provided "as is" for educational and tracking purposes only. '
-    'By using this app you agree that no information provided constitutes medical advice. '
-    'You are responsible for your own research and consultation with qualified healthcare providers. '
-    'We reserve the right to update these terms at any time.\n\n'
-    'This app is not affiliated with, endorsed by, or approved by any medical body. '
-    'Use at your own risk.';
+    'PepMod is provided for educational and tracking purposes only. It is not a medical device and does not provide medical advice, diagnosis, prescriptions, or treatment recommendations. '
+    'By using PepMod, you are responsible for your own records, decisions, and consultation with qualified healthcare professionals.\n\n'
+    'Subscriptions renew automatically unless cancelled through the App Store or Google Play before the renewal period. Refunds are handled by the store where you purchased.\n\n'
+    'Full Terms: https://appstorecopilot.com/legal/yzh32x5v/terms';
 
 const _privacyText =
-    'PepMod stores all your data locally on your device. Nothing is transmitted to our servers by default. '
-    'If optional cloud sync is enabled in the future, data is encrypted in transit. '
-    'We do not sell, rent, or share your data with third parties. '
-    'You can delete all your data at any time from the Profile tab.';
+    'PepMod uses Firebase for authentication and cloud data storage, RevenueCat for subscriptions, AppRefer and Meta/Facebook App Events for attribution, and Firebase/Crashlytics for analytics and diagnostics. '
+    'We do not sell your personal information. You can request account/data deletion from within the app or by contacting support.\n\n'
+    'Full Privacy Policy: https://appstorecopilot.com/legal/yzh32x5v/privacy';
 
 const _disclaimerText =
     'PepMod is a wellness and tracking tool — NOT a medical device. '
