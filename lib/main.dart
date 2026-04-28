@@ -25,6 +25,7 @@ import 'features/auth/screens/auth_screen.dart';
 import 'features/library/providers/peptide_provider.dart';
 import 'features/onboarding/services/onboarding_draft_service.dart';
 import 'features/onboarding/screens/onboarding_screen.dart';
+import 'features/onboarding/widgets/paywall_page.dart';
 import 'features/profile/providers/settings_provider.dart';
 import 'features/progress/providers/body_metric_provider.dart';
 import 'features/protocol/providers/dose_log_provider.dart';
@@ -234,9 +235,10 @@ class PepModApp extends StatelessWidget {
 ///
 /// Flow:
 /// 1. Auth not yet initialised → splash
-/// 2. Onboarding not completed → OnboardingScreen (auth happens at end)
-/// 3. Signed out → AuthScreen
-/// 4. Signed in → AppShell (Firestore streams do the rest)
+/// 2. Onboarding not completed → OnboardingScreen
+/// 3. Onboarding draft staged → AuthScreen
+/// 4. Signed in → replay draft, then show post-auth PaywallScreen
+/// 5. Signed in + onboarded + paywall handled → AppShell
 class _AppRoot extends StatefulWidget {
   const _AppRoot();
 
@@ -246,8 +248,42 @@ class _AppRoot extends StatefulWidget {
 
 class _AppRootState extends State<_AppRoot> {
   bool _firstFrameRefresh = false;
+  bool _handoffStateLoaded = false;
+  bool _preAuthOnboardingReady = false;
+  bool _postAuthPaywallPending = false;
   bool _onboardingReplayAttempted = false;
   bool _replayingOnboardingDraft = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadOnboardingHandoffState();
+  }
+
+  Future<void> _loadOnboardingHandoffState() async {
+    final hasDraft = await OnboardingDraftService.hasDraft();
+    final paywallPending =
+        await OnboardingDraftService.isPostAuthPaywallPending();
+    if (!mounted) return;
+    setState(() {
+      _preAuthOnboardingReady = hasDraft;
+      _postAuthPaywallPending = paywallPending;
+      _handoffStateLoaded = true;
+    });
+  }
+
+  void _markReadyForAuth() {
+    setState(() {
+      _preAuthOnboardingReady = true;
+      _postAuthPaywallPending = true;
+    });
+  }
+
+  Future<void> _clearPostAuthPaywall() async {
+    await OnboardingDraftService.setPostAuthPaywallPending(false);
+    if (!mounted) return;
+    setState(() => _postAuthPaywallPending = false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -273,11 +309,13 @@ class _AppRootState extends State<_AppRoot> {
 
     if (!auth.isInitialized) return const _Splash();
 
-    // Onboarding always runs first — we want the user to experience the
-    // product story before hitting the sign-in wall.
+    // Onboarding story runs first; auth comes before the paywall so AppRefer
+    // and RevenueCat events attach to a stable Firebase UID.
     if (settings.isLoading && auth.isSignedIn) return const _Splash();
     if (!settings.settings.onboardingCompleted && !auth.isSignedIn) {
-      return const OnboardingScreen();
+      if (!_handoffStateLoaded) return const _Splash();
+      if (_preAuthOnboardingReady) return const AuthScreen();
+      return OnboardingScreen(onReadyForAuth: _markReadyForAuth);
     }
 
     if (!auth.isSignedIn) return const AuthScreen();
@@ -294,15 +332,112 @@ class _AppRootState extends State<_AppRoot> {
             doseLogs: context.read<DoseLogProvider>(),
             library: context.read<PeptideProvider>(),
           );
+          final paywallPending =
+              await OnboardingDraftService.isPostAuthPaywallPending();
           if (!mounted) return;
-          setState(() => _replayingOnboardingDraft = false);
+          setState(() {
+            _postAuthPaywallPending = paywallPending;
+            _preAuthOnboardingReady = false;
+            _replayingOnboardingDraft = false;
+          });
         });
       }
       if (_replayingOnboardingDraft) return const _Splash();
-      return const OnboardingScreen();
+      return OnboardingScreen(onReadyForAuth: _markReadyForAuth);
+    }
+
+    final subscription = context.watch<SubscriptionProvider>();
+    if (_postAuthPaywallPending &&
+        !SubscriptionService.forcePremium &&
+        !subscription.isPremium) {
+      return _PostAuthPaywallGate(onComplete: _clearPostAuthPaywall);
+    }
+    if (_postAuthPaywallPending &&
+        (SubscriptionService.forcePremium || subscription.isPremium)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(_clearPostAuthPaywall());
+      });
     }
 
     return const AppShell();
+  }
+}
+
+class _PostAuthPaywallGate extends StatefulWidget {
+  const _PostAuthPaywallGate({required this.onComplete});
+
+  final Future<void> Function() onComplete;
+
+  @override
+  State<_PostAuthPaywallGate> createState() => _PostAuthPaywallGateState();
+}
+
+class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
+  bool _viewLogged = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_viewLogged) return;
+    _viewLogged = true;
+    unawaited(AnalyticsService().logPaywallViewed('post_auth_onboarding'));
+  }
+
+  Future<void> _handleSubscribe(int selectedPlan) async {
+    final sub = context.read<SubscriptionProvider>();
+
+    if (!sub.isLoadingOfferings && sub.offerings == null) {
+      await sub.loadOfferings();
+    }
+    if (!mounted) return;
+
+    final offerings = sub.offerings;
+    final pkg = offerings == null
+        ? null
+        : sub.packageForOnboardingPlan(selectedPlan);
+
+    // If RC offerings are unavailable, let internal/test users continue.
+    if (pkg == null) {
+      await widget.onComplete();
+      return;
+    }
+
+    unawaited(AnalyticsService().logPurchaseInitiated(pkg.identifier));
+    final result = await sub.purchase(pkg);
+    if (!mounted) return;
+    if (result.success || result.cancelled) {
+      await widget.onComplete();
+    } else if (result.error != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(result.error!)));
+    }
+  }
+
+  Future<void> _handleRestore() async {
+    final sub = context.read<SubscriptionProvider>();
+    final result = await sub.restore();
+    if (!mounted) return;
+    if (result.success && result.isPremium) {
+      await widget.onComplete();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result.error ?? 'No purchases found to restore.'),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: PaywallPage(
+        onSubscribe: _handleSubscribe,
+        onRestore: _handleRestore,
+      ),
+    );
   }
 }
 

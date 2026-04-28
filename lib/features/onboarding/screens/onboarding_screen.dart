@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../../core/services/analytics_service.dart';
 import '../../../core/theme/theme.dart';
-import '../../../models/protocol.dart';
-import '../../library/providers/peptide_provider.dart';
-import '../../protocol/providers/dose_log_provider.dart';
-import '../../protocol/providers/protocol_provider.dart';
-import '../../profile/providers/settings_provider.dart';
-import '../../subscription/providers/subscription_provider.dart';
 import '../services/onboarding_draft_service.dart';
 import '../widgets/age_gate_page.dart';
 import '../widgets/hook_page.dart';
@@ -26,17 +18,20 @@ import '../widgets/processing_page.dart';
 import '../widgets/protocol_preview_page.dart';
 import '../widgets/results_summary_page.dart';
 import '../widgets/feature_showcase_page.dart';
-import '../widgets/paywall_page.dart';
 
-/// Full 17-screen onboarding flow — conversion-optimised v2.
+/// Full 16-screen onboarding flow — conversion-optimised v2.
 ///
 /// Phase 1 — Emotional Mirror:   Age Gate → Hook → Social Proof → Disclaimer
 /// Phase 2 — Personalisation:    Name → Birth Date → Goals → Experience → Frustration → Peptides
 /// Phase 3 — Aha Moment:         Calculator Demo → Review Gate
 /// Phase 4 — Reveal:             Processing → Protocol Preview → Results Summary
-/// Phase 5 — Features & Convert: Feature Showcase → Paywall
+/// Phase 5 — Features & Handoff: Feature Showcase → Auth → Paywall
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+  const OnboardingScreen({super.key, this.onReadyForAuth});
+
+  /// Called after onboarding data is staged locally and the next step should
+  /// be Firebase auth. The paywall is intentionally post-auth for attribution.
+  final VoidCallback? onReadyForAuth;
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -45,7 +40,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
   int _currentPage = 0;
-  static const _totalPages = 17;
+  static const _totalPages = 16;
 
   // Collected data
   String _firstName = '';
@@ -68,13 +63,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     setState(() => _currentPage = page);
   }
 
-  Future<void> _completeOnboarding() async {
-    // Persist onboarding data and seed a first protocol from the user's picks.
-    final settings = context.read<SettingsProvider>();
-    final protocols = context.read<ProtocolProvider>();
-    final doseLogs = context.read<DoseLogProvider>();
-    final library = context.read<PeptideProvider>();
-
+  Future<void> _handoffToAuth() async {
+    // Persist onboarding data locally, then route to Firebase auth. Once auth
+    // succeeds, AppRoot replays the draft into Firestore and shows paywall.
     try {
       final draft = OnboardingDraft(
         firstName: _firstName,
@@ -85,115 +76,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         selectedPeptides: _selectedPeptides.toList(),
       );
       await OnboardingDraftService.save(draft);
-
-      await settings.completeOnboarding(
-        name: _firstName,
-        birthDate: _birthDate,
-        goals: _selectedGoals.toList(),
-        experience: _experienceLevel,
-        frustration: _frustration,
-      );
-
-      if (_selectedPeptides.isNotEmpty) {
-        // Match onboarding names to library peptides (case-insensitive).
-        final matched = <String, String>{};
-        for (final name in _selectedPeptides) {
-          for (final p in library.all) {
-            if (p.name.toLowerCase() == name.toLowerCase() ||
-                p.slug.toLowerCase() == name.toLowerCase()) {
-              matched[p.slug] = p.name;
-              break;
-            }
-          }
-        }
-
-        final peptideEntries = <ProtocolPeptide>[];
-        for (final slug in matched.keys) {
-          final lib = library.findBySlug(slug);
-          if (lib == null) continue;
-          peptideEntries.add(
-            protocols.buildPeptide(
-              slug: lib.slug,
-              name: lib.name,
-              dose: lib.defaultDoseMcg,
-              frequency: lib.defaultFrequency,
-              route: lib.defaultRoute,
-              cycleWeeks: lib.typicalCycleWeeks,
-            ),
-          );
-        }
-
-        if (peptideEntries.isNotEmpty) {
-          await protocols.createProtocol(
-            name: 'My Protocol',
-            startDate: DateTime.now(),
-            peptides: peptideEntries,
-          );
-          await doseLogs.refresh();
-        }
-      }
-
-      if (settings.uid.isNotEmpty) {
-        await OnboardingDraftService.clear();
-      }
+      await OnboardingDraftService.setPostAuthPaywallPending(true);
+      widget.onReadyForAuth?.call();
     } catch (e) {
-      debugPrint('completeOnboarding failed: $e');
+      debugPrint('onboarding auth handoff failed: $e');
     }
-
-    // The _AppRoot widget will re-render and show AppShell once
-    // onboardingCompleted flips to true.
   }
 
   String get _firstPeptide =>
       _selectedPeptides.isNotEmpty ? _selectedPeptides.first : 'BPC-157';
-
-  Future<void> _handleSubscribe(int selectedPlan) async {
-    final sub = context.read<SubscriptionProvider>();
-    AnalyticsService().logPaywallViewed('onboarding');
-
-    if (!sub.isLoadingOfferings && sub.offerings == null) {
-      await sub.loadOfferings();
-    }
-    if (!mounted) return;
-
-    final offerings = sub.offerings;
-    // If RC offerings are unavailable, skip straight to post-onboarding so
-    // internal testers can still reach the app shell.
-    final pkg = offerings == null
-        ? null
-        : sub.packageForOnboardingPlan(selectedPlan);
-
-    if (pkg == null) {
-      await _completeOnboarding();
-      return;
-    }
-
-    AnalyticsService().logPurchaseInitiated(pkg.identifier);
-    final result = await sub.purchase(pkg);
-    if (!mounted) return;
-    if (result.success || result.cancelled) {
-      await _completeOnboarding();
-    } else if (result.error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(result.error!)));
-    }
-  }
-
-  Future<void> _handleRestore() async {
-    final sub = context.read<SubscriptionProvider>();
-    final result = await sub.restore();
-    if (!mounted) return;
-    if (result.success && result.isPremium) {
-      await _completeOnboarding();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(result.error ?? 'No purchases found to restore.'),
-        ),
-      );
-    }
-  }
 
   @override
   void dispose() {
@@ -336,18 +227,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // ── Phase 5: Features & Convert ───────────────────────
 
-              // 15: Feature Showcase
-              FeatureShowcasePage(onNext: _nextPage),
-
-              // 16: Paywall
-              PaywallPage(
-                onSubscribe: _handleSubscribe,
-                onRestore: _handleRestore,
-              ),
+              // 15: Feature Showcase → Auth handoff. Paywall is post-auth so
+              // RevenueCat/AppRefer can attach purchase events to Firebase UID.
+              FeatureShowcasePage(onNext: _handoffToAuth),
             ],
           ),
 
-          // ── Progress bar (hidden on age gate & paywall)
+          // ── Progress bar (hidden on age gate & final auth handoff)
           if (_currentPage > 0 && _currentPage < _totalPages - 1)
             Positioned(
               top: MediaQuery.of(context).padding.top + AppSpacing.sm,

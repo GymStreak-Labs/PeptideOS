@@ -13,13 +13,16 @@ import '../../../models/protocol.dart';
 
 /// Local handoff between pre-auth onboarding and post-auth Firestore state.
 ///
-/// Onboarding intentionally runs before sign-in so AppRefer attribution keeps a
-/// clean install journey. The selected protocol/profile data is staged here,
-/// then replayed once Firebase gives us a stable UID.
+/// Onboarding intentionally collects personalization before sign-in, then
+/// shows auth before the paywall so AppRefer / RevenueCat purchases attach to
+/// a stable Firebase UID. The selected protocol/profile data is staged here,
+/// then replayed once Firebase gives us that UID.
 class OnboardingDraftService {
   OnboardingDraftService._();
 
   static const String _draftKey = 'peptideos_onboarding_draft_v1';
+  static const String _postAuthPaywallPendingKey =
+      'pepmod_post_auth_paywall_pending_v1';
 
   static Future<void> save(OnboardingDraft draft) async {
     final prefs = await SharedPreferences.getInstance();
@@ -45,6 +48,16 @@ class OnboardingDraftService {
   }
 
   static Future<bool> hasDraft() async => (await load()) != null;
+
+  static Future<void> setPostAuthPaywallPending(bool pending) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_postAuthPaywallPendingKey, pending);
+  }
+
+  static Future<bool> isPostAuthPaywallPending() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_postAuthPaywallPendingKey) ?? false;
+  }
 
   static Future<void> replayAfterAuth({
     required String email,

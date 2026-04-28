@@ -80,7 +80,7 @@ lib/
 │   ├── profile/        # ⚙️ You tab
 │   │   ├── screens/profile_screen.dart
 │   │   └── providers/settings_provider.dart
-│   ├── onboarding/     # 15-screen onboarding + hard paywall
+│   ├── onboarding/     # 16-screen onboarding + post-auth hard paywall
 │   │   ├── screens/
 │   │   │   └── onboarding_screen.dart   # PageView shell, 15 pages
 │   │   └── widgets/
@@ -88,17 +88,19 @@ lib/
 │   │       ├── hook_page.dart           # 2. Emotional hook
 │   │       ├── social_proof_page.dart   # 3. Testimonials + stats (NEW)
 │   │       ├── onboarding_page.dart     # 4. Generic page (disclaimer uses this)
-│   │       ├── goals_page.dart          # 5. Goal multi-select
-│   │       ├── experience_page.dart     # 6. Experience level
-│   │       ├── frustration_page.dart    # 7. Biggest frustration
-│   │       ├── peptide_select_page.dart # 8. Peptide multi-select
-│   │       ├── calculator_demo_page.dart # 9. Unit converter demo (aha moment)
-│   │       ├── review_gate_page.dart    # 10. in_app_review prompt (NEW)
-│   │       ├── processing_page.dart     # 11. HUD radar processing (NEW)
-│   │       ├── protocol_preview_page.dart # 12. Personalised protocol card
-│   │       ├── results_summary_page.dart # 13. Inputs summary + data tiles (NEW)
-│   │       ├── feature_showcase_page.dart # 14. Swipeable feature cards
-│   │       ├── paywall_page.dart        # 15. Hard paywall (3 plans, countdown)
+│   │       ├── first_name_page.dart     # 5. Natural first-name capture
+│   │       ├── birth_date_page.dart     # 6. Adult-only DOB capture
+│   │       ├── goals_page.dart          # 7. Goal multi-select
+│   │       ├── experience_page.dart     # 8. Experience level
+│   │       ├── frustration_page.dart    # 9. Biggest frustration
+│   │       ├── peptide_select_page.dart # 10. Peptide multi-select
+│   │       ├── calculator_demo_page.dart # 11. Unit converter demo (aha moment)
+│   │       ├── review_gate_page.dart    # 12. in_app_review prompt
+│   │       ├── processing_page.dart     # 13. HUD radar processing
+│   │       ├── protocol_preview_page.dart # 14. Personalised protocol card
+│   │       ├── results_summary_page.dart # 15. Inputs summary + data tiles
+│   │       ├── feature_showcase_page.dart # 16. Swipeable feature cards → auth
+│   │       ├── paywall_page.dart        # Post-auth hard paywall (3 plans, countdown)
 │   │       └── notification_page.dart   # (retained — not in current flow)
 │   └── auth/           # Authentication (not yet built)
 ├── routing/
@@ -240,16 +242,17 @@ Any file calling `.filter()`, `.sortByX()`, `.findAll()` MUST import `package:is
 7. Portrait-locked — peptide tracking is a focused one-hand experience
 8. Neon accents used surgically — only on actionable/status elements, never decorative
 
-## Onboarding Flow (15 screens — conversion-optimised v2)
+## Onboarding Flow (16 screens + post-auth paywall — conversion-optimised v3)
 1. Age Gate → 2. Hook → 3. Social Proof → 4. Disclaimer →
-5. Goals → 6. Experience → 7. Frustration → 8. Peptides →
-9. Calculator Demo (aha moment) → 10. Review Gate (`in_app_review`) →
-11. Processing (HUD radar, auto-advances at 100%) → 12. Protocol Preview →
-13. Results Summary → 14. Feature Showcase → 15. Paywall
+5. First Name → 6. Birth Date → 7. Goals → 8. Experience →
+9. Frustration → 10. Peptides → 11. Calculator Demo (aha moment) →
+12. Review Gate (`in_app_review`) → 13. Processing (HUD radar) →
+14. Protocol Preview → 15. Results Summary → 16. Feature Showcase →
+17. Firebase Auth → 18. Hard Paywall.
 
 Notification permission is no longer requested inline — ask for it elsewhere.
 
-Paywall narrative: the processing screen sets up "we reserved a protocol for you", then the paywall countdown ties back with `YOUR PERSONALISED PROTOCOL IS RESERVED FOR [15:00]` above the Best Value card. Hero headline: "Start your optimised protocol today".
+Paywall narrative: the processing screen sets up "we reserved a protocol for you", then Firebase Auth happens before the hard paywall so RevenueCat/AppRefer events are attached to a stable UID. The paywall countdown ties back with `YOUR PERSONALISED PROTOCOL IS RESERVED FOR [15:00]` above the Best Value card. Hero headline: "Start your optimised protocol today".
 
 ## Key Dependencies
 - `google_fonts: ^6.2.1` — Space Grotesk + JetBrains Mono

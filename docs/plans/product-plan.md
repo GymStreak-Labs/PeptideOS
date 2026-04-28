@@ -124,7 +124,8 @@ Premium only — no free tier.
 3. **"What peptides are you currently using?"** — search/select from database
 4. **Protocol setup** — guided walk-through of their current (or desired) protocol
 5. **Reconstitution demo** — show the calculator in action with their peptides
-6. **Paywall** — by this point they've invested 3 minutes of personal context
+6. **Authentication** — create/sign in before monetisation so attribution and purchase events attach to a stable Firebase UID
+7. **Paywall** — by this point they've invested 3 minutes of personal context and RevenueCat/AppRefer can attribute the purchase cleanly
 
 ---
 
