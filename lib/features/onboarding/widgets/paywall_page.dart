@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/constants/legal_links.dart';
 
 /// Hard paywall — premium conversion design adapted to PepMod cyberpunk.
 ///
@@ -775,6 +777,13 @@ class _PaywallPageState extends State<PaywallPage>
     );
   }
 
+  Future<void> _openLegalUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      debugPrint('Could not open legal URL: $url');
+    }
+  }
+
   // ═══════════════════════════════════════════════════════
   // FOOTER
   // ═══════════════════════════════════════════════════════
@@ -806,7 +815,7 @@ class _PaywallPageState extends State<PaywallPage>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton(
-              onPressed: () {},
+              onPressed: () => _openLegalUrl(LegalLinks.termsOfService),
               child: Text(
                 'Terms',
                 style: AppTypography.disclaimer.copyWith(
@@ -816,7 +825,7 @@ class _PaywallPageState extends State<PaywallPage>
             ),
             Text('·', style: AppTypography.disclaimer),
             TextButton(
-              onPressed: () {},
+              onPressed: () => _openLegalUrl(LegalLinks.privacyPolicy),
               child: Text(
                 'Privacy',
                 style: AppTypography.disclaimer.copyWith(

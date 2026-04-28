@@ -60,63 +60,73 @@ class ProtocolPreviewPage extends StatelessWidget {
                                   shape: BoxShape.circle,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: AppColors.primary
-                                          .withValues(alpha: 0.6),
+                                      color: AppColors.primary.withValues(
+                                        alpha: 0.6,
+                                      ),
                                       blurRadius: 8,
                                     ),
                                   ],
                                 ),
                               ),
                               const SizedBox(width: AppSpacing.sm),
-                              Text('PROTOCOL.ACTIVE',
-                                  style: AppTypography.systemLabel),
+                              Text(
+                                'PROTOCOL.ACTIVE',
+                                style: AppTypography.systemLabel,
+                              ),
                             ],
                           ),
                           const SizedBox(height: AppSpacing.base),
 
-                          Text(
-                            'Custom Protocol',
-                            style: AppTypography.h3,
-                          ),
+                          Text('Custom Protocol', style: AppTypography.h3),
                           const SizedBox(height: AppSpacing.sm),
 
                           // Peptide list
-                          ..._displayPeptides.map((p) => Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: AppSpacing.sm),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.biotech_rounded,
-                                      size: 16,
-                                      color: AppColors.primary,
+                          ..._displayPeptides.map(
+                            (p) => Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: AppSpacing.sm,
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.biotech_rounded,
+                                    size: 16,
+                                    color: AppColors.primary,
+                                  ),
+                                  const SizedBox(width: AppSpacing.sm),
+                                  Expanded(
+                                    child: Text(
+                                      p,
+                                      style: AppTypography.labelLarge,
                                     ),
-                                    const SizedBox(width: AppSpacing.sm),
-                                    Expanded(
-                                      child: Text(p,
-                                          style: AppTypography.labelLarge),
+                                  ),
+                                  Text(
+                                    '2x daily',
+                                    style: AppTypography.tabular.copyWith(
+                                      fontSize: 12,
+                                      color: AppColors.textTertiary,
                                     ),
-                                    Text(
-                                      '2x daily',
-                                      style: AppTypography.tabular.copyWith(
-                                        fontSize: 12,
-                                        color: AppColors.textTertiary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
 
                           const Divider(height: AppSpacing.xl),
 
                           // Schedule preview
-                          Text('SCHEDULE PREVIEW',
-                              style: AppTypography.systemLabel.copyWith(
-                                color: AppColors.textTertiary,
-                              )),
+                          Text(
+                            'SCHEDULE PREVIEW',
+                            style: AppTypography.systemLabel.copyWith(
+                              color: AppColors.textTertiary,
+                            ),
+                          ),
                           const SizedBox(height: AppSpacing.md),
 
-                          _ScheduleRow(time: '08:00', peptides: _displayPeptides),
+                          _ScheduleRow(
+                            time: '08:00',
+                            peptides: _displayPeptides,
+                          ),
                           const SizedBox(height: AppSpacing.sm),
                           _ScheduleRow(
                             time: '20:00',
@@ -129,14 +139,11 @@ class ProtocolPreviewPage extends StatelessWidget {
                           Row(
                             children: [
                               _StatBlock(
-                                  label: 'DOSES/DAY',
-                                  value: '${_displayPeptides.length + 1}'),
-                              _StatBlock(
-                                  label: 'DURATION',
-                                  value: '8 weeks'),
-                              _StatBlock(
-                                  label: 'PHASE',
-                                  value: 'Loading'),
+                                label: 'DOSES/DAY',
+                                value: '${_displayPeptides.length + 1}',
+                              ),
+                              _StatBlock(label: 'DURATION', value: '8 weeks'),
+                              _StatBlock(label: 'PHASE', value: 'Loading'),
                             ],
                           ),
                         ],
@@ -150,16 +157,20 @@ class ProtocolPreviewPage extends StatelessWidget {
                       height: 80,
                       decoration: BoxDecoration(
                         color: AppColors.surfaceContainer,
-                        borderRadius:
-                            BorderRadius.circular(AppSpacing.cardRadius),
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.cardRadius,
+                        ),
                         border: Border.all(color: AppColors.border),
                       ),
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.lock_outline_rounded,
-                                size: 20, color: AppColors.textDisabled),
+                            Icon(
+                              Icons.lock_outline_rounded,
+                              size: 20,
+                              color: AppColors.textDisabled,
+                            ),
                             const SizedBox(height: AppSpacing.xs),
                             Text(
                               'Subscribe to activate your protocol',
@@ -178,10 +189,7 @@ class ProtocolPreviewPage extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.base),
 
-            PrimaryButton(
-              label: 'UNLOCK PEPTIDEOS',
-              onPressed: onNext,
-            ),
+            PrimaryButton(label: 'UNLOCK PEPMOD', onPressed: onNext),
 
             const SizedBox(height: AppSpacing.xxl),
           ],
@@ -207,10 +215,12 @@ class _ScheduleRow extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: peptides
-                .map((p) => Padding(
-                      padding: const EdgeInsets.only(bottom: 2),
-                      child: Text(p, style: AppTypography.bodySmall),
-                    ))
+                .map(
+                  (p) => Padding(
+                    padding: const EdgeInsets.only(bottom: 2),
+                    child: Text(p, style: AppTypography.bodySmall),
+                  ),
+                )
                 .toList(),
           ),
         ),
