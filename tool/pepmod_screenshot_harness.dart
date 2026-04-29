@@ -49,7 +49,11 @@ class _ScreenshotPager extends StatefulWidget {
 
 class _ScreenshotPagerState extends State<_ScreenshotPager> {
   late final PageController _controller;
-  int _index = 0;
+  static const _initialPage = int.fromEnvironment(
+    'SCREENSHOT_INITIAL_PAGE',
+    defaultValue: 0,
+  );
+  int _index = _initialPage;
 
   static const _peptides = {'BPC-157', 'TB-500', 'CJC-1295'};
   static const _goals = {'Recovery', 'Longevity'};
@@ -57,7 +61,7 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
   @override
   void initState() {
     super.initState();
-    _controller = PageController(initialPage: 0);
+    _controller = PageController(initialPage: _initialPage);
   }
 
   @override
@@ -90,6 +94,7 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
       selectedGoals: _goals,
       onNext: () {},
     ),
+    const _ProtocolBuilderMockScreen(),
     ProtocolPreviewPage(peptides: _peptides, onNext: _next),
     ResultsSummaryPage(
       selectedGoals: _goals,
@@ -235,6 +240,276 @@ class _ScreenHeader extends StatelessWidget {
               ),
               child: Icon(actionIcon, color: AppColors.primary),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProtocolBuilderMockScreen extends StatelessWidget {
+  const _ProtocolBuilderMockScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.sm,
+                AppSpacing.sm,
+                AppSpacing.screenHorizontal,
+                0,
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.arrow_back_rounded,
+                    color: AppColors.textPrimary,
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'SYS.PROTOCOL // NEW',
+                          style: AppTypography.systemLabel,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Build Protocol · Step 2 / 3',
+                          style: AppTypography.h3,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.screenHorizontal,
+              ),
+              child: Row(
+                children: List.generate(3, (i) {
+                  final active = i <= 1;
+                  return Expanded(
+                    child: Container(
+                      height: 2,
+                      margin: EdgeInsets.only(right: i < 2 ? 3 : 0),
+                      decoration: BoxDecoration(
+                        color: active ? AppColors.primary : AppColors.border,
+                        borderRadius: BorderRadius.circular(1),
+                        boxShadow: i == 1
+                            ? [
+                                BoxShadow(
+                                  color: AppColors.primary.withValues(
+                                    alpha: 0.5,
+                                  ),
+                                  blurRadius: 4,
+                                ),
+                              ]
+                            : null,
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.screenHorizontal,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Add peptides', style: AppTypography.h2),
+                    const SizedBox(height: AppSpacing.sm),
+                    Text(
+                      'Pick from the library and configure dose, frequency, and cycle.',
+                      style: AppTypography.bodyMedium,
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    const _BuilderPeptideCard(
+                      name: 'BPC-157',
+                      detail: '250 mcg · Daily · 8 weeks',
+                      time: '08:00',
+                    ),
+                    const SizedBox(height: AppSpacing.cardGap),
+                    const _BuilderPeptideCard(
+                      name: 'TB-500',
+                      detail: '2.5 mg · Twice weekly · 8 weeks',
+                      time: '12:30',
+                    ),
+                    const SizedBox(height: AppSpacing.cardGap),
+                    const _BuilderPeptideCard(
+                      name: 'CJC-1295',
+                      detail: '100 mcg · 5 nights / week · 12 weeks',
+                      time: '21:00',
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    Container(
+                      height: AppSpacing.buttonHeight,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.buttonRadius,
+                        ),
+                        border: Border.all(color: AppColors.borderCyan),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: 0.10),
+                            blurRadius: 14,
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.add_rounded,
+                            color: AppColors.primary,
+                            size: 20,
+                          ),
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(
+                            'ADD PEPTIDE',
+                            style: AppTypography.button.copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    Row(
+                      children: const [
+                        Expanded(
+                          child: _BuilderStatTile(
+                            label: 'PEPTIDES',
+                            value: '3',
+                          ),
+                        ),
+                        SizedBox(width: AppSpacing.sm),
+                        Expanded(
+                          child: _BuilderStatTile(
+                            label: 'REMINDERS',
+                            value: '5',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
+              child: PrimaryButton(label: 'NEXT', onPressed: () {}),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BuilderPeptideCard extends StatelessWidget {
+  const _BuilderPeptideCard({
+    required this.name,
+    required this.detail,
+    required this.time,
+  });
+
+  final String name;
+  final String detail;
+  final String time;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      glowColor: name == 'BPC-157' ? AppColors.primary : null,
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppColors.borderCyan),
+            ),
+            child: const Icon(Icons.biotech_rounded, color: AppColors.primary),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(name, style: AppTypography.labelLarge),
+                const SizedBox(height: 2),
+                Text(
+                  detail,
+                  style: AppTypography.bodySmall.copyWith(
+                    fontFamily: 'JetBrainsMono',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Text(
+            time,
+            style: AppTypography.tabular.copyWith(
+              fontSize: 14,
+              color: AppColors.primary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BuilderStatTile extends StatelessWidget {
+  const _BuilderStatTile({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.base),
+      decoration: BoxDecoration(
+        color: AppColors.inputFill,
+        borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: AppTypography.systemLabel.copyWith(
+              color: AppColors.textTertiary,
+              fontSize: 9,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            value,
+            style: AppTypography.h2.copyWith(color: AppColors.primary),
+          ),
         ],
       ),
     );
