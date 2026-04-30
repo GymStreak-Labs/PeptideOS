@@ -50,7 +50,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   String _frustration = '';
   final Set<String> _selectedPeptides = {};
 
+  void _dismissKeyboard() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
+  }
+
   void _nextPage() {
+    _dismissKeyboard();
     if (_currentPage < _totalPages - 1) {
       _pageController.nextPage(
         duration: AppDurations.pageTransition,
@@ -62,6 +68,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _previousPage() {
     if (_currentPage <= 0) return;
     HapticFeedback.selectionClick();
+    _dismissKeyboard();
     _pageController.previousPage(
       duration: AppDurations.pageTransition,
       curve: Curves.easeInOut,
@@ -69,10 +76,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _onPageChanged(int page) {
+    _dismissKeyboard();
     setState(() => _currentPage = page);
   }
 
   Future<void> _handoffToAuth() async {
+    _dismissKeyboard();
     // Persist onboarding data locally, then route to Firebase auth. Once auth
     // succeeds, AppRoot replays the draft into Firestore and shows paywall.
     try {

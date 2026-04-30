@@ -11,6 +11,8 @@ import '../../../data/services/auth_service.dart';
 import '../providers/auth_provider.dart';
 import 'email_auth_screen.dart';
 
+const bool _googleSignInEnabled = bool.fromEnvironment('ENABLE_GOOGLE_SIGN_IN');
+
 /// Gate shown after onboarding when no Firebase user is signed in.
 ///
 /// The UID gives us attribution + cross-device sync — anonymous mode would
@@ -42,7 +44,7 @@ class _AuthScreenState extends State<AuthScreen> {
       }
     } on AuthException catch (e) {
       if (!mounted) return;
-      if (e.code != 'apple_sign_in_failed') {
+      if (e.code != 'apple_sign_in_cancelled') {
         setState(() => _error = e.message);
       }
     } catch (e) {
@@ -80,9 +82,9 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void _openEmailFlow() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const EmailAuthScreen()),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const EmailAuthScreen()));
   }
 
   @override
@@ -100,12 +102,17 @@ class _AuthScreenState extends State<AuthScreen> {
               const Spacer(),
               _HeaderIcon(),
               const SizedBox(height: AppSpacing.xl),
-              Text('SYS.AUTH // REQUIRED',
-                  style: AppTypography.systemLabel,
-                  textAlign: TextAlign.center),
+              Text(
+                'SYS.AUTH // REQUIRED',
+                style: AppTypography.systemLabel,
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: AppSpacing.sm),
-              Text('Secure your protocol',
-                  style: AppTypography.h1, textAlign: TextAlign.center),
+              Text(
+                'Secure your protocol',
+                style: AppTypography.h1,
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: AppSpacing.sm),
               Text(
                 'Your protocols sync encrypted to your account so nothing '
@@ -135,12 +142,14 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
                 const SizedBox(height: AppSpacing.sm),
               ],
-              _GhostButton(
-                label: 'CONTINUE WITH GOOGLE',
-                icon: Icons.g_mobiledata_rounded,
-                onPressed: _busy ? null : _signInWithGoogle,
-              ),
-              const SizedBox(height: AppSpacing.sm),
+              if (_googleSignInEnabled) ...[
+                _GhostButton(
+                  label: 'CONTINUE WITH GOOGLE',
+                  icon: Icons.g_mobiledata_rounded,
+                  onPressed: _busy ? null : _signInWithGoogle,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+              ],
               _GhostButton(
                 label: 'CONTINUE WITH EMAIL',
                 icon: Icons.mail_outline_rounded,
@@ -179,8 +188,11 @@ class _HeaderIcon extends StatelessWidget {
             ),
           ],
         ),
-        child: const Icon(Icons.lock_outline_rounded,
-            color: AppColors.primary, size: 32),
+        child: const Icon(
+          Icons.lock_outline_rounded,
+          color: AppColors.primary,
+          size: 32,
+        ),
       ),
     );
   }
@@ -222,11 +234,11 @@ class _GhostButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon,
-                  size: AppSpacing.iconMedium,
-                  color: enabled
-                      ? AppColors.textPrimary
-                      : AppColors.textDisabled),
+              Icon(
+                icon,
+                size: AppSpacing.iconMedium,
+                color: enabled ? AppColors.textPrimary : AppColors.textDisabled,
+              ),
               const SizedBox(width: AppSpacing.sm),
               Text(
                 label,

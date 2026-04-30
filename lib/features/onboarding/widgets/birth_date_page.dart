@@ -86,85 +86,102 @@ class _BirthDatePageState extends State<BirthDatePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.screenHorizontal,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: AppSpacing.huge),
-            Text('SYS.PROFILE // AGE', style: AppTypography.systemLabel),
-            const SizedBox(height: AppSpacing.md),
-            Text(
-              'When were\nyou born?',
-              style: AppTypography.h1.copyWith(fontSize: 28),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: EdgeInsets.fromLTRB(
+              AppSpacing.screenHorizontal,
+              0,
+              AppSpacing.screenHorizontal,
+              MediaQuery.viewInsetsOf(context).bottom + AppSpacing.xxl,
             ),
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              'PepMod is built for adults only. Your birth date also keeps your profile consistent after sign-in.',
-              style: AppTypography.bodySmall,
-            ),
-            const SizedBox(height: AppSpacing.xl),
-            Text(
-              'DATE OF BIRTH',
-              style: AppTypography.systemLabel.copyWith(
-                color: AppColors.textTertiary,
-                fontSize: 10,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: AppSpacing.huge),
+                    Text(
+                      'SYS.PROFILE // AGE',
+                      style: AppTypography.systemLabel,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    Text(
+                      'When were\nyou born?',
+                      style: AppTypography.h1.copyWith(fontSize: 28),
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      'PepMod is built for adults only. Your birth date also keeps your profile consistent after sign-in.',
+                      style: AppTypography.bodySmall,
+                    ),
+                    const SizedBox(height: AppSpacing.xl),
+                    Text(
+                      'DATE OF BIRTH',
+                      style: AppTypography.systemLabel.copyWith(
+                        color: AppColors.textTertiary,
+                        fontSize: 10,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: _CyberInput(
+                            controller: _yearController,
+                            label: 'YEAR',
+                            hint: '1990',
+                            maxLength: 4,
+                            onChanged: (_) => _syncBirthDate(),
+                          ),
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        Expanded(
+                          child: _CyberInput(
+                            controller: _monthController,
+                            label: 'MM',
+                            hint: '04',
+                            maxLength: 2,
+                            onChanged: (_) => _syncBirthDate(),
+                          ),
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        Expanded(
+                          child: _CyberInput(
+                            controller: _dayController,
+                            label: 'DD',
+                            hint: '23',
+                            maxLength: 2,
+                            onChanged: (_) => _syncBirthDate(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    Text(
+                      _canContinue
+                          ? 'Thanks. Your profile is ready to personalise.'
+                          : 'Enter a valid 18+ birth date to continue.',
+                      style: AppTypography.disclaimer.copyWith(
+                        color: _canContinue
+                            ? AppColors.primary
+                            : AppColors.warning,
+                      ),
+                    ),
+                    const Spacer(),
+                    PrimaryButton(
+                      label: 'CONTINUE',
+                      onPressed: _canContinue ? widget.onNext : null,
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: AppSpacing.sm),
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: _CyberInput(
-                    controller: _yearController,
-                    label: 'YEAR',
-                    hint: '1990',
-                    maxLength: 4,
-                    onChanged: (_) => _syncBirthDate(),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(
-                  child: _CyberInput(
-                    controller: _monthController,
-                    label: 'MM',
-                    hint: '04',
-                    maxLength: 2,
-                    onChanged: (_) => _syncBirthDate(),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(
-                  child: _CyberInput(
-                    controller: _dayController,
-                    label: 'DD',
-                    hint: '23',
-                    maxLength: 2,
-                    onChanged: (_) => _syncBirthDate(),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.md),
-            Text(
-              _canContinue
-                  ? 'Thanks. Your profile is ready to personalise.'
-                  : 'Enter a valid 18+ birth date to continue.',
-              style: AppTypography.disclaimer.copyWith(
-                color: _canContinue ? AppColors.primary : AppColors.warning,
-              ),
-            ),
-            const Spacer(),
-            PrimaryButton(
-              label: 'CONTINUE',
-              onPressed: _canContinue ? widget.onNext : null,
-            ),
-            const SizedBox(height: AppSpacing.xxl),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
