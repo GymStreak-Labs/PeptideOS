@@ -1,7 +1,7 @@
 name: peptide_os
 description: "Intelligent peptide protocol manager — track doses, calculate reconstitution, manage protocols."
 publish_to: 'none'
-version: 1.0.0+3
+version: 1.0.0+5
 
 environment:
   sdk: ^3.11.1
@@ -57,6 +57,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+
+dependency_overrides:
+  # path_provider_foundation 2.6.0 pulls in the objective_c native asset, which
+  # Flutter 3.41.4 packaged with a simulator platform slice in iOS release IPAs.
+  path_provider_foundation: 2.5.1
 
 flutter:
   uses-material-design: true
