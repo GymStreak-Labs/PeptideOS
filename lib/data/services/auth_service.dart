@@ -93,7 +93,28 @@ class AuthService {
 
       return userCredential;
     } on SignInWithAppleAuthorizationException catch (e) {
-      throw AuthException(code: 'apple_sign_in_failed', message: e.message);
+      if (e.code == AuthorizationErrorCode.canceled) {
+        throw AuthException(
+          code: 'apple_sign_in_cancelled',
+          message: 'Sign in was cancelled.',
+        );
+      }
+      throw AuthException(
+        code: 'apple_sign_in_failed',
+        message: 'Apple sign-in failed. Please try again.',
+      );
+    } on SignInWithAppleNotSupportedException {
+      throw AuthException(
+        code: 'apple_sign_in_unavailable',
+        message: 'Sign in with Apple is not available on this device.',
+      );
+    } on SignInWithAppleCredentialsException {
+      throw AuthException(
+        code: 'apple_sign_in_failed',
+        message: 'Apple sign-in did not return valid credentials.',
+      );
+    } on FirebaseAuthException catch (e) {
+      throw _handleAuthException(e);
     }
   }
 

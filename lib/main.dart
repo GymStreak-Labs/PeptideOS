@@ -108,7 +108,6 @@ Future<void> main() async {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         unawaited(NotificationService.instance.initialize());
         unawaited(_initFacebookEvents());
-        unawaited(_requestTrackingPermission());
       });
     },
     (error, stack) {
@@ -253,6 +252,7 @@ class _AppRootState extends State<_AppRoot> {
   bool _postAuthPaywallPending = false;
   bool _onboardingReplayAttempted = false;
   bool _replayingOnboardingDraft = false;
+  bool _trackingPromptRequested = false;
 
   @override
   void initState() {
@@ -356,6 +356,13 @@ class _AppRootState extends State<_AppRoot> {
         (SubscriptionService.forcePremium || subscription.isPremium)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         unawaited(_clearPostAuthPaywall());
+      });
+    }
+
+    if (!_trackingPromptRequested) {
+      _trackingPromptRequested = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(_requestTrackingPermission());
       });
     }
 

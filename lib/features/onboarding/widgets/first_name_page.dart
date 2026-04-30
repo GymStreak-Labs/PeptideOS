@@ -40,45 +40,60 @@ class _FirstNamePageState extends State<FirstNamePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.screenHorizontal,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: AppSpacing.huge),
-            Text('SYS.PROFILE // START', style: AppTypography.systemLabel),
-            const SizedBox(height: AppSpacing.md),
-            Text(
-              'What should\nwe call you?',
-              style: AppTypography.h1.copyWith(fontSize: 28),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: EdgeInsets.fromLTRB(
+              AppSpacing.screenHorizontal,
+              0,
+              AppSpacing.screenHorizontal,
+              MediaQuery.viewInsetsOf(context).bottom + AppSpacing.xxl,
             ),
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              'We’ll use this to make your protocol feel less like a spreadsheet and more like your own system.',
-              style: AppTypography.bodySmall,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: AppSpacing.huge),
+                    Text(
+                      'SYS.PROFILE // START',
+                      style: AppTypography.systemLabel,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    Text(
+                      'What should\nwe call you?',
+                      style: AppTypography.h1.copyWith(fontSize: 28),
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      'We’ll use this to make your protocol feel less like a spreadsheet and more like your own system.',
+                      style: AppTypography.bodySmall,
+                    ),
+                    const SizedBox(height: AppSpacing.xl),
+                    _CyberInput(
+                      controller: _controller,
+                      label: 'FIRST NAME',
+                      hint: 'Joe',
+                      keyboardType: TextInputType.name,
+                      textCapitalization: TextCapitalization.words,
+                      onChanged: (value) {
+                        widget.onChanged(value.trim());
+                        setState(() {});
+                      },
+                    ),
+                    const Spacer(),
+                    PrimaryButton(
+                      label: 'CONTINUE',
+                      onPressed: _canContinue ? widget.onNext : null,
+                    ),
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(height: AppSpacing.xl),
-            _CyberInput(
-              controller: _controller,
-              label: 'FIRST NAME',
-              hint: 'Joe',
-              keyboardType: TextInputType.name,
-              textCapitalization: TextCapitalization.words,
-              onChanged: (value) {
-                widget.onChanged(value.trim());
-                setState(() {});
-              },
-            ),
-            const Spacer(),
-            PrimaryButton(
-              label: 'CONTINUE',
-              onPressed: _canContinue ? widget.onNext : null,
-            ),
-            const SizedBox(height: AppSpacing.xxl),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

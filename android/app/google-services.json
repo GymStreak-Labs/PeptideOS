@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "61227132457",
-    "project_id": "gymstreak-labs",
-    "storage_bucket": "gymstreak-labs.firebasestorage.app"
+    "project_number": "183647218511",
+    "project_id": "pepmod-prod",
+    "storage_bucket": "pepmod-prod.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:61227132457:android:787382999e9ab790e55e38",
+        "mobilesdk_app_id": "1:183647218511:android:c725d5d8fbdb89716a733a",
         "android_client_info": {
           "package_name": "com.gymstreaklabs.peptide_os"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB0LKiAAaSkWoqGzxjXjYH4zo4Xm-p8xME"
+          "current_key": "AIzaSyBzobOfaAYRopI7sfUpObzVA4T4ijNWMDc"
         }
       ],
       "services": {

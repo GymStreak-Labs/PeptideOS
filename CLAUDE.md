@@ -10,10 +10,10 @@ Public app name: **PepMod**. Historical internal package/bundle identifiers stil
 - **Platform**: iOS + Android (unified design — no platform-adaptive widgets)
 - **Fonts**: Space Grotesk (body) + JetBrains Mono (data) via `google_fonts`
 - **Backend**: Firebase (Auth, Firestore) — Phase 2, replaces Isar. Firestore offline persistence enabled.
-- **Auth**: Firebase Auth — Apple (iOS), Google, Email/password. Anonymous mode is intentionally disabled so AppRefer attribution survives cross-device.
+- **Auth**: Firebase Auth — Apple (iOS), Email/password, and Google once mobile OAuth is provisioned. Anonymous mode is intentionally disabled so AppRefer attribution survives cross-device.
 - **Subscriptions**: RevenueCat (`purchases_flutter` 8.x), entitlement `premium`. Public SDK keys are live in source.
 - **Attribution**: AppRefer Flutter SDK 0.4.1 (`configure` on app start with API key + advanced matching on sign-in).
-- **Ad events**: Facebook App Events + App Tracking Transparency (ATT prompt deferred to post first-frame).
+- **Ad events**: Facebook App Events + App Tracking Transparency (ATT prompt deferred until after onboarding/auth so the 18+ gate remains the first interaction).
 - **Notifications**: `flutter_local_notifications` 18.x + `timezone` + `flutter_timezone` — real scheduling wired in Phase 2.
 - **State management**: `provider` 6.1 — one ChangeNotifier per feature, UID-aware via `setUid()`.
 - **Charts**: `fl_chart` 0.69
@@ -23,7 +23,7 @@ Public app name: **PepMod**. Historical internal package/bundle identifiers stil
 RevenueCat public SDK keys and Meta App Events identifiers are live in source.
 The remaining placeholder lives in source code for visibility:
 - `lib/main.dart` — `APPREFER_API_KEY` (read via `--dart-define`; live/test values are stored in Mission Control vault)
-- No TODOs for Firebase — using the pre-existing `gymstreak-labs` project (iOS + Android apps already registered).
+- No TODOs for Firebase — using the dedicated `pepmod-prod` project (iOS + Android apps already registered).
 
 Use `--dart-define=FORCE_PREMIUM=true` to bypass RC for internal testing.
 
@@ -34,6 +34,19 @@ Use `--dart-define=FORCE_PREMIUM=true` to bypass RC for internal testing.
 ## Bundle ID
 - iOS: `com.gymstreaklabs.peptideOs`
 - Android: `com.gymstreaklabs.peptide_os`
+
+## Firebase Project
+- Project ID: `pepmod-prod`
+- Project number: `183647218511`
+- iOS app ID: `1:183647218511:ios:df57adc5f7327dfb6a733a`
+- Android app ID: `1:183647218511:android:c725d5d8fbdb89716a733a`
+- Firestore: `(default)` database in `nam5`
+- Auth providers: Apple and email/password are enabled. Google is hidden by default (`--dart-define=ENABLE_GOOGLE_SIGN_IN=true` re-enables the button) until mobile OAuth client setup is complete.
+
+## Review Account
+- Email: `review-pepmod@gymstreaklabs.com`
+- Password: stored in `mc-vault` as `pepmod-reviewer-password`
+- Firebase Auth user exists in `pepmod-prod`, sign-in is verified, and App Store Connect App Review details use this account.
 
 ## Project Structure
 ```
@@ -184,7 +197,8 @@ Essential (awaited, pre-`runApp`):
 
 Deferred (post-first-frame):
 - `NotificationService.initialize()`
-- Facebook App Events + ATT prompt (iOS only)
+- Facebook App Events init
+- ATT prompt after signed-in onboarding completion (iOS only)
 
 ## Auth gate flow (lib/main.dart `_AppRoot`)
 1. `AuthProvider.isInitialized == false` → splash

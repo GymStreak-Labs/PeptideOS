@@ -149,8 +149,10 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
         backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded,
-              color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: _busy ? null : () => Navigator.of(context).pop(),
         ),
         title: Text(_title, style: AppTypography.h3),
@@ -165,8 +167,14 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
               children: [
-                Text('SYS.AUTH // ${_mode == _Mode.createAccount ? 'NEW_USER' : _mode == _Mode.forgotPassword ? 'RESET' : 'RETURN_USER'}',
-                    style: AppTypography.systemLabel),
+                Text(
+                  'SYS.AUTH // ${_mode == _Mode.createAccount
+                      ? 'NEW_USER'
+                      : _mode == _Mode.forgotPassword
+                      ? 'RESET'
+                      : 'RETURN_USER'}',
+                  style: AppTypography.systemLabel,
+                ),
                 const SizedBox(height: AppSpacing.sm),
                 Text(_title, style: AppTypography.h1),
                 const SizedBox(height: AppSpacing.lg),
@@ -186,15 +194,21 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                 ],
                 if (_error != null) ...[
                   const SizedBox(height: AppSpacing.md),
-                  Text(_error!,
-                      style: AppTypography.bodySmall
-                          .copyWith(color: AppColors.warning)),
+                  Text(
+                    _error!,
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.warning,
+                    ),
+                  ),
                 ],
                 if (_info != null) ...[
                   const SizedBox(height: AppSpacing.md),
-                  Text(_info!,
-                      style: AppTypography.bodySmall
-                          .copyWith(color: AppColors.primary)),
+                  Text(
+                    _info!,
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
                 ],
                 const SizedBox(height: AppSpacing.xl),
                 PrimaryButton(
@@ -311,32 +325,41 @@ class _PasswordFieldState extends State<_PasswordField> {
       onFieldSubmitted: widget.onSubmitted,
       style: AppTypography.bodyMedium.copyWith(color: AppColors.textPrimary),
       cursorColor: AppColors.primary,
-      decoration: _inputDecoration(
-        label: 'Password',
-        icon: Icons.lock_outline_rounded,
-      ).copyWith(
-        suffixIcon: IconButton(
-          onPressed: () => setState(() => _obscure = !_obscure),
-          icon: Icon(
-            _obscure
-                ? Icons.visibility_outlined
-                : Icons.visibility_off_outlined,
-            color: AppColors.textSecondary,
-            size: AppSpacing.iconMedium,
+      decoration:
+          _inputDecoration(
+            label: 'Password',
+            icon: Icons.lock_outline_rounded,
+          ).copyWith(
+            suffixIcon: IconButton(
+              onPressed: () => setState(() => _obscure = !_obscure),
+              icon: Icon(
+                _obscure
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+                color: AppColors.textSecondary,
+                size: AppSpacing.iconMedium,
+              ),
+            ),
           ),
-        ),
-      ),
       validator: widget.validator,
     );
   }
 }
 
-InputDecoration _inputDecoration({required String label, required IconData icon}) {
+InputDecoration _inputDecoration({
+  required String label,
+  required IconData icon,
+}) {
   return InputDecoration(
     labelText: label,
-    labelStyle: AppTypography.bodyMedium
-        .copyWith(color: AppColors.textSecondary),
-    prefixIcon: Icon(icon, color: AppColors.textSecondary, size: AppSpacing.iconMedium),
+    labelStyle: AppTypography.bodyMedium.copyWith(
+      color: AppColors.textSecondary,
+    ),
+    prefixIcon: Icon(
+      icon,
+      color: AppColors.textSecondary,
+      size: AppSpacing.iconMedium,
+    ),
     filled: true,
     fillColor: AppColors.surfaceContainer,
     contentPadding: const EdgeInsets.symmetric(
@@ -359,8 +382,7 @@ InputDecoration _inputDecoration({required String label, required IconData icon}
       borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
       borderSide: const BorderSide(color: AppColors.warning, width: 1.5),
     ),
-    errorStyle:
-        AppTypography.bodySmall.copyWith(color: AppColors.warning),
+    errorStyle: AppTypography.bodySmall.copyWith(color: AppColors.warning),
   );
 }
 
@@ -379,14 +401,17 @@ class _LinkRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: items
-          .map((i) => GestureDetector(
-                onTap: i.onTap,
-                child: Text(
-                  i.label,
-                  style: AppTypography.bodySmall
-                      .copyWith(color: AppColors.primary),
+          .map(
+            (i) => GestureDetector(
+              onTap: i.onTap,
+              child: Text(
+                i.label,
+                style: AppTypography.bodySmall.copyWith(
+                  color: AppColors.primary,
                 ),
-              ))
+              ),
+            ),
+          )
           .toList(),
     );
   }

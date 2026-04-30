@@ -1,9 +1,9 @@
-// File generated for PepMod (gymstreak-labs Firebase project).
+// File generated for PepMod (pepmod-prod Firebase project).
 //
 // Mirrors the shape of `flutterfire configure` output so the usage site remains
 // `Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)`.
 //
-// Regenerate with `flutterfire configure --project=gymstreak-labs` once the
+// Regenerate with `flutterfire configure --project=pepmod-prod` once the
 // CLI can auth locally, or by running the `firebase apps:sdkconfig` commands
 // documented in CLAUDE.md.
 
@@ -35,19 +35,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCogT4VTi3Ffw0Td5XBAvC-5oWA21lBxeI',
-    appId: '1:61227132457:ios:94a126cbe15ada8fe55e38',
-    messagingSenderId: '61227132457',
-    projectId: 'gymstreak-labs',
-    storageBucket: 'gymstreak-labs.firebasestorage.app',
+    apiKey: 'AIzaSyCsXMk5e8Ru7LHYigKq9-1MuX9uSyQlIRo',
+    appId: '1:183647218511:ios:df57adc5f7327dfb6a733a',
+    messagingSenderId: '183647218511',
+    projectId: 'pepmod-prod',
+    storageBucket: 'pepmod-prod.firebasestorage.app',
     iosBundleId: 'com.gymstreaklabs.peptideOs',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB0LKiAAaSkWoqGzxjXjYH4zo4Xm-p8xME',
-    appId: '1:61227132457:android:787382999e9ab790e55e38',
-    messagingSenderId: '61227132457',
-    projectId: 'gymstreak-labs',
-    storageBucket: 'gymstreak-labs.firebasestorage.app',
+    apiKey: 'AIzaSyBzobOfaAYRopI7sfUpObzVA4T4ijNWMDc',
+    appId: '1:183647218511:android:c725d5d8fbdb89716a733a',
+    messagingSenderId: '183647218511',
+    projectId: 'pepmod-prod',
+    storageBucket: 'pepmod-prod.firebasestorage.app',
   );
 }
