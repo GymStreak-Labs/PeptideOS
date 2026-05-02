@@ -86,16 +86,8 @@ Future<void> main() async {
       // RevenueCat — safe no-op if key still TODO.
       await SubscriptionService.instance.configure();
 
-      // AppRefer — safe no-op if key still TODO.
-      if (!_appReferApiKey.startsWith('TODO_')) {
-        try {
-          await AppReferSDK.configure(AppReferConfig(apiKey: _appReferApiKey));
-        } catch (e) {
-          debugPrint('AppRefer init failed: $e');
-        }
-      }
-
-      // Stable install ID on Crashlytics / Analytics / RC / AppRefer.
+      // Stable install ID on Crashlytics / Analytics / RC. AppRefer receives
+      // the same ID after the ATT request path has run.
       await AnalyticsService().initializeIdentity();
 
       // Seed the peptide library on first authenticated launch. Idempotent —
@@ -107,7 +99,7 @@ Future<void> main() async {
       // ── Deferred init (post-first-frame, non-blocking) ─────────────────────
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         unawaited(NotificationService.instance.initialize());
-        unawaited(_initFacebookEvents());
+        unawaited(_initAttributionAfterTrackingPrompt());
       });
     },
     (error, stack) {
@@ -118,26 +110,57 @@ Future<void> main() async {
   );
 }
 
-Future<void> _initFacebookEvents() async {
+Future<void> _initAttributionAfterTrackingPrompt() async {
+  final trackingStatus = await _requestTrackingPermission();
+  await _configureAppRefer();
+  await _initFacebookEvents(trackingStatus);
+}
+
+Future<void> _configureAppRefer() async {
+  if (_appReferApiKey.startsWith('TODO_')) return;
+  try {
+    await AppReferSDK.configure(AppReferConfig(apiKey: _appReferApiKey));
+    final installId = AnalyticsService().installId;
+    if (installId != null) {
+      await AppReferSDK.setUserId(installId);
+    }
+  } catch (e) {
+    debugPrint('AppRefer init failed: $e');
+  }
+}
+
+Future<void> _initFacebookEvents(TrackingStatus trackingStatus) async {
   if (_facebookAppId.startsWith('TODO_')) return;
   try {
     final fb = FacebookAppEvents();
-    await fb.setAdvertiserTracking(enabled: true);
-    await fb.logEvent(name: 'app_open');
+    final advertiserTrackingAllowed =
+        defaultTargetPlatform != TargetPlatform.iOS ||
+        trackingStatus == TrackingStatus.authorized;
+    await fb.setAdvertiserTracking(enabled: advertiserTrackingAllowed);
+    if (advertiserTrackingAllowed) {
+      await fb.logEvent(name: 'app_open');
+    }
   } catch (e) {
     debugPrint('Facebook App Events init failed: $e');
   }
 }
 
-Future<void> _requestTrackingPermission() async {
-  if (!defaultTargetPlatform.name.contains('iOS')) return;
+Future<TrackingStatus> _requestTrackingPermission() async {
+  if (defaultTargetPlatform != TargetPlatform.iOS) {
+    return TrackingStatus.notSupported;
+  }
   try {
+    // Let Flutter paint the first app screen before presenting the system
+    // prompt; iOS only displays ATT while the app is active and foregrounded.
+    await Future<void>.delayed(const Duration(milliseconds: 600));
     final status = await AppTrackingTransparency.trackingAuthorizationStatus;
     if (status == TrackingStatus.notDetermined) {
-      await AppTrackingTransparency.requestTrackingAuthorization();
+      return AppTrackingTransparency.requestTrackingAuthorization();
     }
+    return status;
   } catch (e) {
     debugPrint('ATT request failed: $e');
+    return TrackingStatus.notSupported;
   }
 }
 
@@ -252,7 +275,6 @@ class _AppRootState extends State<_AppRoot> {
   bool _postAuthPaywallPending = false;
   bool _onboardingReplayAttempted = false;
   bool _replayingOnboardingDraft = false;
-  bool _trackingPromptRequested = false;
 
   @override
   void initState() {
@@ -356,13 +378,6 @@ class _AppRootState extends State<_AppRoot> {
         (SubscriptionService.forcePremium || subscription.isPremium)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         unawaited(_clearPostAuthPaywall());
-      });
-    }
-
-    if (!_trackingPromptRequested) {
-      _trackingPromptRequested = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        unawaited(_requestTrackingPermission());
       });
     }
 
