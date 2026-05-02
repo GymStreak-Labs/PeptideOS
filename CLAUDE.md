@@ -13,7 +13,7 @@ Public app name: **PepMod**. Historical internal package/bundle identifiers stil
 - **Auth**: Firebase Auth — Apple (iOS), Email/password, and Google once mobile OAuth is provisioned. Anonymous mode is intentionally disabled so AppRefer attribution survives cross-device.
 - **Subscriptions**: RevenueCat (`purchases_flutter` 8.x), entitlement `premium`. Public SDK keys are live in source.
 - **Attribution**: AppRefer Flutter SDK 0.4.1 (`configure` on app start with API key + advanced matching on sign-in).
-- **Ad events**: Facebook App Events + App Tracking Transparency (ATT prompt deferred until after onboarding/auth so the 18+ gate remains the first interaction).
+- **Ad events**: Facebook App Events + App Tracking Transparency (ATT prompt requested on first visible app session; Facebook/AppRefer attribution starts only after the ATT request path has run).
 - **Notifications**: `flutter_local_notifications` 18.x + `timezone` + `flutter_timezone` — real scheduling wired in Phase 2.
 - **State management**: `provider` 6.1 — one ChangeNotifier per feature, UID-aware via `setUid()`.
 - **Charts**: `fl_chart` 0.69
@@ -197,8 +197,8 @@ Essential (awaited, pre-`runApp`):
 
 Deferred (post-first-frame):
 - `NotificationService.initialize()`
-- Facebook App Events init
-- ATT prompt after signed-in onboarding completion (iOS only)
+- ATT request path on iOS
+- AppRefer configure + Facebook App Events init after ATT request path
 
 ## Auth gate flow (lib/main.dart `_AppRoot`)
 1. `AuthProvider.isInitialized == false` → splash

@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 
 import '../../../core/services/analytics_service.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/widgets.dart';
 import '../../../data/services/auth_service.dart';
 import '../providers/auth_provider.dart';
 import 'email_auth_screen.dart';
@@ -133,11 +132,17 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
                 const SizedBox(height: AppSpacing.md),
               ],
+              _GhostButton(
+                label: 'CONTINUE WITH EMAIL',
+                icon: Icons.mail_outline_rounded,
+                filled: true,
+                onPressed: _busy ? null : _openEmailFlow,
+              ),
+              const SizedBox(height: AppSpacing.sm),
               if (Platform.isIOS) ...[
-                PrimaryButton(
+                _GhostButton(
                   label: 'SIGN IN WITH APPLE',
                   icon: Icons.apple_rounded,
-                  isLoading: _busy,
                   onPressed: _busy ? null : _signInWithApple,
                 ),
                 const SizedBox(height: AppSpacing.sm),
@@ -150,11 +155,6 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
                 const SizedBox(height: AppSpacing.sm),
               ],
-              _GhostButton(
-                label: 'CONTINUE WITH EMAIL',
-                icon: Icons.mail_outline_rounded,
-                onPressed: _busy ? null : _openEmailFlow,
-              ),
               const SizedBox(height: AppSpacing.lg),
               Text(
                 'By continuing you accept our Terms and Privacy Policy. '
@@ -203,11 +203,13 @@ class _GhostButton extends StatelessWidget {
     required this.label,
     required this.icon,
     required this.onPressed,
+    this.filled = false,
   });
 
   final String label;
   final IconData icon;
   final VoidCallback? onPressed;
+  final bool filled;
 
   @override
   Widget build(BuildContext context) {
@@ -222,13 +224,24 @@ class _GhostButton extends StatelessWidget {
       child: Container(
         height: AppSpacing.buttonHeight,
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainer,
+          color: filled ? AppColors.primary : AppColors.surfaceContainer,
           borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
           border: Border.all(
-            color: enabled
+            color: filled
+                ? AppColors.primary
+                : enabled
                 ? AppColors.border
                 : AppColors.border.withValues(alpha: 0.4),
           ),
+          boxShadow: filled && enabled
+              ? [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.28),
+                    blurRadius: 22,
+                    spreadRadius: -4,
+                  ),
+                ]
+              : null,
         ),
         child: Center(
           child: Row(
@@ -237,13 +250,19 @@ class _GhostButton extends StatelessWidget {
               Icon(
                 icon,
                 size: AppSpacing.iconMedium,
-                color: enabled ? AppColors.textPrimary : AppColors.textDisabled,
+                color: filled && enabled
+                    ? AppColors.background
+                    : enabled
+                    ? AppColors.textPrimary
+                    : AppColors.textDisabled,
               ),
               const SizedBox(width: AppSpacing.sm),
               Text(
                 label,
                 style: AppTypography.button.copyWith(
-                  color: enabled
+                  color: filled && enabled
+                      ? AppColors.background
+                      : enabled
                       ? AppColors.textPrimary
                       : AppColors.textDisabled,
                   letterSpacing: 0.8,
