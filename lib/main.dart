@@ -99,7 +99,6 @@ Future<void> main() async {
       // ── Deferred init (post-first-frame, non-blocking) ─────────────────────
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         unawaited(NotificationService.instance.initialize());
-        unawaited(_initAttributionAfterTrackingPrompt());
       });
     },
     (error, stack) {
@@ -275,6 +274,7 @@ class _AppRootState extends State<_AppRoot> {
   bool _postAuthPaywallPending = false;
   bool _onboardingReplayAttempted = false;
   bool _replayingOnboardingDraft = false;
+  bool _attributionInitStarted = false;
 
   @override
   void initState() {
@@ -368,20 +368,34 @@ class _AppRootState extends State<_AppRoot> {
       return OnboardingScreen(onReadyForAuth: _markReadyForAuth);
     }
 
+    _startAttributionAfterAuth();
+
     final subscription = context.watch<SubscriptionProvider>();
+    final reviewAccount = settings.settings.reviewAccount;
     if (_postAuthPaywallPending &&
+        !reviewAccount &&
         !SubscriptionService.forcePremium &&
         !subscription.isPremium) {
       return _PostAuthPaywallGate(onComplete: _clearPostAuthPaywall);
     }
     if (_postAuthPaywallPending &&
-        (SubscriptionService.forcePremium || subscription.isPremium)) {
+        (reviewAccount ||
+            SubscriptionService.forcePremium ||
+            subscription.isPremium)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         unawaited(_clearPostAuthPaywall());
       });
     }
 
     return const AppShell();
+  }
+
+  void _startAttributionAfterAuth() {
+    if (_attributionInitStarted) return;
+    _attributionInitStarted = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(_initAttributionAfterTrackingPrompt());
+    });
   }
 }
 

@@ -13,6 +13,7 @@ class UserSettings {
     this.onboardingCompleted = false,
     this.darkMode = true,
     this.subscriptionState = 'free',
+    this.reviewAccount = false,
     List<String>? selectedGoals,
     this.experience = '',
     this.frustration = '',
@@ -32,6 +33,7 @@ class UserSettings {
   /// Cached subscription state: `free` / `premium`. Firestore copy of the
   /// RevenueCat entitlement so UI can gate without waiting on RC.
   String subscriptionState;
+  bool reviewAccount;
   List<String> selectedGoals;
   String experience;
   String frustration;
@@ -45,6 +47,7 @@ class UserSettings {
     bool? onboardingCompleted,
     bool? darkMode,
     String? subscriptionState,
+    bool? reviewAccount,
     List<String>? selectedGoals,
     String? experience,
     String? frustration,
@@ -58,6 +61,7 @@ class UserSettings {
       onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
       darkMode: darkMode ?? this.darkMode,
       subscriptionState: subscriptionState ?? this.subscriptionState,
+      reviewAccount: reviewAccount ?? this.reviewAccount,
       selectedGoals: selectedGoals ?? this.selectedGoals,
       experience: experience ?? this.experience,
       frustration: frustration ?? this.frustration,
@@ -73,6 +77,7 @@ class UserSettings {
     'onboardingCompleted': onboardingCompleted,
     'darkMode': darkMode,
     'subscriptionState': subscriptionState,
+    'reviewAccount': reviewAccount,
     'selectedGoals': selectedGoals,
     'experience': experience,
     'frustration': frustration,
@@ -88,9 +93,12 @@ class UserSettings {
       onboardingCompleted: (data['onboardingCompleted'] as bool?) ?? false,
       darkMode: (data['darkMode'] as bool?) ?? true,
       subscriptionState: (data['subscriptionState'] as String?) ?? 'free',
-      selectedGoals: (data['selectedGoals'] as List<dynamic>? ?? const [])
-          .map((e) => e.toString())
-          .toList(),
+      reviewAccount: (data['reviewAccount'] as bool?) ?? false,
+      selectedGoals:
+          ((data['selectedGoals'] ?? data['goals']) as List<dynamic>? ??
+                  const [])
+              .map((e) => e.toString())
+              .toList(),
       experience: (data['experience'] as String?) ?? '',
       frustration: (data['frustration'] as String?) ?? '',
     );

@@ -22,12 +22,12 @@ class AuthProvider extends ChangeNotifier {
     SubscriptionService? subscriptionService,
     AnalyticsService? analytics,
     FirebaseFirestore? firestore,
-  })  : _auth = authService ?? AuthService(),
-        _settingsRepo = settingsRepo ?? UserSettingsRepository(),
-        _subscriptionService =
-            subscriptionService ?? SubscriptionService.instance,
-        _analytics = analytics ?? AnalyticsService(),
-        _firestore = firestore ?? FirebaseFirestore.instance {
+  }) : _auth = authService ?? AuthService(),
+       _settingsRepo = settingsRepo ?? UserSettingsRepository(),
+       _subscriptionService =
+           subscriptionService ?? SubscriptionService.instance,
+       _analytics = analytics ?? AnalyticsService(),
+       _firestore = firestore ?? FirebaseFirestore.instance {
     _sub = _auth.authStateChanges.listen(_onAuthChanged);
     _currentUser = _auth.currentUser;
   }
@@ -54,6 +54,7 @@ class AuthProvider extends ChangeNotifier {
     final previous = _currentUser;
     _currentUser = user;
     _initialized = true;
+    notifyListeners();
 
     if (user != null) {
       try {

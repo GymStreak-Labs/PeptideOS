@@ -64,11 +64,13 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
         case _Mode.signIn:
           _logSelected('email_sign_in');
           await auth.signInWithEmail(email: email, password: password);
+          _completeAuthRoute();
           break;
         case _Mode.createAccount:
           _logSelected('email_create');
           await auth.createAccountWithEmail(email: email, password: password);
           _logCreated('email');
+          _completeAuthRoute();
           break;
         case _Mode.forgotPassword:
           await auth.sendPasswordResetEmail(email);
@@ -88,6 +90,12 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  void _completeAuthRoute() {
+    if (!mounted) return;
+    FocusManager.instance.primaryFocus?.unfocus();
+    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   void _logSelected(String method) {

@@ -1,10 +1,5 @@
-import 'dart:convert';
-import 'dart:math';
-
-import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../models/app_user.dart';
 
@@ -60,61 +55,12 @@ class AuthService {
 
   // ── Apple ────────────────────────────────────────────────────────────────
   Future<UserCredential> signInWithApple() async {
-    final rawNonce = _generateNonce();
-    final nonce = _sha256ofString(rawNonce);
-
     try {
-      final appleCredential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-        nonce: nonce,
-      );
-
-      final oauthCredential = OAuthProvider(
-        'apple.com',
-      ).credential(idToken: appleCredential.identityToken, rawNonce: rawNonce);
-
-      final userCredential = await _firebaseAuth.signInWithCredential(
-        oauthCredential,
-      );
-
-      if (appleCredential.givenName != null ||
-          appleCredential.familyName != null) {
-        final displayName = [
-          appleCredential.givenName,
-          appleCredential.familyName,
-        ].where((n) => n != null).join(' ');
-        if (displayName.isNotEmpty) {
-          await userCredential.user?.updateDisplayName(displayName);
-        }
-      }
-
-      return userCredential;
-    } on SignInWithAppleAuthorizationException catch (e) {
-      if (e.code == AuthorizationErrorCode.canceled) {
-        throw AuthException(
-          code: 'apple_sign_in_cancelled',
-          message: 'Sign in was cancelled.',
-        );
-      }
-      throw AuthException(
-        code: 'apple_sign_in_failed',
-        message: 'Apple sign-in failed. Please try again.',
-      );
-    } on SignInWithAppleNotSupportedException {
-      throw AuthException(
-        code: 'apple_sign_in_unavailable',
-        message: 'Sign in with Apple is not available on this device.',
-      );
-    } on SignInWithAppleCredentialsException {
-      throw AuthException(
-        code: 'apple_sign_in_failed',
-        message: 'Apple sign-in did not return valid credentials.',
+      return await _firebaseAuth.signInWithProvider(
+        _appleProvider(includeNameScope: true),
       );
     } on FirebaseAuthException catch (e) {
-      throw _handleAuthException(e);
+      throw _handleAppleAuthException(e);
     }
   }
 
@@ -175,16 +121,9 @@ class AuthService {
   Future<void> _reauthenticate(User user) async {
     final providerIds = user.providerData.map((p) => p.providerId).toSet();
     if (providerIds.contains('apple.com')) {
-      final rawNonce = _generateNonce();
-      final nonce = _sha256ofString(rawNonce);
-      final appleCredential = await SignInWithApple.getAppleIDCredential(
-        scopes: [AppleIDAuthorizationScopes.email],
-        nonce: nonce,
+      await user.reauthenticateWithProvider(
+        _appleProvider(includeNameScope: false),
       );
-      final oauth = OAuthProvider(
-        'apple.com',
-      ).credential(idToken: appleCredential.identityToken, rawNonce: rawNonce);
-      await user.reauthenticateWithCredential(oauth);
     } else if (providerIds.contains('google.com')) {
       final googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
@@ -220,19 +159,30 @@ class AuthService {
     );
   }
 
-  String _generateNonce([int length = 32]) {
-    const charset =
-        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
-    final random = Random.secure();
-    return List.generate(
-      length,
-      (_) => charset[random.nextInt(charset.length)],
-    ).join();
+  AppleAuthProvider _appleProvider({required bool includeNameScope}) {
+    final provider = AppleAuthProvider()..addScope('email');
+    if (includeNameScope) provider.addScope('name');
+    return provider;
   }
 
-  String _sha256ofString(String input) {
-    final bytes = utf8.encode(input);
-    return sha256.convert(bytes).toString();
+  AuthException _handleAppleAuthException(FirebaseAuthException e) {
+    final code = e.code.toLowerCase();
+    if (code.contains('cancel') || code.contains('canceled')) {
+      return AuthException(
+        code: 'apple_sign_in_cancelled',
+        message: 'Sign in was cancelled.',
+      );
+    }
+    if (code == 'operation-not-allowed') {
+      return AuthException(
+        code: e.code,
+        message: 'Sign in with Apple is not enabled for this app.',
+      );
+    }
+    return AuthException(
+      code: e.code,
+      message: e.message ?? 'Apple sign-in failed. Please try again.',
+    );
   }
 
   AuthException _handleAuthException(FirebaseAuthException e) {
