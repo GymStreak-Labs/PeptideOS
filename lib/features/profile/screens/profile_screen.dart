@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../data/services/auth_service.dart';
 import '../../../models/user_settings.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../protocol/providers/dose_log_provider.dart';
@@ -21,6 +22,10 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final settingsProvider = context.watch<SettingsProvider>();
     final settings = settingsProvider.settings;
+    final user = context.watch<AuthProvider>().currentUser;
+    final accountValue = user?.email?.isNotEmpty == true
+        ? user!.email!
+        : 'Signed in';
 
     return CustomScrollView(
       slivers: [
@@ -68,13 +73,15 @@ class ProfileScreen extends StatelessWidget {
         ),
         _Tile(
           icon: Icons.email_outlined,
-          label: 'Sign in',
-          value: 'Not signed in',
-          onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Sign-in coming soon.')),
-            );
-          },
+          label: 'Account',
+          value: accountValue,
+        ),
+        _Tile(
+          icon: Icons.person_remove_alt_1_outlined,
+          label: 'Delete account',
+          value: 'Remove account and data',
+          iconColor: AppColors.warning,
+          onTap: () => _confirmDeleteAccount(context),
         ),
 
         // ── Preferences ────────────────────────────────────────────────
@@ -350,6 +357,149 @@ class ProfileScreen extends StatelessWidget {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(const SnackBar(content: Text('All data cleared.')));
+  }
+
+  Future<void> _confirmDeleteAccount(BuildContext context) async {
+    final auth = context.read<AuthProvider>();
+    final usesPassword = auth.authService.currentUserUsesPasswordProvider;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surfaceContainer,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          side: const BorderSide(color: AppColors.border),
+        ),
+        title: Text('Delete account?', style: AppTypography.h3),
+        content: Text(
+          'This permanently deletes your PepMod account, settings, protocols, dose logs, and body metrics. This cannot be undone.',
+          style: AppTypography.bodyMedium.copyWith(
+            color: AppColors.textSecondary,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(
+              'Cancel',
+              style: AppTypography.labelMedium.copyWith(
+                color: AppColors.textTertiary,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(
+              'Delete account',
+              style: AppTypography.labelMedium.copyWith(
+                color: AppColors.warning,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !context.mounted) return;
+
+    String? password;
+    if (usesPassword) {
+      password = await _promptDeletePassword(context);
+      if (password == null || !context.mounted) return;
+    }
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surfaceContainer,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          side: const BorderSide(color: AppColors.border),
+        ),
+        content: Row(
+          children: [
+            const SizedBox(
+              width: 22,
+              height: 22,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppColors.warning,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Text(
+                'Deleting account...',
+                style: AppTypography.bodyMedium,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    final rootNavigator = Navigator.of(context, rootNavigator: true);
+    final messenger = ScaffoldMessenger.of(context);
+
+    try {
+      await auth.deleteAccount(password: password);
+      if (rootNavigator.canPop()) rootNavigator.pop();
+    } on AuthException catch (e) {
+      if (rootNavigator.canPop()) rootNavigator.pop();
+      messenger.showSnackBar(SnackBar(content: Text(e.message)));
+    } catch (e) {
+      if (rootNavigator.canPop()) rootNavigator.pop();
+      messenger.showSnackBar(
+        SnackBar(content: Text('Account deletion failed: $e')),
+      );
+    }
+  }
+
+  Future<String?> _promptDeletePassword(BuildContext context) async {
+    final controller = TextEditingController();
+    final password = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surfaceContainer,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          side: const BorderSide(color: AppColors.border),
+        ),
+        title: Text('Confirm password', style: AppTypography.h3),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          obscureText: true,
+          style: AppTypography.bodyLarge,
+          decoration: const InputDecoration(
+            labelText: 'Password',
+            border: UnderlineInputBorder(),
+          ),
+          onSubmitted: (value) => Navigator.of(ctx).pop(value.trim()),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(
+              'Cancel',
+              style: AppTypography.labelMedium.copyWith(
+                color: AppColors.textTertiary,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
+            child: Text(
+              'Delete',
+              style: AppTypography.labelMedium.copyWith(
+                color: AppColors.warning,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    controller.dispose();
+    return password;
   }
 
   Future<void> _signOut(BuildContext context) async {
@@ -643,7 +793,7 @@ const _termsText =
 
 const _privacyText =
     'PepMod uses Firebase for authentication and cloud data storage, RevenueCat for subscriptions, AppRefer and Meta/Facebook App Events for attribution, and Firebase/Crashlytics for analytics and diagnostics. '
-    'We do not sell your personal information. You can request account/data deletion from within the app or by contacting support.\n\n'
+    'We do not sell your personal information. You can delete your account and saved app data from within the app.\n\n'
     'Full Privacy Policy: https://appstorecopilot.com/legal/yzh32x5v/privacy';
 
 const _disclaimerText =

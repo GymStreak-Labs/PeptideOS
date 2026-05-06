@@ -21,6 +21,7 @@ import 'data/repositories/user_settings_repository.dart';
 import 'data/services/auth_service.dart';
 import 'data/services/subscription_service.dart';
 import 'features/auth/providers/auth_provider.dart';
+import 'features/auth/screens/account_deleted_screen.dart';
 import 'features/auth/screens/auth_screen.dart';
 import 'features/library/providers/peptide_provider.dart';
 import 'features/onboarding/services/onboarding_draft_service.dart';
@@ -330,6 +331,11 @@ class _AppRootState extends State<_AppRoot> {
     }
 
     if (!auth.isInitialized) return const _Splash();
+    if (!auth.isSignedIn && auth.accountDeletionCompleted) {
+      return AccountDeletedScreen(
+        onContinue: auth.clearAccountDeletionCompleted,
+      );
+    }
 
     // Onboarding story runs first; auth comes before the paywall so AppRefer
     // and RevenueCat events attach to a stable Firebase UID.

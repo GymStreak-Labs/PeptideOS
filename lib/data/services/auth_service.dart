@@ -103,14 +103,26 @@ class AuthService {
     await currentUser?.updateDisplayName(displayName);
   }
 
-  Future<void> deleteAccount() async {
+  bool get currentUserUsesPasswordProvider {
+    final user = currentUser;
+    if (user == null) return false;
+    return user.providerData.any((p) => p.providerId == 'password');
+  }
+
+  Future<void> reauthenticateForAccountDeletion({String? password}) async {
+    final user = currentUser;
+    if (user == null) return;
+    await _reauthenticate(user, password: password);
+  }
+
+  Future<void> deleteAccount({String? password}) async {
     final user = currentUser;
     if (user == null) return;
     try {
       await user.delete();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'requires-recent-login') {
-        await _reauthenticate(user);
+        await _reauthenticate(user, password: password);
         await user.delete();
       } else {
         rethrow;
@@ -118,7 +130,7 @@ class AuthService {
     }
   }
 
-  Future<void> _reauthenticate(User user) async {
+  Future<void> _reauthenticate(User user, {String? password}) async {
     final providerIds = user.providerData.map((p) => p.providerId).toSet();
     if (providerIds.contains('apple.com')) {
       await user.reauthenticateWithProvider(
@@ -138,10 +150,35 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
       await user.reauthenticateWithCredential(credential);
+    } else if (providerIds.contains('password')) {
+      final email = user.email;
+      final confirmedPassword = password?.trim();
+      if (email == null || email.isEmpty) {
+        throw AuthException(
+          code: 'missing_email',
+          message: 'We could not confirm the email for this account.',
+        );
+      }
+      if (confirmedPassword == null || confirmedPassword.isEmpty) {
+        throw AuthException(
+          code: 'requires_password',
+          message: 'Enter your password to confirm account deletion.',
+        );
+      }
+      try {
+        await user.reauthenticateWithCredential(
+          EmailAuthProvider.credential(
+            email: email,
+            password: confirmedPassword,
+          ),
+        );
+      } on FirebaseAuthException catch (e) {
+        throw _handleAuthException(e);
+      }
     } else {
       throw AuthException(
-        code: 'requires_password',
-        message: 'Please enter your password to confirm account deletion.',
+        code: 'unsupported_reauthentication',
+        message: 'Please sign in again before deleting this account.',
       );
     }
   }

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../core/services/analytics_service.dart';
+import '../../../data/repositories/user_data_repository.dart';
 import '../../../data/repositories/user_settings_repository.dart';
 import '../../../data/services/auth_service.dart';
 import '../../../data/services/subscription_service.dart';
@@ -18,11 +19,13 @@ import '../../../data/services/subscription_service.dart';
 class AuthProvider extends ChangeNotifier {
   AuthProvider({
     AuthService? authService,
+    UserDataRepository? userDataRepo,
     UserSettingsRepository? settingsRepo,
     SubscriptionService? subscriptionService,
     AnalyticsService? analytics,
     FirebaseFirestore? firestore,
   }) : _auth = authService ?? AuthService(),
+       _userDataRepo = userDataRepo ?? UserDataRepository(),
        _settingsRepo = settingsRepo ?? UserSettingsRepository(),
        _subscriptionService =
            subscriptionService ?? SubscriptionService.instance,
@@ -33,6 +36,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   final AuthService _auth;
+  final UserDataRepository _userDataRepo;
   final UserSettingsRepository _settingsRepo;
   final SubscriptionService _subscriptionService;
   final AnalyticsService _analytics;
@@ -42,11 +46,13 @@ class AuthProvider extends ChangeNotifier {
 
   User? _currentUser;
   bool _initialized = false;
+  bool _accountDeletionCompleted = false;
 
   User? get currentUser => _currentUser;
   bool get isSignedIn => _currentUser != null;
   bool get isInitialized => _initialized;
   String get uid => _currentUser?.uid ?? '';
+  bool get accountDeletionCompleted => _accountDeletionCompleted;
 
   AuthService get authService => _auth;
 
@@ -57,6 +63,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     if (user != null) {
+      _accountDeletionCompleted = false;
       try {
         await _ensureUserDoc(user);
         await _settingsRepo.ensure(user.uid);
@@ -110,6 +117,23 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> signOut() async {
     await _auth.signOut();
+  }
+
+  Future<void> deleteAccount({String? password}) async {
+    final user = _currentUser ?? _auth.currentUser;
+    if (user == null) return;
+
+    await _auth.reauthenticateForAccountDeletion(password: password);
+    await _userDataRepo.deleteAllForUser(user.uid);
+    await _auth.deleteAccount(password: password);
+    _accountDeletionCompleted = true;
+    notifyListeners();
+  }
+
+  void clearAccountDeletionCompleted() {
+    if (!_accountDeletionCompleted) return;
+    _accountDeletionCompleted = false;
+    notifyListeners();
   }
 
   @override
