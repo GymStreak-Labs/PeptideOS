@@ -11,20 +11,23 @@ import '../../services/peptide_seed_data.dart';
 /// only writes as part of the one-time bootstrap seed.
 class PeptideLibraryRepository {
   PeptideLibraryRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+    : _firestore = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore _firestore;
 
   CollectionReference<Map<String, dynamic>> get _col =>
       _firestore.collection('peptideLibrary');
 
+  List<Peptide> get bundledSeed => PeptideSeedData.build();
+
   /// Stream of the full library, sorted by name.
   Stream<List<Peptide>> watchAll() {
-    return _col.orderBy('name').snapshots().map(
-          (snap) => snap.docs
-              .map((d) => Peptide.fromMap(d.id, d.data()))
-              .toList(growable: false),
-        );
+    return _col.orderBy('name').snapshots().map((snap) {
+      final remote = snap.docs
+          .map((d) => Peptide.fromMap(d.id, d.data()))
+          .toList(growable: false);
+      return remote.isEmpty ? bundledSeed : remote;
+    });
   }
 
   /// One-shot read used during bootstrap to decide whether to seed.
@@ -47,7 +50,8 @@ class PeptideLibraryRepository {
       }
       await batch.commit();
       debugPrint(
-          'PeptideLibraryRepository: seeded ${seed.length} library docs.');
+        'PeptideLibraryRepository: seeded ${seed.length} library docs.',
+      );
     } catch (e) {
       // Seeding relies on security rules being lax enough to write — in a
       // locked-down prod setup the admin console seeds instead.
@@ -57,8 +61,9 @@ class PeptideLibraryRepository {
 
   Future<List<Peptide>> fetchAllOnce() async {
     final snap = await _col.orderBy('name').get();
-    return snap.docs
+    final remote = snap.docs
         .map((d) => Peptide.fromMap(d.id, d.data()))
         .toList(growable: false);
+    return remote.isEmpty ? bundledSeed : remote;
   }
 }

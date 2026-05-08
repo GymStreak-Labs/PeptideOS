@@ -1,4 +1,5 @@
 import java.util.Properties
+import org.gradle.api.GradleException
 
 plugins {
     id("com.android.application")
@@ -18,6 +19,41 @@ if (releaseSigningPropertiesFile.exists()) {
 fun releaseSigningValue(name: String): String? {
     return System.getenv("PEPMOD_UPLOAD_${name.uppercase()}")
         ?: releaseSigningProperties.getProperty(name)
+        ?: releaseSigningValueFromMissionControl(name)
+}
+
+fun releaseSigningValueFromMissionControl(name: String): String? {
+    if (name == "store_file") {
+        val missionControlStoreFile = file(
+            "${System.getProperty("user.home")}/.mission-control/credentials/gymstreak-labs/pepmod-upload-keystore.jks"
+        )
+        return missionControlStoreFile.takeIf { it.exists() }?.absolutePath
+    }
+
+    val serviceName = when (name) {
+        "store_password" -> "peptideos-android-upload-store-password"
+        "key_alias" -> "peptideos-android-upload-key-alias"
+        "key_password" -> "peptideos-android-upload-key-password"
+        else -> return null
+    }
+    val securityTool = file("/usr/bin/security")
+    if (!securityTool.exists()) return null
+
+    return try {
+        val process = ProcessBuilder(
+            securityTool.absolutePath,
+            "find-generic-password",
+            "-s",
+            serviceName,
+            "-w",
+        )
+            .redirectError(ProcessBuilder.Redirect.DISCARD)
+            .start()
+        val output = process.inputStream.bufferedReader().readText().trim()
+        if (process.waitFor() == 0 && output.isNotEmpty()) output else null
+    } catch (_: Exception) {
+        null
+    }
 }
 
 android {
@@ -62,6 +98,11 @@ android {
                 storePassword = configuredStorePassword
                 keyAlias = configuredKeyAlias
                 keyPassword = configuredKeyPassword
+            } else {
+                throw GradleException(
+                    "Missing PepMod Android release signing config. Provide android/key.properties, " +
+                        "PEPMOD_UPLOAD_* env vars, or unlocked Mission Control mc-vault credentials."
+                )
             }
         }
     }

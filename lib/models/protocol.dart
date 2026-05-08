@@ -29,14 +29,14 @@ class Protocol {
   DateTime createdAt;
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-        'uuid': uuid,
-        'name': name,
-        'startDate': startDate.toIso8601String(),
-        'endDate': endDate?.toIso8601String(),
-        'status': status.name,
-        'peptides': peptides.map((p) => p.toMap()).toList(),
-        'createdAt': createdAt.toIso8601String(),
-      };
+    'uuid': uuid,
+    'name': name,
+    'startDate': startDate.toIso8601String(),
+    'endDate': endDate?.toIso8601String(),
+    'status': status.name,
+    'peptides': peptides.map((p) => p.toMap()).toList(),
+    'createdAt': createdAt.toIso8601String(),
+  };
 
   factory Protocol.fromMap(String id, Map<String, dynamic> data) {
     return Protocol(
@@ -46,8 +46,11 @@ class Protocol {
       endDate: _parseDate(data['endDate']),
       status: _parseStatus(data['status'] as String?),
       peptides: (data['peptides'] as List<dynamic>? ?? const [])
-          .map((e) => ProtocolPeptide.fromMap(
-              Map<String, dynamic>.from(e as Map<dynamic, dynamic>)))
+          .map(
+            (e) => ProtocolPeptide.fromMap(
+              Map<String, dynamic>.from(e as Map<dynamic, dynamic>),
+            ),
+          )
           .toList(),
       createdAt: _parseDate(data['createdAt']) ?? DateTime.now(),
     );
@@ -88,8 +91,8 @@ class ProtocolPeptide {
     this.cycleWeeks = 0,
     List<String>? injectionSites,
     List<String>? scheduledTimes,
-  })  : injectionSites = injectionSites ?? <String>[],
-        scheduledTimes = scheduledTimes ?? <String>['08:00'];
+  }) : injectionSites = injectionSites ?? <String>[],
+       scheduledTimes = scheduledTimes ?? <String>['08:00'];
 
   String uuid;
   String peptideSlug;
@@ -103,17 +106,17 @@ class ProtocolPeptide {
   List<String> scheduledTimes;
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-        'uuid': uuid,
-        'peptideSlug': peptideSlug,
-        'peptideName': peptideName,
-        'dosePerInjection': dosePerInjection,
-        'doseUnit': doseUnit,
-        'frequency': frequency,
-        'route': route,
-        'cycleWeeks': cycleWeeks,
-        'injectionSites': injectionSites,
-        'scheduledTimes': scheduledTimes,
-      };
+    'uuid': uuid,
+    'peptideSlug': peptideSlug,
+    'peptideName': peptideName,
+    'dosePerInjection': dosePerInjection,
+    'doseUnit': doseUnit,
+    'frequency': frequency,
+    'route': route,
+    'cycleWeeks': cycleWeeks,
+    'injectionSites': injectionSites,
+    'scheduledTimes': scheduledTimes,
+  };
 
   factory ProtocolPeptide.fromMap(Map<String, dynamic> data) {
     return ProtocolPeptide(
@@ -128,20 +131,20 @@ class ProtocolPeptide {
       injectionSites: (data['injectionSites'] as List<dynamic>? ?? const [])
           .map((e) => e.toString())
           .toList(),
-      scheduledTimes: (data['scheduledTimes'] as List<dynamic>? ??
-              const ['08:00'])
-          .map((e) => e.toString())
-          .toList(),
+      scheduledTimes:
+          (data['scheduledTimes'] as List<dynamic>? ?? const ['08:00'])
+              .map((e) => e.toString())
+              .toList(),
     );
   }
 }
 
 extension ProtocolStatusLabel on ProtocolStatus {
   String get label => switch (this) {
-        ProtocolStatus.active => 'Active',
-        ProtocolStatus.paused => 'Paused',
-        ProtocolStatus.ended => 'Ended',
-      };
+    ProtocolStatus.active => 'Active',
+    ProtocolStatus.paused => 'Paused',
+    ProtocolStatus.ended => 'Ended',
+  };
 }
 
 /// Available frequency options, keyed to the stored `frequency` string.
@@ -158,6 +161,7 @@ const kRoutes = <({String key, String label})>[
   (key: 'intramuscular', label: 'Intramuscular'),
   (key: 'oral', label: 'Oral'),
   (key: 'nasal', label: 'Nasal'),
+  (key: 'topical', label: 'Topical'),
 ];
 
 const kInjectionSites = <({String key, String label})>[

@@ -12,6 +12,8 @@ import '../../../models/peptide.dart';
 /// renders instantly while remote updates arrive asynchronously.
 class PeptideProvider extends ChangeNotifier {
   PeptideProvider(this._repo) {
+    _all = _repo.bundledSeed;
+    _loading = false;
     _subscribe();
   }
 
@@ -19,7 +21,7 @@ class PeptideProvider extends ChangeNotifier {
   StreamSubscription<List<Peptide>>? _sub;
 
   List<Peptide> _all = <Peptide>[];
-  bool _loading = true;
+  bool _loading = false;
   String? _error;
 
   List<Peptide> get all => _all;
@@ -37,8 +39,11 @@ class PeptideProvider extends ChangeNotifier {
       },
       onError: (Object e, StackTrace st) {
         debugPrint('PeptideProvider stream failed: $e');
+        if (_all.isEmpty) {
+          _all = _repo.bundledSeed;
+        }
         _loading = false;
-        _error = 'Failed to load peptide library.';
+        _error = null;
         notifyListeners();
       },
     );
@@ -51,7 +56,10 @@ class PeptideProvider extends ChangeNotifier {
       _error = null;
     } catch (e) {
       debugPrint('PeptideProvider refresh failed: $e');
-      _error = 'Failed to load peptide library.';
+      if (_all.isEmpty) {
+        _all = _repo.bundledSeed;
+      }
+      _error = null;
     }
     notifyListeners();
   }

@@ -9,21 +9,23 @@ class PeptideSeedData {
 
   static List<Peptide> build() {
     return _entries
-        .map((e) => Peptide(
-              slug: e.slug,
-              name: e.name,
-              category: e.category,
-              description: e.description,
-              typicalDose: e.typicalDose,
-              defaultDoseMcg: e.defaultDoseMcg,
-              defaultFrequency: e.defaultFrequency,
-              halfLife: e.halfLife,
-              typicalCycleWeeks: e.cycleWeeks,
-              defaultRoute: e.route,
-              commonStack: List<String>.from(e.stack),
-              notes: e.notes,
-              disclaimer: _stdDisclaimer,
-            ))
+        .map(
+          (e) => Peptide(
+            slug: e.slug,
+            name: e.name,
+            category: e.category,
+            description: e.description,
+            typicalDose: e.typicalDose,
+            defaultDoseMcg: e.defaultDoseMcg,
+            defaultFrequency: e.defaultFrequency,
+            halfLife: e.halfLife,
+            typicalCycleWeeks: e.cycleWeeks,
+            defaultRoute: e.route,
+            commonStack: List<String>.from(e.stack),
+            notes: e.notes,
+            disclaimer: _stdDisclaimer,
+          ),
+        )
         .toList();
   }
 
@@ -347,6 +349,262 @@ class PeptideSeedData {
       stack: [],
       notes:
           'Technically a coenzyme rather than a peptide, but commonly grouped with longevity protocols. Slow infusion is recommended to minimise flushing and discomfort.',
+    ),
+    _Seed(
+      slug: 'sermorelin',
+      name: 'Sermorelin',
+      category: PeptideCategory.growthHormone,
+      description:
+          'Sermorelin is a synthetic analogue of growth hormone-releasing hormone (GHRH). It has been used clinically as a diagnostic agent for growth-hormone reserve and is commonly discussed in wellness settings as a GH-axis support peptide.',
+      typicalDose: '100–300 mcg before bed',
+      defaultDoseMcg: 200,
+      defaultFrequency: 'daily',
+      halfLife: '~10–20 minutes',
+      cycleWeeks: 12,
+      route: 'subcutaneous',
+      stack: ['ipamorelin'],
+      notes:
+          'Often compared with CJC-1295 no-DAC because both act on the GHRH pathway. Short half-life makes evening dosing common in non-clinical protocols.',
+    ),
+    _Seed(
+      slug: 'aod-9604',
+      name: 'AOD-9604',
+      category: PeptideCategory.metabolic,
+      description:
+          'AOD-9604 is a modified fragment of human growth hormone, derived from the 176–191 region. It has been investigated for metabolic and lipolysis signalling, but published human evidence is limited and mixed.',
+      typicalDose: '250–500 mcg daily',
+      defaultDoseMcg: 300,
+      defaultFrequency: 'daily',
+      halfLife: '~30 minutes',
+      cycleWeeks: 8,
+      route: 'subcutaneous',
+      stack: [],
+      notes:
+          'Also called HGH fragment 176–191 in some discussions. Not an approved weight-loss drug; use neutral tracking language and avoid outcome guarantees.',
+    ),
+    _Seed(
+      slug: 'kpv',
+      name: 'KPV',
+      category: PeptideCategory.healing,
+      description:
+          'KPV is a short tripeptide sequence (lysine-proline-valine) derived from alpha-melanocyte-stimulating hormone. It is discussed in research contexts for immune and gut-barrier signalling.',
+      typicalDose: '250–500 mcg daily',
+      defaultDoseMcg: 300,
+      defaultFrequency: 'daily',
+      halfLife: 'Not well established',
+      cycleWeeks: 4,
+      route: 'subcutaneous',
+      stack: ['bpc-157'],
+      notes:
+          'Appears in gut-health and topical discussions, including informal stacks with BPC-157. Human dosing evidence is limited, so protocols should be conservative.',
+    ),
+    _Seed(
+      slug: 'ss-31',
+      name: 'SS-31 (Elamipretide)',
+      category: PeptideCategory.longevity,
+      description:
+          'SS-31, also known as Elamipretide, is a mitochondria-targeted tetrapeptide studied for interactions with cardiolipin and mitochondrial membrane function. Clinical research has focused on rare mitochondrial and cardiac conditions.',
+      typicalDose: 'Trial protocols vary',
+      defaultDoseMcg: 40000,
+      defaultFrequency: 'daily',
+      halfLife: '~4 hours',
+      cycleWeeks: 8,
+      route: 'subcutaneous',
+      stack: ['mots-c'],
+      notes:
+          'Investigational in many contexts. Community protocols often differ from clinical-trial formulations and should be treated as research-only.',
+    ),
+    _Seed(
+      slug: 'll-37',
+      name: 'LL-37',
+      category: PeptideCategory.healing,
+      description:
+          'LL-37 is a human cathelicidin antimicrobial peptide involved in innate immune signalling. It is discussed in research communities for host-defense and tissue-response pathways, but safety considerations are significant.',
+      typicalDose: 'Research protocols vary',
+      defaultDoseMcg: 100,
+      defaultFrequency: 'daily',
+      halfLife: 'Not well established',
+      cycleWeeks: 4,
+      route: 'subcutaneous',
+      stack: ['kpv'],
+      notes:
+          'Highly experimental outside controlled research. Because antimicrobial peptides can affect immune signalling, conservative educational framing is important.',
+    ),
+    _Seed(
+      slug: 'dihexa',
+      name: 'Dihexa',
+      category: PeptideCategory.cognitive,
+      description:
+          'Dihexa is an orally active angiotensin IV-derived peptide analogue studied preclinically for hepatocyte growth factor/c-Met signalling and synaptogenic activity. Human safety and efficacy data are not established.',
+      typicalDose: 'Research-only; protocols vary',
+      defaultDoseMcg: 10000,
+      defaultFrequency: 'daily',
+      halfLife: 'Not well established',
+      cycleWeeks: 4,
+      route: 'oral',
+      stack: [],
+      notes:
+          'Popular in nootropic discussions but very experimental. Treat as a research compound entry rather than a suggested protocol.',
+    ),
+    _Seed(
+      slug: 'ghrp-2',
+      name: 'GHRP-2',
+      category: PeptideCategory.growthHormone,
+      description:
+          'GHRP-2 is a synthetic growth hormone-releasing peptide that acts as a ghrelin receptor agonist. It has been studied for GH secretion, appetite signalling, and endocrine testing.',
+      typicalDose: '100–300 mcg per injection',
+      defaultDoseMcg: 100,
+      defaultFrequency: 'daily',
+      halfLife: '~20–30 minutes',
+      cycleWeeks: 8,
+      route: 'subcutaneous',
+      stack: ['cjc-1295-no-dac'],
+      notes:
+          'Often paired with a GHRH analogue such as CJC-1295 no-DAC or Sermorelin. It may affect appetite, cortisol, and prolactin more than Ipamorelin.',
+    ),
+    _Seed(
+      slug: 'ghrp-6',
+      name: 'GHRP-6',
+      category: PeptideCategory.growthHormone,
+      description:
+          'GHRP-6 is a synthetic hexapeptide and ghrelin receptor agonist studied for growth-hormone release and appetite signalling. It is one of the older peptides in the GHRP family.',
+      typicalDose: '100–300 mcg per injection',
+      defaultDoseMcg: 100,
+      defaultFrequency: 'daily',
+      halfLife: '~20–30 minutes',
+      cycleWeeks: 8,
+      route: 'subcutaneous',
+      stack: ['cjc-1295-no-dac'],
+      notes:
+          'Community use often emphasises appetite stimulation. More selective options such as Ipamorelin are commonly preferred when appetite effects are unwanted.',
+    ),
+    _Seed(
+      slug: 'hexarelin',
+      name: 'Hexarelin',
+      category: PeptideCategory.growthHormone,
+      description:
+          'Hexarelin is a synthetic growth hormone secretagogue and ghrelin receptor agonist studied for GH release and cardiovascular research signals. It is generally considered one of the more potent GHRPs.',
+      typicalDose: '100–200 mcg per injection',
+      defaultDoseMcg: 100,
+      defaultFrequency: 'daily',
+      halfLife: '~70 minutes',
+      cycleWeeks: 4,
+      route: 'subcutaneous',
+      stack: ['cjc-1295-no-dac'],
+      notes:
+          'Often cycled more conservatively than Ipamorelin due to potency and desensitisation concerns discussed in research communities.',
+    ),
+    _Seed(
+      slug: 'igf-1-lr3',
+      name: 'IGF-1 LR3',
+      category: PeptideCategory.growthHormone,
+      description:
+          'IGF-1 LR3 is a modified insulin-like growth factor-1 analogue with amino-acid substitutions that reduce binding-protein affinity and extend activity. It is discussed mostly in advanced performance and cell-growth research contexts.',
+      typicalDose: '20–50 mcg daily in research protocols',
+      defaultDoseMcg: 20,
+      defaultFrequency: 'daily',
+      halfLife: '~20–30 hours',
+      cycleWeeks: 4,
+      route: 'subcutaneous',
+      stack: [],
+      notes:
+          'Higher-risk research compound. Potential glucose and tissue-growth signalling concerns make medical supervision especially important.',
+    ),
+    _Seed(
+      slug: 'igf-1-des',
+      name: 'IGF-1 DES',
+      category: PeptideCategory.growthHormone,
+      description:
+          'IGF-1 DES is a shorter IGF-1 analogue missing the first three amino acids. It is discussed as a shorter-acting IGF variant in local tissue-signalling research.',
+      typicalDose: '20–50 mcg in research protocols',
+      defaultDoseMcg: 20,
+      defaultFrequency: 'daily',
+      halfLife: '~20–30 minutes',
+      cycleWeeks: 4,
+      route: 'subcutaneous',
+      stack: [],
+      notes:
+          'Very advanced and experimental. Avoid broad protocol suggestions because human safety data and appropriate monitoring are limited.',
+    ),
+    _Seed(
+      slug: 'peg-mgf',
+      name: 'PEG-MGF',
+      category: PeptideCategory.growthHormone,
+      description:
+          'PEG-MGF is a pegylated variant of mechano growth factor, an IGF-1 splice-variant peptide. The pegylation is intended to extend circulation time compared with unmodified MGF.',
+      typicalDose: '100–300 mcg weekly in research protocols',
+      defaultDoseMcg: 200,
+      defaultFrequency: 'weekly',
+      halfLife: 'Extended by PEGylation',
+      cycleWeeks: 4,
+      route: 'subcutaneous',
+      stack: ['igf-1-lr3'],
+      notes:
+          'Common in performance forums but not an approved therapy. Treat as an advanced research entry with conservative tracking defaults.',
+    ),
+    _Seed(
+      slug: 'mk-677',
+      name: 'MK-677 (Ibutamoren)',
+      category: PeptideCategory.other,
+      description:
+          'MK-677, also known as Ibutamoren, is an orally active ghrelin receptor agonist and growth-hormone secretagogue. It is not a peptide, but it is commonly discussed alongside GH-axis peptides.',
+      typicalDose: '10–25 mg daily',
+      defaultDoseMcg: 10000,
+      defaultFrequency: 'daily',
+      halfLife: '~24 hours',
+      cycleWeeks: 8,
+      route: 'oral',
+      stack: [],
+      notes:
+          'Related compound, not a peptide. Community discussions often mention appetite, water retention, sleep, and glucose-monitoring considerations.',
+    ),
+    _Seed(
+      slug: 'five-amino-1mq',
+      name: '5-Amino-1MQ',
+      category: PeptideCategory.other,
+      description:
+          '5-Amino-1MQ is a small-molecule NNMT inhibitor discussed in metabolic and body-composition communities. It is not a peptide, but it often appears in peptide-adjacent longevity and fat-loss stacks.',
+      typicalDose: '25–100 mg daily',
+      defaultDoseMcg: 50000,
+      defaultFrequency: 'daily',
+      halfLife: 'Not well established',
+      cycleWeeks: 8,
+      route: 'oral',
+      stack: [],
+      notes:
+          'Related compound, not a peptide. Human evidence is limited; avoid claims about fat loss or insulin sensitivity outcomes.',
+    ),
+    _Seed(
+      slug: 'tesofensine',
+      name: 'Tesofensine',
+      category: PeptideCategory.other,
+      description:
+          'Tesofensine is an oral monoamine reuptake inhibitor investigated for obesity and neurodegenerative conditions. It is not a peptide, but it is frequently discussed in weight-management communities near GLP-1 compounds.',
+      typicalDose: '0.25–0.5 mg daily in studies',
+      defaultDoseMcg: 250,
+      defaultFrequency: 'daily',
+      halfLife: '~9 days',
+      cycleWeeks: 8,
+      route: 'oral',
+      stack: [],
+      notes:
+          'Related compound, not a peptide. Because it affects neurotransmitter pathways, blood pressure, heart rate, and interaction screening matter.',
+    ),
+    _Seed(
+      slug: 'ru-58841',
+      name: 'RU-58841',
+      category: PeptideCategory.other,
+      description:
+          'RU-58841 is a topical nonsteroidal antiandrogen researched for androgen-receptor signalling in hair-follicle contexts. It is not a peptide, but it is often discussed in peptide-adjacent aesthetic communities.',
+      typicalDose: 'Topical 25–50 mg daily in informal protocols',
+      defaultDoseMcg: 25000,
+      defaultFrequency: 'daily',
+      halfLife: 'Not well established',
+      cycleWeeks: 12,
+      route: 'topical',
+      stack: [],
+      notes:
+          'Related compound, not a peptide and not an approved medication. Quality-control and systemic exposure concerns are common discussion points.',
     ),
   ];
 }

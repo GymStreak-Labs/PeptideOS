@@ -52,7 +52,8 @@ class Peptide {
   /// Usual cycle length in weeks (0 = continuous / no cycle).
   final int typicalCycleWeeks;
 
-  /// Default administration route: `subcutaneous`, `intramuscular`, `oral`, `nasal`.
+  /// Default administration route: `subcutaneous`, `intramuscular`, `oral`,
+  /// `nasal`, `topical`.
   final String defaultRoute;
 
   /// Peptides that are commonly stacked with this one (slugs).
@@ -65,20 +66,20 @@ class Peptide {
   final String disclaimer;
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-        'slug': slug,
-        'name': name,
-        'category': category.name,
-        'description': description,
-        'typicalDose': typicalDose,
-        'defaultDoseMcg': defaultDoseMcg,
-        'defaultFrequency': defaultFrequency,
-        'halfLife': halfLife,
-        'typicalCycleWeeks': typicalCycleWeeks,
-        'defaultRoute': defaultRoute,
-        'commonStack': commonStack,
-        'notes': notes,
-        'disclaimer': disclaimer,
-      };
+    'slug': slug,
+    'name': name,
+    'category': category.name,
+    'description': description,
+    'typicalDose': typicalDose,
+    'defaultDoseMcg': defaultDoseMcg,
+    'defaultFrequency': defaultFrequency,
+    'halfLife': halfLife,
+    'typicalCycleWeeks': typicalCycleWeeks,
+    'defaultRoute': defaultRoute,
+    'commonStack': commonStack,
+    'notes': notes,
+    'disclaimer': disclaimer,
+  };
 
   factory Peptide.fromMap(String id, Map<String, dynamic> data) {
     return Peptide(
@@ -111,12 +112,12 @@ class Peptide {
 
 extension PeptideCategoryLabel on PeptideCategory {
   String get label => switch (this) {
-        PeptideCategory.healing => 'Healing',
-        PeptideCategory.growthHormone => 'Growth Hormone',
-        PeptideCategory.cognitive => 'Cognitive',
-        PeptideCategory.metabolic => 'Metabolic',
-        PeptideCategory.aesthetic => 'Aesthetic',
-        PeptideCategory.longevity => 'Longevity',
-        PeptideCategory.other => 'Other',
-      };
+    PeptideCategory.healing => 'Healing',
+    PeptideCategory.growthHormone => 'Growth Hormone',
+    PeptideCategory.cognitive => 'Cognitive',
+    PeptideCategory.metabolic => 'Metabolic',
+    PeptideCategory.aesthetic => 'Aesthetic',
+    PeptideCategory.longevity => 'Longevity',
+    PeptideCategory.other => 'Other',
+  };
 }
