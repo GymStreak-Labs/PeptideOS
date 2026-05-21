@@ -21,6 +21,14 @@ class AnalyticsService {
 
   final FirebaseAnalytics _analytics;
   String? _installId;
+  String? _authenticatedUserId;
+  String? _authenticatedEmail;
+  String? _authenticatedDisplayName;
+  String? _authenticatedFirstName;
+  String? _authenticatedDateOfBirth;
+  String? _advancedMatchingEmail;
+  String? _advancedMatchingFirstName;
+  String? _advancedMatchingDateOfBirth;
 
   String? get installId => _installId;
 
@@ -46,9 +54,7 @@ class AnalyticsService {
           'install_id': _installId!,
         });
       } catch (_) {}
-      try {
-        await AppReferSDK.setUserId(_installId!);
-      } catch (_) {}
+      await syncAppReferIdentity();
     } catch (e) {
       debugPrint('AnalyticsService.initializeIdentity failed: $e');
     }
@@ -64,6 +70,12 @@ class AnalyticsService {
     String? dateOfBirth,
     String? subscriptionTier,
   }) async {
+    _authenticatedUserId = userId;
+    _authenticatedEmail = email;
+    _authenticatedDisplayName = displayName;
+    _authenticatedFirstName = firstName;
+    _authenticatedDateOfBirth = dateOfBirth;
+
     try {
       await _analytics.setUserId(id: userId);
     } catch (_) {}
@@ -82,22 +94,18 @@ class AnalyticsService {
     } catch (_) {}
 
     try {
-      await SubscriptionService.instance.setAttributes({
+      final attributes = <String, String>{
         '\$email': email,
         '\$displayName': displayName ?? '',
         'install_id': _installId ?? 'unknown',
         'firebase_uid': userId,
-      });
+      };
+      final appReferId = await AppReferSDK.getDeviceId();
+      if (appReferId != null) attributes['appreferId'] = appReferId;
+      await SubscriptionService.instance.setAttributes(attributes);
     } catch (_) {}
 
-    try {
-      await AppReferSDK.setUserId(userId);
-      await AppReferSDK.setAdvancedMatching(
-        email: email,
-        firstName: firstName ?? _firstToken(displayName),
-        dateOfBirth: dateOfBirth,
-      );
-    } catch (_) {}
+    await syncAppReferIdentity();
   }
 
   Future<void> sendAppReferAdvancedMatching({
@@ -105,12 +113,49 @@ class AnalyticsService {
     String? firstName,
     String? dateOfBirth,
   }) async {
+    _advancedMatchingEmail = email;
+    _advancedMatchingFirstName = firstName;
+    _advancedMatchingDateOfBirth = dateOfBirth;
+    await syncAppReferIdentity();
+  }
+
+  /// Replays the best known AppRefer identity after SDK configure.
+  ///
+  /// The AppRefer SDK intentionally ignores identity calls made before
+  /// `configure()`, so startup and auth flows store the latest values here and
+  /// replay them once main.dart has completed first-frame attribution setup.
+  Future<void> syncAppReferIdentity() async {
     try {
-      await AppReferSDK.setAdvancedMatching(
-        email: email,
-        firstName: firstName,
-        dateOfBirth: dateOfBirth,
-      );
+      final userId = _nonEmpty(_authenticatedUserId) ?? _nonEmpty(_installId);
+      if (userId != null) await AppReferSDK.setUserId(userId);
+    } catch (_) {}
+
+    try {
+      final email =
+          _nonEmpty(_advancedMatchingEmail) ?? _nonEmpty(_authenticatedEmail);
+      final firstName =
+          _nonEmpty(_advancedMatchingFirstName) ??
+          _nonEmpty(_authenticatedFirstName) ??
+          _firstToken(_authenticatedDisplayName);
+      final dateOfBirth =
+          _nonEmpty(_advancedMatchingDateOfBirth) ??
+          _nonEmpty(_authenticatedDateOfBirth);
+      if (email != null || firstName != null || dateOfBirth != null) {
+        await AppReferSDK.setAdvancedMatching(
+          email: email,
+          firstName: firstName,
+          dateOfBirth: dateOfBirth,
+        );
+      }
+    } catch (_) {}
+
+    try {
+      final appReferId = await AppReferSDK.getDeviceId();
+      if (appReferId != null) {
+        await SubscriptionService.instance.setAttributes({
+          'appreferId': appReferId,
+        });
+      }
     } catch (_) {}
   }
 
@@ -168,5 +213,10 @@ class AnalyticsService {
     final trimmed = value?.trim();
     if (trimmed == null || trimmed.isEmpty) return null;
     return trimmed.split(RegExp(r'\s+')).first;
+  }
+
+  String? _nonEmpty(String? value) {
+    final trimmed = value?.trim();
+    return trimmed == null || trimmed.isEmpty ? null : trimmed;
   }
 }

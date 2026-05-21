@@ -36,9 +36,9 @@ import 'services/notification_service.dart';
 
 /// AppRefer is injected via --dart-define so test/live keys can stay out of
 /// source. RevenueCat and Meta App Events use public SDK/app identifiers in
-/// source. None of these blocks short-circuit app start; if AppRefer is still
-/// a placeholder the SDK init is skipped and attribution continues with the
-/// remaining installed SDKs.
+/// source. Release builds fail fast if this value is missing; local/dev builds
+/// can still run without attribution. AppRefer is configured on the first
+/// visible app frame so install attribution is captured before onboarding/auth.
 ///
 /// See CLAUDE.md for the per-SDK credential rollout plan.
 const String _appReferApiKey = String.fromEnvironment(
@@ -49,6 +49,9 @@ const String _facebookAppId = String.fromEnvironment(
   'FACEBOOK_APP_ID',
   defaultValue: '1657843155413563',
 );
+
+bool get _hasAppReferApiKey =>
+    _appReferApiKey.trim().isNotEmpty && !_appReferApiKey.startsWith('TODO_');
 
 Future<void> main() async {
   // Capture uncaught errors and ship them to Crashlytics once Firebase is up.
@@ -84,11 +87,13 @@ Future<void> main() async {
         } catch (_) {}
       };
 
+      _validateReleaseAttributionConfig();
+
       // RevenueCat — safe no-op if key still TODO.
       await SubscriptionService.instance.configure();
 
       // Stable install ID on Crashlytics / Analytics / RC. AppRefer receives
-      // the same ID after the ATT request path has run.
+      // the same ID once it is configured on the first visible app frame.
       await AnalyticsService().initializeIdentity();
 
       // Seed the peptide library on first authenticated launch. Idempotent —
@@ -100,6 +105,7 @@ Future<void> main() async {
       // ── Deferred init (post-first-frame, non-blocking) ─────────────────────
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         unawaited(NotificationService.instance.initialize());
+        unawaited(_initAttributionAfterTrackingPrompt());
       });
     },
     (error, stack) {
@@ -117,16 +123,35 @@ Future<void> _initAttributionAfterTrackingPrompt() async {
 }
 
 Future<void> _configureAppRefer() async {
-  if (_appReferApiKey.startsWith('TODO_')) return;
-  try {
-    await AppReferSDK.configure(AppReferConfig(apiKey: _appReferApiKey));
-    final installId = AnalyticsService().installId;
-    if (installId != null) {
-      await AppReferSDK.setUserId(installId);
+  if (!_hasAppReferApiKey) {
+    if (kReleaseMode) {
+      throw StateError(
+        'Release builds require --dart-define=APPREFER_API_KEY.',
+      );
     }
+    debugPrint('AppRefer init skipped: APPREFER_API_KEY not configured.');
+    return;
+  }
+  try {
+    final analytics = AnalyticsService();
+    await AppReferSDK.configure(
+      AppReferConfig(apiKey: _appReferApiKey, userId: analytics.installId),
+    );
+    final appReferId = await AppReferSDK.getDeviceId();
+    if (appReferId != null) {
+      await SubscriptionService.instance.setAttributes({
+        'appreferId': appReferId,
+      });
+    }
+    await analytics.syncAppReferIdentity();
   } catch (e) {
     debugPrint('AppRefer init failed: $e');
   }
+}
+
+void _validateReleaseAttributionConfig() {
+  if (!kReleaseMode || _hasAppReferApiKey) return;
+  throw StateError('Release builds require --dart-define=APPREFER_API_KEY.');
 }
 
 Future<void> _initFacebookEvents(TrackingStatus trackingStatus) async {
@@ -275,7 +300,6 @@ class _AppRootState extends State<_AppRoot> {
   bool _postAuthPaywallPending = false;
   bool _onboardingReplayAttempted = false;
   bool _replayingOnboardingDraft = false;
-  bool _attributionInitStarted = false;
 
   @override
   void initState() {
@@ -337,8 +361,8 @@ class _AppRootState extends State<_AppRoot> {
       );
     }
 
-    // Onboarding story runs first; auth comes before the paywall so AppRefer
-    // and RevenueCat events attach to a stable Firebase UID.
+    // Onboarding story runs first; auth comes before the paywall so attribution
+    // and RevenueCat purchase events attach to a stable Firebase UID.
     if (settings.isLoading && auth.isSignedIn) return const _Splash();
     if (!settings.settings.onboardingCompleted && !auth.isSignedIn) {
       if (!_handoffStateLoaded) return const _Splash();
@@ -374,8 +398,6 @@ class _AppRootState extends State<_AppRoot> {
       return OnboardingScreen(onReadyForAuth: _markReadyForAuth);
     }
 
-    _startAttributionAfterAuth();
-
     final subscription = context.watch<SubscriptionProvider>();
     final reviewAccount = settings.settings.reviewAccount;
     if (_postAuthPaywallPending &&
@@ -394,14 +416,6 @@ class _AppRootState extends State<_AppRoot> {
     }
 
     return const AppShell();
-  }
-
-  void _startAttributionAfterAuth() {
-    if (_attributionInitStarted) return;
-    _attributionInitStarted = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      unawaited(_initAttributionAfterTrackingPrompt());
-    });
   }
 }
 
