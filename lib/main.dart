@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'app_shell.dart';
 import 'core/firebase/firebase_init.dart';
 import 'core/services/analytics_service.dart';
+import 'core/services/support_service.dart';
 import 'core/theme/theme.dart';
 import 'data/repositories/body_metric_repository.dart';
 import 'data/repositories/dose_log_repository.dart';
@@ -92,8 +93,11 @@ Future<void> main() async {
       // RevenueCat — safe no-op if key still TODO.
       await SubscriptionService.instance.configure();
 
-      // Stable install ID on Crashlytics / Analytics / RC. AppRefer receives
-      // the same ID once it is configured on the first visible app frame.
+      // Gleap support — safe no-op if GLEAP_SDK_TOKEN is not injected.
+      await SupportService.instance.initialize();
+
+      // Stable install ID on Crashlytics / Analytics / RC / Gleap. AppRefer
+      // receives the same ID once it is configured on the first visible frame.
       await AnalyticsService().initializeIdentity();
 
       // Seed the peptide library on first authenticated launch. Idempotent —

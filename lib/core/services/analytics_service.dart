@@ -6,9 +6,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../data/services/subscription_service.dart';
+import 'support_service.dart';
 
 /// Analytics singleton — wraps Firebase Analytics + stamps a stable install ID
-/// on Crashlytics, RC, and AppRefer so attribution can tie installs to users.
+/// on Crashlytics, RC, AppRefer, and Gleap so attribution/support can tie
+/// installs to users.
 ///
 /// Usage: `AnalyticsService().logPaywallViewed('onboarding');`.
 class AnalyticsService {
@@ -53,6 +55,9 @@ class AnalyticsService {
         await SubscriptionService.instance.setAttributes({
           'install_id': _installId!,
         });
+      } catch (_) {}
+      try {
+        await SupportService.instance.attachInstallIdentity(_installId!);
       } catch (_) {}
       await syncAppReferIdentity();
     } catch (e) {
@@ -103,6 +108,18 @@ class AnalyticsService {
       final appReferId = await AppReferSDK.getDeviceId();
       if (appReferId != null) attributes['appreferId'] = appReferId;
       await SubscriptionService.instance.setAttributes(attributes);
+    } catch (_) {}
+
+    try {
+      await SupportService.instance.identifyAuthenticatedUser(
+        userId: userId,
+        email: email,
+        displayName: displayName,
+        subscriptionTier: subscriptionTier,
+      );
+      await SupportService.instance.attachCustomData({
+        'install_id': _installId ?? 'unknown',
+      });
     } catch (_) {}
 
     await syncAppReferIdentity();
@@ -166,12 +183,18 @@ class AnalyticsService {
     try {
       await FirebaseCrashlytics.instance.setUserIdentifier('');
     } catch (_) {}
+    try {
+      await SupportService.instance.clearIdentity();
+    } catch (_) {}
   }
 
   // ── Generic event API ──────────────────────────────────────────────────
   Future<void> logEvent(String name, [Map<String, Object>? params]) async {
     try {
       await _analytics.logEvent(name: name, parameters: params);
+    } catch (_) {}
+    try {
+      await SupportService.instance.trackEvent(name, params);
     } catch (_) {}
   }
 
@@ -183,7 +206,34 @@ class AnalyticsService {
 
   // ── Onboarding / Paywall ───────────────────────────────────────────────
   Future<void> logOnboardingStarted() => logEvent('onboarding_started');
-  Future<void> logOnboardingCompleted() => logEvent('onboarding_completed');
+  Future<void> logOnboardingScreenViewed({
+    required int stepIndex,
+    required int stepPosition,
+    required int stepTotal,
+    required String stepName,
+  }) => logEvent('onboarding_screen_viewed', {
+    'step_index': stepIndex,
+    'step_position': stepPosition,
+    'step_total': stepTotal,
+    'step_name': stepName,
+  });
+  Future<void> logOnboardingCompleted({
+    required int stepTotal,
+    required int goalCount,
+    required int peptideCount,
+    required bool hasFirstName,
+    required bool hasBirthDate,
+    required bool hasExperience,
+    required bool hasFrustration,
+  }) => logEvent('onboarding_completed', {
+    'step_total': stepTotal,
+    'goal_count': goalCount,
+    'peptide_count': peptideCount,
+    'has_first_name': hasFirstName ? 1 : 0,
+    'has_birth_date': hasBirthDate ? 1 : 0,
+    'has_experience': hasExperience ? 1 : 0,
+    'has_frustration': hasFrustration ? 1 : 0,
+  });
   Future<void> logPaywallViewed(String source) =>
       logEvent('paywall_viewed', {'source': source});
   Future<void> logPlanSelected(String planId) =>
@@ -208,6 +258,7 @@ class AnalyticsService {
   Future<void> logDoseLogged(String peptideName) =>
       logEvent('dose_logged', {'peptide_name': peptideName});
   Future<void> logBodyMetricLogged() => logEvent('body_metric_logged');
+  Future<void> logSupportOpened() => logEvent('support_opened');
 
   String? _firstToken(String? value) {
     final trimmed = value?.trim();

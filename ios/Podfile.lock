@@ -1357,6 +1357,10 @@ PODS:
     - Flutter
   - flutter_timezone (0.0.1):
     - Flutter
+  - Gleap (15.3.0)
+  - gleap_sdk (15.3.0):
+    - Flutter
+    - Gleap (= 15.3.0)
   - google_sign_in_ios (0.0.1):
     - AppAuth (>= 1.7.4)
     - Flutter
@@ -1569,6 +1573,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
+  - gleap_sdk (from `.symlinks/plugins/gleap_sdk/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -1603,6 +1608,7 @@ SPEC REPOS:
     - FirebaseRemoteConfigInterop
     - FirebaseSessions
     - FirebaseSharedSwift
+    - Gleap
     - GoogleAdsOnDeviceConversion
     - GoogleAppMeasurement
     - GoogleDataTransport
@@ -1647,6 +1653,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_timezone:
     :path: ".symlinks/plugins/flutter_timezone/ios"
+  gleap_sdk:
+    :path: ".symlinks/plugins/gleap_sdk/ios"
   google_sign_in_ios:
     :path: ".symlinks/plugins/google_sign_in_ios/darwin"
   in_app_review:
@@ -1701,6 +1709,8 @@ SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_local_notifications: 395056b3175ba4f08480a7c5de30cd36d69827e4
   flutter_timezone: ee50ce7786b5fde27e2fe5375bbc8c9661ffc13f
+  Gleap: b5c98f582de22a4bd8959bb4faad60bbab9e554c
+  gleap_sdk: 8b69b03779d39c645dff2b18d069c4e86adb7ef0
   google_sign_in_ios: b48bb9af78576358a168361173155596c845f0b9
   GoogleAdsOnDeviceConversion: 2be6297a4f048459e0ae17fad9bfd2844e10cf64
   GoogleAppMeasurement: 700dce7541804bec33db590a5c496b663fbe2539
