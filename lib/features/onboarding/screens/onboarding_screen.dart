@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../core/services/analytics_service.dart';
 import '../../../core/theme/theme.dart';
 import '../services/onboarding_draft_service.dart';
 import '../widgets/age_gate_page.dart';
@@ -41,6 +44,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
   int _currentPage = 0;
   static const _totalPages = 18;
+  static const _stepNames = <String>[
+    'age_gate',
+    'hook',
+    'disclaimer',
+    'first_name',
+    'birth_date',
+    'goals',
+    'experience',
+    'frustration',
+    'peptide_select',
+    'calculator_demo',
+    'processing',
+    'protocol_preview',
+    'results_summary',
+    'feature_showcase',
+    'value_protocol',
+    'value_conversion',
+    'value_progress',
+    'review_gate',
+  ];
 
   // Collected data
   String _firstName = '';
@@ -49,6 +72,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   String _experienceLevel = '';
   String _frustration = '';
   final Set<String> _selectedPeptides = {};
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(AnalyticsService().logOnboardingStarted());
+    _logScreenViewed(0);
+  }
 
   void _dismissKeyboard() {
     FocusManager.instance.primaryFocus?.unfocus();
@@ -78,6 +108,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _onPageChanged(int page) {
     _dismissKeyboard();
     setState(() => _currentPage = page);
+    _logScreenViewed(page);
   }
 
   Future<void> _handoffToAuth() async {
@@ -95,6 +126,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       );
       await OnboardingDraftService.save(draft);
       await OnboardingDraftService.setPostAuthPaywallPending(true);
+      unawaited(
+        AnalyticsService().logOnboardingCompleted(
+          stepTotal: _totalPages,
+          goalCount: _selectedGoals.length,
+          peptideCount: _selectedPeptides.length,
+          hasFirstName: _firstName.trim().isNotEmpty,
+          hasBirthDate: _birthDate.trim().isNotEmpty,
+          hasExperience: _experienceLevel.trim().isNotEmpty,
+          hasFrustration: _frustration.trim().isNotEmpty,
+        ),
+      );
       widget.onReadyForAuth?.call();
     } catch (e) {
       debugPrint('onboarding auth handoff failed: $e');
@@ -103,6 +145,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   String get _firstPeptide =>
       _selectedPeptides.isNotEmpty ? _selectedPeptides.first : 'BPC-157';
+
+  void _logScreenViewed(int page) {
+    if (page < 0 || page >= _stepNames.length) return;
+    unawaited(
+      AnalyticsService().logOnboardingScreenViewed(
+        stepIndex: page,
+        stepPosition: page + 1,
+        stepTotal: _totalPages,
+        stepName: _stepNames[page],
+      ),
+    );
+  }
 
   @override
   void dispose() {

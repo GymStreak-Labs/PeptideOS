@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/services/analytics_service.dart';
+import '../../../core/services/support_service.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/services/auth_service.dart';
@@ -126,6 +129,15 @@ class ProfileScreen extends StatelessWidget {
           value: 'Reset app',
           iconColor: AppColors.warning,
           onTap: () => _confirmClearData(context),
+        ),
+
+        // ── Support ────────────────────────────────────────────────────
+        _SectionHeader(label: 'SUPPORT'),
+        _Tile(
+          icon: Icons.support_agent_rounded,
+          label: 'Contact support',
+          value: 'Chat with us',
+          onTap: () => _openSupport(context),
         ),
 
         // ── Legal ──────────────────────────────────────────────────────
@@ -555,6 +567,12 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       builder: (_) => _LegalSheet(title: title, body: body),
     );
+  }
+
+  Future<void> _openSupport(BuildContext context) async {
+    HapticFeedback.selectionClick();
+    unawaited(AnalyticsService().logSupportOpened());
+    await SupportService.instance.openSupport();
   }
 }
 

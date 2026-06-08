@@ -23,13 +23,16 @@ Public app name: **PepMod**. Historical internal package/bundle identifiers stil
 RevenueCat public SDK keys and Meta App Events identifiers are live in source.
 The remaining placeholder lives in source code for visibility:
 - `lib/main.dart` — `APPREFER_API_KEY` (read via `--dart-define`; live/test values are stored in Mission Control vault)
+- Gleap support SDK token is read via `--dart-define=GLEAP_SDK_TOKEN`; live value is stored in Mission Control vault as `peptideos-gleap-sdk-token`. Missing token safely falls back to `support@gymstreak.com`.
 - No TODOs for Firebase — using the dedicated `pepmod-prod` project (iOS + Android apps already registered).
 
 Use `--dart-define=FORCE_PREMIUM=true` to bypass RC for internal testing.
 
 ## Provisioned third-party app IDs
 - AppRefer app: `app_74601f5191f` (GymStreak Labs org). Live/test SDK keys are stored in Mission Control vault as `peptideos-apprefer-api-key` and `peptideos-apprefer-test-api-key`.
+- RevenueCat -> AppRefer webhook: `AppRefer PepMod` / `whintgrca0bff17a9` points to `https://apprefer.com/api/webhook/revenuecat/app_74601f5191f`, sends both production and sandbox events for all apps/event types, and uses `Authorization: Bearer <vault:peptideos-apprefer-revenuecat-webhook-auth-header>`. The raw AppRefer webhook secret is stored as `peptideos-apprefer-revenuecat-webhook-secret` and encrypted in the AppRefer app config.
 - Meta app: `1657843155413563` (GymStreak business portfolio). Client token and URL scheme are stored in Mission Control vault as `peptideos-meta-client-token` and `peptideos-meta-url-scheme`; source is also configured for Facebook App Events on iOS + Android.
+- Gleap support: project `PepMod` / `6a245300938ecfa0b363283c` in the GymStreak Labs Gleap org. App-side SDK integration is wired with hidden floating button and Profile -> Contact support entrypoint. Client token must be injected via `GLEAP_SDK_TOKEN`; AppStoreCopilot/MCP uses the PepMod service-account API token stored as `peptideos-gleap-api-token`.
 
 ## Bundle ID
 - iOS: `com.gymstreaklabs.peptideOs`
