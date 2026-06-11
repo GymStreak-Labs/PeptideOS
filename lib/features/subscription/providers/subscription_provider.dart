@@ -127,7 +127,9 @@ class SubscriptionProvider extends ChangeNotifier {
       unawaited(
         _analytics.logPurchaseCompleted(package.identifier, product.price),
       );
-    } else if (!result.cancelled) {
+    } else if (result.cancelled) {
+      unawaited(_analytics.logPurchaseCancelled(package.identifier));
+    } else {
       unawaited(
         _analytics.logPurchaseFailed(
           package.identifier,

@@ -445,6 +445,7 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
 
   Future<void> _handleSubscribe(int selectedPlan) async {
     final sub = context.read<SubscriptionProvider>();
+    final planId = 'onboarding_plan_$selectedPlan';
 
     if (!sub.isLoadingOfferings && sub.offerings == null) {
       await sub.loadOfferings();
@@ -456,17 +457,28 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
         ? null
         : sub.packageForOnboardingPlan(selectedPlan);
 
-    // If RC offerings are unavailable, let internal/test users continue.
     if (pkg == null) {
-      await widget.onComplete();
+      unawaited(
+        AnalyticsService().logPurchaseFailed(planId, 'package_unavailable'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            sub.offeringsError ??
+                'Subscription plans are not available right now. Please try again.',
+          ),
+        ),
+      );
       return;
     }
 
     unawaited(AnalyticsService().logPurchaseInitiated(pkg.identifier));
     final result = await sub.purchase(pkg);
     if (!mounted) return;
-    if (result.success || result.cancelled) {
+    if (result.success) {
       await widget.onComplete();
+    } else if (result.cancelled) {
+      return;
     } else if (result.error != null) {
       ScaffoldMessenger.of(
         context,
