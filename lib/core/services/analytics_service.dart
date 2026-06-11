@@ -242,6 +242,8 @@ class AnalyticsService {
       logEvent('purchase_initiated', {'plan_id': planId});
   Future<void> logPurchaseCompleted(String planId, double price) =>
       logEvent('purchase_completed', {'plan_id': planId, 'price': price});
+  Future<void> logPurchaseCancelled(String planId) =>
+      logEvent('purchase_cancelled', {'plan_id': planId});
   Future<void> logPurchaseFailed(String planId, String error) =>
       logEvent('purchase_failed', {'plan_id': planId, 'error': error});
   Future<void> logPurchaseRestored() => logEvent('purchase_restored');

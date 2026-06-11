@@ -27,6 +27,7 @@ class _PaywallPageState extends State<PaywallPage>
     with SingleTickerProviderStateMixin {
   int _selectedPlan = 0; // 0=special annual, 1=annual, 2=weekly
   int _secretTapCount = 0;
+  bool _isSubmitting = false;
 
   // Staggered entrance
   bool _showHero = false;
@@ -82,6 +83,18 @@ class _PaywallPageState extends State<PaywallPage>
     final m = (_countdownSeconds ~/ 60).toString().padLeft(2, '0');
     final s = (_countdownSeconds % 60).toString().padLeft(2, '0');
     return '$m:$s';
+  }
+
+  Future<void> _submitSelectedPlan() async {
+    if (_isSubmitting) return;
+    setState(() => _isSubmitting = true);
+    try {
+      await widget.onSubscribe(_selectedPlan);
+    } finally {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
+    }
   }
 
   @override
@@ -194,7 +207,7 @@ class _PaywallPageState extends State<PaywallPage>
                 if (_secretTapCount >= 7) {
                   _secretTapCount = 0;
                   HapticFeedback.heavyImpact();
-                  unawaited(widget.onSubscribe(_selectedPlan));
+                  unawaited(_submitSelectedPlan());
                 }
               },
               child: Text(
@@ -879,8 +892,9 @@ class _PaywallPageState extends State<PaywallPage>
           ),
           child: GestureDetector(
             onTap: () {
+              if (_isSubmitting) return;
               HapticFeedback.mediumImpact();
-              unawaited(widget.onSubscribe(_selectedPlan));
+              unawaited(_submitSelectedPlan());
             },
             child: Container(
               height: AppSpacing.buttonHeight + 4,
@@ -903,14 +917,24 @@ class _PaywallPageState extends State<PaywallPage>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.bolt_rounded,
-                      size: 18,
-                      color: AppColors.primary,
-                    ),
+                    if (_isSubmitting)
+                      const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.primary,
+                        ),
+                      )
+                    else
+                      Icon(
+                        Icons.bolt_rounded,
+                        size: 18,
+                        color: AppColors.primary,
+                      ),
                     const SizedBox(width: AppSpacing.sm),
                     Text(
-                      label,
+                      _isSubmitting ? 'CONNECTING TO STORE...' : label,
                       style: AppTypography.button.copyWith(
                         color: AppColors.textPrimary,
                         letterSpacing: 0.8,
