@@ -272,6 +272,9 @@ class ProfileScreen extends StatelessWidget {
                       'route': pp.route,
                       'cycleWeeks': pp.cycleWeeks,
                       'scheduledTimes': pp.scheduledTimes,
+                      'weekdayDoses': pp.weekdayDoses
+                          .map((d) => d.toMap())
+                          .toList(),
                     },
                   )
                   .toList(),
