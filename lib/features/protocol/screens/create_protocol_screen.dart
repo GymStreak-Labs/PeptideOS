@@ -88,10 +88,10 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
     setState(() => _saving = true);
     try {
       await context.read<ProtocolProvider>().createProtocol(
-            name: _nameController.text.trim(),
-            startDate: _startDate,
-            peptides: _peptides,
-          );
+        name: _nameController.text.trim(),
+        startDate: _startDate,
+        peptides: _peptides,
+      );
       if (!mounted) return;
       await context.read<DoseLogProvider>().refresh();
       if (!mounted) return;
@@ -137,8 +137,10 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
                 children: [
                   IconButton(
                     onPressed: _back,
-                    icon: const Icon(Icons.arrow_back_rounded,
-                        color: AppColors.textPrimary),
+                    icon: const Icon(
+                      Icons.arrow_back_rounded,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                   Expanded(
                     child: Column(
@@ -148,8 +150,10 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
                           'SYS.PROTOCOL // NEW',
                           style: AppTypography.systemLabel,
                         ),
-                        Text('Build Protocol · Step ${_step + 1} / 3',
-                            style: AppTypography.h3),
+                        Text(
+                          'Build Protocol · Step ${_step + 1} / 3',
+                          style: AppTypography.h3,
+                        ),
                       ],
                     ),
                   ),
@@ -160,7 +164,8 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
             // Progress bar
             Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.screenHorizontal),
+                horizontal: AppSpacing.screenHorizontal,
+              ),
               child: Row(
                 children: List.generate(3, (i) {
                   final active = i <= _step;
@@ -174,7 +179,9 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
                         boxShadow: i == _step
                             ? [
                                 BoxShadow(
-                                  color: AppColors.primary.withValues(alpha: 0.5),
+                                  color: AppColors.primary.withValues(
+                                    alpha: 0.5,
+                                  ),
                                   blurRadius: 4,
                                 ),
                               ]
@@ -199,8 +206,7 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
                   _Step2Peptides(
                     peptides: _peptides,
                     onAdd: _handleAddPeptide,
-                    onRemove: (p) =>
-                        setState(() => _peptides.remove(p)),
+                    onRemove: (p) => setState(() => _peptides.remove(p)),
                     onEdit: (index, p) => setState(() => _peptides[index] = p),
                   ),
                   _Step3Review(
@@ -208,12 +214,12 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
                     peptides: _peptides,
                     startDate: _startDate,
                     onPickDate: () async {
+                      final now = DateTime.now();
                       final picked = await showDatePicker(
                         context: context,
                         initialDate: _startDate,
-                        firstDate: DateTime.now()
-                            .subtract(const Duration(days: 30)),
-                        lastDate: DateTime.now().add(const Duration(days: 365)),
+                        firstDate: now.subtract(const Duration(days: 365 * 5)),
+                        lastDate: now.add(const Duration(days: 365)),
                       );
                       if (picked != null) {
                         setState(() => _startDate = picked);
@@ -249,8 +255,9 @@ class _Step1Name extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.symmetric(horizontal: AppSpacing.screenHorizontal),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.screenHorizontal,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -301,8 +308,9 @@ class _Step2Peptides extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.symmetric(horizontal: AppSpacing.screenHorizontal),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.screenHorizontal,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -319,14 +327,21 @@ class _Step2Peptides extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.science_rounded,
-                            color: AppColors.textTertiary, size: 36),
+                        Icon(
+                          Icons.science_rounded,
+                          color: AppColors.textTertiary,
+                          size: 36,
+                        ),
                         const SizedBox(height: AppSpacing.base),
-                        Text('No peptides yet',
-                            style: AppTypography.labelLarge),
+                        Text(
+                          'No peptides yet',
+                          style: AppTypography.labelLarge,
+                        ),
                         const SizedBox(height: AppSpacing.xs),
-                        Text('Tap + to pick from the library',
-                            style: AppTypography.bodySmall),
+                        Text(
+                          'Tap + to pick from the library',
+                          style: AppTypography.bodySmall,
+                        ),
                       ],
                     ),
                   )
@@ -348,21 +363,27 @@ class _Step2Peptides extends StatelessWidget {
                               width: 40,
                               height: 40,
                               decoration: BoxDecoration(
-                                color: AppColors.primary.withValues(alpha: 0.12),
+                                color: AppColors.primary.withValues(
+                                  alpha: 0.12,
+                                ),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: const Icon(Icons.biotech_rounded,
-                                  color: AppColors.primary),
+                              child: const Icon(
+                                Icons.biotech_rounded,
+                                color: AppColors.primary,
+                              ),
                             ),
                             const SizedBox(width: AppSpacing.md),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(p.peptideName,
-                                      style: AppTypography.labelLarge),
                                   Text(
-                                    '${_formatAmount(p.dosePerInjection)} ${p.doseUnit} · ${_freqLabel(p.frequency)}',
+                                    p.peptideName,
+                                    style: AppTypography.labelLarge,
+                                  ),
+                                  Text(
+                                    _scheduleSummary(p),
                                     style: AppTypography.bodySmall.copyWith(
                                       fontFamily: 'JetBrainsMono',
                                     ),
@@ -372,9 +393,11 @@ class _Step2Peptides extends StatelessWidget {
                             ),
                             IconButton(
                               onPressed: () => onRemove(p),
-                              icon: Icon(Icons.close_rounded,
-                                  color: AppColors.textTertiary,
-                                  size: AppSpacing.iconMedium),
+                              icon: Icon(
+                                Icons.close_rounded,
+                                color: AppColors.textTertiary,
+                                size: AppSpacing.iconMedium,
+                              ),
                             ),
                           ],
                         ),
@@ -396,8 +419,10 @@ class _Step2Peptides extends StatelessWidget {
               ),
             ),
             icon: const Icon(Icons.add_rounded),
-            label: Text('ADD PEPTIDE',
-                style: AppTypography.button.copyWith(color: AppColors.primary)),
+            label: Text(
+              'ADD PEPTIDE',
+              style: AppTypography.button.copyWith(color: AppColors.primary),
+            ),
           ),
           const SizedBox(height: AppSpacing.sm),
         ],
@@ -423,8 +448,9 @@ class _Step3Review extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding:
-          const EdgeInsets.symmetric(horizontal: AppSpacing.screenHorizontal),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.screenHorizontal,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -449,41 +475,49 @@ class _Step3Review extends StatelessWidget {
                   onTap: onPickDate,
                   child: Row(
                     children: [
-                      Text(_formatDate(startDate),
-                          style: AppTypography.tabular.copyWith(fontSize: 16)),
+                      Text(
+                        _formatDate(startDate),
+                        style: AppTypography.tabular.copyWith(fontSize: 16),
+                      ),
                       const SizedBox(width: AppSpacing.sm),
-                      Icon(Icons.edit_rounded,
-                          size: 16, color: AppColors.primary),
+                      Icon(
+                        Icons.edit_rounded,
+                        size: 16,
+                        color: AppColors.primary,
+                      ),
                     ],
                   ),
                 ),
                 const SizedBox(height: AppSpacing.base),
-                Text('PEPTIDES (${peptides.length})',
-                    style: AppTypography.systemLabel),
+                Text(
+                  'PEPTIDES (${peptides.length})',
+                  style: AppTypography.systemLabel,
+                ),
                 const SizedBox(height: AppSpacing.xs),
-                ...peptides.map((p) => Padding(
-                      padding:
-                          const EdgeInsets.only(top: AppSpacing.xs),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 6,
-                            height: 6,
-                            decoration: const BoxDecoration(
-                              color: AppColors.primary,
-                              shape: BoxShape.circle,
-                            ),
+                ...peptides.map(
+                  (p) => Padding(
+                    padding: const EdgeInsets.only(top: AppSpacing.xs),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 6,
+                          height: 6,
+                          decoration: const BoxDecoration(
+                            color: AppColors.primary,
+                            shape: BoxShape.circle,
                           ),
-                          const SizedBox(width: AppSpacing.sm),
-                          Expanded(
-                            child: Text(
-                              '${p.peptideName} · ${_formatAmount(p.dosePerInjection)} ${p.doseUnit} · ${_freqLabel(p.frequency)}',
-                              style: AppTypography.bodyMedium,
-                            ),
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        Expanded(
+                          child: Text(
+                            '${p.peptideName} · ${_scheduleSummary(p)}',
+                            style: AppTypography.bodyMedium,
                           ),
-                        ],
-                      ),
-                    )),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -501,15 +535,56 @@ class _Step3Review extends StatelessWidget {
 
 // ── Helpers shared across steps ────────────────────────────────────────────
 String _formatDate(DateTime d) {
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
   return '${months[d.month - 1]} ${d.day}, ${d.year}';
 }
 
 String _formatAmount(double d) =>
     d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(1);
 
-String _freqLabel(String key) =>
-    kFrequencies.firstWhere((f) => f.key == key, orElse: () => kFrequencies.first).label;
+String _freqLabel(String key) => kFrequencies
+    .firstWhere((f) => f.key == key, orElse: () => kFrequencies.first)
+    .label;
+
+String _weekdayLabel(int weekday) => switch (weekday) {
+  DateTime.monday => 'Mon',
+  DateTime.tuesday => 'Tue',
+  DateTime.wednesday => 'Wed',
+  DateTime.thursday => 'Thu',
+  DateTime.friday => 'Fri',
+  DateTime.saturday => 'Sat',
+  DateTime.sunday => 'Sun',
+  _ => 'Day',
+};
+
+String _scheduleSummary(ProtocolPeptide p) {
+  if (!p.usesCustomWeekdays) {
+    return '${_formatAmount(p.dosePerInjection)} ${p.doseUnit} · '
+        '${_freqLabel(p.frequency)}';
+  }
+  final days = [...p.weekdayDoses]
+    ..sort((a, b) => a.weekday.compareTo(b.weekday));
+  final summary = days
+      .map(
+        (d) =>
+            '${_weekdayLabel(d.weekday)} ${_formatAmount(d.dosePerInjection)} ${d.doseUnit}',
+      )
+      .join(', ');
+  return summary.isEmpty ? 'Custom days' : summary;
+}
 
 /// Opens the peptide picker and returns a configured ProtocolPeptide.
 Future<ProtocolPeptide?> _pickPeptide(BuildContext context) async {
@@ -544,7 +619,9 @@ Future<ProtocolPeptide?> _pickPeptide(BuildContext context) async {
 }
 
 Future<ProtocolPeptide?> _editPeptide(
-    BuildContext context, ProtocolPeptide p) async {
+  BuildContext context,
+  ProtocolPeptide p,
+) async {
   return showModalBottomSheet<ProtocolPeptide>(
     context: context,
     isScrollControlled: true,
@@ -588,7 +665,9 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                   height: AppSpacing.sheetHandleHeight,
                   decoration: BoxDecoration(
                     color: AppColors.border,
-                    borderRadius: BorderRadius.circular(AppSpacing.sheetHandleHeight),
+                    borderRadius: BorderRadius.circular(
+                      AppSpacing.sheetHandleHeight,
+                    ),
                   ),
                 ),
               ),
@@ -600,7 +679,8 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
               Container(
                 height: AppSpacing.inputHeight,
                 padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.inputPadding),
+                  horizontal: AppSpacing.inputPadding,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.inputFill,
                   borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
@@ -608,9 +688,11 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.search_rounded,
-                        color: AppColors.textTertiary,
-                        size: AppSpacing.iconMedium),
+                    const Icon(
+                      Icons.search_rounded,
+                      color: AppColors.textTertiary,
+                      size: AppSpacing.iconMedium,
+                    ),
                     const SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: TextField(
@@ -618,8 +700,9 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                         style: AppTypography.bodyMedium,
                         decoration: InputDecoration(
                           hintText: 'Search peptides...',
-                          hintStyle: AppTypography.bodyMedium
-                              .copyWith(color: AppColors.textDisabled),
+                          hintStyle: AppTypography.bodyMedium.copyWith(
+                            color: AppColors.textDisabled,
+                          ),
                           border: InputBorder.none,
                           isDense: true,
                           filled: false,
@@ -649,14 +732,18 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(p.name, style: AppTypography.labelLarge),
-                                Text(p.category.label,
-                                    style: AppTypography.bodySmall),
+                                Text(
+                                  p.category.label,
+                                  style: AppTypography.bodySmall,
+                                ),
                               ],
                             ),
                           ),
-                          Icon(Icons.chevron_right_rounded,
-                              color: AppColors.textTertiary,
-                              size: AppSpacing.iconMedium),
+                          Icon(
+                            Icons.chevron_right_rounded,
+                            color: AppColors.textTertiary,
+                            size: AppSpacing.iconMedium,
+                          ),
                         ],
                       ),
                     );
@@ -682,38 +769,113 @@ class _PeptideConfigSheet extends StatefulWidget {
 
 class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
   late final TextEditingController _doseCtrl;
+  final Map<int, TextEditingController> _weekdayDoseCtrls = {};
   late String _unit;
   late String _frequency;
   late String _route;
   late String _time;
+  late Set<int> _selectedWeekdays;
 
   @override
   void initState() {
     super.initState();
     _doseCtrl = TextEditingController(
-        text: _formatAmount(widget.initial.dosePerInjection));
+      text: _formatAmount(widget.initial.dosePerInjection),
+    );
     _unit = widget.initial.doseUnit;
     _frequency = widget.initial.frequency;
     _route = widget.initial.route;
     _time = widget.initial.scheduledTimes.isEmpty
         ? '08:00'
         : widget.initial.scheduledTimes.first;
+    _selectedWeekdays = widget.initial.weekdayDoses
+        .map((d) => d.weekday)
+        .toSet();
+    if (_frequency == kCustomWeekdayFrequency && _selectedWeekdays.isEmpty) {
+      _selectedWeekdays = {DateTime.now().weekday};
+    }
+    for (final weekday in _selectedWeekdays) {
+      _ensureWeekdayController(weekday);
+    }
   }
 
   @override
   void dispose() {
     _doseCtrl.dispose();
+    for (final controller in _weekdayDoseCtrls.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
+  void _ensureWeekdayController(int weekday) {
+    if (_weekdayDoseCtrls.containsKey(weekday)) return;
+    ProtocolWeekdayDose? existing;
+    for (final dose in widget.initial.weekdayDoses) {
+      if (dose.weekday == weekday) {
+        existing = dose;
+        break;
+      }
+    }
+    _weekdayDoseCtrls[weekday] = TextEditingController(
+      text: _formatAmount(existing?.dosePerInjection ?? _parsedBaseDose),
+    );
+  }
+
+  double get _parsedBaseDose =>
+      double.tryParse(_doseCtrl.text) ?? widget.initial.dosePerInjection;
+
+  void _selectFrequency(String frequency) {
+    setState(() {
+      _frequency = frequency;
+      if (_frequency == kCustomWeekdayFrequency && _selectedWeekdays.isEmpty) {
+        _selectedWeekdays.add(DateTime.now().weekday);
+        _ensureWeekdayController(DateTime.now().weekday);
+      }
+    });
+  }
+
+  void _toggleWeekday(int weekday) {
+    setState(() {
+      if (_selectedWeekdays.contains(weekday)) {
+        _selectedWeekdays.remove(weekday);
+      } else {
+        _selectedWeekdays.add(weekday);
+        _ensureWeekdayController(weekday);
+      }
+    });
+  }
+
+  List<ProtocolWeekdayDose> _buildWeekdayDoses(double fallbackDose) {
+    final weekdays = _selectedWeekdays.toList()..sort();
+    return [
+      for (final weekday in weekdays)
+        ProtocolWeekdayDose(
+          weekday: weekday,
+          dosePerInjection:
+              double.tryParse(_weekdayDoseCtrls[weekday]?.text ?? '') ??
+              fallbackDose,
+          doseUnit: _unit,
+          scheduledTimes: [_time],
+        ),
+    ];
+  }
+
+  bool get _canSave =>
+      _frequency != kCustomWeekdayFrequency || _selectedWeekdays.isNotEmpty;
+
   void _save() {
-    final dose = double.tryParse(_doseCtrl.text) ?? widget.initial.dosePerInjection;
+    final dose = _parsedBaseDose;
+    final weekdayDoses = _frequency == kCustomWeekdayFrequency
+        ? _buildWeekdayDoses(dose)
+        : <ProtocolWeekdayDose>[];
     final updated = widget.initial
       ..dosePerInjection = dose
       ..doseUnit = _unit
       ..frequency = _frequency
       ..route = _route
-      ..scheduledTimes = [_time];
+      ..scheduledTimes = [_time]
+      ..weekdayDoses = weekdayDoses;
     Navigator.of(context).pop(updated);
   }
 
@@ -721,12 +883,14 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom),
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.surfaceContainer,
           borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(AppSpacing.sheetRadius)),
+            top: Radius.circular(AppSpacing.sheetRadius),
+          ),
         ),
         child: SafeArea(
           top: false,
@@ -743,15 +907,15 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                       decoration: BoxDecoration(
                         color: AppColors.border,
                         borderRadius: BorderRadius.circular(
-                            AppSpacing.sheetHandleHeight),
+                          AppSpacing.sheetHandleHeight,
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text('CONFIG.PEPTIDE', style: AppTypography.systemLabel),
                   const SizedBox(height: AppSpacing.sm),
-                  Text(widget.initial.peptideName,
-                      style: AppTypography.h2),
+                  Text(widget.initial.peptideName, style: AppTypography.h2),
                   const SizedBox(height: AppSpacing.lg),
 
                   // Dose + unit
@@ -764,17 +928,23 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                           child: TextField(
                             controller: _doseCtrl,
                             keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
+                              decimal: true,
+                            ),
                             inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp(r'[\d.]'))
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'[\d.]'),
+                              ),
                             ],
-                            style: AppTypography.heroSmall.copyWith(fontSize: 18),
+                            style: AppTypography.heroSmall.copyWith(
+                              fontSize: 18,
+                            ),
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               isDense: true,
                               filled: false,
                               contentPadding: EdgeInsets.symmetric(
-                                  horizontal: AppSpacing.md),
+                                horizontal: AppSpacing.md,
+                              ),
                             ),
                           ),
                         ),
@@ -805,10 +975,88 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                         _Chip(
                           label: f.label,
                           selected: _frequency == f.key,
-                          onTap: () => setState(() => _frequency = f.key),
+                          onTap: () => _selectFrequency(f.key),
                         ),
                     ],
                   ),
+                  if (_frequency == kCustomWeekdayFrequency) ...[
+                    const SizedBox(height: AppSpacing.base),
+                    Text('CUSTOM DAYS', style: AppTypography.systemLabel),
+                    const SizedBox(height: AppSpacing.sm),
+                    Wrap(
+                      spacing: AppSpacing.sm,
+                      runSpacing: AppSpacing.sm,
+                      children: [
+                        for (
+                          var weekday = DateTime.monday;
+                          weekday <= DateTime.sunday;
+                          weekday++
+                        )
+                          _Chip(
+                            label: _weekdayLabel(weekday),
+                            selected: _selectedWeekdays.contains(weekday),
+                            onTap: () => _toggleWeekday(weekday),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: AppSpacing.base),
+                    if (_selectedWeekdays.isEmpty)
+                      Text(
+                        'Select at least one day to schedule this peptide.',
+                        style: AppTypography.bodySmall.copyWith(
+                          color: AppColors.warning,
+                        ),
+                      )
+                    else
+                      Column(
+                        children: [
+                          for (final weekday
+                              in (_selectedWeekdays.toList()..sort()))
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: AppSpacing.sm,
+                              ),
+                              child: _FieldLabel(
+                                label: '${_weekdayLabel(weekday)} DOSE',
+                                child: TextField(
+                                  controller: _weekdayDoseCtrls[weekday],
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                        decimal: true,
+                                      ),
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                      RegExp(r'[\d.]'),
+                                    ),
+                                  ],
+                                  style: AppTypography.tabular.copyWith(
+                                    fontSize: 16,
+                                  ),
+                                  decoration: InputDecoration(
+                                    suffixText: _unit,
+                                    suffixStyle: AppTypography.bodySmall
+                                        .copyWith(
+                                          color: AppColors.textTertiary,
+                                        ),
+                                    border: InputBorder.none,
+                                    isDense: true,
+                                    filled: false,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: AppSpacing.md,
+                                      vertical: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      'Only selected weekdays are scheduled. Amounts are user-entered tracking values, not dosing advice.',
+                      style: AppTypography.disclaimer,
+                    ),
+                  ],
                   const SizedBox(height: AppSpacing.lg),
 
                   // Route
@@ -839,30 +1087,43 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                           minute: int.tryParse(parts[1]) ?? 0,
                         );
                         final t = await showTimePicker(
-                            context: context, initialTime: initial);
+                          context: context,
+                          initialTime: initial,
+                        );
                         if (t != null) {
-                          setState(() => _time =
-                              '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}');
+                          setState(
+                            () => _time =
+                                '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}',
+                          );
                         }
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: AppSpacing.md, vertical: 14),
-                        child: Text(_time,
-                            style:
-                                AppTypography.tabular.copyWith(fontSize: 18)),
+                          horizontal: AppSpacing.md,
+                          vertical: 14,
+                        ),
+                        child: Text(
+                          _time,
+                          style: AppTypography.tabular.copyWith(fontSize: 18),
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xl),
 
-                  PrimaryButton(label: 'SAVE', onPressed: _save),
+                  PrimaryButton(
+                    label: 'SAVE',
+                    onPressed: _canSave ? _save : null,
+                  ),
                   const SizedBox(height: AppSpacing.sm),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: Text('Cancel',
-                        style: AppTypography.labelMedium
-                            .copyWith(color: AppColors.textTertiary)),
+                    child: Text(
+                      'Cancel',
+                      style: AppTypography.labelMedium.copyWith(
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -970,7 +1231,9 @@ class _Chip extends StatelessWidget {
       child: AnimatedContainer(
         duration: AppDurations.fast,
         padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
         decoration: BoxDecoration(
           color: selected
               ? AppColors.primary.withValues(alpha: 0.15)

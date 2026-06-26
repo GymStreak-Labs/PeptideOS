@@ -15,11 +15,8 @@ import '../../../services/notification_service.dart';
 /// "refresh schedule" — it materialises the next [scheduleHorizonDays] days
 /// of doses so the Today view can read from a single Firestore collection.
 class ProtocolProvider extends ChangeNotifier {
-  ProtocolProvider(
-    this._protocolRepo,
-    this._doseLogRepo, {
-    required String uid,
-  }) : _uid = uid {
+  ProtocolProvider(this._protocolRepo, this._doseLogRepo, {required String uid})
+    : _uid = uid {
     _subscribe();
   }
 
@@ -59,19 +56,21 @@ class ProtocolProvider extends ChangeNotifier {
       notifyListeners();
       return;
     }
-    _sub = _protocolRepo.watchAll(_uid).listen(
-      (items) {
-        _protocols = items;
-        _loading = false;
-        notifyListeners();
-      },
-      onError: (Object e, StackTrace st) {
-        debugPrint('ProtocolProvider stream failed: $e');
-        _loading = false;
-        _protocols = <Protocol>[];
-        notifyListeners();
-      },
-    );
+    _sub = _protocolRepo
+        .watchAll(_uid)
+        .listen(
+          (items) {
+            _protocols = items;
+            _loading = false;
+            notifyListeners();
+          },
+          onError: (Object e, StackTrace st) {
+            debugPrint('ProtocolProvider stream failed: $e');
+            _loading = false;
+            _protocols = <Protocol>[];
+            notifyListeners();
+          },
+        );
   }
 
   Future<void> refresh() async {
@@ -133,9 +132,7 @@ class ProtocolProvider extends ChangeNotifier {
       final logs = await _doseLogRepo.fetchByProtocol(_uid, p.uuid);
       final toDelete = <String>[];
       for (final d in logs) {
-        if (d.takenAt == null &&
-            !d.skipped &&
-            d.scheduledAt.isAfter(now)) {
+        if (d.takenAt == null && !d.skipped && d.scheduledAt.isAfter(now)) {
           toDelete.add(d.uuid);
           await NotificationService.instance.cancelDoseReminder(d.uuid);
         }
@@ -182,7 +179,9 @@ class ProtocolProvider extends ChangeNotifier {
     final existing = await _doseLogRepo.fetchRange(_uid, start, end);
     final existingKeys = existing
         .where((d) => d.protocolUuid == p.uuid)
-        .map((e) => '${e.protocolPeptideUuid}|${e.scheduledAt.toIso8601String()}')
+        .map(
+          (e) => '${e.protocolPeptideUuid}|${e.scheduledAt.toIso8601String()}',
+        )
         .toSet();
 
     final toInsert = <DoseLog>[];
@@ -190,17 +189,24 @@ class ProtocolProvider extends ChangeNotifier {
     for (var day = 0; day < scheduleHorizonDays; day++) {
       final date = start.add(Duration(days: day));
       for (final pp in p.peptides) {
-        if (!_isDosingDay(pp.frequency, p.startDate, date)) continue;
-        final times = pp.scheduledTimes.isEmpty
-            ? const ['08:00']
-            : pp.scheduledTimes;
-        for (final timeStr in times) {
+        final schedule = pp.scheduleForDate(
+          protocolStart: p.startDate,
+          date: date,
+        );
+        if (schedule == null) continue;
+
+        for (final timeStr in schedule.scheduledTimes) {
           final parts = timeStr.split(':');
           if (parts.length != 2) continue;
           final hour = int.tryParse(parts[0]) ?? 8;
           final minute = int.tryParse(parts[1]) ?? 0;
-          final scheduledAt =
-              DateTime(date.year, date.month, date.day, hour, minute);
+          final scheduledAt = DateTime(
+            date.year,
+            date.month,
+            date.day,
+            hour,
+            minute,
+          );
           final key = '${pp.uuid}|${scheduledAt.toIso8601String()}';
           if (existingKeys.contains(key)) continue;
 
@@ -208,16 +214,18 @@ class ProtocolProvider extends ChangeNotifier {
               ? ''
               : pp.injectionSites[day % pp.injectionSites.length];
 
-          toInsert.add(DoseLog(
-            uuid: _uuid.v4(),
-            protocolUuid: p.uuid,
-            protocolPeptideUuid: pp.uuid,
-            peptideName: pp.peptideName,
-            scheduledAt: scheduledAt,
-            amountTaken: pp.dosePerInjection,
-            units: pp.doseUnit,
-            injectionSite: site,
-          ));
+          toInsert.add(
+            DoseLog(
+              uuid: _uuid.v4(),
+              protocolUuid: p.uuid,
+              protocolPeptideUuid: pp.uuid,
+              peptideName: pp.peptideName,
+              scheduledAt: scheduledAt,
+              amountTaken: schedule.dosePerInjection,
+              units: schedule.doseUnit,
+              injectionSite: site,
+            ),
+          );
         }
       }
     }
@@ -231,26 +239,6 @@ class ProtocolProvider extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint('generateDoseLogs failed: $e');
-    }
-  }
-
-  bool _isDosingDay(String frequency, DateTime start, DateTime day) {
-    switch (frequency) {
-      case 'daily':
-        return true;
-      case 'eod':
-        final diff =
-            day.difference(DateTime(start.year, start.month, start.day)).inDays;
-        return diff.isEven;
-      case 'twice_weekly':
-        return day.weekday == DateTime.monday || day.weekday == DateTime.thursday;
-      case 'weekly':
-        final diff =
-            day.difference(DateTime(start.year, start.month, start.day)).inDays;
-        return diff % 7 == 0;
-      case 'as_needed':
-      default:
-        return false;
     }
   }
 
@@ -271,6 +259,7 @@ class ProtocolProvider extends ChangeNotifier {
     int cycleWeeks = 0,
     List<String>? times,
     List<String>? sites,
+    List<ProtocolWeekdayDose>? weekdayDoses,
   }) {
     return ProtocolPeptide(
       uuid: _uuid.v4(),
@@ -283,6 +272,7 @@ class ProtocolProvider extends ChangeNotifier {
       cycleWeeks: cycleWeeks,
       scheduledTimes: times ?? const ['08:00'],
       injectionSites: sites ?? const [],
+      weekdayDoses: weekdayDoses ?? const [],
     );
   }
 

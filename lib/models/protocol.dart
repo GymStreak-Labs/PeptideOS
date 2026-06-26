@@ -91,8 +91,10 @@ class ProtocolPeptide {
     this.cycleWeeks = 0,
     List<String>? injectionSites,
     List<String>? scheduledTimes,
+    List<ProtocolWeekdayDose>? weekdayDoses,
   }) : injectionSites = injectionSites ?? <String>[],
-       scheduledTimes = scheduledTimes ?? <String>['08:00'];
+       scheduledTimes = scheduledTimes ?? <String>['08:00'],
+       weekdayDoses = weekdayDoses ?? <ProtocolWeekdayDose>[];
 
   String uuid;
   String peptideSlug;
@@ -104,6 +106,46 @@ class ProtocolPeptide {
   int cycleWeeks;
   List<String> injectionSites;
   List<String> scheduledTimes;
+  List<ProtocolWeekdayDose> weekdayDoses;
+
+  bool get usesCustomWeekdays =>
+      frequency == kCustomWeekdayFrequency && weekdayDoses.isNotEmpty;
+
+  ProtocolDoseSchedule? scheduleForDate({
+    required DateTime protocolStart,
+    required DateTime date,
+  }) {
+    final startDay = DateTime(
+      protocolStart.year,
+      protocolStart.month,
+      protocolStart.day,
+    );
+    final targetDay = DateTime(date.year, date.month, date.day);
+    if (targetDay.isBefore(startDay)) return null;
+
+    ProtocolWeekdayDose? weekdayDose;
+    if (usesCustomWeekdays) {
+      for (final dose in weekdayDoses) {
+        if (dose.weekday == targetDay.weekday) {
+          weekdayDose = dose;
+          break;
+        }
+      }
+    }
+    if (usesCustomWeekdays && weekdayDose == null) return null;
+
+    if (!usesCustomWeekdays &&
+        !isDosingDayForFrequency(frequency, startDay, targetDay)) {
+      return null;
+    }
+
+    final times = weekdayDose?.scheduledTimes ?? scheduledTimes;
+    return ProtocolDoseSchedule(
+      dosePerInjection: weekdayDose?.dosePerInjection ?? dosePerInjection,
+      doseUnit: weekdayDose?.doseUnit ?? doseUnit,
+      scheduledTimes: times.isEmpty ? const <String>['08:00'] : times,
+    );
+  }
 
   Map<String, dynamic> toMap() => <String, dynamic>{
     'uuid': uuid,
@@ -116,6 +158,7 @@ class ProtocolPeptide {
     'cycleWeeks': cycleWeeks,
     'injectionSites': injectionSites,
     'scheduledTimes': scheduledTimes,
+    'weekdayDoses': weekdayDoses.map((d) => d.toMap()).toList(),
   };
 
   factory ProtocolPeptide.fromMap(Map<String, dynamic> data) {
@@ -135,8 +178,66 @@ class ProtocolPeptide {
           (data['scheduledTimes'] as List<dynamic>? ?? const ['08:00'])
               .map((e) => e.toString())
               .toList(),
+      weekdayDoses: (data['weekdayDoses'] as List<dynamic>? ?? const [])
+          .map(
+            (e) => ProtocolWeekdayDose.fromMap(
+              Map<String, dynamic>.from(e as Map<dynamic, dynamic>),
+            ),
+          )
+          .where((d) => d.isValid)
+          .toList(),
     );
   }
+}
+
+class ProtocolWeekdayDose {
+  ProtocolWeekdayDose({
+    required this.weekday,
+    required this.dosePerInjection,
+    this.doseUnit = 'mcg',
+    List<String>? scheduledTimes,
+  }) : scheduledTimes = scheduledTimes ?? <String>['08:00'];
+
+  int weekday;
+  double dosePerInjection;
+  String doseUnit;
+  List<String> scheduledTimes;
+
+  bool get isValid =>
+      weekday >= DateTime.monday &&
+      weekday <= DateTime.sunday &&
+      dosePerInjection > 0;
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
+    'weekday': weekday,
+    'dosePerInjection': dosePerInjection,
+    'doseUnit': doseUnit,
+    'scheduledTimes': scheduledTimes,
+  };
+
+  factory ProtocolWeekdayDose.fromMap(Map<String, dynamic> data) {
+    return ProtocolWeekdayDose(
+      weekday: (data['weekday'] as num?)?.toInt() ?? 0,
+      dosePerInjection: (data['dosePerInjection'] as num?)?.toDouble() ?? 0,
+      doseUnit: (data['doseUnit'] as String?) ?? 'mcg',
+      scheduledTimes:
+          (data['scheduledTimes'] as List<dynamic>? ?? const ['08:00'])
+              .map((e) => e.toString())
+              .toList(),
+    );
+  }
+}
+
+class ProtocolDoseSchedule {
+  const ProtocolDoseSchedule({
+    required this.dosePerInjection,
+    required this.doseUnit,
+    required this.scheduledTimes,
+  });
+
+  final double dosePerInjection;
+  final String doseUnit;
+  final List<String> scheduledTimes;
 }
 
 extension ProtocolStatusLabel on ProtocolStatus {
@@ -148,13 +249,38 @@ extension ProtocolStatusLabel on ProtocolStatus {
 }
 
 /// Available frequency options, keyed to the stored `frequency` string.
+const kCustomWeekdayFrequency = 'custom_weekdays';
+
 const kFrequencies = <({String key, String label, int daysPerWeek})>[
   (key: 'daily', label: 'Daily', daysPerWeek: 7),
   (key: 'eod', label: 'Every other day', daysPerWeek: 4),
   (key: 'twice_weekly', label: '2x per week', daysPerWeek: 2),
   (key: 'weekly', label: 'Weekly', daysPerWeek: 1),
+  (key: kCustomWeekdayFrequency, label: 'Custom days', daysPerWeek: 0),
   (key: 'as_needed', label: 'As needed', daysPerWeek: 0),
 ];
+
+bool isDosingDayForFrequency(String frequency, DateTime start, DateTime day) {
+  switch (frequency) {
+    case 'daily':
+      return true;
+    case 'eod':
+      final diff = day
+          .difference(DateTime(start.year, start.month, start.day))
+          .inDays;
+      return diff.isEven;
+    case 'twice_weekly':
+      return day.weekday == DateTime.monday || day.weekday == DateTime.thursday;
+    case 'weekly':
+      final diff = day
+          .difference(DateTime(start.year, start.month, start.day))
+          .inDays;
+      return diff % 7 == 0;
+    case 'as_needed':
+    default:
+      return false;
+  }
+}
 
 const kRoutes = <({String key, String label})>[
   (key: 'subcutaneous', label: 'Subcutaneous'),

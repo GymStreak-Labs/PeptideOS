@@ -37,8 +37,7 @@ class _ActiveProtocolDetailScreenState
     final doseProvider = context.watch<DoseLogProvider>();
 
     // Refresh local reference from provider (status may have changed).
-    final fresh =
-        provider.all.where((p) => p.uuid == _protocol.uuid).toList();
+    final fresh = provider.all.where((p) => p.uuid == _protocol.uuid).toList();
     if (fresh.isNotEmpty) _protocol = fresh.first;
 
     final last7 = _adherenceLastNDays(doseProvider.recent30, 7);
@@ -61,20 +60,26 @@ class _ActiveProtocolDetailScreenState
                 children: [
                   IconButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.arrow_back_rounded,
-                        color: AppColors.textPrimary),
+                    icon: const Icon(
+                      Icons.arrow_back_rounded,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('SYS.PROTOCOL // MANAGE',
-                            style: AppTypography.systemLabel),
+                        Text(
+                          'SYS.PROTOCOL // MANAGE',
+                          style: AppTypography.systemLabel,
+                        ),
                         const SizedBox(height: 2),
-                        Text(_protocol.name,
-                            style: AppTypography.h2,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis),
+                        Text(
+                          _protocol.name,
+                          style: AppTypography.h2,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ],
                     ),
                   ),
@@ -124,12 +129,17 @@ class _ActiveProtocolDetailScreenState
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('STARTED',
-                                    style: AppTypography.systemLabel),
+                                Text(
+                                  'STARTED',
+                                  style: AppTypography.systemLabel,
+                                ),
                                 const SizedBox(height: AppSpacing.xs),
-                                Text(_formatDate(_protocol.startDate),
-                                    style: AppTypography.tabular
-                                        .copyWith(fontSize: 16)),
+                                Text(
+                                  _formatDate(_protocol.startDate),
+                                  style: AppTypography.tabular.copyWith(
+                                    fontSize: 16,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -138,12 +148,17 @@ class _ActiveProtocolDetailScreenState
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('ENDED',
-                                      style: AppTypography.systemLabel),
+                                  Text(
+                                    'ENDED',
+                                    style: AppTypography.systemLabel,
+                                  ),
                                   const SizedBox(height: AppSpacing.xs),
-                                  Text(_formatDate(_protocol.endDate!),
-                                      style: AppTypography.tabular
-                                          .copyWith(fontSize: 16)),
+                                  Text(
+                                    _formatDate(_protocol.endDate!),
+                                    style: AppTypography.tabular.copyWith(
+                                      fontSize: 16,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -153,8 +168,10 @@ class _ActiveProtocolDetailScreenState
                     const SizedBox(height: AppSpacing.xl),
 
                     // Peptides
-                    Text('PEPTIDES (${_protocol.peptides.length})',
-                        style: AppTypography.systemLabel),
+                    Text(
+                      'PEPTIDES (${_protocol.peptides.length})',
+                      style: AppTypography.systemLabel,
+                    ),
                     const SizedBox(height: AppSpacing.sm),
                     for (final p in _protocol.peptides) ...[
                       _PeptideRowCard(peptide: p),
@@ -269,15 +286,21 @@ class _ActiveProtocolDetailScreenState
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text('Cancel',
-                style: AppTypography.labelMedium
-                    .copyWith(color: AppColors.textTertiary)),
+            child: Text(
+              'Cancel',
+              style: AppTypography.labelMedium.copyWith(
+                color: AppColors.textTertiary,
+              ),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(confirmLabel,
-                style: AppTypography.labelMedium
-                    .copyWith(color: AppColors.warning)),
+            child: Text(
+              confirmLabel,
+              style: AppTypography.labelMedium.copyWith(
+                color: AppColors.warning,
+              ),
+            ),
           ),
         ],
       ),
@@ -287,13 +310,18 @@ class _ActiveProtocolDetailScreenState
 
   double _adherenceLastNDays(List<DoseLog> recent, int days) {
     final now = DateTime.now();
-    final cutoff = DateTime(now.year, now.month, now.day)
-        .subtract(Duration(days: days - 1));
+    final cutoff = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).subtract(Duration(days: days - 1));
     final scoped = recent
-        .where((d) =>
-            d.protocolUuid == _protocol.uuid &&
-            d.scheduledAt.isAfter(cutoff) &&
-            d.scheduledAt.isBefore(now))
+        .where(
+          (d) =>
+              d.protocolUuid == _protocol.uuid &&
+              d.scheduledAt.isAfter(cutoff) &&
+              d.scheduledAt.isBefore(now),
+        )
         .where((d) => !d.skipped)
         .toList();
     if (scoped.isEmpty) return 0;
@@ -304,10 +332,12 @@ class _ActiveProtocolDetailScreenState
   double _adherenceAllTime(List<DoseLog> recent) {
     final now = DateTime.now();
     final scoped = recent
-        .where((d) =>
-            d.protocolUuid == _protocol.uuid &&
-            d.scheduledAt.isBefore(now) &&
-            !d.skipped)
+        .where(
+          (d) =>
+              d.protocolUuid == _protocol.uuid &&
+              d.scheduledAt.isBefore(now) &&
+              !d.skipped,
+        )
         .toList();
     if (scoped.isEmpty) return 0;
     final taken = scoped.where((d) => d.isTaken).length;
@@ -315,8 +345,18 @@ class _ActiveProtocolDetailScreenState
   }
 
   static const _months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
   String _formatDate(DateTime d) =>
       '${_months[d.month - 1]} ${d.day}, ${d.year}';
@@ -335,7 +375,9 @@ class _StatusPill extends StatelessWidget {
     };
     return Container(
       padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.sm, vertical: 4),
+        horizontal: AppSpacing.sm,
+        vertical: 4,
+      ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(4),
@@ -367,9 +409,13 @@ class _StatTile extends StatelessWidget {
         children: [
           Text(label, style: AppTypography.systemLabel),
           const SizedBox(height: AppSpacing.xs),
-          Text(value,
-              style: AppTypography.heroMedium
-                  .copyWith(color: AppColors.primary, fontSize: 28)),
+          Text(
+            value,
+            style: AppTypography.heroMedium.copyWith(
+              color: AppColors.primary,
+              fontSize: 28,
+            ),
+          ),
           Text(hint, style: AppTypography.bodySmall),
         ],
       ),
@@ -389,6 +435,32 @@ class _PeptideRowCard extends StatelessWidget {
       if (f.key == key) return f.label;
     }
     return key;
+  }
+
+  String _weekdayLabel(int weekday) => switch (weekday) {
+    DateTime.monday => 'Mon',
+    DateTime.tuesday => 'Tue',
+    DateTime.wednesday => 'Wed',
+    DateTime.thursday => 'Thu',
+    DateTime.friday => 'Fri',
+    DateTime.saturday => 'Sat',
+    DateTime.sunday => 'Sun',
+    _ => 'Day',
+  };
+
+  String _scheduleSummary() {
+    if (!peptide.usesCustomWeekdays) {
+      return '${_formatAmount(peptide.dosePerInjection)} ${peptide.doseUnit} · '
+          '${_freqLabel(peptide.frequency)}';
+    }
+    final days = [...peptide.weekdayDoses]
+      ..sort((a, b) => a.weekday.compareTo(b.weekday));
+    return days
+        .map(
+          (d) =>
+              '${_weekdayLabel(d.weekday)} ${_formatAmount(d.dosePerInjection)} ${d.doseUnit}',
+        )
+        .join(', ');
   }
 
   String _routeLabel(String key) {
@@ -413,20 +485,22 @@ class _PeptideRowCard extends StatelessWidget {
                   color: AppColors.primary.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.biotech_rounded,
-                    color: AppColors.primary),
+                child: const Icon(
+                  Icons.biotech_rounded,
+                  color: AppColors.primary,
+                ),
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(peptide.peptideName,
-                        style: AppTypography.labelLarge),
+                    Text(peptide.peptideName, style: AppTypography.labelLarge),
                     Text(
-                      '${_formatAmount(peptide.dosePerInjection)} ${peptide.doseUnit} · ${_freqLabel(peptide.frequency)}',
-                      style: AppTypography.bodySmall
-                          .copyWith(fontFamily: 'JetBrainsMono'),
+                      _scheduleSummary(),
+                      style: AppTypography.bodySmall.copyWith(
+                        fontFamily: 'JetBrainsMono',
+                      ),
                     ),
                   ],
                 ),
@@ -441,8 +515,15 @@ class _PeptideRowCard extends StatelessWidget {
               _Tag(label: _routeLabel(peptide.route)),
               if (peptide.cycleWeeks > 0)
                 _Tag(label: '${peptide.cycleWeeks}wk cycle'),
-              for (final t in peptide.scheduledTimes)
-                _Tag(label: t),
+              if (peptide.usesCustomWeekdays)
+                for (final d in ([
+                  ...peptide.weekdayDoses,
+                ]..sort((a, b) => a.weekday.compareTo(b.weekday))))
+                  _Tag(
+                    label:
+                        '${_weekdayLabel(d.weekday)} ${_formatAmount(d.dosePerInjection)} ${d.doseUnit}',
+                  ),
+              for (final t in peptide.scheduledTimes) _Tag(label: t),
             ],
           ),
         ],
@@ -459,7 +540,9 @@ class _Tag extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.sm, vertical: 4),
+        horizontal: AppSpacing.sm,
+        vertical: 4,
+      ),
       decoration: BoxDecoration(
         color: AppColors.inputFill,
         borderRadius: BorderRadius.circular(4),
