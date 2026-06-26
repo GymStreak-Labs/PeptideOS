@@ -110,6 +110,29 @@ class ProtocolProvider extends ChangeNotifier {
     return p;
   }
 
+  Future<void> updateProtocol({
+    required Protocol protocol,
+    required String name,
+    required DateTime startDate,
+    required List<ProtocolPeptide> peptides,
+  }) async {
+    if (_uid.isEmpty) return;
+
+    protocol
+      ..name = name.isEmpty ? 'My Protocol' : name
+      ..startDate = startDate
+      ..peptides = peptides;
+
+    try {
+      await _protocolRepo.upsert(_uid, protocol);
+      await _deleteFuturePendingDoseLogs(protocol);
+      await _generateDoseLogs(protocol);
+    } catch (e) {
+      debugPrint('updateProtocol failed: $e');
+      rethrow;
+    }
+  }
+
   Future<void> pauseProtocol(Protocol p) async {
     p.status = ProtocolStatus.paused;
     await _persist(p);
@@ -164,6 +187,20 @@ class ProtocolProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Protocol persist failed: $e');
     }
+  }
+
+  Future<void> _deleteFuturePendingDoseLogs(Protocol p) async {
+    if (_uid.isEmpty) return;
+    final now = DateTime.now();
+    final logs = await _doseLogRepo.fetchByProtocol(_uid, p.uuid);
+    final toDelete = <String>[];
+    for (final d in logs) {
+      if (d.takenAt == null && !d.skipped && d.scheduledAt.isAfter(now)) {
+        toDelete.add(d.uuid);
+        await NotificationService.instance.cancelDoseReminder(d.uuid);
+      }
+    }
+    await _doseLogRepo.deleteMany(_uid, toDelete);
   }
 
   /// Generate DoseLog rows for the next [scheduleHorizonDays] days from now.

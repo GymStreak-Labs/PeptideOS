@@ -28,8 +28,11 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   void initState() {
     super.initState();
     _amountCtrl = TextEditingController(
-      text: widget.dose.amountTaken
-          .toStringAsFixed(widget.dose.amountTaken == widget.dose.amountTaken.roundToDouble() ? 0 : 2),
+      text: widget.dose.amountTaken.toStringAsFixed(
+        widget.dose.amountTaken == widget.dose.amountTaken.roundToDouble()
+            ? 0
+            : 2,
+      ),
     );
     _notesCtrl = TextEditingController(text: widget.dose.notes);
     final d = widget.dose.takenAt ?? widget.dose.scheduledAt;
@@ -57,12 +60,12 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
 
     try {
       await context.read<DoseLogProvider>().logDose(
-            widget.dose,
-            takenAt: takenAt,
-            amount: amount,
-            site: _site,
-            notes: _notesCtrl.text,
-          );
+        widget.dose,
+        takenAt: takenAt,
+        amount: amount,
+        site: _site,
+        notes: _notesCtrl.text,
+      );
       if (!mounted) return;
       HapticFeedback.mediumImpact();
       Navigator.of(context).pop();
@@ -73,7 +76,10 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
 
   Future<void> _skip() async {
     try {
-      await context.read<DoseLogProvider>().skipDose(widget.dose, notes: _notesCtrl.text);
+      await context.read<DoseLogProvider>().skipDose(
+        widget.dose,
+        notes: _notesCtrl.text,
+      );
       if (!mounted) return;
       Navigator.of(context).pop();
     } catch (_) {
@@ -128,8 +134,9 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                       height: AppSpacing.sheetHandleHeight,
                       decoration: BoxDecoration(
                         color: AppColors.border,
-                        borderRadius:
-                            BorderRadius.circular(AppSpacing.sheetHandleHeight),
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.sheetHandleHeight,
+                        ),
                       ),
                     ),
                   ),
@@ -150,18 +157,23 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                           child: TextField(
                             controller: _amountCtrl,
                             keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
+                              decimal: true,
+                            ),
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
-                                  RegExp(r'[\d.]')),
+                                RegExp(r'[\d.]'),
+                              ),
                             ],
-                            style: AppTypography.heroSmall.copyWith(fontSize: 18),
+                            style: AppTypography.heroSmall.copyWith(
+                              fontSize: 18,
+                            ),
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               isDense: true,
                               filled: false,
                               contentPadding: EdgeInsets.symmetric(
-                                  horizontal: AppSpacing.md),
+                                horizontal: AppSpacing.md,
+                              ),
                             ),
                           ),
                         ),
@@ -178,7 +190,8 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                                 initialTime: _time,
                                 builder: (ctx, child) => Theme(
                                   data: Theme.of(ctx).copyWith(
-                                    colorScheme: Theme.of(ctx).colorScheme.copyWith(
+                                    colorScheme: Theme.of(ctx).colorScheme
+                                        .copyWith(
                                           primary: AppColors.primary,
                                           surface: AppColors.surfaceContainer,
                                         ),
@@ -190,11 +203,14 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: AppSpacing.md, vertical: 14),
+                                horizontal: AppSpacing.md,
+                                vertical: 14,
+                              ),
                               child: Text(
                                 _formatTime(_time),
-                                style: AppTypography.tabular
-                                    .copyWith(fontSize: 18),
+                                style: AppTypography.tabular.copyWith(
+                                  fontSize: 18,
+                                ),
                               ),
                             ),
                           ),
@@ -216,8 +232,9 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                         _SiteChip(
                           label: s.label,
                           selected: _site == s.key,
-                          onTap: () => setState(() =>
-                              _site = _site == s.key ? '' : s.key),
+                          onTap: () => setState(
+                            () => _site = _site == s.key ? '' : s.key,
+                          ),
                         ),
                     ],
                   ),
@@ -233,23 +250,22 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                       style: AppTypography.bodyMedium,
                       decoration: InputDecoration(
                         hintText: 'Optional...',
-                        hintStyle: AppTypography.bodyMedium
-                            .copyWith(color: AppColors.textDisabled),
+                        hintStyle: AppTypography.bodyMedium.copyWith(
+                          color: AppColors.textDisabled,
+                        ),
                         border: InputBorder.none,
                         isDense: true,
                         filled: false,
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.md,
+                        ),
                       ),
                     ),
                   ),
 
                   const SizedBox(height: AppSpacing.xl),
                   if (alreadyLogged) ...[
-                    PrimaryButton(
-                      label: 'MARK AS PENDING',
-                      onPressed: _undo,
-                    ),
+                    PrimaryButton(label: 'MARK AS PENDING', onPressed: _undo),
                     const SizedBox(height: AppSpacing.cardGap),
                   ],
                   PrimaryButton(
@@ -281,12 +297,431 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   }
 }
 
+class LogPastDoseSheet extends StatefulWidget {
+  const LogPastDoseSheet({super.key, required this.protocols});
+
+  final List<Protocol> protocols;
+
+  @override
+  State<LogPastDoseSheet> createState() => _LogPastDoseSheetState();
+}
+
+class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
+  late final TextEditingController _amountCtrl;
+  late final TextEditingController _notesCtrl;
+  late final List<_PastDoseTarget> _targets;
+  late DateTime _date;
+  late TimeOfDay _time;
+  int _selectedIndex = 0;
+  String _site = '';
+  bool _saving = false;
+
+  _PastDoseTarget get _target => _targets[_selectedIndex];
+
+  @override
+  void initState() {
+    super.initState();
+    _targets = [
+      for (final protocol in widget.protocols)
+        for (final peptide in protocol.peptides)
+          _PastDoseTarget(protocol: protocol, peptide: peptide),
+    ];
+    final now = DateTime.now();
+    _date = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).subtract(const Duration(days: 1));
+    _amountCtrl = TextEditingController();
+    _notesCtrl = TextEditingController();
+    _time = TimeOfDay(hour: now.hour, minute: now.minute);
+    if (_targets.isNotEmpty) _applyTargetDefaults();
+  }
+
+  @override
+  void dispose() {
+    _amountCtrl.dispose();
+    _notesCtrl.dispose();
+    super.dispose();
+  }
+
+  void _applyTargetDefaults() {
+    final schedule = _target.peptide.scheduleForDate(
+      protocolStart: _target.protocol.startDate,
+      date: _date,
+    );
+    final amount =
+        schedule?.dosePerInjection ?? _target.peptide.dosePerInjection;
+    final time =
+        _firstScheduledTime(schedule?.scheduledTimes) ??
+        _firstScheduledTime(_target.peptide.scheduledTimes);
+    _amountCtrl.text = _formatAmount(amount);
+    if (time != null) _time = _parseTime(time);
+  }
+
+  String get _units {
+    final schedule = _target.peptide.scheduleForDate(
+      protocolStart: _target.protocol.startDate,
+      date: _date,
+    );
+    return schedule?.doseUnit ?? _target.peptide.doseUnit;
+  }
+
+  bool get _canSave =>
+      _targets.isNotEmpty &&
+      !_saving &&
+      (double.tryParse(_amountCtrl.text) ?? 0) > 0;
+
+  Future<void> _pickDate() async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _date,
+      firstDate: today.subtract(const Duration(days: 30)),
+      lastDate: today,
+    );
+    if (picked == null) return;
+    setState(() {
+      _date = picked;
+      _applyTargetDefaults();
+    });
+  }
+
+  Future<void> _pickTime() async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: _time,
+      builder: (ctx, child) => Theme(
+        data: Theme.of(ctx).copyWith(
+          colorScheme: Theme.of(ctx).colorScheme.copyWith(
+            primary: AppColors.primary,
+            surface: AppColors.surfaceContainer,
+          ),
+        ),
+        child: child ?? const SizedBox.shrink(),
+      ),
+    );
+    if (picked != null) setState(() => _time = picked);
+  }
+
+  Future<void> _save() async {
+    if (!_canSave) return;
+    final loggedAt = DateTime(
+      _date.year,
+      _date.month,
+      _date.day,
+      _time.hour,
+      _time.minute,
+    );
+    if (loggedAt.isAfter(DateTime.now())) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Choose a past time to log.')),
+      );
+      return;
+    }
+
+    setState(() => _saving = true);
+    try {
+      await context.read<DoseLogProvider>().logAdHoc(
+        protocolUuid: _target.protocol.uuid,
+        protocolPeptideUuid: _target.peptide.uuid,
+        peptideName: _target.peptide.peptideName,
+        amount:
+            double.tryParse(_amountCtrl.text) ??
+            _target.peptide.dosePerInjection,
+        units: _units,
+        injectionSite: _site,
+        notes: _notesCtrl.text,
+        scheduledAt: loggedAt,
+        takenAt: loggedAt,
+      );
+      if (!mounted) return;
+      HapticFeedback.mediumImpact();
+      Navigator.of(context).pop();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not log previous dose. Try again.'),
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Container(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.88,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainer,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(AppSpacing.sheetRadius),
+          ),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: _targets.isEmpty ? _emptyState(context) : _form(context),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _emptyState(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _SheetHandle(),
+        const SizedBox(height: AppSpacing.lg),
+        Text('LOG.PREVIOUS', style: AppTypography.systemLabel),
+        const SizedBox(height: AppSpacing.sm),
+        Text('No peptides available', style: AppTypography.h2),
+        const SizedBox(height: AppSpacing.base),
+        Text(
+          'Add a peptide to an active protocol before logging history.',
+          style: AppTypography.bodyMedium,
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _form(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _SheetHandle(),
+          const SizedBox(height: AppSpacing.lg),
+          Text('LOG.PREVIOUS', style: AppTypography.systemLabel),
+          const SizedBox(height: AppSpacing.sm),
+          Text('Correct dose history', style: AppTypography.h2),
+          const SizedBox(height: AppSpacing.lg),
+          _LabeledField(
+            label: 'PEPTIDE',
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<int>(
+                  value: _selectedIndex,
+                  isExpanded: true,
+                  dropdownColor: AppColors.surfaceContainer,
+                  iconEnabledColor: AppColors.primary,
+                  style: AppTypography.bodyMedium,
+                  items: [
+                    for (var i = 0; i < _targets.length; i++)
+                      DropdownMenuItem<int>(
+                        value: i,
+                        child: Text(
+                          '${_targets[i].peptide.peptideName} · ${_targets[i].protocol.name}',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                  ],
+                  onChanged: (value) {
+                    if (value == null) return;
+                    setState(() {
+                      _selectedIndex = value;
+                      _applyTargetDefaults();
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          Row(
+            children: [
+              Expanded(
+                child: _LabeledField(
+                  label: 'DATE',
+                  child: InkWell(
+                    onTap: _pickDate,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.md,
+                        vertical: 14,
+                      ),
+                      child: Text(
+                        _formatDate(_date),
+                        style: AppTypography.tabular.copyWith(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.cardGap),
+              Expanded(
+                child: _LabeledField(
+                  label: 'TIME',
+                  child: InkWell(
+                    onTap: _pickTime,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.md,
+                        vertical: 14,
+                      ),
+                      child: Text(
+                        _formatTime(_time),
+                        style: AppTypography.tabular.copyWith(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          _LabeledField(
+            label: 'AMOUNT',
+            suffix: _units,
+            child: TextField(
+              controller: _amountCtrl,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
+              ],
+              style: AppTypography.heroSmall.copyWith(fontSize: 18),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                isDense: true,
+                filled: false,
+                contentPadding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          Text('INJECTION.SITE', style: AppTypography.systemLabel),
+          const SizedBox(height: AppSpacing.sm),
+          Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
+            children: [
+              for (final s in kInjectionSites)
+                _SiteChip(
+                  label: s.label,
+                  selected: _site == s.key,
+                  onTap: () =>
+                      setState(() => _site = _site == s.key ? '' : s.key),
+                ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          _LabeledField(
+            label: 'NOTES',
+            child: TextField(
+              controller: _notesCtrl,
+              maxLines: 2,
+              style: AppTypography.bodyMedium,
+              decoration: InputDecoration(
+                hintText: 'Optional...',
+                hintStyle: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.textDisabled,
+                ),
+                border: InputBorder.none,
+                isDense: true,
+                filled: false,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.base),
+          Text(
+            'Historical logs are personal tracking records only. They do not change medical guidance or dosing recommendations.',
+            style: AppTypography.disclaimer,
+          ),
+          const SizedBox(height: AppSpacing.xl),
+          PrimaryButton(
+            label: 'LOG PREVIOUS DOSE',
+            icon: Icons.history_rounded,
+            isLoading: _saving,
+            onPressed: _canSave ? _save : null,
+          ),
+        ],
+      ),
+    );
+  }
+
+  String? _firstScheduledTime(List<String>? times) {
+    if (times == null || times.isEmpty) return null;
+    return times.first;
+  }
+
+  TimeOfDay _parseTime(String value) {
+    final parts = value.split(':');
+    return TimeOfDay(
+      hour: int.tryParse(parts.isNotEmpty ? parts[0] : '') ?? 8,
+      minute: int.tryParse(parts.length > 1 ? parts[1] : '') ?? 0,
+    );
+  }
+
+  String _formatAmount(double d) =>
+      d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(2);
+
+  String _formatDate(DateTime d) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${months[d.month - 1]} ${d.day}';
+  }
+
+  String _formatTime(TimeOfDay t) =>
+      '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
+}
+
+class _PastDoseTarget {
+  const _PastDoseTarget({required this.protocol, required this.peptide});
+
+  final Protocol protocol;
+  final ProtocolPeptide peptide;
+}
+
+class _SheetHandle extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: AppSpacing.sheetHandleWidth,
+        height: AppSpacing.sheetHandleHeight,
+        decoration: BoxDecoration(
+          color: AppColors.border,
+          borderRadius: BorderRadius.circular(AppSpacing.sheetHandleHeight),
+        ),
+      ),
+    );
+  }
+}
+
 class _LabeledField extends StatelessWidget {
-  const _LabeledField({
-    required this.label,
-    required this.child,
-    this.suffix,
-  });
+  const _LabeledField({required this.label, required this.child, this.suffix});
 
   final String label;
   final Widget child;
@@ -317,7 +752,10 @@ class _LabeledField extends StatelessWidget {
               if (suffix != null)
                 Padding(
                   padding: const EdgeInsets.only(right: AppSpacing.md),
-                  child: Text(suffix!, style: AppTypography.unit.copyWith(fontSize: 14)),
+                  child: Text(
+                    suffix!,
+                    style: AppTypography.unit.copyWith(fontSize: 14),
+                  ),
                 ),
             ],
           ),

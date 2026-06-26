@@ -142,5 +142,31 @@ void main() {
       expect(restored.weekdayDoses.single.doseUnit, 'mg');
       expect(restored.weekdayDoses.single.scheduledTimes, ['08:45']);
     });
+
+    test('cloned peptide maps can be edited without mutating the source', () {
+      final source = ProtocolPeptide(
+        uuid: 'pp-1',
+        peptideName: 'TB-500',
+        dosePerInjection: 2.5,
+        doseUnit: 'mg',
+        frequency: kCustomWeekdayFrequency,
+        weekdayDoses: [
+          ProtocolWeekdayDose(
+            weekday: DateTime.monday,
+            dosePerInjection: 2.5,
+            doseUnit: 'mg',
+          ),
+        ],
+      );
+
+      final clone = ProtocolPeptide.fromMap(source.toMap())
+        ..dosePerInjection = 5
+        ..weekdayDoses.first.dosePerInjection = 5;
+
+      expect(clone.uuid, source.uuid);
+      expect(source.dosePerInjection, 2.5);
+      expect(source.weekdayDoses.single.dosePerInjection, 2.5);
+      expect(clone.weekdayDoses.single.dosePerInjection, 5);
+    });
   });
 }
