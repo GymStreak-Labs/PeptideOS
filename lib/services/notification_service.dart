@@ -7,6 +7,9 @@ import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../models/dose_log.dart';
+import '../models/protocol.dart';
+
+enum ProtocolReminderKind { cycleEnds, washoutEnds }
 
 /// Schedules local notifications for upcoming peptide doses.
 ///
@@ -41,8 +44,7 @@ class NotificationService {
       debugPrint('NotificationService: timezone init failed: $e');
     }
 
-    const androidInit =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosInit = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
@@ -67,13 +69,15 @@ class NotificationService {
       if (Platform.isIOS) {
         final ok = await _plugin
             .resolvePlatformSpecificImplementation<
-                IOSFlutterLocalNotificationsPlugin>()
+              IOSFlutterLocalNotificationsPlugin
+            >()
             ?.requestPermissions(alert: true, badge: true, sound: true);
         return ok ?? false;
       } else if (Platform.isAndroid) {
         final ok = await _plugin
             .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()
+              AndroidFlutterLocalNotificationsPlugin
+            >()
             ?.requestNotificationsPermission();
         return ok ?? false;
       }
@@ -117,12 +121,87 @@ class NotificationService {
     }
   }
 
+  Future<void> scheduleProtocolReminder({
+    required String protocolUuid,
+    required String protocolPeptideUuid,
+    required String peptideName,
+    required ProtocolReminderKind kind,
+    required DateTime scheduledAt,
+  }) async {
+    if (!_initialized) await initialize();
+    if (!_initialized) return;
+    if (scheduledAt.isBefore(DateTime.now())) return;
+
+    final id = _protocolReminderId(
+      protocolUuid: protocolUuid,
+      protocolPeptideUuid: protocolPeptideUuid,
+      kind: kind,
+    );
+    final scheduled = tz.TZDateTime.from(scheduledAt, tz.local);
+    final (title, body) = switch (kind) {
+      ProtocolReminderKind.cycleEnds => (
+        'Protocol checkpoint',
+        '$peptideName cycle window ends today. Review your tracking plan.',
+      ),
+      ProtocolReminderKind.washoutEnds => (
+        'Rest period checkpoint',
+        '$peptideName rest window ends today. Review your tracking plan.',
+      ),
+    };
+
+    try {
+      await _plugin.zonedSchedule(
+        id,
+        title,
+        body,
+        scheduled,
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            _channelId,
+            _channelName,
+            channelDescription: _channelDescription,
+            importance: Importance.defaultImportance,
+            priority: Priority.defaultPriority,
+          ),
+          iOS: DarwinNotificationDetails(),
+        ),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.dateAndTime,
+      );
+    } catch (e) {
+      debugPrint('NotificationService: protocol reminder failed: $e');
+    }
+  }
+
   Future<void> cancelDoseReminder(String doseUuid) async {
     if (!_initialized) return;
     try {
       await _plugin.cancel(_notificationIdForUuid(doseUuid));
     } catch (e) {
       debugPrint('NotificationService: cancel failed: $e');
+    }
+  }
+
+  Future<void> cancelProtocolRemindersForProtocol(Protocol protocol) async {
+    if (!_initialized) return;
+    for (final peptide in protocol.peptides) {
+      for (final kind in ProtocolReminderKind.values) {
+        try {
+          await _plugin.cancel(
+            _protocolReminderId(
+              protocolUuid: protocol.uuid,
+              protocolPeptideUuid: peptide.uuid,
+              kind: kind,
+            ),
+          );
+        } catch (e) {
+          debugPrint(
+            'NotificationService: cancel protocol reminder failed: $e',
+          );
+        }
+      }
     }
   }
 
@@ -143,5 +222,15 @@ class NotificationService {
       hash = (hash * 31 + codeUnit) & 0x7FFFFFFF;
     }
     return hash;
+  }
+
+  int _protocolReminderId({
+    required String protocolUuid,
+    required String protocolPeptideUuid,
+    required ProtocolReminderKind kind,
+  }) {
+    return _notificationIdForUuid(
+      'protocol|$protocolUuid|$protocolPeptideUuid|${kind.name}',
+    );
   }
 }

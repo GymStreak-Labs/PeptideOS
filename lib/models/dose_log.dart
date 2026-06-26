@@ -9,6 +9,7 @@ class DoseLog {
     required this.scheduledAt,
     required this.amountTaken,
     required this.units,
+    this.syringeUnits = 0,
     this.takenAt,
     this.injectionSite = '',
     this.notes = '',
@@ -26,6 +27,7 @@ class DoseLog {
   DateTime? takenAt;
   double amountTaken;
   String units;
+  double syringeUnits;
   String injectionSite;
   String notes;
   bool skipped;
@@ -38,18 +40,19 @@ class DoseLog {
       isPending && scheduledAt.isBefore(now.subtract(const Duration(hours: 3)));
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-        'uuid': uuid,
-        'protocolUuid': protocolUuid,
-        'protocolPeptideUuid': protocolPeptideUuid,
-        'peptideName': peptideName,
-        'scheduledAt': scheduledAt.toIso8601String(),
-        'takenAt': takenAt?.toIso8601String(),
-        'amountTaken': amountTaken,
-        'units': units,
-        'injectionSite': injectionSite,
-        'notes': notes,
-        'skipped': skipped,
-      };
+    'uuid': uuid,
+    'protocolUuid': protocolUuid,
+    'protocolPeptideUuid': protocolPeptideUuid,
+    'peptideName': peptideName,
+    'scheduledAt': scheduledAt.toIso8601String(),
+    'takenAt': takenAt?.toIso8601String(),
+    'amountTaken': amountTaken,
+    'units': units,
+    'syringeUnits': syringeUnits,
+    'injectionSite': injectionSite,
+    'notes': notes,
+    'skipped': skipped,
+  };
 
   factory DoseLog.fromMap(String id, Map<String, dynamic> data) {
     return DoseLog(
@@ -61,6 +64,7 @@ class DoseLog {
       takenAt: _parseDate(data['takenAt']),
       amountTaken: (data['amountTaken'] as num?)?.toDouble() ?? 0,
       units: (data['units'] as String?) ?? 'mcg',
+      syringeUnits: (data['syringeUnits'] as num?)?.toDouble() ?? 0,
       injectionSite: (data['injectionSite'] as String?) ?? '',
       notes: (data['notes'] as String?) ?? '',
       skipped: (data['skipped'] as bool?) ?? false,

@@ -14,6 +14,7 @@ void main() {
         takenAt: loggedAt,
         amountTaken: 250,
         units: 'mcg',
+        syringeUnits: 12.5,
         injectionSite: 'left-abdomen',
         notes: 'Logged after midnight',
       );
@@ -25,6 +26,7 @@ void main() {
       expect(restored.takenAt, loggedAt);
       expect(restored.isTaken, isTrue);
       expect(restored.skipped, isFalse);
+      expect(restored.syringeUnits, 12.5);
       expect(restored.notes, 'Logged after midnight');
     });
   });

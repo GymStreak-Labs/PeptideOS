@@ -19,6 +19,7 @@ class Peptide {
     required this.description,
     required this.typicalDose,
     required this.defaultDoseMcg,
+    this.defaultDoseUnit = 'mcg',
     required this.defaultFrequency,
     required this.halfLife,
     required this.typicalCycleWeeks,
@@ -42,6 +43,7 @@ class Peptide {
   /// Default dose in mcg used as a sensible starting value when a user
   /// adds this peptide to a protocol.
   final double defaultDoseMcg;
+  final String defaultDoseUnit;
 
   /// Default frequency key: `daily`, `eod`, `twice_weekly`, `weekly`, `as_needed`.
   final String defaultFrequency;
@@ -72,6 +74,7 @@ class Peptide {
     'description': description,
     'typicalDose': typicalDose,
     'defaultDoseMcg': defaultDoseMcg,
+    'defaultDoseUnit': defaultDoseUnit,
     'defaultFrequency': defaultFrequency,
     'halfLife': halfLife,
     'typicalCycleWeeks': typicalCycleWeeks,
@@ -89,6 +92,7 @@ class Peptide {
       description: (data['description'] as String?) ?? '',
       typicalDose: (data['typicalDose'] as String?) ?? '',
       defaultDoseMcg: (data['defaultDoseMcg'] as num?)?.toDouble() ?? 0,
+      defaultDoseUnit: (data['defaultDoseUnit'] as String?) ?? 'mcg',
       defaultFrequency: (data['defaultFrequency'] as String?) ?? 'daily',
       halfLife: (data['halfLife'] as String?) ?? '',
       typicalCycleWeeks: (data['typicalCycleWeeks'] as num?)?.toInt() ?? 0,
