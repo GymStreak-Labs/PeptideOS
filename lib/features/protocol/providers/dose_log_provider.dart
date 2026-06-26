@@ -177,6 +177,7 @@ class DoseLogProvider extends ChangeNotifier {
     required String peptideName,
     required double amount,
     required String units,
+    double syringeUnits = 0,
     String injectionSite = '',
     String notes = '',
     DateTime? scheduledAt,
@@ -192,6 +193,7 @@ class DoseLogProvider extends ChangeNotifier {
       takenAt: happenedAt,
       amountTaken: amount,
       units: units,
+      syringeUnits: syringeUnits,
       injectionSite: injectionSite,
       notes: notes,
     );

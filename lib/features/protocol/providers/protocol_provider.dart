@@ -103,6 +103,7 @@ class ProtocolProvider extends ChangeNotifier {
     try {
       await _protocolRepo.upsert(_uid, p);
       await _generateDoseLogs(p);
+      await _rescheduleProtocolReminders(p);
     } catch (e) {
       debugPrint('createProtocol failed: $e');
       rethrow;
@@ -118,6 +119,10 @@ class ProtocolProvider extends ChangeNotifier {
   }) async {
     if (_uid.isEmpty) return;
 
+    await NotificationService.instance.cancelProtocolRemindersForProtocol(
+      protocol,
+    );
+
     protocol
       ..name = name.isEmpty ? 'My Protocol' : name
       ..startDate = startDate
@@ -127,6 +132,7 @@ class ProtocolProvider extends ChangeNotifier {
       await _protocolRepo.upsert(_uid, protocol);
       await _deleteFuturePendingDoseLogs(protocol);
       await _generateDoseLogs(protocol);
+      await _rescheduleProtocolReminders(protocol);
     } catch (e) {
       debugPrint('updateProtocol failed: $e');
       rethrow;
@@ -136,18 +142,21 @@ class ProtocolProvider extends ChangeNotifier {
   Future<void> pauseProtocol(Protocol p) async {
     p.status = ProtocolStatus.paused;
     await _persist(p);
+    await NotificationService.instance.cancelProtocolRemindersForProtocol(p);
   }
 
   Future<void> resumeProtocol(Protocol p) async {
     p.status = ProtocolStatus.active;
     await _persist(p);
     await _generateDoseLogs(p);
+    await _rescheduleProtocolReminders(p);
   }
 
   Future<void> endProtocol(Protocol p) async {
     p.endDate = DateTime.now();
     p.status = ProtocolStatus.ended;
     await _persist(p);
+    await NotificationService.instance.cancelProtocolRemindersForProtocol(p);
 
     if (_uid.isEmpty) return;
     try {
@@ -173,6 +182,7 @@ class ProtocolProvider extends ChangeNotifier {
       for (final d in logs) {
         await NotificationService.instance.cancelDoseReminder(d.uuid);
       }
+      await NotificationService.instance.cancelProtocolRemindersForProtocol(p);
       await _doseLogRepo.deleteMany(_uid, logs.map((d) => d.uuid).toList());
       await _protocolRepo.delete(_uid, p.uuid);
     } catch (e) {
@@ -260,6 +270,7 @@ class ProtocolProvider extends ChangeNotifier {
               scheduledAt: scheduledAt,
               amountTaken: schedule.dosePerInjection,
               units: schedule.doseUnit,
+              syringeUnits: schedule.syringeUnits,
               injectionSite: site,
             ),
           );
@@ -282,6 +293,38 @@ class ProtocolProvider extends ChangeNotifier {
   Future<void> regenerateSchedules() async {
     for (final p in active) {
       await _generateDoseLogs(p);
+      await _rescheduleProtocolReminders(p);
+    }
+  }
+
+  Future<void> _rescheduleProtocolReminders(Protocol p) async {
+    if (p.status != ProtocolStatus.active) return;
+    await NotificationService.instance.cancelProtocolRemindersForProtocol(p);
+    for (final peptide in p.peptides) {
+      final cycleEnd = peptide.cycleEndDate(p.startDate);
+      if (cycleEnd == null) continue;
+      await NotificationService.instance.scheduleProtocolReminder(
+        protocolUuid: p.uuid,
+        protocolPeptideUuid: peptide.uuid,
+        peptideName: peptide.peptideName,
+        kind: ProtocolReminderKind.cycleEnds,
+        scheduledAt: DateTime(cycleEnd.year, cycleEnd.month, cycleEnd.day, 9),
+      );
+
+      final washoutEnd = peptide.washoutEndDate(p.startDate);
+      if (washoutEnd == null || washoutEnd == cycleEnd) continue;
+      await NotificationService.instance.scheduleProtocolReminder(
+        protocolUuid: p.uuid,
+        protocolPeptideUuid: peptide.uuid,
+        peptideName: peptide.peptideName,
+        kind: ProtocolReminderKind.washoutEnds,
+        scheduledAt: DateTime(
+          washoutEnd.year,
+          washoutEnd.month,
+          washoutEnd.day,
+          9,
+        ),
+      );
     }
   }
 
@@ -294,6 +337,8 @@ class ProtocolProvider extends ChangeNotifier {
     String frequency = 'daily',
     String route = 'subcutaneous',
     int cycleWeeks = 0,
+    int washoutWeeks = 0,
+    double syringeUnits = 0,
     List<String>? times,
     List<String>? sites,
     List<ProtocolWeekdayDose>? weekdayDoses,
@@ -307,6 +352,8 @@ class ProtocolProvider extends ChangeNotifier {
       frequency: frequency,
       route: route,
       cycleWeeks: cycleWeeks,
+      washoutWeeks: washoutWeeks,
+      syringeUnits: syringeUnits,
       scheduledTimes: times ?? const ['08:00'],
       injectionSites: sites ?? const [],
       weekdayDoses: weekdayDoses ?? const [],

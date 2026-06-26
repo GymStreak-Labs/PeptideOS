@@ -480,7 +480,8 @@ class _NextDoseCard extends StatelessWidget {
             dose.peptideName +
                 (dose.injectionSite.isEmpty
                     ? ''
-                    : ' · ${_siteLabel(dose.injectionSite)}'),
+                    : ' · ${_siteLabel(dose.injectionSite)}') +
+                _syringeLabel(dose.syringeUnits),
             style: AppTypography.bodySmall,
           ),
           const SizedBox(height: AppSpacing.base),
@@ -520,6 +521,14 @@ class _NextDoseCard extends StatelessWidget {
         .map((s) => s.isEmpty ? s : '${s[0].toUpperCase()}${s.substring(1)}')
         .join(' ');
   }
+
+  String _syringeLabel(double value) {
+    if (value <= 0) return '';
+    return ' · ${_formatAmount(value)} syringe units';
+  }
+
+  String _formatAmount(double d) =>
+      d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(1);
 }
 
 // ── Dose card for today's list ──────────────────────────────────────────────
@@ -592,6 +601,7 @@ class _DoseCard extends StatelessWidget {
                 Text(dose.peptideName, style: AppTypography.labelLarge),
                 Text(
                   '${_formatAmount(dose.amountTaken)} ${dose.units}'
+                  '${_syringeLabel(dose.syringeUnits)}'
                   '${dose.injectionSite.isEmpty ? '' : ' · ${_siteLabel(dose.injectionSite)}'}',
                   style: AppTypography.bodySmall.copyWith(
                     fontFamily: 'JetBrainsMono',
@@ -641,6 +651,11 @@ class _DoseCard extends StatelessWidget {
         .split('-')
         .map((s) => s.isEmpty ? s : '${s[0].toUpperCase()}${s.substring(1)}')
         .join(' ');
+  }
+
+  String _syringeLabel(double value) {
+    if (value <= 0) return '';
+    return ' · ${_formatAmount(value)} syringe units';
   }
 }
 

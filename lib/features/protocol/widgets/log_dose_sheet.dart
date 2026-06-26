@@ -220,6 +220,16 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                   ),
 
                   const SizedBox(height: AppSpacing.lg),
+                  if (widget.dose.syringeUnits > 0) ...[
+                    Text(
+                      '${_formatAmount(widget.dose.syringeUnits)} syringe units recorded for this dose.',
+                      style: AppTypography.bodySmall.copyWith(
+                        fontFamily: 'JetBrainsMono',
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                  ],
 
                   // Injection site rotator
                   Text('INJECTION.SITE', style: AppTypography.systemLabel),
@@ -295,6 +305,9 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   String _formatTime(TimeOfDay t) {
     return '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
   }
+
+  String _formatAmount(double d) =>
+      d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(2);
 }
 
 class LogPastDoseSheet extends StatefulWidget {
@@ -367,6 +380,14 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
     return schedule?.doseUnit ?? _target.peptide.doseUnit;
   }
 
+  double get _syringeUnits {
+    final schedule = _target.peptide.scheduleForDate(
+      protocolStart: _target.protocol.startDate,
+      date: _date,
+    );
+    return schedule?.syringeUnits ?? _target.peptide.syringeUnits;
+  }
+
   bool get _canSave =>
       _targets.isNotEmpty &&
       !_saving &&
@@ -431,6 +452,7 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
             double.tryParse(_amountCtrl.text) ??
             _target.peptide.dosePerInjection,
         units: _units,
+        syringeUnits: _syringeUnits,
         injectionSite: _site,
         notes: _notesCtrl.text,
         scheduledAt: loggedAt,
@@ -605,6 +627,16 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
               ),
             ),
           ),
+          if (_syringeUnits > 0) ...[
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              '${_formatAmount(_syringeUnits)} syringe units recorded for this entry.',
+              style: AppTypography.bodySmall.copyWith(
+                fontFamily: 'JetBrainsMono',
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ],
           const SizedBox(height: AppSpacing.lg),
           Text('INJECTION.SITE', style: AppTypography.systemLabel),
           const SizedBox(height: AppSpacing.sm),

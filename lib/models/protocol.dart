@@ -89,6 +89,8 @@ class ProtocolPeptide {
     this.frequency = 'daily',
     this.route = 'subcutaneous',
     this.cycleWeeks = 0,
+    this.washoutWeeks = 0,
+    this.syringeUnits = 0,
     List<String>? injectionSites,
     List<String>? scheduledTimes,
     List<ProtocolWeekdayDose>? weekdayDoses,
@@ -104,6 +106,8 @@ class ProtocolPeptide {
   String frequency;
   String route;
   int cycleWeeks;
+  int washoutWeeks;
+  double syringeUnits;
   List<String> injectionSites;
   List<String> scheduledTimes;
   List<ProtocolWeekdayDose> weekdayDoses;
@@ -122,6 +126,9 @@ class ProtocolPeptide {
     );
     final targetDay = DateTime(date.year, date.month, date.day);
     if (targetDay.isBefore(startDay)) return null;
+    if (!isInActiveCycle(protocolStart: startDay, date: targetDay)) {
+      return null;
+    }
 
     ProtocolWeekdayDose? weekdayDose;
     if (usesCustomWeekdays) {
@@ -143,8 +150,45 @@ class ProtocolPeptide {
     return ProtocolDoseSchedule(
       dosePerInjection: weekdayDose?.dosePerInjection ?? dosePerInjection,
       doseUnit: weekdayDose?.doseUnit ?? doseUnit,
+      syringeUnits: weekdayDose?.syringeUnits ?? syringeUnits,
       scheduledTimes: times.isEmpty ? const <String>['08:00'] : times,
     );
+  }
+
+  DateTime? cycleEndDate(DateTime protocolStart) {
+    if (cycleWeeks <= 0) return null;
+    final startDay = DateTime(
+      protocolStart.year,
+      protocolStart.month,
+      protocolStart.day,
+    );
+    return startDay.add(Duration(days: cycleWeeks * 7));
+  }
+
+  DateTime? washoutEndDate(DateTime protocolStart) {
+    final cycleEnd = cycleEndDate(protocolStart);
+    if (cycleEnd == null || washoutWeeks <= 0) return cycleEnd;
+    return cycleEnd.add(Duration(days: washoutWeeks * 7));
+  }
+
+  bool isInActiveCycle({
+    required DateTime protocolStart,
+    required DateTime date,
+  }) {
+    final cycleEnd = cycleEndDate(protocolStart);
+    if (cycleEnd == null) return true;
+    final targetDay = DateTime(date.year, date.month, date.day);
+    return targetDay.isBefore(cycleEnd);
+  }
+
+  bool isInWashout({required DateTime protocolStart, required DateTime date}) {
+    final cycleEnd = cycleEndDate(protocolStart);
+    final washoutEnd = washoutEndDate(protocolStart);
+    if (cycleEnd == null || washoutEnd == null || washoutWeeks <= 0) {
+      return false;
+    }
+    final targetDay = DateTime(date.year, date.month, date.day);
+    return !targetDay.isBefore(cycleEnd) && targetDay.isBefore(washoutEnd);
   }
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -156,6 +200,8 @@ class ProtocolPeptide {
     'frequency': frequency,
     'route': route,
     'cycleWeeks': cycleWeeks,
+    'washoutWeeks': washoutWeeks,
+    'syringeUnits': syringeUnits,
     'injectionSites': injectionSites,
     'scheduledTimes': scheduledTimes,
     'weekdayDoses': weekdayDoses.map((d) => d.toMap()).toList(),
@@ -171,6 +217,8 @@ class ProtocolPeptide {
       frequency: (data['frequency'] as String?) ?? 'daily',
       route: (data['route'] as String?) ?? 'subcutaneous',
       cycleWeeks: (data['cycleWeeks'] as num?)?.toInt() ?? 0,
+      washoutWeeks: (data['washoutWeeks'] as num?)?.toInt() ?? 0,
+      syringeUnits: (data['syringeUnits'] as num?)?.toDouble() ?? 0,
       injectionSites: (data['injectionSites'] as List<dynamic>? ?? const [])
           .map((e) => e.toString())
           .toList(),
@@ -195,12 +243,14 @@ class ProtocolWeekdayDose {
     required this.weekday,
     required this.dosePerInjection,
     this.doseUnit = 'mcg',
+    this.syringeUnits = 0,
     List<String>? scheduledTimes,
   }) : scheduledTimes = scheduledTimes ?? <String>['08:00'];
 
   int weekday;
   double dosePerInjection;
   String doseUnit;
+  double syringeUnits;
   List<String> scheduledTimes;
 
   bool get isValid =>
@@ -212,6 +262,7 @@ class ProtocolWeekdayDose {
     'weekday': weekday,
     'dosePerInjection': dosePerInjection,
     'doseUnit': doseUnit,
+    'syringeUnits': syringeUnits,
     'scheduledTimes': scheduledTimes,
   };
 
@@ -220,6 +271,7 @@ class ProtocolWeekdayDose {
       weekday: (data['weekday'] as num?)?.toInt() ?? 0,
       dosePerInjection: (data['dosePerInjection'] as num?)?.toDouble() ?? 0,
       doseUnit: (data['doseUnit'] as String?) ?? 'mcg',
+      syringeUnits: (data['syringeUnits'] as num?)?.toDouble() ?? 0,
       scheduledTimes:
           (data['scheduledTimes'] as List<dynamic>? ?? const ['08:00'])
               .map((e) => e.toString())
@@ -232,11 +284,13 @@ class ProtocolDoseSchedule {
   const ProtocolDoseSchedule({
     required this.dosePerInjection,
     required this.doseUnit,
+    required this.syringeUnits,
     required this.scheduledTimes,
   });
 
   final double dosePerInjection;
   final String doseUnit;
+  final double syringeUnits;
   final List<String> scheduledTimes;
 }
 
