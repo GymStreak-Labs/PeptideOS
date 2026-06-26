@@ -14,7 +14,9 @@ import '../providers/protocol_provider.dart';
 
 /// 3-step protocol builder: name → add peptides → start date + review.
 class CreateProtocolScreen extends StatefulWidget {
-  const CreateProtocolScreen({super.key});
+  const CreateProtocolScreen({super.key, this.initialProtocol});
+
+  final Protocol? initialProtocol;
 
   @override
   State<CreateProtocolScreen> createState() => _CreateProtocolScreenState();
@@ -24,10 +26,25 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
   final _pageController = PageController();
   int _step = 0;
 
-  final _nameController = TextEditingController(text: 'My Protocol');
+  late final TextEditingController _nameController;
   final List<ProtocolPeptide> _peptides = [];
   DateTime _startDate = DateTime.now();
   bool _saving = false;
+
+  bool get _isEditing => widget.initialProtocol != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final initial = widget.initialProtocol;
+    _nameController = TextEditingController(
+      text: initial?.name ?? 'My Protocol',
+    );
+    if (initial != null) {
+      _startDate = initial.startDate;
+      _peptides.addAll(initial.peptides.map(_cloneProtocolPeptide));
+    }
+  }
 
   @override
   void dispose() {
@@ -87,11 +104,21 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
     }
     setState(() => _saving = true);
     try {
-      await context.read<ProtocolProvider>().createProtocol(
-        name: _nameController.text.trim(),
-        startDate: _startDate,
-        peptides: _peptides,
-      );
+      final provider = context.read<ProtocolProvider>();
+      if (_isEditing) {
+        await provider.updateProtocol(
+          protocol: widget.initialProtocol!,
+          name: _nameController.text.trim(),
+          startDate: _startDate,
+          peptides: _peptides,
+        );
+      } else {
+        await provider.createProtocol(
+          name: _nameController.text.trim(),
+          startDate: _startDate,
+          peptides: _peptides,
+        );
+      }
       if (!mounted) return;
       await context.read<DoseLogProvider>().refresh();
       if (!mounted) return;
@@ -147,11 +174,13 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'SYS.PROTOCOL // NEW',
+                          _isEditing
+                              ? 'SYS.PROTOCOL // EDIT'
+                              : 'SYS.PROTOCOL // NEW',
                           style: AppTypography.systemLabel,
                         ),
                         Text(
-                          'Build Protocol · Step ${_step + 1} / 3',
+                          '${_isEditing ? 'Edit' : 'Build'} Protocol · Step ${_step + 1} / 3',
                           style: AppTypography.h3,
                         ),
                       ],
@@ -233,7 +262,9 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
             Padding(
               padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
               child: PrimaryButton(
-                label: _step == 2 ? 'CREATE PROTOCOL' : 'NEXT',
+                label: _step == 2
+                    ? (_isEditing ? 'SAVE CHANGES' : 'CREATE PROTOCOL')
+                    : 'NEXT',
                 icon: _step == 2 ? Icons.check_rounded : null,
                 isLoading: _saving,
                 onPressed: _canAdvance ? _next : null,
@@ -584,6 +615,10 @@ String _scheduleSummary(ProtocolPeptide p) {
       )
       .join(', ');
   return summary.isEmpty ? 'Custom days' : summary;
+}
+
+ProtocolPeptide _cloneProtocolPeptide(ProtocolPeptide p) {
+  return ProtocolPeptide.fromMap(p.toMap());
 }
 
 /// Opens the peptide picker and returns a configured ProtocolPeptide.

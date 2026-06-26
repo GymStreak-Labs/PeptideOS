@@ -8,6 +8,7 @@ import '../../../models/dose_log.dart';
 import '../../../models/protocol.dart';
 import '../providers/dose_log_provider.dart';
 import '../providers/protocol_provider.dart';
+import 'create_protocol_screen.dart';
 
 /// Shows all peptides in an active (or paused) protocol with adherence stats,
 /// pause / resume / end controls, and per-peptide edit/remove.
@@ -183,6 +184,12 @@ class _ActiveProtocolDetailScreenState
                     // Actions
                     if (_protocol.status == ProtocolStatus.active) ...[
                       PrimaryButton(
+                        label: 'EDIT PROTOCOL',
+                        icon: Icons.edit_rounded,
+                        onPressed: _editProtocol,
+                      ),
+                      const SizedBox(height: AppSpacing.cardGap),
+                      PrimaryButton(
                         label: 'PAUSE PROTOCOL',
                         icon: Icons.pause_rounded,
                         onPressed: () async {
@@ -200,6 +207,12 @@ class _ActiveProtocolDetailScreenState
                         onPressed: () => _confirmEnd(provider),
                       ),
                     ] else if (_protocol.status == ProtocolStatus.paused) ...[
+                      PrimaryButton(
+                        label: 'EDIT PROTOCOL',
+                        icon: Icons.edit_rounded,
+                        onPressed: _editProtocol,
+                      ),
+                      const SizedBox(height: AppSpacing.cardGap),
                       PrimaryButton(
                         label: 'RESUME PROTOCOL',
                         icon: Icons.play_arrow_rounded,
@@ -240,6 +253,19 @@ class _ActiveProtocolDetailScreenState
         ),
       ),
     );
+  }
+
+  Future<void> _editProtocol() async {
+    HapticFeedback.lightImpact();
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => CreateProtocolScreen(initialProtocol: _protocol),
+      ),
+    );
+    if (!mounted) return;
+    await context.read<ProtocolProvider>().refresh();
+    if (!mounted) return;
+    setState(() {});
   }
 
   Future<void> _confirmEnd(ProtocolProvider provider) async {

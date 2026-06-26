@@ -50,30 +50,34 @@ class DoseLogProvider extends ChangeNotifier {
     final endToday = startToday.add(const Duration(days: 1));
     final start30 = startToday.subtract(const Duration(days: 30));
 
-    _todaySub = _repo.watchRange(_uid, startToday, endToday).listen(
-      (items) {
-        _today = items;
-        _loading = false;
-        notifyListeners();
-      },
-      onError: (Object e, StackTrace st) {
-        debugPrint('DoseLogProvider today stream failed: $e');
-        _today = <DoseLog>[];
-        _loading = false;
-        notifyListeners();
-      },
-    );
-    _rangeSub = _repo.watchRange(_uid, start30, endToday).listen(
-      (items) {
-        _recent30 = items;
-        notifyListeners();
-      },
-      onError: (Object e, StackTrace st) {
-        debugPrint('DoseLogProvider 30d stream failed: $e');
-        _recent30 = <DoseLog>[];
-        notifyListeners();
-      },
-    );
+    _todaySub = _repo
+        .watchRange(_uid, startToday, endToday)
+        .listen(
+          (items) {
+            _today = items;
+            _loading = false;
+            notifyListeners();
+          },
+          onError: (Object e, StackTrace st) {
+            debugPrint('DoseLogProvider today stream failed: $e');
+            _today = <DoseLog>[];
+            _loading = false;
+            notifyListeners();
+          },
+        );
+    _rangeSub = _repo
+        .watchRange(_uid, start30, endToday)
+        .listen(
+          (items) {
+            _recent30 = items;
+            notifyListeners();
+          },
+          onError: (Object e, StackTrace st) {
+            debugPrint('DoseLogProvider 30d stream failed: $e');
+            _recent30 = <DoseLog>[];
+            notifyListeners();
+          },
+        );
   }
 
   Future<void> refresh() async {
@@ -91,8 +95,9 @@ class DoseLogProvider extends ChangeNotifier {
 
   double get adherence30dPct {
     final now = DateTime.now();
-    final scheduled =
-        _recent30.where((d) => d.scheduledAt.isBefore(now) && !d.skipped).length;
+    final scheduled = _recent30
+        .where((d) => d.scheduledAt.isBefore(now) && !d.skipped)
+        .length;
     if (scheduled == 0) return 0;
     final taken = _recent30.where((d) => d.isTaken).length;
     return (taken / scheduled) * 100;
@@ -102,8 +107,11 @@ class DoseLogProvider extends ChangeNotifier {
     final now = DateTime.now();
     final byDay = <DateTime, List<DoseLog>>{};
     for (final d in _recent30) {
-      final day =
-          DateTime(d.scheduledAt.year, d.scheduledAt.month, d.scheduledAt.day);
+      final day = DateTime(
+        d.scheduledAt.year,
+        d.scheduledAt.month,
+        d.scheduledAt.day,
+      );
       byDay.putIfAbsent(day, () => []).add(d);
     }
 
@@ -112,8 +120,9 @@ class DoseLogProvider extends ChangeNotifier {
     while (true) {
       final doses = byDay[cursor];
       if (doses == null || doses.isEmpty) break;
-      final everyTaken =
-          doses.every((d) => d.isTaken || (!d.skipped && d.isPending));
+      final everyTaken = doses.every(
+        (d) => d.isTaken || (!d.skipped && d.isPending),
+      );
       final taken = doses.every((d) => d.isTaken);
       if (!everyTaken || !taken) break;
       streak++;
@@ -170,15 +179,17 @@ class DoseLogProvider extends ChangeNotifier {
     required String units,
     String injectionSite = '',
     String notes = '',
+    DateTime? scheduledAt,
+    DateTime? takenAt,
   }) async {
-    final now = DateTime.now();
+    final happenedAt = takenAt ?? scheduledAt ?? DateTime.now();
     final dose = DoseLog(
       uuid: _uuid.v4(),
       protocolUuid: protocolUuid,
       protocolPeptideUuid: protocolPeptideUuid,
       peptideName: peptideName,
-      scheduledAt: now,
-      takenAt: now,
+      scheduledAt: scheduledAt ?? happenedAt,
+      takenAt: happenedAt,
       amountTaken: amount,
       units: units,
       injectionSite: injectionSite,
