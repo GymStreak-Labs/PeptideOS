@@ -71,3 +71,11 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/animations/
+
+  fonts:
+    - family: SpaceGrotesk
+      fonts:
+        - asset: assets/fonts/SpaceGrotesk.ttf
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono.ttf
