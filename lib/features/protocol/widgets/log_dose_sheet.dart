@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
+import '../../../core/utils/decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/dose_log.dart';
 import '../../../models/protocol.dart';
@@ -48,7 +49,8 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   }
 
   Future<void> _log() async {
-    final amount = double.tryParse(_amountCtrl.text) ?? widget.dose.amountTaken;
+    final amount =
+        parseDecimalInput(_amountCtrl.text) ?? widget.dose.amountTaken;
     final scheduled = widget.dose.scheduledAt;
     final takenAt = DateTime(
       scheduled.year,
@@ -159,11 +161,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
                             ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'[\d.]'),
-                              ),
-                            ],
+                            inputFormatters: const [decimalInputFormatter],
                             style: AppTypography.heroSmall.copyWith(
                               fontSize: 18,
                             ),
@@ -398,7 +396,7 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
   bool get _canSave =>
       _targets.isNotEmpty &&
       !_saving &&
-      (double.tryParse(_amountCtrl.text) ?? 0) > 0;
+      (parseDecimalInput(_amountCtrl.text) ?? 0) > 0;
 
   Future<void> _pickDate() async {
     final now = DateTime.now();
@@ -456,7 +454,7 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
         protocolPeptideUuid: _target.peptide.uuid,
         peptideName: _target.peptide.peptideName,
         amount:
-            double.tryParse(_amountCtrl.text) ??
+            parseDecimalInput(_amountCtrl.text) ??
             _target.peptide.dosePerInjection,
         units: _units,
         syringeUnits: _syringeUnits,
@@ -622,9 +620,7 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: true,
               ),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
-              ],
+              inputFormatters: const [decimalInputFormatter],
               style: AppTypography.heroSmall.copyWith(fontSize: 18),
               textAlignVertical: TextAlignVertical.center,
               decoration: const InputDecoration(
