@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
+import '../../../core/utils/decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/peptide.dart';
 import '../../../models/protocol.dart';
@@ -951,10 +952,10 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
   }
 
   double get _parsedBaseDose =>
-      double.tryParse(_doseCtrl.text) ?? widget.initial.dosePerInjection;
+      parseDecimalInput(_doseCtrl.text) ?? widget.initial.dosePerInjection;
 
   double get _parsedSyringeUnits =>
-      double.tryParse(_syringeUnitsCtrl.text) ?? 0;
+      parseDecimalInput(_syringeUnitsCtrl.text) ?? 0;
 
   int get _parsedCycleWeeks => int.tryParse(_cycleWeeksCtrl.text) ?? 0;
 
@@ -1043,7 +1044,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
         ProtocolWeekdayDose(
           weekday: weekday,
           dosePerInjection:
-              double.tryParse(_weekdayDoseCtrls[weekday]?.text ?? '') ??
+              parseDecimalInput(_weekdayDoseCtrls[weekday]?.text ?? '') ??
               fallbackDose,
           doseUnit: _unit,
           syringeUnits: _parsedSyringeUnits > 0 ? _parsedSyringeUnits : 0,
@@ -1167,11 +1168,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
                             ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'[\d.]'),
-                              ),
-                            ],
+                            inputFormatters: const [decimalInputFormatter],
                             style: AppTypography.heroSmall.copyWith(
                               fontSize: 18,
                             ),
@@ -1207,9 +1204,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                       keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
                       ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
-                      ],
+                      inputFormatters: const [decimalInputFormatter],
                       style: AppTypography.tabular.copyWith(fontSize: 16),
                       decoration: InputDecoration(
                         hintText: 'e.g. 12.5',
@@ -1298,10 +1293,8 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                                       const TextInputType.numberWithOptions(
                                         decimal: true,
                                       ),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                      RegExp(r'[\d.]'),
-                                    ),
+                                  inputFormatters: const [
+                                    decimalInputFormatter,
                                   ],
                                   style: AppTypography.tabular.copyWith(
                                     fontSize: 16,

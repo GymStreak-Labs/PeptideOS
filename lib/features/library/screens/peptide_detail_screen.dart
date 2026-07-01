@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
+import '../../../core/utils/decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/peptide.dart';
 import '../../protocol/screens/create_protocol_screen.dart';
@@ -349,9 +350,9 @@ class _InlineReconstitutionCalculatorState
     super.dispose();
   }
 
-  double get _mg => double.tryParse(_peptideMg.text) ?? 0;
-  double get _ml => double.tryParse(_waterMl.text) ?? 0;
-  double get _dose => double.tryParse(_doseMcg.text) ?? 0;
+  double get _mg => parseDecimalInput(_peptideMg.text) ?? 0;
+  double get _ml => parseDecimalInput(_waterMl.text) ?? 0;
+  double get _dose => parseDecimalInput(_doseMcg.text) ?? 0;
 
   double get _concentration =>
       _ml <= 0 ? 0 : (_mg * 1000) / _ml; // mcg per ml
@@ -478,9 +479,7 @@ class _NumField extends StatelessWidget {
             onChanged: (_) => onChanged(),
             keyboardType:
                 const TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
-            ],
+            inputFormatters: const [decimalInputFormatter],
             style: AppTypography.heroSmall.copyWith(fontSize: 16),
             decoration: const InputDecoration(
               border: InputBorder.none,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/utils/decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
 import '../widgets/syringe_visual.dart';
 
@@ -21,9 +21,9 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
   final _waterMlController = TextEditingController(text: '2');
   final _doseMcgController = TextEditingController(text: '250');
 
-  double get _peptideMg => double.tryParse(_peptideMgController.text) ?? 0;
-  double get _waterMl => double.tryParse(_waterMlController.text) ?? 0;
-  double get _doseMcg => double.tryParse(_doseMcgController.text) ?? 0;
+  double get _peptideMg => parseDecimalInput(_peptideMgController.text) ?? 0;
+  double get _waterMl => parseDecimalInput(_waterMlController.text) ?? 0;
+  double get _doseMcg => parseDecimalInput(_doseMcgController.text) ?? 0;
 
   // ── Calculations ─────────────────────────────────────────────────────
   /// Concentration in mcg per ml after reconstitution.
@@ -357,9 +357,7 @@ class _InputField extends StatelessWidget {
                   onChanged: onChanged,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
-                  ],
+                  inputFormatters: const [decimalInputFormatter],
                   style: AppTypography.heroSmall.copyWith(fontSize: 20),
                   decoration: const InputDecoration(
                     border: InputBorder.none,
