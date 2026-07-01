@@ -194,18 +194,23 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                                     style: AppTypography.systemLabel),
                                 const SizedBox(height: AppSpacing.sm),
                                 Row(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.baseline,
-                                  textBaseline: TextBaseline.alphabetic,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Text(
-                                      _syringeUnits.toStringAsFixed(1),
-                                      style: AppTypography.heroMedium.copyWith(
-                                        color: _isDoseDanger
-                                            ? AppColors.danger
-                                            : _isDoseWarning
-                                                ? AppColors.warning
-                                                : AppColors.primary,
+                                    Flexible(
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          _syringeUnits.toStringAsFixed(1),
+                                          style: AppTypography.heroMedium
+                                              .copyWith(
+                                            color: _isDoseDanger
+                                                ? AppColors.danger
+                                                : _isDoseWarning
+                                                    ? AppColors.warning
+                                                    : AppColors.primary,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(width: AppSpacing.xs),
@@ -391,7 +396,6 @@ class _DataRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
@@ -400,9 +404,19 @@ class _DataRow extends StatelessWidget {
             fontSize: 9,
           ),
         ),
-        Text(
-          value,
-          style: AppTypography.tabular.copyWith(fontSize: 13),
+        const SizedBox(width: AppSpacing.sm),
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerRight,
+              child: Text(
+                value,
+                style: AppTypography.tabular.copyWith(fontSize: 13),
+              ),
+            ),
+          ),
         ),
       ],
     );
