@@ -230,21 +230,29 @@ class PepModApp extends StatelessWidget {
           update: (_, __, previous) =>
               previous ?? PeptideProvider(PeptideLibraryRepository()),
         ),
-        ChangeNotifierProxyProvider<AuthProvider, ProtocolProvider>(
+        ChangeNotifierProxyProvider2<
+          AuthProvider,
+          SettingsProvider,
+          ProtocolProvider
+        >(
           create: (_) => ProtocolProvider(
             ProtocolRepository(),
             DoseLogRepository(),
             uid: '',
           ),
-          update: (_, auth, previous) {
+          update: (_, auth, settings, previous) {
             final prov =
                 previous ??
                 ProtocolProvider(
                   ProtocolRepository(),
                   DoseLogRepository(),
                   uid: auth.uid,
+                  notificationsEnabled: settings.settings.notificationsEnabled,
                 );
             prov.setUid(auth.uid);
+            prov.setNotificationsEnabled(
+              settings.settings.notificationsEnabled,
+            );
             return prov;
           },
         ),

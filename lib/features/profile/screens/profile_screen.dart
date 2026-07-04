@@ -11,6 +11,7 @@ import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/services/auth_service.dart';
 import '../../../models/user_settings.dart';
+import '../../../services/notification_service.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../protocol/providers/dose_log_provider.dart';
 import '../../protocol/providers/protocol_provider.dart';
@@ -110,7 +111,7 @@ class ProfileScreen extends StatelessWidget {
             activeThumbColor: AppColors.primary,
             onChanged: (v) async {
               HapticFeedback.selectionClick();
-              await settingsProvider.update((s) => s.notificationsEnabled = v);
+              await _setNotificationsEnabled(context, v);
             },
           ),
         ),
@@ -576,6 +577,37 @@ class ProfileScreen extends StatelessWidget {
     HapticFeedback.selectionClick();
     unawaited(AnalyticsService().logSupportOpened());
     await SupportService.instance.openSupport();
+  }
+
+  Future<void> _setNotificationsEnabled(
+    BuildContext context,
+    bool enabled,
+  ) async {
+    final settingsProvider = context.read<SettingsProvider>();
+    final protocols = context.read<ProtocolProvider>();
+    final messenger = ScaffoldMessenger.of(context);
+
+    if (!enabled) {
+      await settingsProvider.update((s) => s.notificationsEnabled = false);
+      await protocols.syncDoseReminders(enabled: false);
+      return;
+    }
+
+    final granted = await NotificationService.instance.requestPermission();
+    if (!context.mounted) return;
+
+    if (!granted) {
+      await settingsProvider.update((s) => s.notificationsEnabled = false);
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Notifications are disabled in system settings.'),
+        ),
+      );
+      return;
+    }
+
+    await settingsProvider.update((s) => s.notificationsEnabled = true);
+    await protocols.syncDoseReminders(enabled: true);
   }
 }
 

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
@@ -29,6 +30,7 @@ class NotificationService {
 
   bool _initialized = false;
   bool _permissionRequested = false;
+  bool? _permissionGranted;
   bool get isInitialized => _initialized;
 
   Future<void> initialize() async {
@@ -41,8 +43,7 @@ class NotificationService {
       debugPrint('NotificationService: timezone init failed: $e');
     }
 
-    const androidInit =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosInit = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
@@ -61,25 +62,33 @@ class NotificationService {
 
   /// Ask the OS for permission — lazily, only once per install.
   Future<bool> requestPermission() async {
-    if (_permissionRequested) return true;
+    if (!_initialized) await initialize();
+    if (!_initialized) return false;
+    if (_permissionRequested && _permissionGranted == true) return true;
     _permissionRequested = true;
     try {
+      bool? granted;
       if (Platform.isIOS) {
-        final ok = await _plugin
+        granted = await _plugin
             .resolvePlatformSpecificImplementation<
-                IOSFlutterLocalNotificationsPlugin>()
+              IOSFlutterLocalNotificationsPlugin
+            >()
             ?.requestPermissions(alert: true, badge: true, sound: true);
-        return ok ?? false;
       } else if (Platform.isAndroid) {
-        final ok = await _plugin
+        granted = await _plugin
             .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()
+              AndroidFlutterLocalNotificationsPlugin
+            >()
             ?.requestNotificationsPermission();
-        return ok ?? false;
+      } else {
+        granted = true;
       }
+      _permissionGranted = granted ?? false;
+      return _permissionGranted!;
     } catch (e) {
       debugPrint('NotificationService: requestPermission failed: $e');
     }
+    _permissionGranted = false;
     return false;
   }
 
@@ -87,6 +96,8 @@ class NotificationService {
     if (!_initialized) await initialize();
     if (!_initialized) return;
     if (log.scheduledAt.isBefore(DateTime.now())) return;
+    final hasPermission = await requestPermission();
+    if (!hasPermission) return;
 
     final id = _notificationIdForUuid(log.uuid);
     final scheduled = tz.TZDateTime.from(log.scheduledAt, tz.local);
@@ -107,17 +118,19 @@ class NotificationService {
           ),
           iOS: DarwinNotificationDetails(),
         ),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: DateTimeComponents.dateAndTime,
       );
+    } on PlatformException catch (e) {
+      debugPrint('NotificationService: schedule failed: ${e.code}');
     } catch (e) {
       debugPrint('NotificationService: schedule failed: $e');
     }
   }
 
   Future<void> cancelDoseReminder(String doseUuid) async {
+    if (!_initialized) await initialize();
     if (!_initialized) return;
     try {
       await _plugin.cancel(_notificationIdForUuid(doseUuid));
@@ -127,6 +140,7 @@ class NotificationService {
   }
 
   Future<void> cancelAll() async {
+    if (!_initialized) await initialize();
     if (!_initialized) return;
     try {
       await _plugin.cancelAll();
