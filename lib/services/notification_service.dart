@@ -197,6 +197,7 @@ class NotificationService {
   }
 
   Future<void> cancelProtocolRemindersForProtocol(Protocol protocol) async {
+    if (!_initialized) await initialize();
     if (!_initialized) return;
     for (final peptide in protocol.peptides) {
       for (final kind in ProtocolReminderKind.values) {

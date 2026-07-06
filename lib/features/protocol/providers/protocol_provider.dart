@@ -234,6 +234,14 @@ class ProtocolProvider extends ChangeNotifier {
           await NotificationService.instance.cancelDoseReminder(d.uuid);
         }
       }
+
+      if (!enabled) {
+        for (final p in active) {
+          await NotificationService.instance.cancelProtocolRemindersForProtocol(
+            p,
+          );
+        }
+      }
     } catch (e) {
       debugPrint('syncDoseReminders failed: $e');
     }
@@ -342,6 +350,8 @@ class ProtocolProvider extends ChangeNotifier {
   Future<void> _rescheduleProtocolReminders(Protocol p) async {
     if (p.status != ProtocolStatus.active) return;
     await NotificationService.instance.cancelProtocolRemindersForProtocol(p);
+    if (!_notificationsEnabled) return;
+
     for (final peptide in p.peptides) {
       final cycleEnd = peptide.cycleEndDate(p.startDate);
       if (cycleEnd == null) continue;
