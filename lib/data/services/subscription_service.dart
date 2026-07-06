@@ -25,6 +25,10 @@ class SubscriptionService {
   static const String specialAnnualPackageId = 'special_annual';
   static const String annualPackageId = r'$rc_annual';
   static const String weeklyPackageId = r'$rc_weekly';
+  static const String defaultSpecialOfferOfferingId = 'special_offer';
+  static const String specialOfferingMetadataKey = 'special_offering';
+  static const String showSpecialOfferMetadataKey =
+      'show_special_offer_on_subscription_screen';
 
   /// Build-time override: bypass RC and treat the user as premium. Set via
   /// `--dart-define=FORCE_PREMIUM=true` for internal test builds.
@@ -102,6 +106,115 @@ class SubscriptionService {
       debugPrint('[SubscriptionService] getOfferings failed: $e');
       return null;
     }
+  }
+
+  /// Returns whether the current/default offering metadata allows showing the
+  /// mobile special-offer card. A missing metadata key preserves legacy
+  /// behavior once offerings are loaded.
+  bool shouldShowSpecialOffer(Offerings? offerings) {
+    if (offerings == null) return false;
+    return shouldShowSpecialOfferFromMetadata(
+      offerings.current?.metadata ?? const <String, Object?>{},
+    );
+  }
+
+  /// Returns the configured special offer, or null when current-offering
+  /// metadata explicitly hides it.
+  Offering? specialOfferOffering(Offerings? offerings) {
+    if (offerings == null || !shouldShowSpecialOffer(offerings)) return null;
+    final metadata = offerings.current?.metadata ?? const <String, Object?>{};
+    return offerings.all[specialOfferingIdFromMetadata(metadata)];
+  }
+
+  Package? packageForOnboardingPlan(Offerings? offerings, int planIndex) {
+    return switch (planIndex) {
+      0 =>
+        _specialAnnualPackage(offerings) ??
+            _packageByIdentifier(offerings?.current, annualPackageId) ??
+            _packageByIdentifier(offerings?.current, weeklyPackageId) ??
+            _firstNonSpecialPackage(offerings?.current),
+      1 => _packageByIdentifier(offerings?.current, annualPackageId),
+      2 => _packageByIdentifier(offerings?.current, weeklyPackageId),
+      _ => defaultUpgradePackage(offerings),
+    };
+  }
+
+  Package? defaultUpgradePackage(Offerings? offerings) {
+    return _specialAnnualPackage(offerings) ??
+        _packageByIdentifier(offerings?.current, annualPackageId) ??
+        _packageByIdentifier(offerings?.current, weeklyPackageId) ??
+        _firstNonSpecialPackage(offerings?.current);
+  }
+
+  Package? _specialAnnualPackage(Offerings? offerings) {
+    if (!shouldShowSpecialOffer(offerings)) return null;
+    final specialOffering = specialOfferOffering(offerings);
+    return _packageByIdentifier(specialOffering, specialAnnualPackageId) ??
+        _firstPackage(specialOffering) ??
+        _packageByIdentifier(offerings?.current, specialAnnualPackageId);
+  }
+
+  static Package? _packageByIdentifier(Offering? offering, String identifier) {
+    final packages = offering?.availablePackages;
+    if (packages == null) return null;
+    for (final package in packages) {
+      if (package.identifier == identifier) return package;
+    }
+    return null;
+  }
+
+  static Package? _firstPackage(Offering? offering) {
+    final packages = offering?.availablePackages;
+    if (packages == null || packages.isEmpty) return null;
+    return packages.first;
+  }
+
+  static Package? _firstNonSpecialPackage(Offering? offering) {
+    final packages = offering?.availablePackages;
+    if (packages == null) return null;
+    for (final package in packages) {
+      if (package.identifier != specialAnnualPackageId) return package;
+    }
+    return null;
+  }
+
+  @visibleForTesting
+  static bool shouldShowSpecialOfferFromMetadata(
+    Map<String, Object?> metadata,
+  ) {
+    return parseMetadataBool(metadata[showSpecialOfferMetadataKey]) ?? true;
+  }
+
+  @visibleForTesting
+  static String specialOfferingIdFromMetadata(Map<String, Object?> metadata) {
+    final value = metadata[specialOfferingMetadataKey];
+    if (value is String && value.trim().isNotEmpty) {
+      return value.trim();
+    }
+    return defaultSpecialOfferOfferingId;
+  }
+
+  @visibleForTesting
+  static bool? parseMetadataBool(Object? value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    if (value is String) {
+      switch (value.trim().toLowerCase()) {
+        case 'true':
+        case '1':
+        case 'yes':
+        case 'y':
+        case 'on':
+          return true;
+        case 'false':
+        case '0':
+        case 'no':
+        case 'n':
+        case 'off':
+          return false;
+      }
+    }
+    return null;
   }
 
   /// Attach RevenueCat subscriber attributes only after the SDK is configured.

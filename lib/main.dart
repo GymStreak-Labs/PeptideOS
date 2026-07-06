@@ -442,6 +442,7 @@ class _PostAuthPaywallGate extends StatefulWidget {
 
 class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
   bool _viewLogged = false;
+  bool _offeringsLoadStarted = false;
 
   @override
   void didChangeDependencies() {
@@ -449,6 +450,13 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
     if (_viewLogged) return;
     _viewLogged = true;
     unawaited(AnalyticsService().logPaywallViewed('post_auth_onboarding'));
+    if (!_offeringsLoadStarted) {
+      _offeringsLoadStarted = true;
+      final sub = context.read<SubscriptionProvider>();
+      if (!sub.isLoadingOfferings && sub.offerings == null) {
+        unawaited(sub.loadOfferings());
+      }
+    }
   }
 
   Future<void> _handleSubscribe(int selectedPlan) async {
@@ -511,11 +519,13 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
 
   @override
   Widget build(BuildContext context) {
+    final sub = context.watch<SubscriptionProvider>();
     return Scaffold(
       backgroundColor: AppColors.background,
       body: PaywallPage(
         onSubscribe: _handleSubscribe,
         onRestore: _handleRestore,
+        showSpecialOffer: sub.showSpecialOffer,
       ),
     );
   }

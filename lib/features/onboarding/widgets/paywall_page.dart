@@ -14,10 +14,12 @@ class PaywallPage extends StatefulWidget {
     super.key,
     required this.onSubscribe,
     required this.onRestore,
+    this.showSpecialOffer = true,
   });
 
   final Future<void> Function(int selectedPlan) onSubscribe;
   final VoidCallback onRestore;
+  final bool showSpecialOffer;
 
   @override
   State<PaywallPage> createState() => _PaywallPageState();
@@ -25,7 +27,7 @@ class PaywallPage extends StatefulWidget {
 
 class _PaywallPageState extends State<PaywallPage>
     with SingleTickerProviderStateMixin {
-  int _selectedPlan = 0; // 0=special annual, 1=annual, 2=weekly
+  late int _selectedPlan; // 0=special annual, 1=annual, 2=weekly
   int _secretTapCount = 0;
   bool _isSubmitting = false;
 
@@ -45,6 +47,7 @@ class _PaywallPageState extends State<PaywallPage>
   @override
   void initState() {
     super.initState();
+    _selectedPlan = widget.showSpecialOffer ? 0 : 1;
     _shimmerController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2500),
@@ -70,6 +73,18 @@ class _PaywallPageState extends State<PaywallPage>
         setState(() => _countdownSeconds--);
       }
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant PaywallPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!widget.showSpecialOffer && _selectedPlan == 0) {
+      _selectedPlan = 1;
+    } else if (widget.showSpecialOffer &&
+        !oldWidget.showSpecialOffer &&
+        _selectedPlan == 1) {
+      _selectedPlan = 0;
+    }
   }
 
   @override
@@ -251,8 +266,10 @@ class _PaywallPageState extends State<PaywallPage>
         curve: Curves.easeOutCubic,
         child: Column(
           children: [
-            _buildSpecialOfferCard(),
-            const SizedBox(height: 10),
+            if (widget.showSpecialOffer) ...[
+              _buildSpecialOfferCard(),
+              const SizedBox(height: 10),
+            ],
             _buildPlanCard(
               index: 1,
               label: 'Annual',
@@ -857,12 +874,12 @@ class _PaywallPageState extends State<PaywallPage>
   // ═══════════════════════════════════════════════════════
 
   Widget _buildFixedCta(double bottomPadding) {
-    final planLabels = [
-      'ACTIVATE PRO — \$29.99/year',
-      'START FREE TRIAL',
-      'SUBSCRIBE — \$9.99/week',
-    ];
-    final label = planLabels[_selectedPlan];
+    final label = switch (_selectedPlan) {
+      0 => 'ACTIVATE PRO — \$29.99/year',
+      1 => 'START FREE TRIAL',
+      2 => 'SUBSCRIBE — \$9.99/week',
+      _ => 'START FREE TRIAL',
+    };
 
     return AnimatedOpacity(
       opacity: _showCta ? 1.0 : 0.0,
