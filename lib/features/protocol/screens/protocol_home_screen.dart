@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/dose_log.dart';
+import '../../../models/protocol.dart';
 import '../../subscription/providers/subscription_provider.dart';
 import '../../subscription/screens/soft_paywall_sheet.dart';
 import '../providers/dose_log_provider.dart';
@@ -65,13 +66,23 @@ class ProtocolHomeScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('SYS.PROTOCOL // TODAY',
-                            style: AppTypography.systemLabel),
+                        Text(
+                          'SYS.PROTOCOL // TODAY',
+                          style: AppTypography.systemLabel,
+                        ),
                         const SizedBox(height: AppSpacing.sm),
                         Text(_dayLabel(now), style: AppTypography.h1),
                       ],
                     ),
                   ),
+                  _HeaderIconButton(
+                    icon: Icons.history_rounded,
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      _openPastDoseSheet(context, protocolProvider.active);
+                    },
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
                   _HeaderIconButton(
                     icon: Icons.add_rounded,
                     onTap: () {
@@ -101,11 +112,13 @@ class ProtocolHomeScreen extends StatelessWidget {
           // ── Next dose countdown ──────────────────────────────────────
           if (nextDose != null) ...[
             const SliverToBoxAdapter(
-                child: SizedBox(height: AppSpacing.cardGap)),
+              child: SizedBox(height: AppSpacing.cardGap),
+            ),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.screenHorizontal),
+                  horizontal: AppSpacing.screenHorizontal,
+                ),
                 child: _NextDoseCard(
                   dose: nextDose,
                   onLog: () => _openLogSheet(context, nextDose),
@@ -125,8 +138,7 @@ class ProtocolHomeScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Text('SCHEDULE // TODAY',
-                      style: AppTypography.systemLabel),
+                  Text('SCHEDULE // TODAY', style: AppTypography.systemLabel),
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
@@ -156,14 +168,16 @@ class ProtocolHomeScreen extends StatelessWidget {
             const SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: AppSpacing.screenHorizontal),
+                  horizontal: AppSpacing.screenHorizontal,
+                ),
                 child: _EmptyTodayCard(),
               ),
             )
           else
             SliverPadding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.screenHorizontal),
+                horizontal: AppSpacing.screenHorizontal,
+              ),
               sliver: SliverList.separated(
                 itemCount: today.length,
                 separatorBuilder: (_, __) =>
@@ -195,13 +209,40 @@ class ProtocolHomeScreen extends StatelessWidget {
     );
   }
 
+  Future<void> _openPastDoseSheet(
+    BuildContext context,
+    List<Protocol> protocols,
+  ) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => LogPastDoseSheet(protocols: protocols),
+    );
+  }
+
   static const _months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
   static const _weekdays = [
-    'Monday', 'Tuesday', 'Wednesday', 'Thursday',
-    'Friday', 'Saturday', 'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
   ];
 
   String _dayLabel(DateTime d) =>
@@ -303,9 +344,9 @@ Future<void> _onCreateProtocol(BuildContext context) async {
     if (!purchased) return;
     if (!context.mounted) return;
   }
-  Navigator.of(context).push(
-    MaterialPageRoute(builder: (_) => const CreateProtocolScreen()),
-  );
+  Navigator.of(
+    context,
+  ).push(MaterialPageRoute(builder: (_) => const CreateProtocolScreen()));
 }
 
 // ── Today hero card ──────────────────────────────────────────────────────────
@@ -424,9 +465,8 @@ class _NextDoseCard extends StatelessWidget {
             children: [
               Text(
                 dose.amountTaken.toStringAsFixed(
-                    dose.amountTaken == dose.amountTaken.roundToDouble()
-                        ? 0
-                        : 1),
+                  dose.amountTaken == dose.amountTaken.roundToDouble() ? 0 : 1,
+                ),
                 style: AppTypography.heroLarge.copyWith(
                   color: AppColors.primary,
                 ),
@@ -438,7 +478,10 @@ class _NextDoseCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.xs),
           Text(
             dose.peptideName +
-                (dose.injectionSite.isEmpty ? '' : ' · ${_siteLabel(dose.injectionSite)}'),
+                (dose.injectionSite.isEmpty
+                    ? ''
+                    : ' · ${_siteLabel(dose.injectionSite)}') +
+                _syringeLabel(dose.syringeUnits),
             style: AppTypography.bodySmall,
           ),
           const SizedBox(height: AppSpacing.base),
@@ -478,6 +521,14 @@ class _NextDoseCard extends StatelessWidget {
         .map((s) => s.isEmpty ? s : '${s[0].toUpperCase()}${s.substring(1)}')
         .join(' ');
   }
+
+  String _syringeLabel(double value) {
+    if (value <= 0) return '';
+    return ' · ${_formatAmount(value)} syringe units';
+  }
+
+  String _formatAmount(double d) =>
+      d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(1);
 }
 
 // ── Dose card for today's list ──────────────────────────────────────────────
@@ -528,10 +579,7 @@ class _DoseCard extends StatelessWidget {
               color: taken
                   ? AppColors.primary.withValues(alpha: 0.12)
                   : Colors.transparent,
-              border: Border.all(
-                color: statusColor,
-                width: taken ? 1.5 : 1,
-              ),
+              border: Border.all(color: statusColor, width: taken ? 1.5 : 1),
               boxShadow: taken
                   ? [
                       BoxShadow(
@@ -553,6 +601,7 @@ class _DoseCard extends StatelessWidget {
                 Text(dose.peptideName, style: AppTypography.labelLarge),
                 Text(
                   '${_formatAmount(dose.amountTaken)} ${dose.units}'
+                  '${_syringeLabel(dose.syringeUnits)}'
                   '${dose.injectionSite.isEmpty ? '' : ' · ${_siteLabel(dose.injectionSite)}'}',
                   style: AppTypography.bodySmall.copyWith(
                     fontFamily: 'JetBrainsMono',
@@ -566,17 +615,21 @@ class _DoseCard extends StatelessWidget {
             children: [
               Text(_formatTime(dose.scheduledAt), style: AppTypography.tabular),
               if (isMissed && !taken && !skipped)
-                Text('MISSED',
-                    style: AppTypography.systemLabel.copyWith(
-                      color: AppColors.danger,
-                      fontSize: 9,
-                    )),
+                Text(
+                  'MISSED',
+                  style: AppTypography.systemLabel.copyWith(
+                    color: AppColors.danger,
+                    fontSize: 9,
+                  ),
+                ),
               if (skipped)
-                Text('SKIPPED',
-                    style: AppTypography.systemLabel.copyWith(
-                      color: AppColors.textTertiary,
-                      fontSize: 9,
-                    )),
+                Text(
+                  'SKIPPED',
+                  style: AppTypography.systemLabel.copyWith(
+                    color: AppColors.textTertiary,
+                    fontSize: 9,
+                  ),
+                ),
             ],
           ),
         ],
@@ -584,9 +637,8 @@ class _DoseCard extends StatelessWidget {
     );
   }
 
-  String _formatAmount(double d) => d == d.roundToDouble()
-      ? d.toStringAsFixed(0)
-      : d.toStringAsFixed(1);
+  String _formatAmount(double d) =>
+      d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(1);
 
   String _formatTime(DateTime d) {
     final h = d.hour.toString().padLeft(2, '0');
@@ -599,6 +651,11 @@ class _DoseCard extends StatelessWidget {
         .split('-')
         .map((s) => s.isEmpty ? s : '${s[0].toUpperCase()}${s.substring(1)}')
         .join(' ');
+  }
+
+  String _syringeLabel(double value) {
+    if (value <= 0) return '';
+    return ' · ${_formatAmount(value)} syringe units';
   }
 }
 
@@ -613,18 +670,22 @@ class _EmptyTodayCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.base),
         child: Row(
           children: [
-            Icon(Icons.event_available_rounded,
-                color: AppColors.primary, size: AppSpacing.iconLarge),
+            Icon(
+              Icons.event_available_rounded,
+              color: AppColors.primary,
+              size: AppSpacing.iconLarge,
+            ),
             const SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('No doses today',
-                      style: AppTypography.labelLarge),
+                  Text('No doses today', style: AppTypography.labelLarge),
                   const SizedBox(height: 2),
-                  Text('Your protocol has no doses scheduled for today.',
-                      style: AppTypography.bodySmall),
+                  Text(
+                    'Your protocol has no doses scheduled for today.',
+                    style: AppTypography.bodySmall,
+                  ),
                 ],
               ),
             ),

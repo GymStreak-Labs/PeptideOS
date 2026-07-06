@@ -13,6 +13,7 @@ void main() {
       containsAll([
         'bpc-157',
         'tb-500',
+        'hcg',
         'cjc-1295-no-dac',
         'sermorelin',
         'aod-9604',
@@ -32,5 +33,8 @@ void main() {
         'ru-58841',
       ]),
     );
+    final hcg = peptides.firstWhere((p) => p.slug == 'hcg');
+    expect(hcg.defaultDoseUnit, 'IU');
+    expect(hcg.defaultDoseMcg, 0);
   });
 }

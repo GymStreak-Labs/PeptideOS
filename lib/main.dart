@@ -7,6 +7,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'app_shell.dart';
@@ -59,6 +60,7 @@ Future<void> main() async {
   runZonedGuarded<Future<void>>(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      GoogleFonts.config.allowRuntimeFetching = false;
 
       // Lock to portrait — peptide tracking is a focused, one-hand experience.
       await SystemChrome.setPreferredOrientations([

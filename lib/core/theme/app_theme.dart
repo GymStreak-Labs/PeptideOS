@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'colors.dart';
 import 'typography.dart';
 import 'spacing.dart';
@@ -9,8 +8,11 @@ import 'spacing.dart';
 /// "Clinical Cyberpunk" — one theme, identical on iOS and Android.
 abstract final class AppTheme {
   static ThemeData get dark {
-    // Space Grotesk for body, JetBrains Mono loaded per-widget for data.
-    final textTheme = GoogleFonts.spaceGroteskTextTheme(ThemeData.dark().textTheme);
+    final textTheme = ThemeData.dark().textTheme.apply(
+      fontFamily: 'SpaceGrotesk',
+      bodyColor: AppColors.textSecondary,
+      displayColor: AppColors.textPrimary,
+    );
 
     return ThemeData(
       useMaterial3: true,
@@ -65,7 +67,10 @@ abstract final class AppTheme {
         ),
         showDragHandle: true,
         dragHandleColor: AppColors.divider,
-        dragHandleSize: Size(AppSpacing.sheetHandleWidth, AppSpacing.sheetHandleHeight),
+        dragHandleSize: Size(
+          AppSpacing.sheetHandleWidth,
+          AppSpacing.sheetHandleHeight,
+        ),
       ),
 
       // ── Divider ────────────────────────────────────────────────────
@@ -99,7 +104,9 @@ abstract final class AppTheme {
           borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
           borderSide: const BorderSide(color: AppColors.danger),
         ),
-        hintStyle: AppTypography.bodyMedium.copyWith(color: AppColors.textDisabled),
+        hintStyle: AppTypography.bodyMedium.copyWith(
+          color: AppColors.textDisabled,
+        ),
         labelStyle: AppTypography.labelMedium,
       ),
 

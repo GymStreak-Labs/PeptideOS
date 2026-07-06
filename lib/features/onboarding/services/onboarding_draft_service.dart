@@ -98,6 +98,7 @@ class OnboardingDraftService {
               slug: lib.slug,
               name: lib.name,
               dose: lib.defaultDoseMcg,
+              unit: lib.defaultDoseUnit,
               frequency: lib.defaultFrequency,
               route: lib.defaultRoute,
               cycleWeeks: lib.typicalCycleWeeks,

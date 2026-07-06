@@ -1,7 +1,7 @@
 name: peptide_os
 description: "Intelligent peptide protocol manager — track doses, calculate reconstitution, manage protocols."
 publish_to: 'none'
-version: 1.0.2+13
+version: 1.0.4+15
 
 environment:
   sdk: ^3.11.1
@@ -71,3 +71,11 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/animations/
+
+  fonts:
+    - family: SpaceGrotesk
+      fonts:
+        - asset: assets/fonts/SpaceGrotesk.ttf
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono.ttf
