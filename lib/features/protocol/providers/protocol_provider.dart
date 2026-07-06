@@ -15,8 +15,13 @@ import '../../../services/notification_service.dart';
 /// "refresh schedule" — it materialises the next [scheduleHorizonDays] days
 /// of doses so the Today view can read from a single Firestore collection.
 class ProtocolProvider extends ChangeNotifier {
-  ProtocolProvider(this._protocolRepo, this._doseLogRepo, {required String uid})
-    : _uid = uid {
+  ProtocolProvider(
+    this._protocolRepo,
+    this._doseLogRepo, {
+    required String uid,
+    bool notificationsEnabled = false,
+  }) : _uid = uid,
+       _notificationsEnabled = notificationsEnabled {
     _subscribe();
   }
 
@@ -24,6 +29,7 @@ class ProtocolProvider extends ChangeNotifier {
   final DoseLogRepository _doseLogRepo;
   final _uuid = const Uuid();
   String _uid;
+  bool _notificationsEnabled;
   StreamSubscription<List<Protocol>>? _sub;
 
   /// How far ahead we pre-compute dose entries.
@@ -40,6 +46,10 @@ class ProtocolProvider extends ChangeNotifier {
   bool get isLoading => _loading;
   bool get hasActive => active.isNotEmpty;
   String get uid => _uid;
+
+  void setNotificationsEnabled(bool enabled) {
+    _notificationsEnabled = enabled;
+  }
 
   void setUid(String uid) {
     if (_uid == uid) return;
@@ -199,6 +209,44 @@ class ProtocolProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> syncDoseReminders({required bool enabled}) async {
+    _notificationsEnabled = enabled;
+    if (_uid.isEmpty) return;
+
+    try {
+      if (enabled) {
+        await regenerateSchedules();
+      }
+
+      final now = DateTime.now();
+      final futurePending = <DoseLog>[];
+      for (final p in active) {
+        final logs = await _doseLogRepo.fetchByProtocol(_uid, p.uuid);
+        futurePending.addAll(
+          logs.where((d) => d.isPending && d.scheduledAt.isAfter(now)),
+        );
+      }
+
+      for (final d in futurePending) {
+        if (enabled) {
+          await NotificationService.instance.scheduleDoseReminder(d);
+        } else {
+          await NotificationService.instance.cancelDoseReminder(d.uuid);
+        }
+      }
+
+      if (!enabled) {
+        for (final p in active) {
+          await NotificationService.instance.cancelProtocolRemindersForProtocol(
+            p,
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('syncDoseReminders failed: $e');
+    }
+  }
+
   Future<void> _deleteFuturePendingDoseLogs(Protocol p) async {
     if (_uid.isEmpty) return;
     final now = DateTime.now();
@@ -282,8 +330,10 @@ class ProtocolProvider extends ChangeNotifier {
     try {
       await _doseLogRepo.upsertMany(_uid, toInsert);
       // Fire notifications for future doses only — respect user setting.
-      for (final d in toInsert) {
-        unawaited(NotificationService.instance.scheduleDoseReminder(d));
+      if (_notificationsEnabled) {
+        for (final d in toInsert) {
+          unawaited(NotificationService.instance.scheduleDoseReminder(d));
+        }
       }
     } catch (e) {
       debugPrint('generateDoseLogs failed: $e');
@@ -300,6 +350,8 @@ class ProtocolProvider extends ChangeNotifier {
   Future<void> _rescheduleProtocolReminders(Protocol p) async {
     if (p.status != ProtocolStatus.active) return;
     await NotificationService.instance.cancelProtocolRemindersForProtocol(p);
+    if (!_notificationsEnabled) return;
+
     for (final peptide in p.peptides) {
       final cycleEnd = peptide.cycleEndDate(p.startDate);
       if (cycleEnd == null) continue;

@@ -39,41 +39,16 @@ class SubscriptionProvider extends ChangeNotifier {
   bool get isLoadingOfferings => _loadingOfferings;
   Offerings? get offerings => _offerings;
   String? get offeringsError => _offeringsError;
+  bool get showSpecialOffer => _service.shouldShowSpecialOffer(_offerings);
 
   /// Onboarding paywall plan index:
   /// 0 = special annual, 1 = annual, 2 = weekly.
   Package? packageForOnboardingPlan(int planIndex) {
-    return switch (planIndex) {
-      0 =>
-        _packageByIdentifier(SubscriptionService.specialAnnualPackageId) ??
-            _packageByIdentifier(SubscriptionService.annualPackageId),
-      1 => _packageByIdentifier(SubscriptionService.annualPackageId),
-      2 => _packageByIdentifier(SubscriptionService.weeklyPackageId),
-      _ => defaultUpgradePackage,
-    };
+    return _service.packageForOnboardingPlan(_offerings, planIndex);
   }
 
-  Package? get defaultUpgradePackage {
-    return _packageByIdentifier(SubscriptionService.specialAnnualPackageId) ??
-        _packageByIdentifier(SubscriptionService.annualPackageId) ??
-        _packageByIdentifier(SubscriptionService.weeklyPackageId) ??
-        _firstAvailablePackage;
-  }
-
-  Package? _packageByIdentifier(String identifier) {
-    final packages = _offerings?.current?.availablePackages;
-    if (packages == null) return null;
-    for (final package in packages) {
-      if (package.identifier == identifier) return package;
-    }
-    return null;
-  }
-
-  Package? get _firstAvailablePackage {
-    final packages = _offerings?.current?.availablePackages;
-    if (packages == null || packages.isEmpty) return null;
-    return packages.first;
-  }
+  Package? get defaultUpgradePackage =>
+      _service.defaultUpgradePackage(_offerings);
 
   /// Per-free-user hard limits. Enforced by the UI through [canAddPeptide] /
   /// [canAddProtocol] before calling into the data providers.
