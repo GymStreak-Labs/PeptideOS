@@ -181,10 +181,13 @@ class _TimelineConnector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 21),
-      child: Container(
-        width: 1,
-        height: 18,
-        color: AppColors.primary.withValues(alpha: 0.32),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          width: 1,
+          height: 18,
+          color: AppColors.primary.withValues(alpha: 0.32),
+        ),
       ),
     );
   }

@@ -269,7 +269,7 @@ class _PaywallPageState extends State<PaywallPage>
       opacity: _showPlans ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 500),
       child: Container(
-        height: 170,
+        height: 210,
         decoration: BoxDecoration(
           color: AppColors.surfaceContainer.withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -955,7 +955,7 @@ class _PaywallPageState extends State<PaywallPage>
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                AppColors.background.withValues(alpha: 0),
+                AppColors.background.withValues(alpha: 0.78),
                 AppColors.background.withValues(alpha: 0.95),
                 AppColors.background,
               ],
