@@ -5,10 +5,13 @@ import 'package:peptide_os/core/theme/theme.dart';
 import 'package:peptide_os/core/widgets/widgets.dart';
 import 'package:peptide_os/features/library/widgets/syringe_visual.dart';
 import 'package:peptide_os/features/onboarding/widgets/calculator_demo_page.dart';
+import 'package:peptide_os/features/onboarding/widgets/confidence_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/first_name_page.dart';
+import 'package:peptide_os/features/onboarding/widgets/notification_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/paywall_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/processing_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/protocol_preview_page.dart';
+import 'package:peptide_os/features/onboarding/widgets/protocol_roadmap_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/results_summary_page.dart';
 
 Future<void> main() async {
@@ -57,6 +60,7 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
 
   static const _peptides = {'BPC-157', 'TB-500', 'CJC-1295'};
   static const _goals = {'Recovery', 'Longevity'};
+  static const _confidenceNeeds = {'Dose math', 'Site rotation'};
 
   @override
   void initState() {
@@ -88,6 +92,11 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
 
   List<Widget> get _pages => [
     FirstNamePage(firstName: 'Joe', onChanged: (_) {}, onNext: _next),
+    ConfidencePage(
+      selectedNeeds: _confidenceNeeds,
+      onToggle: (_) {},
+      onNext: _next,
+    ),
     const CalculatorDemoPage(peptideName: 'BPC-157', onNext: _noop),
     ProcessingPage(
       selectedPeptides: _peptides,
@@ -98,11 +107,19 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
     ProtocolPreviewPage(peptides: _peptides, onNext: _next),
     ResultsSummaryPage(
       selectedGoals: _goals,
+      confidenceNeeds: _confidenceNeeds,
       experienceLevel: 'Intermediate',
       frustration: 'Keeping protocols organised',
       selectedPeptides: _peptides,
       onNext: _next,
     ),
+    ProtocolRoadmapPage(
+      selectedGoals: _goals,
+      confidenceNeeds: _confidenceNeeds,
+      selectedPeptides: _peptides,
+      onNext: _next,
+    ),
+    NotificationPage(onEnable: () async => true, onNext: _next),
     PaywallPage(onSubscribe: (_) async {}, onRestore: () {}),
     const _TodayMockScreen(),
     const _ConverterMockScreen(),

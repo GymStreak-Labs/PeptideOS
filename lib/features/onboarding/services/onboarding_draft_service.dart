@@ -75,9 +75,12 @@ class OnboardingDraftService {
         name: draft.firstName,
         birthDate: draft.birthDate,
         goals: draft.goals,
+        confidenceNeeds: draft.confidenceNeeds,
         experience: draft.experience,
         frustration: draft.frustration,
+        notificationsEnabled: draft.notificationsEnabled,
       );
+      protocols.setNotificationsEnabled(draft.notificationsEnabled);
 
       await AnalyticsService().sendAppReferAdvancedMatching(
         email: email,
@@ -138,9 +141,11 @@ class OnboardingDraft {
     required this.firstName,
     required this.birthDate,
     required this.goals,
+    required this.confidenceNeeds,
     required this.experience,
     required this.frustration,
     required this.selectedPeptides,
+    required this.notificationsEnabled,
   });
 
   final String firstName;
@@ -148,17 +153,21 @@ class OnboardingDraft {
   /// ISO-8601 date only (`yyyy-MM-dd`) for AppRefer advanced matching.
   final String birthDate;
   final List<String> goals;
+  final List<String> confidenceNeeds;
   final String experience;
   final String frustration;
   final List<String> selectedPeptides;
+  final bool notificationsEnabled;
 
   Map<String, dynamic> toMap() => <String, dynamic>{
     'firstName': firstName,
     'birthDate': birthDate,
     'goals': goals,
+    'confidenceNeeds': confidenceNeeds,
     'experience': experience,
     'frustration': frustration,
     'selectedPeptides': selectedPeptides,
+    'notificationsEnabled': notificationsEnabled,
   };
 
   factory OnboardingDraft.fromMap(Map<String, dynamic> data) {
@@ -168,11 +177,15 @@ class OnboardingDraft {
       goals: (data['goals'] as List<dynamic>? ?? const [])
           .map((e) => e.toString())
           .toList(),
+      confidenceNeeds: (data['confidenceNeeds'] as List<dynamic>? ?? const [])
+          .map((e) => e.toString())
+          .toList(),
       experience: (data['experience'] as String?) ?? '',
       frustration: (data['frustration'] as String?) ?? '',
       selectedPeptides: (data['selectedPeptides'] as List<dynamic>? ?? const [])
           .map((e) => e.toString())
           .toList(),
+      notificationsEnabled: (data['notificationsEnabled'] as bool?) ?? false,
     );
   }
 }

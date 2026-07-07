@@ -7,8 +7,7 @@ import '../../../core/constants/legal_links.dart';
 
 /// Hard paywall — premium conversion design adapted to PepMod cyberpunk.
 ///
-/// Layout: Hero headline → Pricing cards (special offer + annual + weekly)
-///         → "WHAT YOU GET" divider → Feature showcases → Fixed CTA
+/// Layout: hero, product proof, feature rows, pricing cards, fixed CTA.
 class PaywallPage extends StatefulWidget {
   const PaywallPage({
     super.key,
@@ -144,16 +143,28 @@ class _PaywallPageState extends State<PaywallPage>
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.screenHorizontal,
                 ),
-                child: _buildPricingCards(),
+                child: _buildProductPreview(),
               ),
-              const SizedBox(height: AppSpacing.xxl),
-              _buildSectionDivider(),
-              const SizedBox(height: AppSpacing.xl),
+              const SizedBox(height: AppSpacing.lg),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.screenHorizontal,
                 ),
                 child: _buildFeatureShowcases(),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.screenHorizontal,
+                ),
+                child: _buildValueNote(),
+              ),
+              const SizedBox(height: AppSpacing.xl),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.screenHorizontal,
+                ),
+                child: _buildPricingCards(),
               ),
               const SizedBox(height: AppSpacing.xl),
               _buildFooter(),
@@ -213,7 +224,7 @@ class _PaywallPageState extends State<PaywallPage>
             ),
             const SizedBox(height: AppSpacing.lg),
 
-            Text('SYS.ACCESS // UPGRADE', style: AppTypography.systemLabel),
+            Text('SYS.ACCESS // PROTOCOL', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.sm),
 
             GestureDetector(
@@ -226,9 +237,9 @@ class _PaywallPageState extends State<PaywallPage>
                 }
               },
               child: Text(
-                'Start your optimised\nprotocol today',
+                'Everything to run\nyour protocol right.',
                 style: AppTypography.h1.copyWith(
-                  fontSize: 32,
+                  fontSize: 30,
                   height: 1.1,
                   shadows: [
                     Shadow(
@@ -241,9 +252,105 @@ class _PaywallPageState extends State<PaywallPage>
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Your intelligent protocol manager —\ntrack, calculate, optimise.',
+              'Dose math, site rotation, reminders, and protocol history - all in one record.',
               style: AppTypography.bodyMedium.copyWith(
                 color: AppColors.textSecondary.withValues(alpha: 0.65),
+                height: 1.45,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProductPreview() {
+    return AnimatedOpacity(
+      opacity: _showPlans ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 500),
+      child: Container(
+        height: 170,
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainer.withValues(alpha: 0.9),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          border: Border.all(color: AppColors.borderCyan),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primary.withValues(alpha: 0.12),
+              blurRadius: 22,
+            ),
+          ],
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                  gradient: RadialGradient(
+                    center: const Alignment(-0.9, -0.8),
+                    radius: 1.3,
+                    colors: [
+                      AppColors.primary.withValues(alpha: 0.13),
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const Positioned(
+              left: 18,
+              top: 18,
+              child: _MiniPhonePreview(
+                title: 'Dose math',
+                primary: '300 mcg',
+                secondary: 'Units to draw',
+                icon: Icons.calculate_rounded,
+              ),
+            ),
+            const Positioned(
+              left: 122,
+              top: 4,
+              child: _MiniPhonePreview(
+                title: 'Site map',
+                primary: 'Left abdomen',
+                secondary: 'Last: 3 days ago',
+                icon: Icons.location_on_outlined,
+                featured: true,
+              ),
+            ),
+            const Positioned(
+              right: 18,
+              top: 22,
+              child: _MiniPhonePreview(
+                title: 'Progress',
+                primary: '87%',
+                secondary: '30-day adherence',
+                icon: Icons.query_stats_rounded,
+              ),
+            ),
+            Positioned(
+              left: 18,
+              right: 18,
+              bottom: 14,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.verified_rounded,
+                    size: 16,
+                    color: AppColors.primary,
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Text(
+                      'Built for records, reminders, and unit clarity - not medical advice.',
+                      style: AppTypography.disclaimer.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -696,62 +803,6 @@ class _PaywallPageState extends State<PaywallPage>
   }
 
   // ═══════════════════════════════════════════════════════
-  // SECTION DIVIDER
-  // ═══════════════════════════════════════════════════════
-
-  Widget _buildSectionDivider() {
-    return AnimatedOpacity(
-      opacity: _showBenefits ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 500),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.screenHorizontal,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 1,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.transparent,
-                      AppColors.primary.withValues(alpha: 0.3),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.base),
-              child: Text(
-                'WHAT YOU GET',
-                style: AppTypography.systemLabel.copyWith(
-                  fontSize: 10,
-                  letterSpacing: 3,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                height: 1,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.primary.withValues(alpha: 0.3),
-                      Colors.transparent,
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ═══════════════════════════════════════════════════════
   // FEATURE SHOWCASES
   // ═══════════════════════════════════════════════════════
 
@@ -762,45 +813,55 @@ class _PaywallPageState extends State<PaywallPage>
       child: Column(
         children: [
           _FeatureRow(
-            icon: Icons.science_rounded,
-            title: 'RECONSTITUTION CALCULATOR',
+            icon: Icons.calculate_rounded,
+            title: 'GET THE DOSE MATH RIGHT',
             description:
-                'Visual syringe diagram with exact unit calculations. Eliminate dosing errors forever.',
+                'Keep vial, water, dose, and units-to-draw together so each log is easier to check.',
           ),
           const SizedBox(height: AppSpacing.md),
           _FeatureRow(
-            icon: Icons.auto_awesome_rounded,
-            title: 'AI PROTOCOL INSIGHTS',
+            icon: Icons.location_on_outlined,
+            title: 'NEVER LOSE YOUR ROTATION',
             description:
-                'Accumulating AI mentor that correlates your protocol changes with outcomes over time.',
+                'Every site, cycle, and reminder stays attached to the protocol record.',
           ),
           const SizedBox(height: AppSpacing.md),
           _FeatureRow(
-            icon: Icons.inventory_2_rounded,
-            title: 'VIAL TRACKING',
+            icon: Icons.timeline_rounded,
+            title: 'WATCH THE ARC OVER TIME',
             description:
-                'Track doses remaining, expiration dates, and cost per dose across all your vials.',
+                'See what was planned, what was logged, and what needs a cleaner record next.',
           ),
-          const SizedBox(height: AppSpacing.md),
-          _FeatureRow(
-            icon: Icons.accessibility_new_rounded,
-            title: 'INJECTION SITE MAP',
-            description:
-                'Interactive body map with rotation suggestions and healing status per site.',
+        ],
+      ),
+    );
+  }
+
+  Widget _buildValueNote() {
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.base),
+      decoration: BoxDecoration(
+        color: AppColors.secondary.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        border: Border.all(color: AppColors.secondary.withValues(alpha: 0.24)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.warning_amber_rounded,
+            color: AppColors.secondary,
+            size: AppSpacing.iconMedium,
           ),
-          const SizedBox(height: AppSpacing.md),
-          _FeatureRow(
-            icon: Icons.insights_rounded,
-            title: 'WEEKLY REPORTS',
-            description:
-                'Personalised trend analysis correlating protocols with symptom changes.',
-          ),
-          const SizedBox(height: AppSpacing.md),
-          _FeatureRow(
-            icon: Icons.library_books_rounded,
-            title: '50+ PEPTIDE PROFILES',
-            description:
-                'Evidence-rated database with mechanisms, dosing ranges, interactions, and side effects.',
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Text(
+              'A confusing vial calculation can waste time and product. PepMod keeps the math beside the log so you can re-check your records before you act on old notes.',
+              style: AppTypography.bodySmall.copyWith(
+                color: AppColors.textSecondary,
+                height: 1.45,
+              ),
+            ),
           ),
         ],
       ),
@@ -875,9 +936,9 @@ class _PaywallPageState extends State<PaywallPage>
 
   Widget _buildFixedCta(double bottomPadding) {
     final label = switch (_selectedPlan) {
-      0 => 'ACTIVATE PRO — \$29.99/year',
+      0 => 'ACTIVATE PRO - \$29.99/year',
       1 => 'START FREE TRIAL',
-      2 => 'SUBSCRIBE — \$9.99/week',
+      2 => 'SUBSCRIBE - \$9.99/week',
       _ => 'START FREE TRIAL',
     };
 
@@ -962,6 +1023,137 @@ class _PaywallPageState extends State<PaywallPage>
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Product Proof Widgets ─────────────────────────────────────────────────
+
+class _MiniPhonePreview extends StatelessWidget {
+  const _MiniPhonePreview({
+    required this.title,
+    required this.primary,
+    required this.secondary,
+    required this.icon,
+    this.featured = false,
+  });
+
+  final String title;
+  final String primary;
+  final String secondary;
+  final IconData icon;
+  final bool featured;
+
+  @override
+  Widget build(BuildContext context) {
+    final width = featured ? 92.0 : 78.0;
+    final height = featured ? 132.0 : 118.0;
+
+    return Transform.rotate(
+      angle: featured ? 0.02 : -0.035,
+      child: Container(
+        width: width,
+        height: height,
+        padding: const EdgeInsets.all(7),
+        decoration: BoxDecoration(
+          color: AppColors.background,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: featured
+                ? AppColors.primary.withValues(alpha: 0.55)
+                : AppColors.border,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.35),
+              blurRadius: featured ? 20 : 12,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 16,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.14),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Icon(icon, size: 10, color: AppColors.primary),
+                ),
+                const Spacer(),
+                Container(
+                  width: 18,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              title,
+              style: AppTypography.systemLabel.copyWith(
+                fontSize: 7,
+                color: AppColors.textTertiary,
+                letterSpacing: 0.8,
+              ),
+            ),
+            const SizedBox(height: 3),
+            Text(
+              primary,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.labelMedium.copyWith(
+                fontSize: featured ? 13 : 11,
+                color: featured ? AppColors.primary : AppColors.textPrimary,
+              ),
+            ),
+            const Spacer(),
+            _TinyMetricBar(widthFactor: featured ? 0.82 : 0.62),
+            const SizedBox(height: 4),
+            _TinyMetricBar(widthFactor: featured ? 0.55 : 0.75),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              secondary,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.disclaimer.copyWith(
+                fontSize: 7,
+                color: AppColors.textSecondary,
+                height: 1.2,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TinyMetricBar extends StatelessWidget {
+  const _TinyMetricBar({required this.widthFactor});
+
+  final double widthFactor;
+
+  @override
+  Widget build(BuildContext context) {
+    return FractionallySizedBox(
+      alignment: Alignment.centerLeft,
+      widthFactor: widthFactor,
+      child: Container(
+        height: 4,
+        decoration: BoxDecoration(
+          color: AppColors.primary.withValues(alpha: 0.18),
+          borderRadius: BorderRadius.circular(4),
         ),
       ),
     );

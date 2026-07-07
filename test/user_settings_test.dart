@@ -7,11 +7,13 @@ void main() {
       'onboardingCompleted': true,
       'reviewAccount': true,
       'goals': ['Protocol tracking', 'Unit conversion'],
+      'confidenceNeeds': ['Dose math', 'Site rotation'],
     });
 
     expect(settings.onboardingCompleted, isTrue);
     expect(settings.reviewAccount, isTrue);
     expect(settings.selectedGoals, ['Protocol tracking', 'Unit conversion']);
+    expect(settings.confidenceNeeds, ['Dose math', 'Site rotation']);
   });
 
   test('preserves review account flag when serializing settings', () {
@@ -19,8 +21,13 @@ void main() {
       onboardingCompleted: true,
       reviewAccount: true,
       selectedGoals: ['Progress'],
+      confidenceNeeds: ['Plain-English info'],
     );
 
     expect(settings.toMap(), containsPair('reviewAccount', true));
+    expect(
+      settings.toMap(),
+      containsPair('confidenceNeeds', ['Plain-English info']),
+    );
   });
 }
