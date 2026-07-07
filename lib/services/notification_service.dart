@@ -109,7 +109,7 @@ class NotificationService {
       await _plugin.zonedSchedule(
         id,
         'Time for your dose',
-        '${log.peptideName} · ${log.amountTaken.toStringAsFixed(0)} ${log.units}',
+        'Your scheduled protocol reminder is ready.',
         scheduled,
         const NotificationDetails(
           android: AndroidNotificationDetails(
@@ -152,11 +152,11 @@ class NotificationService {
     final (title, body) = switch (kind) {
       ProtocolReminderKind.cycleEnds => (
         'Protocol checkpoint',
-        '$peptideName cycle window ends today. Review your tracking plan.',
+        'A cycle-window reminder is due today. Review your tracking plan.',
       ),
       ProtocolReminderKind.washoutEnds => (
         'Rest period checkpoint',
-        '$peptideName rest window ends today. Review your tracking plan.',
+        'A rest-period reminder is due today. Review your tracking plan.',
       ),
     };
 

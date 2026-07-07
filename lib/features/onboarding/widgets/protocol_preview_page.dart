@@ -101,7 +101,7 @@ class ProtocolPreviewPage extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    '2x daily',
+                                    'tracked',
                                     style: AppTypography.tabular.copyWith(
                                       fontSize: 12,
                                       color: AppColors.textTertiary,
@@ -143,7 +143,7 @@ class ProtocolPreviewPage extends StatelessWidget {
                                 value: '${_displayPeptides.length + 1}',
                               ),
                               _StatBlock(label: 'DURATION', value: '8 weeks'),
-                              _StatBlock(label: 'PHASE', value: 'Loading'),
+                              _StatBlock(label: 'VIEW', value: 'Timeline'),
                             ],
                           ),
                         ],

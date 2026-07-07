@@ -108,14 +108,14 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               const SizedBox(height: AppSpacing.sm),
               Text(
-                'Secure your protocol',
+                'Save your personalised\nprotocol',
                 style: AppTypography.h1,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.sm),
               Text(
-                'Your protocols sync encrypted to your account so nothing '
-                'is lost between devices.',
+                'Keep your roadmap, schedule, dose logs, and reminders attached '
+                'to your account before the protocol unlocks.',
                 style: AppTypography.bodyMedium.copyWith(
                   color: AppColors.textSecondary,
                 ),

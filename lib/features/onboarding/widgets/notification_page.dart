@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 
-/// Screen 11: Notification Permission warm-up.
-/// Explains the value BEFORE the system prompt fires.
+/// Notification permission warm-up.
+/// Explains the value before the system prompt fires.
 class NotificationPage extends StatelessWidget {
-  const NotificationPage({super.key, required this.onNext});
+  const NotificationPage({
+    super.key,
+    required this.onEnable,
+    required this.onNext,
+  });
 
+  final Future<bool> Function() onEnable;
   final VoidCallback onNext;
 
   @override
@@ -50,7 +55,7 @@ class NotificationPage extends StatelessWidget {
             const SizedBox(height: AppSpacing.md),
 
             Text(
-              'Never miss\na dose.',
+              'Keep dose times\nvisible.',
               style: AppTypography.h1.copyWith(fontSize: 32),
               textAlign: TextAlign.center,
             ),
@@ -58,7 +63,7 @@ class NotificationPage extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
 
             Text(
-              'Get discreet reminders exactly when your next dose is due. No peptide names in notifications — just a gentle nudge.',
+              'Get discreet reminders when a scheduled protocol window is due. No peptide names in notifications - just a gentle nudge.',
               style: AppTypography.bodyMedium,
               textAlign: TextAlign.center,
             ),
@@ -98,18 +103,17 @@ class NotificationPage extends StatelessWidget {
                               ),
                             ),
                             const Spacer(),
-                            Text(
-                              'now',
-                              style: AppTypography.disclaimer,
-                            ),
+                            Text('now', style: AppTypography.disclaimer),
                           ],
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'Time for your morning protocol',
+                          'Protocol reminder is ready',
                           style: AppTypography.bodySmall.copyWith(
                             color: AppColors.textPrimary,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
@@ -120,13 +124,7 @@ class NotificationPage extends StatelessWidget {
 
             const Spacer(flex: 3),
 
-            PrimaryButton(
-              label: 'ENABLE NOTIFICATIONS',
-              onPressed: () {
-                // TODO: request notification permission, then proceed
-                onNext();
-              },
-            ),
+            _EnableButton(onEnable: onEnable, onNext: onNext),
 
             const SizedBox(height: AppSpacing.md),
 
@@ -144,6 +142,37 @@ class NotificationPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _EnableButton extends StatefulWidget {
+  const _EnableButton({required this.onEnable, required this.onNext});
+
+  final Future<bool> Function() onEnable;
+  final VoidCallback onNext;
+
+  @override
+  State<_EnableButton> createState() => _EnableButtonState();
+}
+
+class _EnableButtonState extends State<_EnableButton> {
+  bool _loading = false;
+
+  Future<void> _handleTap() async {
+    if (_loading) return;
+    setState(() => _loading = true);
+    await widget.onEnable();
+    if (!mounted) return;
+    setState(() => _loading = false);
+    widget.onNext();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PrimaryButton(
+      label: _loading ? 'OPENING PERMISSION...' : 'TURN ON REMINDERS',
+      onPressed: _loading ? null : _handleTap,
     );
   }
 }

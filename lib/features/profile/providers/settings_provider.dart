@@ -76,16 +76,20 @@ class SettingsProvider extends ChangeNotifier {
     required String name,
     required String birthDate,
     required List<String> goals,
+    required List<String> confidenceNeeds,
     required String experience,
     required String frustration,
+    required bool notificationsEnabled,
   }) async {
     await update((s) {
       s.name = name.isEmpty ? s.name : name;
       s.firstName = name;
       s.birthDate = birthDate;
       s.selectedGoals = goals;
+      s.confidenceNeeds = confidenceNeeds;
       s.experience = experience;
       s.frustration = frustration;
+      s.notificationsEnabled = notificationsEnabled;
       s.onboardingCompleted = true;
     });
   }

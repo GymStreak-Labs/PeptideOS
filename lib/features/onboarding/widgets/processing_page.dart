@@ -49,18 +49,19 @@ class _ProcessingPageState extends State<ProcessingPage>
       duration: const Duration(milliseconds: 4500),
     )..repeat();
 
-    _progressController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 4500),
-    )..addStatusListener((status) {
-        if (status == AnimationStatus.completed && !_advanced) {
-          _advanced = true;
-          setState(() => _protocolReadyFlash = true);
-          Future.delayed(const Duration(milliseconds: 400), () {
-            if (mounted) widget.onNext();
-          });
-        }
-      });
+    _progressController =
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 4500),
+        )..addStatusListener((status) {
+          if (status == AnimationStatus.completed && !_advanced) {
+            _advanced = true;
+            setState(() => _protocolReadyFlash = true);
+            Future.delayed(const Duration(milliseconds: 400), () {
+              if (mounted) widget.onNext();
+            });
+          }
+        });
 
     _progressController.forward();
   }
@@ -78,15 +79,16 @@ class _ProcessingPageState extends State<ProcessingPage>
     final peptideCount = widget.selectedPeptides.isEmpty
         ? 2
         : widget.selectedPeptides.length;
-    final goalCount =
-        widget.selectedGoals.isEmpty ? 3 : widget.selectedGoals.length;
+    final goalCount = widget.selectedGoals.isEmpty
+        ? 3
+        : widget.selectedGoals.length;
 
     if (progress < 0.25) {
       return 'ANALYSING $goalCount GOALS...';
     } else if (progress < 0.55) {
-      return 'CALCULATING OPTIMAL SCHEDULE...';
+      return 'ORGANISING YOUR SCHEDULE...';
     } else if (progress < 0.80) {
-      return 'MAPPING $peptideCount PEPTIDE INTERACTIONS...';
+      return 'LINKING $peptideCount PEPTIDE RECORDS...';
     } else {
       return 'BUILDING YOUR PROTOCOL...';
     }
@@ -121,8 +123,10 @@ class _ProcessingPageState extends State<ProcessingPage>
               children: [
                 const SizedBox(height: AppSpacing.huge),
 
-                Text('SYS.ENGINE // COMPILING',
-                    style: AppTypography.systemLabel),
+                Text(
+                  'SYS.ENGINE // COMPILING',
+                  style: AppTypography.systemLabel,
+                ),
                 const SizedBox(height: AppSpacing.md),
                 Text(
                   'Building your\nprotocol',
@@ -183,8 +187,9 @@ class _ProcessingPageState extends State<ProcessingPage>
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color:
-                                      AppColors.primary.withValues(alpha: 0.3),
+                                  color: AppColors.primary.withValues(
+                                    alpha: 0.3,
+                                  ),
                                   blurRadius: 24,
                                 ),
                               ],
@@ -193,8 +198,8 @@ class _ProcessingPageState extends State<ProcessingPage>
                               child: AnimatedBuilder(
                                 animation: _progressController,
                                 builder: (context, _) {
-                                  final pct =
-                                      (_progressController.value * 100).round();
+                                  final pct = (_progressController.value * 100)
+                                      .round();
                                   return Text(
                                     '$pct%',
                                     style: AppTypography.heroSmall.copyWith(
@@ -202,8 +207,9 @@ class _ProcessingPageState extends State<ProcessingPage>
                                       color: AppColors.primary,
                                       shadows: [
                                         Shadow(
-                                          color: AppColors.primary
-                                              .withValues(alpha: 0.6),
+                                          color: AppColors.primary.withValues(
+                                            alpha: 0.6,
+                                          ),
                                           blurRadius: 10,
                                         ),
                                       ],
@@ -237,8 +243,9 @@ class _ProcessingPageState extends State<ProcessingPage>
                                 color: AppColors.primary,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.primary
-                                        .withValues(alpha: 0.6),
+                                    color: AppColors.primary.withValues(
+                                      alpha: 0.6,
+                                    ),
                                     blurRadius: 6,
                                   ),
                                 ],
@@ -266,8 +273,7 @@ class _ProcessingPageState extends State<ProcessingPage>
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color:
-                                  AppColors.primary.withValues(alpha: 0.7),
+                              color: AppColors.primary.withValues(alpha: 0.7),
                               blurRadius: 6,
                             ),
                           ],

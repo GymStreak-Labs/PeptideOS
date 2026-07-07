@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import '../../../core/services/analytics_service.dart';
 import '../../../core/theme/theme.dart';
+import '../../../services/notification_service.dart';
 import '../services/onboarding_draft_service.dart';
 import '../widgets/age_gate_page.dart';
 import '../widgets/hook_page.dart';
@@ -14,21 +15,24 @@ import '../widgets/first_name_page.dart';
 import '../widgets/goals_page.dart';
 import '../widgets/experience_page.dart';
 import '../widgets/frustration_page.dart';
+import '../widgets/confidence_page.dart';
 import '../widgets/peptide_select_page.dart';
 import '../widgets/calculator_demo_page.dart';
+import '../widgets/notification_page.dart';
 import '../widgets/review_gate_page.dart';
 import '../widgets/processing_page.dart';
 import '../widgets/protocol_preview_page.dart';
+import '../widgets/protocol_roadmap_page.dart';
 import '../widgets/results_summary_page.dart';
 import '../widgets/feature_showcase_page.dart';
 
-/// Full 18-screen onboarding flow — conversion-optimised v3.
+/// Full onboarding flow — conversion-optimised v5.
 ///
 /// Phase 1 — Emotional Mirror:   Age Gate → Hook → Disclaimer
-/// Phase 2 — Personalisation:    Name → Birth Date → Goals → Experience → Frustration → Peptides
+/// Phase 2 — Personalisation:    Name → Birth Date → Goals → Experience → Frustration → Confidence → Peptides
 /// Phase 3 — Aha Moment:         Calculator Demo
-/// Phase 4 — Reveal:             Processing → Protocol Preview → Results Summary
-/// Phase 5 — Value & Handoff:    Feature Showcase → Value Screens → Review → Auth → Paywall
+/// Phase 4 — Reveal:             Processing → Protocol Preview → Results Summary → 60-day roadmap
+/// Phase 5 — Value & Handoff:    Feature Showcase → Notifications → Value Screens → Review → Auth → Paywall
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key, this.onReadyForAuth});
 
@@ -43,7 +47,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
   int _currentPage = 0;
-  static const _totalPages = 18;
+  static const _totalPages = 23;
   static const _stepNames = <String>[
     'age_gate',
     'hook',
@@ -51,14 +55,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     'first_name',
     'birth_date',
     'goals',
+    'goals_reassurance',
     'experience',
     'frustration',
+    'confidence',
+    'confidence_reassurance',
     'peptide_select',
     'calculator_demo',
     'processing',
     'protocol_preview',
     'results_summary',
+    'first_60_days',
     'feature_showcase',
+    'notification_prompt',
     'value_protocol',
     'value_conversion',
     'value_progress',
@@ -71,7 +80,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final Set<String> _selectedGoals = {};
   String _experienceLevel = '';
   String _frustration = '';
+  final Set<String> _selectedConfidenceNeeds = {};
   final Set<String> _selectedPeptides = {};
+  bool _notificationsEnabled = false;
 
   @override
   void initState() {
@@ -120,9 +131,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         firstName: _firstName,
         birthDate: _birthDate,
         goals: _selectedGoals.toList(),
+        confidenceNeeds: _selectedConfidenceNeeds.toList(),
         experience: _experienceLevel,
         frustration: _frustration,
         selectedPeptides: _selectedPeptides.toList(),
+        notificationsEnabled: _notificationsEnabled,
       );
       await OnboardingDraftService.save(draft);
       await OnboardingDraftService.setPostAuthPaywallPending(true);
@@ -145,6 +158,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   String get _firstPeptide =>
       _selectedPeptides.isNotEmpty ? _selectedPeptides.first : 'BPC-157';
+
+  Future<bool> _requestNotifications() async {
+    final granted = await NotificationService.instance.requestPermission();
+    if (mounted) {
+      setState(() => _notificationsEnabled = granted);
+    }
+    return granted;
+  }
 
   void _logScreenViewed(int page) {
     if (page < 0 || page >= _stepNames.length) return;
@@ -231,7 +252,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 6: Experience Level
+              // 6: Reassurance after goals
+              OnboardingPage(
+                systemLabel: 'SYS.GUIDE // CALIBRATED',
+                title: 'You are already\nahead.',
+                body:
+                    'Most peptide tracking gets scattered across notes, screenshots, and guesses. We will turn your choices into one organised record.',
+                icon: Icons.route_rounded,
+                iconColor: AppColors.primary,
+                buttonLabel: 'CONTINUE',
+                onNext: _nextPage,
+              ),
+
+              // 7: Experience Level
               ExperiencePage(
                 selected: _experienceLevel,
                 onSelect: (level) {
@@ -240,14 +273,41 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 7: Biggest Frustration
+              // 8: Biggest Frustration
               FrustrationPage(
                 selected: _frustration,
                 onSelect: (f) => setState(() => _frustration = f),
                 onNext: _nextPage,
               ),
 
-              // 8: Current/Planned Peptides
+              // 9: Confidence Signals
+              ConfidencePage(
+                selectedNeeds: _selectedConfidenceNeeds,
+                onToggle: (need) {
+                  setState(() {
+                    if (_selectedConfidenceNeeds.contains(need)) {
+                      _selectedConfidenceNeeds.remove(need);
+                    } else {
+                      _selectedConfidenceNeeds.add(need);
+                    }
+                  });
+                },
+                onNext: _nextPage,
+              ),
+
+              // 10: Reassurance after confidence signals
+              OnboardingPage(
+                systemLabel: 'SYS.CLARITY // READY',
+                title: 'We will give you\na guided place to start.',
+                body:
+                    'PepMod stays in tracking territory: clean records, dose math, reminders, and plain-English reference notes. No diagnosis. No prescribing.',
+                icon: Icons.verified_user_outlined,
+                iconColor: AppColors.secondary,
+                buttonLabel: 'CONTINUE',
+                onNext: _nextPage,
+              ),
+
+              // 11: Current/Planned Peptides
               PeptideSelectPage(
                 selectedPeptides: _selectedPeptides,
                 onToggle: (p) {
@@ -264,39 +324,54 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // ── Phase 3: Aha Moment ───────────────────────────────
 
-              // 9: Unit Converter Demo
+              // 12: Unit Converter Demo
               CalculatorDemoPage(peptideName: _firstPeptide, onNext: _nextPage),
 
               // ── Phase 4: Reveal ───────────────────────────────────
 
-              // 10: Building Your Protocol (processing)
+              // 13: Building Your Protocol (processing)
               ProcessingPage(
                 onNext: _nextPage,
                 selectedPeptides: _selectedPeptides,
                 selectedGoals: _selectedGoals,
               ),
 
-              // 11: Protocol Preview
+              // 14: Protocol Preview
               ProtocolPreviewPage(
                 peptides: _selectedPeptides,
                 onNext: _nextPage,
               ),
 
-              // 12: Personalised Results Summary
+              // 15: Personalised Results Summary
               ResultsSummaryPage(
                 selectedGoals: _selectedGoals,
+                confidenceNeeds: _selectedConfidenceNeeds,
                 experienceLevel: _experienceLevel,
                 frustration: _frustration,
                 selectedPeptides: _selectedPeptides,
                 onNext: _nextPage,
               ),
 
+              // 16: 60-day Roadmap
+              ProtocolRoadmapPage(
+                selectedGoals: _selectedGoals,
+                confidenceNeeds: _selectedConfidenceNeeds,
+                selectedPeptides: _selectedPeptides,
+                onNext: _nextPage,
+              ),
+
               // ── Phase 5: Value & Handoff ─────────────────────────
 
-              // 13: Feature Showcase
+              // 17: Feature Showcase
               FeatureShowcasePage(onNext: _nextPage),
 
-              // 14: Value screen — protocol organization
+              // 18: Notification permission warm-up
+              NotificationPage(
+                onEnable: _requestNotifications,
+                onNext: _nextPage,
+              ),
+
+              // 19: Value screen — protocol organization
               OnboardingPage(
                 systemLabel: 'SYS.VALUE // PROTOCOL',
                 title: 'Everything stays\nin one protocol.',
@@ -308,19 +383,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 15: Value screen — unit conversion
+              // 20: Value screen — unit conversion
               OnboardingPage(
                 systemLabel: 'SYS.VALUE // CONVERT',
                 title: 'Unit conversion\nwithout second guessing.',
                 body:
-                    'Use the built-in converter to translate vial, water, and dose inputs into clear syringe units for your own records.',
+                    'Keep vial size, water volume, dose, and syringe units together so you are not redoing the same math from scattered notes.',
                 icon: Icons.straighten_rounded,
                 iconColor: AppColors.secondary,
                 buttonLabel: 'CONTINUE',
                 onNext: _nextPage,
               ),
 
-              // 16: Value screen — trend tracking
+              // 21: Value screen — trend tracking
               OnboardingPage(
                 systemLabel: 'SYS.VALUE // SIGNAL',
                 title: 'See your tracking\ndata over time.',
@@ -332,7 +407,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 17: Review request at the end → Auth handoff. Paywall is
+              // 22: Review request at the end → Auth handoff. Paywall is
               // post-auth so RevenueCat/AppRefer attach events to Firebase UID.
               ReviewGatePage(onNext: _handoffToAuth),
             ],
