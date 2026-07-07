@@ -8,6 +8,8 @@ import '../../../core/widgets/widgets.dart';
 import '../../../models/dose_log.dart';
 import '../../../models/protocol.dart';
 import '../providers/dose_log_provider.dart';
+import '../providers/protocol_provider.dart';
+import 'peptide_label_color.dart';
 
 /// Bottom sheet that lets a user log / edit / skip a scheduled dose.
 class LogDoseSheet extends StatefulWidget {
@@ -106,9 +108,23 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
     );
   }
 
+  String _labelColorForDose(List<Protocol> protocols) {
+    for (final protocol in protocols) {
+      for (final peptide in protocol.peptides) {
+        if (peptide.uuid == widget.dose.protocolPeptideUuid) {
+          return peptide.labelColorHex;
+        }
+      }
+    }
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     final alreadyLogged = widget.dose.isTaken || widget.dose.skipped;
+    final labelColorHex = _labelColorForDose(
+      context.watch<ProtocolProvider>().all,
+    );
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -145,7 +161,19 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                   const SizedBox(height: AppSpacing.lg),
                   Text('LOG.DOSE', style: AppTypography.systemLabel),
                   const SizedBox(height: AppSpacing.sm),
-                  Text(widget.dose.peptideName, style: AppTypography.h2),
+                  Row(
+                    children: [
+                      PeptideLabelSwatch(hex: labelColorHex, size: 12),
+                      const SizedBox(width: AppSpacing.sm),
+                      Expanded(
+                        child: Text(
+                          widget.dose.peptideName,
+                          style: AppTypography.h2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: AppSpacing.lg),
 
                   // Amount + units

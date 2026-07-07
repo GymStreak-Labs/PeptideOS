@@ -12,6 +12,7 @@ import '../providers/dose_log_provider.dart';
 import '../providers/protocol_provider.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/log_dose_sheet.dart';
+import '../widgets/peptide_label_color.dart';
 import 'active_protocol_detail_screen.dart';
 import 'create_protocol_screen.dart';
 
@@ -39,6 +40,7 @@ class ProtocolHomeScreen extends StatelessWidget {
         .where((d) => d.isPending && d.scheduledAt.isAfter(now))
         .toList();
     final nextDose = upcoming.isEmpty ? null : upcoming.first;
+    final labelColors = _labelColorsByPeptideUuid(protocolProvider.active);
 
     return RefreshIndicator(
       color: AppColors.primary,
@@ -121,6 +123,7 @@ class ProtocolHomeScreen extends StatelessWidget {
                 ),
                 child: _NextDoseCard(
                   dose: nextDose,
+                  labelColorHex: _labelColorForDose(nextDose, labelColors),
                   onLog: () => _openLogSheet(context, nextDose),
                 ),
               ),
@@ -186,6 +189,7 @@ class ProtocolHomeScreen extends StatelessWidget {
                   final dose = today[index];
                   return _DoseCard(
                     dose: dose,
+                    labelColorHex: _labelColorForDose(dose, labelColors),
                     onTap: () => _openLogSheet(context, dose),
                   );
                 },
@@ -247,6 +251,18 @@ class ProtocolHomeScreen extends StatelessWidget {
 
   String _dayLabel(DateTime d) =>
       '${_weekdays[d.weekday - 1]}\n${_months[d.month - 1]} ${d.day}';
+
+  Map<String, String> _labelColorsByPeptideUuid(List<Protocol> protocols) {
+    return <String, String>{
+      for (final protocol in protocols)
+        for (final peptide in protocol.peptides)
+          peptide.uuid: peptide.labelColorHex,
+    };
+  }
+
+  String _labelColorForDose(DoseLog dose, Map<String, String> labelColors) {
+    return labelColors[dose.protocolPeptideUuid] ?? '';
+  }
 }
 
 // ── Header icon button ──────────────────────────────────────────────────────
@@ -424,8 +440,14 @@ class _TodayHeroCard extends StatelessWidget {
 
 // ── Next dose card ──────────────────────────────────────────────────────────
 class _NextDoseCard extends StatelessWidget {
-  const _NextDoseCard({required this.dose, required this.onLog});
+  const _NextDoseCard({
+    required this.dose,
+    required this.labelColorHex,
+    required this.onLog,
+  });
+
   final DoseLog dose;
+  final String labelColorHex;
   final VoidCallback onLog;
 
   @override
@@ -438,20 +460,7 @@ class _NextDoseCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.6),
-                      blurRadius: 8,
-                    ),
-                  ],
-                ),
-              ),
+              PeptideLabelSwatch(hex: labelColorHex, size: 8),
               const SizedBox(width: AppSpacing.sm),
               Text('NEXT DOSE', style: AppTypography.systemLabel),
               const Spacer(),
@@ -533,8 +542,14 @@ class _NextDoseCard extends StatelessWidget {
 
 // ── Dose card for today's list ──────────────────────────────────────────────
 class _DoseCard extends StatelessWidget {
-  const _DoseCard({required this.dose, required this.onTap});
+  const _DoseCard({
+    required this.dose,
+    required this.labelColorHex,
+    required this.onTap,
+  });
+
   final DoseLog dose;
+  final String labelColorHex;
   final VoidCallback onTap;
 
   @override
@@ -598,7 +613,19 @@ class _DoseCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(dose.peptideName, style: AppTypography.labelLarge),
+                Row(
+                  children: [
+                    PeptideLabelSwatch(hex: labelColorHex, size: 8),
+                    const SizedBox(width: AppSpacing.xs),
+                    Expanded(
+                      child: Text(
+                        dose.peptideName,
+                        style: AppTypography.labelLarge,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
                 Text(
                   '${_formatAmount(dose.amountTaken)} ${dose.units}'
                   '${_syringeLabel(dose.syringeUnits)}'

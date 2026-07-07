@@ -274,6 +274,7 @@ class ProfileScreen extends StatelessWidget {
                       'cycleWeeks': pp.cycleWeeks,
                       'washoutWeeks': pp.washoutWeeks,
                       'syringeUnits': pp.syringeUnits,
+                      'labelColorHex': pp.labelColorHex,
                       'scheduledTimes': pp.scheduledTimes,
                       'weekdayDoses': pp.weekdayDoses
                           .map((d) => d.toMap())

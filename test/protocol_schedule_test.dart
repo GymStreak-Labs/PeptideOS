@@ -13,6 +13,7 @@ void main() {
       });
 
       expect(peptide.weekdayDoses, isEmpty);
+      expect(peptide.labelColorHex, isEmpty);
 
       final schedule = peptide.scheduleForDate(
         protocolStart: DateTime(2026, 6, 20),
@@ -170,6 +171,7 @@ void main() {
         frequency: kCustomWeekdayFrequency,
         cycleWeeks: 8,
         washoutWeeks: 4,
+        labelColorHex: '#FF2A6D',
         weekdayDoses: [
           ProtocolWeekdayDose(
             weekday: DateTime.friday,
@@ -187,6 +189,7 @@ void main() {
       expect(restored.syringeUnits, 8);
       expect(restored.cycleWeeks, 8);
       expect(restored.washoutWeeks, 4);
+      expect(restored.labelColorHex, '#FF2A6D');
       expect(restored.weekdayDoses.single.weekday, DateTime.friday);
       expect(restored.weekdayDoses.single.dosePerInjection, 0.25);
       expect(restored.weekdayDoses.single.doseUnit, 'mg');
