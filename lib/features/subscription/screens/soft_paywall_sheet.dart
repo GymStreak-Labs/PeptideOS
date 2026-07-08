@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../core/services/analytics_service.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../data/services/superwall_bridge_service.dart';
 import '../providers/subscription_provider.dart';
 
 /// Simple bottom-sheet paywall shown when a free-tier user hits the peptide
@@ -18,6 +19,17 @@ Future<bool> showSoftPaywall(
   required String reason,
 }) async {
   AnalyticsService().logPaywallViewed(source);
+  final bridge = SuperwallBridgeService.instance;
+  if (bridge.canPresentPaywalls) {
+    final result = await bridge.presentPlacement(
+      SuperwallPlacements.forSoftGateSource(source),
+      params: {'source': source, 'reason': reason, 'surface': 'soft_gate'},
+    );
+    if (result == SuperwallPlacementResult.completedPremium) return true;
+    if (result == SuperwallPlacementResult.completedNoPurchase) return false;
+    if (!context.mounted) return false;
+  }
+
   final result = await showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,

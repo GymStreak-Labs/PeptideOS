@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 /// Wraps RevenueCat with PepMod-specific API keys + entitlement.
@@ -240,13 +241,14 @@ class SubscriptionService {
     try {
       final info = await Purchases.purchasePackage(package);
       _handleCustomerInfoUpdate(info);
-      final premium = info.entitlements.active.containsKey(entitlementId);
+      final premium = customerInfoHasPremium(info);
       return PurchaseResult(success: premium, customerInfo: info);
-    } on PurchasesErrorCode catch (e) {
+    } on PlatformException catch (e) {
+      final code = PurchasesErrorHelper.getErrorCode(e);
       return PurchaseResult(
         success: false,
-        error: _handlePurchaseError(e),
-        cancelled: e == PurchasesErrorCode.purchaseCancelledError,
+        error: _handlePurchaseError(code),
+        cancelled: code == PurchasesErrorCode.purchaseCancelledError,
       );
     } catch (_) {
       return PurchaseResult(
@@ -254,6 +256,14 @@ class SubscriptionService {
         error: 'An unexpected error occurred.',
       );
     }
+  }
+
+  void syncCustomerInfo(CustomerInfo info) {
+    _handleCustomerInfoUpdate(info);
+  }
+
+  static bool customerInfoHasPremium(CustomerInfo info) {
+    return info.entitlements.active.containsKey(entitlementId);
   }
 
   Future<RestoreResult> restorePurchases() async {
@@ -267,7 +277,7 @@ class SubscriptionService {
     try {
       final info = await Purchases.restorePurchases();
       _handleCustomerInfoUpdate(info);
-      final premium = info.entitlements.active.containsKey(entitlementId);
+      final premium = customerInfoHasPremium(info);
       return RestoreResult(success: true, isPremium: premium);
     } catch (_) {
       return RestoreResult(
@@ -279,7 +289,7 @@ class SubscriptionService {
   }
 
   void _handleCustomerInfoUpdate(CustomerInfo info) {
-    final premium = info.entitlements.active.containsKey(entitlementId);
+    final premium = customerInfoHasPremium(info);
     _lastKnownPremium = premium;
     _premiumController.add(premium);
   }
