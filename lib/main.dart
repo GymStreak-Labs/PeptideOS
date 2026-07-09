@@ -92,6 +92,7 @@ Future<void> main() async {
       };
 
       _validateReleaseAttributionConfig();
+      _validateReleaseSuperwallConfig();
 
       // RevenueCat — safe no-op if key still TODO.
       await SubscriptionService.instance.configure();
@@ -160,6 +161,18 @@ Future<void> _configureAppRefer() async {
 void _validateReleaseAttributionConfig() {
   if (!kReleaseMode || _hasAppReferApiKey) return;
   throw StateError('Release builds require --dart-define=APPREFER_API_KEY.');
+}
+
+void _validateReleaseSuperwallConfig() {
+  if (!kReleaseMode || !SuperwallBridgeService.releaseRequiresPlatformApiKey) {
+    return;
+  }
+  if (SuperwallBridgeService.hasPlatformApiKey) return;
+  throw StateError(
+    'Release builds require --dart-define=SUPERWALL_IOS_API_KEY or '
+    '--dart-define=SUPERWALL_ANDROID_API_KEY unless Superwall is explicitly '
+    'disabled or native fallback is explicitly forced.',
+  );
 }
 
 Future<void> _initFacebookEvents(TrackingStatus trackingStatus) async {
