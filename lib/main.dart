@@ -350,9 +350,16 @@ class _AppRootState extends State<_AppRoot> {
   }
 
   void _markReadyForAuth() {
+    final isSignedIn = context.read<AuthProvider>().isSignedIn;
     setState(() {
       _preAuthOnboardingReady = true;
       _postAuthPaywallPending = true;
+      // A signed-in user can re-enter onboarding through Clear all data.
+      // In that flow the first replay attempt happens before the new draft
+      // exists, so release the latch now that onboarding has staged it.
+      if (isSignedIn && !_replayingOnboardingDraft) {
+        _onboardingReplayAttempted = false;
+      }
     });
   }
 
