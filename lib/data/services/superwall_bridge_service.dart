@@ -58,10 +58,19 @@ class SuperwallBridgeService {
     defaultValue: SubscriptionService.entitlementId,
   );
 
+  static bool get releaseRequiresPlatformApiKey =>
+      enabled && !forceNativePaywall;
+
+  static bool get hasPlatformApiKey {
+    final apiKey = _platformApiKey;
+    return apiKey.isNotEmpty && !apiKey.startsWith('TODO_');
+  }
+
   final _RevenueCatSuperwallPurchaseController _purchaseController;
   final SubscriptionService _subscriptionService = SubscriptionService.instance;
 
   StreamSubscription<bool>? _premiumSub;
+  Future<void>? _configurationReady;
   bool _configureAttempted = false;
   bool _configured = false;
 
@@ -85,13 +94,15 @@ class SuperwallBridgeService {
       return;
     }
 
-    final apiKey = (Platform.isIOS ? _iosApiKey : _androidApiKey).trim();
-    if (apiKey.isEmpty || apiKey.startsWith('TODO_')) {
+    final apiKey = _platformApiKey;
+    if (!hasPlatformApiKey) {
       debugPrint('[SuperwallBridge] API key missing; native paywall remains.');
       return;
     }
 
     try {
+      final configurationCompleter = Completer<void>();
+      _configurationReady = configurationCompleter.future;
       final options = sw.SuperwallOptions()
         ..shouldObservePurchases = false
         ..passIdentifiersToPlayStore = false
@@ -102,17 +113,28 @@ class SuperwallBridgeService {
         apiKey,
         purchaseController: _purchaseController,
         options: options,
+        completion: () {
+          if (!configurationCompleter.isCompleted) {
+            configurationCompleter.complete();
+          }
+        },
       );
 
       _configured = true;
       _premiumSub = _subscriptionService.premiumStatusStream.listen(
         (premium) => unawaited(syncPremiumStatus(premium)),
       );
-      await syncPremiumStatus(await _subscriptionService.isPremium());
+      unawaited(_syncAfterNativeConfiguration(configurationCompleter.future));
     } catch (e) {
       _configured = false;
       debugPrint('[SuperwallBridge] configure failed: $e');
     }
+  }
+
+  Future<void> _syncAfterNativeConfiguration(Future<void> nativeReady) async {
+    await _waitForNativeConfiguration(nativeReady);
+    if (!_configured) return;
+    await syncPremiumStatus(await _subscriptionService.isPremium());
   }
 
   Future<void> identifyUser({
@@ -185,6 +207,7 @@ class SuperwallBridgeService {
     Map<String, Object>? params,
   }) async {
     if (!canPresentPaywalls) return SuperwallPlacementResult.unavailable;
+    await _waitForNativeConfiguration(_configurationReady);
 
     try {
       await sw.Superwall.shared.registerPlacement(placement, params: params);
@@ -260,6 +283,18 @@ class SuperwallBridgeService {
 
   static String? _nonEmpty(String? value) {
     return _trimOrNull(value);
+  }
+
+  static String get _platformApiKey =>
+      (Platform.isIOS ? _iosApiKey : _androidApiKey).trim();
+
+  Future<void> _waitForNativeConfiguration(Future<void>? nativeReady) async {
+    if (nativeReady == null) return;
+    try {
+      await nativeReady.timeout(const Duration(seconds: 6));
+    } catch (_) {
+      debugPrint('[SuperwallBridge] native configuration still pending.');
+    }
   }
 
   static String? _trimOrNull(String? value) {
