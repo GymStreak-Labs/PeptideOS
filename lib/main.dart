@@ -15,6 +15,7 @@ import 'core/firebase/firebase_init.dart';
 import 'core/services/analytics_service.dart';
 import 'core/services/support_service.dart';
 import 'core/theme/theme.dart';
+import 'core/widgets/widgets.dart';
 import 'data/repositories/body_metric_repository.dart';
 import 'data/repositories/dose_log_repository.dart';
 import 'data/repositories/peptide_library_repository.dart';
@@ -462,6 +463,7 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
   bool _offeringsLoadStarted = false;
   bool _superwallAttempted = false;
   bool _showNativeFallback = false;
+  bool _showRemoteUnavailable = false;
 
   @override
   void didChangeDependencies() {
@@ -483,7 +485,7 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
     if (_superwallAttempted || _showNativeFallback) return;
     final bridge = SuperwallBridgeService.instance;
     if (!bridge.canPresentPaywalls) {
-      _showNativeFallback = true;
+      _showFallbackOrUnavailable();
       return;
     }
 
@@ -501,8 +503,26 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
         await widget.onComplete();
         return;
       }
-      setState(() => _showNativeFallback = true);
+      _showFallbackOrUnavailable();
     });
+  }
+
+  void _showFallbackOrUnavailable() {
+    setState(() {
+      if (SuperwallBridgeService.canUseNativeFallback) {
+        _showNativeFallback = true;
+      } else {
+        _showRemoteUnavailable = true;
+      }
+    });
+  }
+
+  void _retrySuperwall() {
+    setState(() {
+      _superwallAttempted = false;
+      _showRemoteUnavailable = false;
+    });
+    _presentSuperwallIfAvailable();
   }
 
   Future<void> _handleSubscribe(int selectedPlan) async {
@@ -550,6 +570,21 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
 
   Future<void> _handleRestore() async {
     final sub = context.read<SubscriptionProvider>();
+    if (SuperwallBridgeService.handlesPurchases &&
+        SuperwallBridgeService.instance.canPresentPaywalls) {
+      final restored = await SuperwallBridgeService.instance.restorePurchases();
+      await sub.refresh();
+      if (!mounted) return;
+      if (restored || sub.isPremium) {
+        await widget.onComplete();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No purchases found to restore.')),
+        );
+      }
+      return;
+    }
+
     final result = await sub.restore();
     if (!mounted) return;
     if (result.success && result.isPremium) {
@@ -566,6 +601,12 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
   @override
   Widget build(BuildContext context) {
     final sub = context.watch<SubscriptionProvider>();
+    if (_showRemoteUnavailable) {
+      return _RemotePaywallUnavailable(
+        onRetry: _retrySuperwall,
+        onRestore: _handleRestore,
+      );
+    }
     if (!_showNativeFallback) return const _Splash();
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -573,6 +614,65 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
         onSubscribe: _handleSubscribe,
         onRestore: _handleRestore,
         showSpecialOffer: sub.showSpecialOffer,
+      ),
+    );
+  }
+}
+
+class _RemotePaywallUnavailable extends StatelessWidget {
+  const _RemotePaywallUnavailable({
+    required this.onRetry,
+    required this.onRestore,
+  });
+
+  final VoidCallback onRetry;
+  final Future<void> Function() onRestore;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'SYS.PRO // CONNECTION',
+                style: AppTypography.systemLabel,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Text(
+                'PepMod Pro is not available right now',
+                style: AppTypography.h2,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                'Please try again or restore an existing purchase.',
+                style: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: AppSpacing.xl),
+              PrimaryButton(label: 'TRY AGAIN', onPressed: onRetry),
+              const SizedBox(height: AppSpacing.sm),
+              TextButton(
+                onPressed: onRestore,
+                child: Text(
+                  'Restore purchases',
+                  style: AppTypography.bodySmall.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

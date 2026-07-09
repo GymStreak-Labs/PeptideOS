@@ -35,6 +35,18 @@ class SubscriptionService {
   /// `--dart-define=FORCE_PREMIUM=true` for internal test builds.
   static const bool forcePremium = bool.fromEnvironment('FORCE_PREMIUM');
 
+  /// Migration mode: Superwall completes new purchases while RevenueCat remains
+  /// configured as a legacy entitlement fallback for existing subscribers.
+  static const bool superwallHandlesPurchases = bool.fromEnvironment(
+    'SUPERWALL_HANDLES_PURCHASES',
+    defaultValue: true,
+  );
+
+  static const bool legacyRevenueCatAccessFallback = bool.fromEnvironment(
+    'SUPERWALL_LEGACY_REVENUECAT_ACCESS_FALLBACK',
+    defaultValue: true,
+  );
+
   final StreamController<bool> _premiumController =
       StreamController<bool>.broadcast();
 
@@ -44,7 +56,9 @@ class SubscriptionService {
   bool get isConfigured => _configured;
 
   bool _lastKnownPremium = false;
-  bool get lastKnownPremium => _lastKnownPremium;
+  bool _lastKnownRevenueCatPremium = false;
+  bool _lastKnownExternalPremium = false;
+  bool get lastKnownPremium => forcePremium || _lastKnownPremium;
 
   /// Configure the RC SDK and wire up the customer-info listener.
   /// Call once in main.dart essential init.
@@ -56,7 +70,13 @@ class SubscriptionService {
         debugPrint('[SubscriptionService] RC key not configured; skipping.');
         return;
       }
-      await Purchases.configure(PurchasesConfiguration(key));
+      final configuration = PurchasesConfiguration(key);
+      if (superwallHandlesPurchases) {
+        configuration.purchasesAreCompletedBy = PurchasesAreCompletedByMyApp(
+          storeKitVersion: StoreKitVersion.storeKit2,
+        );
+      }
+      await Purchases.configure(configuration);
       Purchases.addCustomerInfoUpdateListener(_handleCustomerInfoUpdate);
       _configured = true;
     } catch (e) {
@@ -78,8 +98,9 @@ class SubscriptionService {
     if (!_configured) return;
     try {
       await Purchases.logOut();
-      _lastKnownPremium = false;
-      _premiumController.add(false);
+      _lastKnownRevenueCatPremium = false;
+      _lastKnownExternalPremium = false;
+      _emitPremiumStatus();
     } catch (e) {
       debugPrint('[SubscriptionService] logout failed: $e');
     }
@@ -87,12 +108,23 @@ class SubscriptionService {
 
   Future<bool> isPremium() async {
     if (forcePremium) return true;
+    if (_lastKnownExternalPremium) return true;
+    if (!legacyRevenueCatAccessFallback && superwallHandlesPurchases) {
+      _emitPremiumStatus();
+      return _lastKnownPremium;
+    }
+    return isRevenueCatPremium();
+  }
+
+  Future<bool> isRevenueCatPremium() async {
+    if (forcePremium) return true;
     if (!_configured) return false;
     try {
       final info = await Purchases.getCustomerInfo();
       final premium = info.entitlements.active.containsKey(entitlementId);
-      _lastKnownPremium = premium;
-      return premium;
+      _lastKnownRevenueCatPremium = premium;
+      _emitPremiumStatus();
+      return _lastKnownPremium;
     } catch (e) {
       debugPrint('[SubscriptionService] isPremium failed: $e');
       return _lastKnownPremium;
@@ -262,6 +294,11 @@ class SubscriptionService {
     _handleCustomerInfoUpdate(info);
   }
 
+  void syncExternalPremiumStatus(bool premium) {
+    _lastKnownExternalPremium = premium;
+    _emitPremiumStatus();
+  }
+
   static bool customerInfoHasPremium(CustomerInfo info) {
     return info.entitlements.active.containsKey(entitlementId);
   }
@@ -290,8 +327,16 @@ class SubscriptionService {
 
   void _handleCustomerInfoUpdate(CustomerInfo info) {
     final premium = customerInfoHasPremium(info);
-    _lastKnownPremium = premium;
-    _premiumController.add(premium);
+    _lastKnownRevenueCatPremium = premium;
+    _emitPremiumStatus();
+  }
+
+  void _emitPremiumStatus() {
+    _lastKnownPremium =
+        forcePremium ||
+        _lastKnownExternalPremium ||
+        (legacyRevenueCatAccessFallback && _lastKnownRevenueCatPremium);
+    _premiumController.add(_lastKnownPremium);
   }
 
   String _handlePurchaseError(PurchasesErrorCode error) {

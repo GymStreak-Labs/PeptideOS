@@ -47,6 +47,13 @@ class SuperwallBridgeService {
   static const bool forceNativePaywall = bool.fromEnvironment(
     'SUPERWALL_FORCE_NATIVE_PAYWALL',
   );
+  static const bool handlesPurchases = bool.fromEnvironment(
+    'SUPERWALL_HANDLES_PURCHASES',
+    defaultValue: true,
+  );
+  static const bool allowNativeFallback = bool.fromEnvironment(
+    'SUPERWALL_ALLOW_NATIVE_FALLBACK',
+  );
   static const String _iosApiKey = String.fromEnvironment(
     'SUPERWALL_IOS_API_KEY',
   );
@@ -61,6 +68,9 @@ class SuperwallBridgeService {
   static bool get releaseRequiresPlatformApiKey =>
       enabled && !forceNativePaywall;
 
+  static bool get canUseNativeFallback =>
+      allowNativeFallback || !handlesPurchases;
+
   static bool get hasPlatformApiKey {
     final apiKey = _platformApiKey;
     return apiKey.isNotEmpty && !apiKey.startsWith('TODO_');
@@ -70,6 +80,7 @@ class SuperwallBridgeService {
   final SubscriptionService _subscriptionService = SubscriptionService.instance;
 
   StreamSubscription<bool>? _premiumSub;
+  StreamSubscription<sw.SubscriptionStatus>? _superwallStatusSub;
   Future<void>? _configurationReady;
   bool _configureAttempted = false;
   bool _configured = false;
@@ -89,7 +100,7 @@ class SuperwallBridgeService {
       debugPrint('[SuperwallBridge] native paywall forced by dart-define.');
       return;
     }
-    if (!_subscriptionService.isConfigured) {
+    if (!handlesPurchases && !_subscriptionService.isConfigured) {
       debugPrint('[SuperwallBridge] RevenueCat is not configured; skipping.');
       return;
     }
@@ -111,7 +122,7 @@ class SuperwallBridgeService {
 
       sw.Superwall.configure(
         apiKey,
-        purchaseController: _purchaseController,
+        purchaseController: handlesPurchases ? null : _purchaseController,
         options: options,
         completion: () {
           if (!configurationCompleter.isCompleted) {
@@ -121,9 +132,15 @@ class SuperwallBridgeService {
       );
 
       _configured = true;
-      _premiumSub = _subscriptionService.premiumStatusStream.listen(
-        (premium) => unawaited(syncPremiumStatus(premium)),
-      );
+      if (handlesPurchases) {
+        _superwallStatusSub = sw.Superwall.shared.subscriptionStatus.listen(
+          _handleSuperwallSubscriptionStatus,
+        );
+      } else {
+        _premiumSub = _subscriptionService.premiumStatusStream.listen(
+          (premium) => unawaited(syncPremiumStatus(premium)),
+        );
+      }
       unawaited(_syncAfterNativeConfiguration(configurationCompleter.future));
     } catch (e) {
       _configured = false;
@@ -134,7 +151,11 @@ class SuperwallBridgeService {
   Future<void> _syncAfterNativeConfiguration(Future<void> nativeReady) async {
     await _waitForNativeConfiguration(nativeReady);
     if (!_configured) return;
-    await syncPremiumStatus(await _subscriptionService.isPremium());
+    if (handlesPurchases) {
+      await _refreshSuperwallPremiumStatus();
+    } else {
+      await syncPremiumStatus(await _subscriptionService.isPremium());
+    }
   }
 
   Future<void> identifyUser({
@@ -169,7 +190,8 @@ class SuperwallBridgeService {
     if (!_configured) return;
     try {
       await sw.Superwall.shared.reset();
-      await syncPremiumStatus(false);
+      _subscriptionService.syncExternalPremiumStatus(false);
+      if (!handlesPurchases) await syncPremiumStatus(false);
     } catch (e) {
       debugPrint('[SuperwallBridge] reset failed: $e');
     }
@@ -187,13 +209,15 @@ class SuperwallBridgeService {
   Future<void> syncPremiumStatus(bool premium) async {
     if (!_configured) return;
     try {
-      await sw.Superwall.shared.setSubscriptionStatus(
-        premium
-            ? sw.SubscriptionStatusActive(
-                entitlements: {sw.Entitlement(id: entitlementId)},
-              )
-            : sw.SubscriptionStatusInactive(),
-      );
+      if (!handlesPurchases) {
+        await sw.Superwall.shared.setSubscriptionStatus(
+          premium
+              ? sw.SubscriptionStatusActive(
+                  entitlements: {sw.Entitlement(id: entitlementId)},
+                )
+              : sw.SubscriptionStatusInactive(),
+        );
+      }
       await sw.Superwall.shared.setUserAttributes({
         'subscription_tier': premium ? 'premium' : 'free',
       });
@@ -210,9 +234,12 @@ class SuperwallBridgeService {
     await _waitForNativeConfiguration(_configurationReady);
 
     try {
+      if (await _hasPremiumAccess()) {
+        return SuperwallPlacementResult.completedPremium;
+      }
       await sw.Superwall.shared.registerPlacement(placement, params: params);
-      final premium = await _subscriptionService.isPremium();
-      await syncPremiumStatus(premium);
+      final premium = await _hasPremiumAccess();
+      if (!handlesPurchases) await syncPremiumStatus(premium);
       return premium
           ? SuperwallPlacementResult.completedPremium
           : SuperwallPlacementResult.completedNoPurchase;
@@ -226,8 +253,17 @@ class SuperwallBridgeService {
     if (!_configured) return false;
     try {
       await sw.Superwall.shared.restorePurchases();
-      final premium = await _subscriptionService.isPremium();
-      await syncPremiumStatus(premium);
+      var premium = await _hasPremiumAccess();
+      if (!premium &&
+          SubscriptionService.legacyRevenueCatAccessFallback &&
+          _subscriptionService.isConfigured) {
+        final rcResult = await _subscriptionService.restorePurchases();
+        premium = rcResult.success && rcResult.isPremium;
+      }
+      if (!handlesPurchases) await syncPremiumStatus(premium);
+      await setUserAttributes({
+        'subscription_tier': premium ? 'premium' : 'free',
+      });
       return premium;
     } catch (e) {
       debugPrint('[SuperwallBridge] restore failed: $e');
@@ -238,6 +274,45 @@ class SuperwallBridgeService {
   Future<void> dispose() async {
     await _premiumSub?.cancel();
     _premiumSub = null;
+    await _superwallStatusSub?.cancel();
+    _superwallStatusSub = null;
+  }
+
+  Future<bool> _hasPremiumAccess() async {
+    if (SubscriptionService.forcePremium) return true;
+    if (handlesPurchases) {
+      final superwallPremium = await _refreshSuperwallPremiumStatus();
+      if (superwallPremium) return true;
+    }
+    if (!handlesPurchases ||
+        SubscriptionService.legacyRevenueCatAccessFallback) {
+      return _subscriptionService.isRevenueCatPremium();
+    }
+    return _subscriptionService.isPremium();
+  }
+
+  Future<bool> _refreshSuperwallPremiumStatus() async {
+    if (!_configured) return false;
+    try {
+      final status = await sw.Superwall.shared.getSubscriptionStatus();
+      return _syncSuperwallStatus(status);
+    } catch (e) {
+      debugPrint('[SuperwallBridge] subscription status refresh failed: $e');
+      return false;
+    }
+  }
+
+  void _handleSuperwallSubscriptionStatus(sw.SubscriptionStatus status) {
+    final premium = _syncSuperwallStatus(status);
+    unawaited(
+      setUserAttributes({'subscription_tier': premium ? 'premium' : 'free'}),
+    );
+  }
+
+  bool _syncSuperwallStatus(sw.SubscriptionStatus status) {
+    final premium = status.isActive;
+    _subscriptionService.syncExternalPremiumStatus(premium);
+    return premium;
   }
 
   @visibleForTesting

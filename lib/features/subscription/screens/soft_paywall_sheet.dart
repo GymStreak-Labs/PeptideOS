@@ -30,6 +30,19 @@ Future<bool> showSoftPaywall(
     if (!context.mounted) return false;
   }
 
+  if (!SuperwallBridgeService.canUseNativeFallback) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Upgrade is not available right now. Please try again.',
+          ),
+        ),
+      );
+    }
+    return false;
+  }
+
   final result = await showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
