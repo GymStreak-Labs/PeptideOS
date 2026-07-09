@@ -36,8 +36,8 @@ class _PaywallPageState extends State<PaywallPage>
   bool _showCta = false;
   bool _showBenefits = false;
 
-  // Countdown timer (15 min = 900s)
-  int _countdownSeconds = 900;
+  // Countdown timer (2 min = 120s)
+  int _countdownSeconds = 120;
   Timer? _countdownTimer;
 
   // Shimmer
@@ -237,7 +237,7 @@ class _PaywallPageState extends State<PaywallPage>
                 }
               },
               child: Text(
-                'Everything to run\nyour protocol right.',
+                'Keep every dose and\nreminder in one clear plan.',
                 style: AppTypography.h1.copyWith(
                   fontSize: 30,
                   height: 1.1,
@@ -252,7 +252,7 @@ class _PaywallPageState extends State<PaywallPage>
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Dose math, site rotation, reminders, and protocol history - all in one record.',
+              'Dose math, site rotation, reminders, and protocol history stay together before each log.',
               style: AppTypography.bodyMedium.copyWith(
                 color: AppColors.textSecondary.withValues(alpha: 0.65),
                 height: 1.45,
@@ -491,7 +491,7 @@ class _PaywallPageState extends State<PaywallPage>
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'SPECIAL OFFER',
+                        'LAUNCH OFFER',
                         style: AppTypography.systemLabel.copyWith(
                           fontSize: 10,
                           letterSpacing: 2,
@@ -534,7 +534,7 @@ class _PaywallPageState extends State<PaywallPage>
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      'YOUR PERSONALISED PROTOCOL IS RESERVED FOR',
+                      'YOUR 50% LAUNCH OFFER IS RESERVED FOR',
                       style: AppTypography.systemLabel.copyWith(
                         fontSize: 9,
                         letterSpacing: 1.4,
@@ -841,22 +841,22 @@ class _PaywallPageState extends State<PaywallPage>
     return Container(
       padding: const EdgeInsets.all(AppSpacing.base),
       decoration: BoxDecoration(
-        color: AppColors.secondary.withValues(alpha: 0.08),
+        color: AppColors.surfaceElevated.withValues(alpha: 0.72),
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        border: Border.all(color: AppColors.secondary.withValues(alpha: 0.24)),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.22)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
-            Icons.warning_amber_rounded,
-            color: AppColors.secondary,
+            Icons.info_outline_rounded,
+            color: AppColors.primary,
             size: AppSpacing.iconMedium,
           ),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
-              'A confusing vial calculation can waste time and product. PepMod keeps the math beside the log so you can re-check your records before you act on old notes.',
+              'PepMod keeps vial math, site rotation, reminders, and protocol history beside each log so your records stay easy to re-check.',
               style: AppTypography.bodySmall.copyWith(
                 color: AppColors.textSecondary,
                 height: 1.45,
@@ -936,10 +936,10 @@ class _PaywallPageState extends State<PaywallPage>
 
   Widget _buildFixedCta(double bottomPadding) {
     final label = switch (_selectedPlan) {
-      0 => 'ACTIVATE PRO - \$29.99/year',
-      1 => 'START FREE TRIAL',
-      2 => 'SUBSCRIBE - \$9.99/week',
-      _ => 'START FREE TRIAL',
+      0 => 'UNLOCK PRO - \$29.99/YEAR',
+      1 => 'START 3-DAY FREE TRIAL',
+      2 => 'UNLOCK PRO - \$9.99/WEEK',
+      _ => 'START 3-DAY FREE TRIAL',
     };
 
     return AnimatedOpacity(

@@ -74,7 +74,7 @@ void main() {
     );
 
     expect(
-      find.text('Everything to run\nyour protocol right.'),
+      find.text('Keep every dose and\nreminder in one clear plan.'),
       findsOneWidget,
     );
     expect(tester.takeException(), isNull);

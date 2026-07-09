@@ -16,6 +16,8 @@ import '../../auth/providers/auth_provider.dart';
 import '../../protocol/providers/dose_log_provider.dart';
 import '../../protocol/providers/protocol_provider.dart';
 import '../../progress/providers/body_metric_provider.dart';
+import '../../subscription/providers/subscription_provider.dart';
+import '../../subscription/screens/soft_paywall_sheet.dart';
 import '../providers/settings_provider.dart';
 
 /// Profile / You tab — user info, subscription, preferences, data, legal.
@@ -26,10 +28,14 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final settingsProvider = context.watch<SettingsProvider>();
     final settings = settingsProvider.settings;
+    final subscription = context.watch<SubscriptionProvider>();
     final user = context.watch<AuthProvider>().currentUser;
     final accountValue = user?.email?.isNotEmpty == true
         ? user!.email!
         : 'Signed in';
+    final isPremium =
+        subscription.isPremium ||
+        _storedSubscriptionIsPremium(settings.subscriptionState);
 
     return CustomScrollView(
       slivers: [
@@ -60,12 +66,30 @@ class ProfileScreen extends StatelessWidget {
             ),
             child: _AvatarCard(
               settings: settings,
+              isPremium: isPremium,
               onEdit: () => _editName(context, settings.name),
             ),
           ),
         ),
 
         const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.xl)),
+
+        // ── Premium ───────────────────────────────────────────────────
+        _SectionHeader(label: 'PREMIUM'),
+        _Tile(
+          icon: Icons.workspace_premium_rounded,
+          label: isPremium ? 'PepMod Pro' : 'Upgrade to Pro',
+          value: isPremium ? 'Active' : 'Unlock unlimited protocols',
+          iconColor: AppColors.primary,
+          onTap: isPremium
+              ? null
+              : () {
+                  HapticFeedback.selectionClick();
+                  unawaited(_openProfileUpgrade(context));
+                },
+        ),
+
+        const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.base)),
 
         // ── Account ───────────────────────────────────────────────────
         _SectionHeader(label: 'ACCOUNT'),
@@ -244,6 +268,16 @@ class ProfileScreen extends StatelessWidget {
     if (name != null && name.isNotEmpty) {
       await context.read<SettingsProvider>().update((s) => s.name = name);
     }
+  }
+
+  Future<void> _openProfileUpgrade(BuildContext context) async {
+    final purchased = await showSoftPaywall(
+      context,
+      source: 'profile_upgrade',
+      reason: 'Upgrade from Profile',
+    );
+    if (!context.mounted || !purchased) return;
+    await context.read<SubscriptionProvider>().refresh();
   }
 
   Future<void> _exportData(BuildContext context) async {
@@ -613,17 +647,30 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
+bool _storedSubscriptionIsPremium(String state) {
+  switch (state.trim().toLowerCase()) {
+    case 'premium':
+    case 'pro':
+    case 'active':
+      return true;
+    default:
+      return false;
+  }
+}
+
 // ── Avatar card ───────────────────────────────────────────────────────────
 class _AvatarCard extends StatelessWidget {
-  const _AvatarCard({required this.settings, required this.onEdit});
+  const _AvatarCard({
+    required this.settings,
+    required this.isPremium,
+    required this.onEdit,
+  });
   final UserSettings settings;
+  final bool isPremium;
   final VoidCallback onEdit;
 
   @override
   Widget build(BuildContext context) {
-    final isPro =
-        settings.subscriptionState == 'pro' ||
-        settings.subscriptionState == 'active';
     return AppCard(
       onTap: onEdit,
       borderColor: AppColors.borderCyan,
@@ -663,19 +710,24 @@ class _AvatarCard extends StatelessWidget {
                     vertical: 2,
                   ),
                   decoration: BoxDecoration(
-                    color: (isPro ? AppColors.primary : AppColors.textTertiary)
-                        .withValues(alpha: 0.15),
+                    color:
+                        (isPremium ? AppColors.primary : AppColors.textTertiary)
+                            .withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(4),
                     border: Border.all(
                       color:
-                          (isPro ? AppColors.primary : AppColors.textTertiary)
+                          (isPremium
+                                  ? AppColors.primary
+                                  : AppColors.textTertiary)
                               .withValues(alpha: 0.5),
                     ),
                   ),
                   child: Text(
-                    isPro ? 'PRO' : 'FREE',
+                    isPremium ? 'PRO' : 'FREE',
                     style: AppTypography.systemLabel.copyWith(
-                      color: isPro ? AppColors.primary : AppColors.textTertiary,
+                      color: isPremium
+                          ? AppColors.primary
+                          : AppColors.textTertiary,
                       fontSize: 9,
                     ),
                   ),
