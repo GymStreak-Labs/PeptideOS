@@ -32,14 +32,20 @@ class SubscriptionService {
 
   final StreamController<bool> _premiumController =
       StreamController<bool>.broadcast();
+  final StreamController<CustomerInfo> _customerInfoController =
+      StreamController<CustomerInfo>.broadcast();
 
   Stream<bool> get premiumStatusStream => _premiumController.stream;
+  Stream<CustomerInfo> get customerInfoStream => _customerInfoController.stream;
 
   bool _configured = false;
   bool get isConfigured => _configured;
 
   bool _lastKnownPremium = false;
   bool get lastKnownPremium => _lastKnownPremium;
+
+  CustomerInfo? _lastKnownCustomerInfo;
+  CustomerInfo? get lastKnownCustomerInfo => _lastKnownCustomerInfo;
 
   /// Configure the RC SDK and wire up the customer-info listener.
   /// Call once in main.dart essential init.
@@ -85,12 +91,23 @@ class SubscriptionService {
     if (!_configured) return false;
     try {
       final info = await Purchases.getCustomerInfo();
-      final premium = info.entitlements.active.containsKey(entitlementId);
-      _lastKnownPremium = premium;
-      return premium;
+      syncCustomerInfo(info);
+      return _lastKnownPremium;
     } catch (e) {
       debugPrint('[SubscriptionService] isPremium failed: $e');
       return _lastKnownPremium;
+    }
+  }
+
+  Future<CustomerInfo?> getCustomerInfo() async {
+    if (!_configured) return _lastKnownCustomerInfo;
+    try {
+      final info = await Purchases.getCustomerInfo();
+      syncCustomerInfo(info);
+      return info;
+    } catch (e) {
+      debugPrint('[SubscriptionService] getCustomerInfo failed: $e');
+      return _lastKnownCustomerInfo;
     }
   }
 
@@ -165,10 +182,14 @@ class SubscriptionService {
     }
   }
 
+  void syncCustomerInfo(CustomerInfo info) => _handleCustomerInfoUpdate(info);
+
   void _handleCustomerInfoUpdate(CustomerInfo info) {
     final premium = info.entitlements.active.containsKey(entitlementId);
+    _lastKnownCustomerInfo = info;
     _lastKnownPremium = premium;
     _premiumController.add(premium);
+    _customerInfoController.add(info);
   }
 
   String _handlePurchaseError(PurchasesErrorCode error) {
@@ -190,6 +211,7 @@ class SubscriptionService {
 
   void dispose() {
     _premiumController.close();
+    _customerInfoController.close();
   }
 }
 

@@ -9,6 +9,7 @@ import '../../../data/repositories/user_data_repository.dart';
 import '../../../data/repositories/user_settings_repository.dart';
 import '../../../data/services/auth_service.dart';
 import '../../../data/services/subscription_service.dart';
+import '../../../data/services/superwall_service.dart';
 
 /// Exposes the current authenticated user and drives a few side-effects on
 /// sign-in / sign-out:
@@ -22,6 +23,7 @@ class AuthProvider extends ChangeNotifier {
     UserDataRepository? userDataRepo,
     UserSettingsRepository? settingsRepo,
     SubscriptionService? subscriptionService,
+    SuperwallService? superwallService,
     AnalyticsService? analytics,
     FirebaseFirestore? firestore,
   }) : _auth = authService ?? AuthService(),
@@ -29,6 +31,7 @@ class AuthProvider extends ChangeNotifier {
        _settingsRepo = settingsRepo ?? UserSettingsRepository(),
        _subscriptionService =
            subscriptionService ?? SubscriptionService.instance,
+       _superwallService = superwallService ?? SuperwallService.instance,
        _analytics = analytics ?? AnalyticsService(),
        _firestore = firestore ?? FirebaseFirestore.instance {
     _sub = _auth.authStateChanges.listen(_onAuthChanged);
@@ -39,6 +42,7 @@ class AuthProvider extends ChangeNotifier {
   final UserDataRepository _userDataRepo;
   final UserSettingsRepository _settingsRepo;
   final SubscriptionService _subscriptionService;
+  final SuperwallService _superwallService;
   final AnalyticsService _analytics;
   final FirebaseFirestore _firestore;
 
@@ -76,6 +80,11 @@ class AuthProvider extends ChangeNotifier {
         debugPrint('AuthProvider RC login failed: $e');
       }
       try {
+        await _superwallService.identify(user.uid);
+      } catch (e) {
+        debugPrint('AuthProvider Superwall identify failed: $e');
+      }
+      try {
         await _analytics.identifyAuthenticatedUser(
           userId: user.uid,
           email: user.email ?? '',
@@ -89,6 +98,11 @@ class AuthProvider extends ChangeNotifier {
         await _subscriptionService.logout();
       } catch (e) {
         debugPrint('AuthProvider RC logout failed: $e');
+      }
+      try {
+        await _superwallService.reset();
+      } catch (e) {
+        debugPrint('AuthProvider Superwall reset failed: $e');
       }
       try {
         await _analytics.clearIdentity();

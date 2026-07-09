@@ -21,6 +21,7 @@ import 'data/repositories/protocol_repository.dart';
 import 'data/repositories/user_settings_repository.dart';
 import 'data/services/auth_service.dart';
 import 'data/services/subscription_service.dart';
+import 'data/services/superwall_service.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/screens/account_deleted_screen.dart';
 import 'features/auth/screens/auth_screen.dart';
@@ -89,9 +90,13 @@ Future<void> main() async {
       };
 
       _validateReleaseAttributionConfig();
+      _validateReleaseSuperwallConfig();
 
       // RevenueCat — safe no-op if key still TODO.
       await SubscriptionService.instance.configure();
+
+      // Superwall presentation layer, backed by RevenueCat purchases.
+      await SuperwallService.instance.configure();
 
       // Gleap support — safe no-op if GLEAP_SDK_TOKEN is not injected.
       await SupportService.instance.initialize();
@@ -156,6 +161,14 @@ Future<void> _configureAppRefer() async {
 void _validateReleaseAttributionConfig() {
   if (!kReleaseMode || _hasAppReferApiKey) return;
   throw StateError('Release builds require --dart-define=APPREFER_API_KEY.');
+}
+
+void _validateReleaseSuperwallConfig() {
+  if (!kReleaseMode || SuperwallService.instance.hasApiKey) return;
+  throw StateError(
+    'Release builds require --dart-define=SUPERWALL_IOS_API_KEY or '
+    '--dart-define=SUPERWALL_ANDROID_API_KEY.',
+  );
 }
 
 Future<void> _initFacebookEvents(TrackingStatus trackingStatus) async {
@@ -442,13 +455,48 @@ class _PostAuthPaywallGate extends StatefulWidget {
 
 class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
   bool _viewLogged = false;
+  bool _superwallAttempted = false;
+  bool _showLocalPaywall = !SuperwallService.instance.isConfigured;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_viewLogged) return;
-    _viewLogged = true;
-    unawaited(AnalyticsService().logPaywallViewed('post_auth_onboarding'));
+    if (!_viewLogged) {
+      _viewLogged = true;
+      unawaited(AnalyticsService().logPaywallViewed('post_auth_onboarding'));
+    }
+    if (!_showLocalPaywall && !_superwallAttempted) {
+      _superwallAttempted = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(_presentSuperwallPaywall());
+      });
+    }
+  }
+
+  Future<void> _presentSuperwallPaywall() async {
+    final presented = await SuperwallService.instance.presentPostAuthPaywall(
+      onPresented: () {},
+      onDismissed: () {
+        unawaited(_handleSuperwallDismissed());
+      },
+      onUnavailable: (_) {
+        if (!mounted) return;
+        setState(() => _showLocalPaywall = true);
+      },
+    );
+    if (!mounted || presented) return;
+    setState(() => _showLocalPaywall = true);
+  }
+
+  Future<void> _handleSuperwallDismissed() async {
+    final sub = context.read<SubscriptionProvider>();
+    await sub.refresh();
+    if (!mounted) return;
+    if (sub.isPremium) {
+      await widget.onComplete();
+      return;
+    }
+    setState(() => _showLocalPaywall = true);
   }
 
   Future<void> _handleSubscribe(int selectedPlan) async {
@@ -511,6 +559,10 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_showLocalPaywall) {
+      return const _Splash();
+    }
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: PaywallPage(

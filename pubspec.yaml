@@ -27,6 +27,7 @@ dependencies:
 
   # ── Monetisation ─────────────────────────────────────────────────────
   purchases_flutter: ^8.4.0
+  superwallkit_flutter: ^2.4.12
 
   # ── Attribution ──────────────────────────────────────────────────────
   apprefer:
