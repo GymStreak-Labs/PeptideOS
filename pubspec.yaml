@@ -58,6 +58,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  fake_cloud_firestore: ^3.1.0
 
 dependency_overrides:
   # path_provider_foundation 2.6.0 pulls in the objective_c native asset, which
