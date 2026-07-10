@@ -243,7 +243,8 @@ on auth state change. One provider instance survives sign-in / sign-out.
 - `ProtocolProvider` — CRUD + `_generateDoseLogs` materialises the next 7 days of schedule rows on create / resume / app-open (`scheduleHorizonDays = 7`)
 - `DoseLogProvider` — today + recent30, adherence% today, adherence% 30d, currentStreak, totalLogged, mutations log/skip/undo/logAdHoc
 - `BodyMetricProvider` — CRUD for weight/BF/measurements
-- `SettingsProvider` — reactive wrapper around the `UserSettings` singleton, `completeOnboarding({goals, experience, frustration})`, `resetAll()` which wipes user data (preserves seeded library)
+- `SettingsProvider` — reactive wrapper around the `UserSettings` singleton and onboarding/profile mutations.
+- `AuthProvider.clearAppData()` — Profile reset coordinator: deletes dose logs, protocols, and body metrics in bounded server batches; cancels reminders and stale onboarding handoff state; then resets settings last while preserving Auth, subscription/reviewer flags, and the shared peptide library.
 
 ### Isar extension imports
 Any file calling `.filter()`, `.sortByX()`, `.findAll()` MUST import `package:isar/isar.dart` directly — extensions are only visible when the defining package is imported in the consumer file. Providers already do this.

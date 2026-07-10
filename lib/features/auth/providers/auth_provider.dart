@@ -10,6 +10,8 @@ import '../../../data/repositories/user_settings_repository.dart';
 import '../../../data/services/auth_service.dart';
 import '../../../data/services/subscription_service.dart';
 import '../../../data/services/superwall_bridge_service.dart';
+import '../../../services/notification_service.dart';
+import '../../onboarding/services/onboarding_draft_service.dart';
 
 /// Exposes the current authenticated user and drives a few side-effects on
 /// sign-in / sign-out:
@@ -51,12 +53,14 @@ class AuthProvider extends ChangeNotifier {
   User? _currentUser;
   bool _initialized = false;
   bool _accountDeletionCompleted = false;
+  bool _clearingAppData = false;
 
   User? get currentUser => _currentUser;
   bool get isSignedIn => _currentUser != null;
   bool get isInitialized => _initialized;
   String get uid => _currentUser?.uid ?? '';
   bool get accountDeletionCompleted => _accountDeletionCompleted;
+  bool get isClearingAppData => _clearingAppData;
 
   AuthService get authService => _auth;
 
@@ -135,6 +139,38 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> signOut() async {
     await _auth.signOut();
+  }
+
+  /// Clears user-created tracking data while preserving the signed-in account
+  /// and account-level subscription/reviewer flags. Settings are reset last:
+  /// that Firestore write routes the app back into onboarding, so it must only
+  /// happen after every destructive operation has succeeded.
+  Future<void> clearAppData() async {
+    if (_clearingAppData) {
+      throw StateError('Clear data is already in progress.');
+    }
+    final user = _currentUser ?? _auth.currentUser;
+    if (user == null) {
+      throw StateError('A signed-in user is required to clear app data.');
+    }
+
+    _clearingAppData = true;
+    notifyListeners();
+    try {
+      final currentSettings = await _settingsRepo.fetchFromServer(user.uid);
+      await NotificationService.instance.cancelAll(strict: true);
+      await _userDataRepo.deleteAppDataForUser(user.uid);
+      await OnboardingDraftService.clear();
+      await OnboardingDraftService.setPostAuthPaywallPending(false);
+      await _settingsRepo.reset(
+        user.uid,
+        subscriptionState: currentSettings.subscriptionState,
+        reviewAccount: currentSettings.reviewAccount,
+      );
+    } finally {
+      _clearingAppData = false;
+      notifyListeners();
+    }
   }
 
   Future<void> deleteAccount({String? password}) async {

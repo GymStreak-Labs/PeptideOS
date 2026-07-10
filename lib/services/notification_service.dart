@@ -218,13 +218,19 @@ class NotificationService {
     }
   }
 
-  Future<void> cancelAll() async {
+  Future<void> cancelAll({bool strict = false}) async {
     if (!_initialized) await initialize();
-    if (!_initialized) return;
+    if (!_initialized) {
+      if (strict) {
+        throw StateError('Notification service could not be initialized.');
+      }
+      return;
+    }
     try {
       await _plugin.cancelAll();
     } catch (e) {
       debugPrint('NotificationService: cancelAll failed: $e');
+      if (strict) rethrow;
     }
   }
 
