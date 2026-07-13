@@ -79,7 +79,7 @@ class ProtocolHomeScreen extends StatelessWidget {
                     icon: Icons.history_rounded,
                     onTap: () {
                       HapticFeedback.lightImpact();
-                      _openPastDoseSheet(context, protocolProvider.active);
+                      _openDoseHistorySheet(context, protocolProvider.active);
                     },
                   ),
                   const SizedBox(width: AppSpacing.sm),
@@ -209,7 +209,7 @@ class ProtocolHomeScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _openPastDoseSheet(
+  Future<void> _openDoseHistorySheet(
     BuildContext context,
     List<Protocol> protocols,
   ) async {
@@ -217,7 +217,7 @@ class ProtocolHomeScreen extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => LogPastDoseSheet(protocols: protocols),
+      builder: (_) => DoseHistorySheet(protocols: protocols),
     );
   }
 

@@ -51,11 +51,11 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   Future<void> _log() async {
     final amount =
         parseDecimalInput(_amountCtrl.text) ?? widget.dose.amountTaken;
-    final scheduled = widget.dose.scheduledAt;
+    final actualDay = widget.dose.takenAt ?? widget.dose.scheduledAt;
     final takenAt = DateTime(
-      scheduled.year,
-      scheduled.month,
-      scheduled.day,
+      actualDay.year,
+      actualDay.month,
+      actualDay.day,
       _time.hour,
       _time.minute,
     );
@@ -143,7 +143,10 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                     ),
                   ),
                   const SizedBox(height: AppSpacing.lg),
-                  Text('LOG.DOSE', style: AppTypography.systemLabel),
+                  Text(
+                    alreadyLogged ? 'EDIT.DOSE' : 'LOG.DOSE',
+                    style: AppTypography.systemLabel,
+                  ),
                   const SizedBox(height: AppSpacing.sm),
                   Text(widget.dose.peptideName, style: AppTypography.h2),
                   const SizedBox(height: AppSpacing.lg),
@@ -284,7 +287,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                     const SizedBox(height: AppSpacing.cardGap),
                   ],
                   PrimaryButton(
-                    label: 'LOG DOSE',
+                    label: alreadyLogged ? 'SAVE CHANGES' : 'LOG DOSE',
                     icon: Icons.check_rounded,
                     onPressed: _log,
                   ),
@@ -313,6 +316,208 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
 
   String _formatAmount(double d) =>
       d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(2);
+}
+
+/// Recent completed/skipped dose records. Tapping a row reuses
+/// [LogDoseSheet], which edits only the record's actual administration fields
+/// and leaves its scheduled identity and protocol cross-references intact.
+class DoseHistorySheet extends StatelessWidget {
+  const DoseHistorySheet({super.key, required this.protocols});
+
+  final List<Protocol> protocols;
+
+  @override
+  Widget build(BuildContext context) {
+    final logs =
+        context
+            .watch<DoseLogProvider>()
+            .recent30
+            .where((dose) => dose.isTaken || dose.skipped)
+            .toList()
+          ..sort((a, b) => _recordedAt(b).compareTo(_recordedAt(a)));
+
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.88,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainer,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppSpacing.sheetRadius),
+        ),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _SheetHandle(),
+              const SizedBox(height: AppSpacing.lg),
+              Text('DOSE.HISTORY // 30.DAY', style: AppTypography.systemLabel),
+              const SizedBox(height: AppSpacing.sm),
+              Text('Logged doses', style: AppTypography.h2),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                'Tap a record to correct its amount, actual time, injection site, notes, or status.',
+                style: AppTypography.bodySmall,
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Expanded(
+                child: logs.isEmpty
+                    ? Center(
+                        child: Text(
+                          'No logged doses in the last 30 days.',
+                          style: AppTypography.bodyMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    : ListView.separated(
+                        itemCount: logs.length,
+                        separatorBuilder: (_, __) =>
+                            const SizedBox(height: AppSpacing.cardGap),
+                        itemBuilder: (context, index) => _DoseHistoryRow(
+                          dose: logs[index],
+                          onTap: () => _openEditor(context, logs[index]),
+                        ),
+                      ),
+              ),
+              if (protocols.isNotEmpty) ...[
+                const SizedBox(height: AppSpacing.lg),
+                PrimaryButton(
+                  label: 'LOG PREVIOUS DOSE',
+                  icon: Icons.add_rounded,
+                  onPressed: () => _openPastDoseSheet(context),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openEditor(BuildContext context, DoseLog dose) async {
+    HapticFeedback.lightImpact();
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => LogDoseSheet(dose: dose),
+    );
+  }
+
+  Future<void> _openPastDoseSheet(BuildContext context) async {
+    HapticFeedback.lightImpact();
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => LogPastDoseSheet(protocols: protocols),
+    );
+  }
+
+  static DateTime _recordedAt(DoseLog dose) => dose.takenAt ?? dose.scheduledAt;
+}
+
+class _DoseHistoryRow extends StatelessWidget {
+  const _DoseHistoryRow({required this.dose, required this.onTap});
+
+  final DoseLog dose;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final recordedAt = dose.takenAt ?? dose.scheduledAt;
+    final statusColor = dose.skipped
+        ? AppColors.textTertiary
+        : AppColors.primary;
+
+    return AppCard(
+      onTap: onTap,
+      borderColor: dose.isTaken ? AppColors.borderCyan : AppColors.border,
+      child: Row(
+        children: [
+          Icon(
+            dose.skipped ? Icons.remove_rounded : Icons.check_rounded,
+            color: statusColor,
+            size: AppSpacing.iconMedium,
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(dose.peptideName, style: AppTypography.labelLarge),
+                const SizedBox(height: 2),
+                Text(
+                  dose.skipped
+                      ? 'Skipped · ${_formatDateTime(recordedAt)}'
+                      : '${_formatAmount(dose.amountTaken)} ${dose.units} · ${_formatDateTime(recordedAt)}',
+                  style: AppTypography.bodySmall.copyWith(
+                    fontFamily: 'JetBrainsMono',
+                  ),
+                ),
+                if (dose.injectionSite.isNotEmpty)
+                  Text(
+                    _siteLabel(dose.injectionSite),
+                    style: AppTypography.bodySmall,
+                  ),
+              ],
+            ),
+          ),
+          Text(
+            'EDIT',
+            style: AppTypography.systemLabel.copyWith(
+              color: AppColors.primary,
+              fontSize: 9,
+            ),
+          ),
+          const SizedBox(width: AppSpacing.xs),
+          const Icon(
+            Icons.chevron_right_rounded,
+            color: AppColors.textTertiary,
+            size: AppSpacing.iconMedium,
+          ),
+        ],
+      ),
+    );
+  }
+
+  static String _formatAmount(double value) => value == value.roundToDouble()
+      ? value.toStringAsFixed(0)
+      : value.toStringAsFixed(2);
+
+  static String _formatDateTime(DateTime value) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    final hour = value.hour.toString().padLeft(2, '0');
+    final minute = value.minute.toString().padLeft(2, '0');
+    return '${months[value.month - 1]} ${value.day} · $hour:$minute';
+  }
+
+  static String _siteLabel(String key) => key
+      .split('-')
+      .map(
+        (part) => part.isEmpty
+            ? part
+            : '${part[0].toUpperCase()}${part.substring(1)}',
+      )
+      .join(' ');
 }
 
 class LogPastDoseSheet extends StatefulWidget {
