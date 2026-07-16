@@ -90,7 +90,12 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
   }
 
   List<Widget> get _pages => [
-    FirstNamePage(firstName: 'Joe', onChanged: (_) {}, onNext: _next),
+    FirstNamePage(
+      firstName: 'Joe',
+      isActive: _index == 0,
+      onChanged: (_) {},
+      onNext: _next,
+    ),
     ConfidencePage(
       selectedNeeds: _confidenceNeeds,
       onToggle: (_) {},

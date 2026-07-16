@@ -8,11 +8,13 @@ class FirstNamePage extends StatefulWidget {
   const FirstNamePage({
     super.key,
     required this.firstName,
+    required this.isActive,
     required this.onChanged,
     required this.onNext,
   });
 
   final String firstName;
+  final bool isActive;
   final ValueChanged<String> onChanged;
   final VoidCallback onNext;
 
@@ -22,16 +24,36 @@ class FirstNamePage extends StatefulWidget {
 
 class _FirstNamePageState extends State<FirstNamePage> {
   late final TextEditingController _controller;
+  late final FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.firstName);
+    _focusNode = FocusNode(debugLabel: 'onboarding_first_name');
+    _requestFocusIfActive();
+  }
+
+  @override
+  void didUpdateWidget(covariant FirstNamePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!oldWidget.isActive && widget.isActive) {
+      _requestFocusIfActive();
+    }
+  }
+
+  void _requestFocusIfActive() {
+    if (!widget.isActive) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !widget.isActive) return;
+      _focusNode.requestFocus();
+    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -72,16 +94,20 @@ class _FirstNamePageState extends State<FirstNamePage> {
                       style: AppTypography.bodySmall,
                     ),
                     const SizedBox(height: AppSpacing.xl),
-                    _CyberInput(
-                      controller: _controller,
-                      label: 'FIRST NAME',
-                      hint: 'Joe',
-                      keyboardType: TextInputType.name,
-                      textCapitalization: TextCapitalization.words,
-                      onChanged: (value) {
-                        widget.onChanged(value.trim());
-                        setState(() {});
-                      },
+                    AutofillGroup(
+                      child: _CyberInput(
+                        controller: _controller,
+                        focusNode: _focusNode,
+                        label: 'First name',
+                        hint: 'Your first name',
+                        keyboardType: TextInputType.name,
+                        textCapitalization: TextCapitalization.words,
+                        autofillHints: const [AutofillHints.givenName],
+                        onChanged: (value) {
+                          widget.onChanged(value.trim());
+                          setState(() {});
+                        },
+                      ),
                     ),
                     const Spacer(),
                     PrimaryButton(
@@ -102,26 +128,34 @@ class _FirstNamePageState extends State<FirstNamePage> {
 class _CyberInput extends StatelessWidget {
   const _CyberInput({
     required this.controller,
+    required this.focusNode,
     required this.label,
     required this.hint,
     required this.onChanged,
     this.keyboardType,
     this.textCapitalization = TextCapitalization.none,
+    this.autofillHints,
   });
 
   final TextEditingController controller;
+  final FocusNode focusNode;
   final String label;
   final String hint;
   final ValueChanged<String> onChanged;
   final TextInputType? keyboardType;
   final TextCapitalization textCapitalization;
+  final Iterable<String>? autofillHints;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      focusNode: focusNode,
       keyboardType: keyboardType,
       textCapitalization: textCapitalization,
+      textInputAction: TextInputAction.next,
+      autofillHints: autofillHints,
+      autocorrect: false,
       onChanged: onChanged,
       cursorColor: AppColors.primary,
       style: AppTypography.bodyLarge.copyWith(color: AppColors.textPrimary),

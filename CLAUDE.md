@@ -274,21 +274,23 @@ Any file calling `.filter()`, `.sortByX()`, `.findAll()` MUST import `package:is
 7. Portrait-locked — peptide tracking is a focused one-hand experience
 8. Neon accents used surgically — only on actionable/status elements, never decorative
 
-## Onboarding Flow (18 screens + auth + post-auth paywall — conversion-optimised v4)
+## Onboarding Flow (23 screens + auth + post-auth paywall — conversion-optimised v5)
 1. Age Gate → 2. Hook → 3. Disclaimer → 4. First Name →
-5. Birth Date → 6. Goals → 7. Experience → 8. Frustration →
-9. Peptides → 10. Calculator Demo (aha moment) →
-11. Processing (HUD radar) → 12. Protocol Preview →
-13. Results Summary → 14. Feature Showcase →
-15. Value: Protocol Timeline → 16. Value: Unit Conversion →
-17. Value: Progress Signals → 18. Review Gate (`in_app_review`) →
-19. Firebase Auth → 20. Hard Paywall.
+5. Goals → 6. Goals Reassurance → 7. Experience → 8. Frustration →
+9. Confidence → 10. Confidence Reassurance → 11. Peptides →
+12. Calculator Demo (aha moment) → 13. Processing (HUD radar) →
+14. Protocol Preview → 15. Results Summary → 16. 60-day Roadmap →
+17. Feature Showcase → 18. Notification Warm-up →
+19. Value: Protocol Timeline → 20. Value: Unit Conversion →
+21. Value: Progress Signals → 22. Birth Date →
+23. Review Gate (`in_app_review`) → 24. Firebase Auth →
+25. Hard Paywall.
 
 Fake testimonial/social-proof cards are intentionally hidden from the current
-flow. The native review request sits at the end of onboarding, just before auth.
-Onboarding has a custom back button on every page after the age gate.
-
-Notification permission is no longer requested inline — ask for it elsewhere.
+flow. The native review request sits immediately before auth. Birth date is
+deliberately late because precise DOB entry is higher-friction than the earlier
+preference steps. Onboarding has a custom back button on every page after the
+age gate.
 
 Paywall narrative: the processing screen sets up the reserved protocol, then Firebase Auth happens before the new-onboarding hard paywall so Superwall/AppRefer events attach to a stable UID. Superwall remotely owns the paywall copy, current two-minute launch-offer countdown, products, restore action, and legal links.
 

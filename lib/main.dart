@@ -404,7 +404,9 @@ class _AppRootState extends State<_AppRoot> {
     if (settings.isLoading && auth.isSignedIn) return const _Splash();
     if (!settings.settings.onboardingCompleted && !auth.isSignedIn) {
       if (!_handoffStateLoaded) return const _Splash();
-      if (_preAuthOnboardingReady) return const AuthScreen();
+      if (_preAuthOnboardingReady) {
+        return const AuthScreen(createAccountByDefault: true);
+      }
       return OnboardingScreen(onReadyForAuth: _markReadyForAuth);
     }
 
