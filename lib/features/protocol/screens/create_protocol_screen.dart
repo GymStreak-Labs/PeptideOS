@@ -12,6 +12,7 @@ import '../../subscription/providers/subscription_provider.dart';
 import '../../subscription/screens/soft_paywall_sheet.dart';
 import '../providers/dose_log_provider.dart';
 import '../providers/protocol_provider.dart';
+import '../widgets/peptide_label_color.dart';
 
 const _customPeptideSlug = 'custom';
 
@@ -348,10 +349,10 @@ class _Step2Peptides extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Add peptides', style: AppTypography.h2),
+          Text('Build your stack', style: AppTypography.h2),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Pick from the library and configure dose, frequency, and cycle.',
+            'Add one peptide or stack multiple compounds. Configure each label, dose, frequency, and cycle.',
             style: AppTypography.bodyMedium,
           ),
           const SizedBox(height: AppSpacing.lg),
@@ -393,20 +394,7 @@ class _Step2Peptides extends StatelessWidget {
                         },
                         child: Row(
                           children: [
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withValues(
-                                  alpha: 0.12,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Icon(
-                                Icons.biotech_rounded,
-                                color: AppColors.primary,
-                              ),
-                            ),
+                            PeptideLabelAvatar(hex: p.labelColorHex),
                             const SizedBox(width: AppSpacing.md),
                             Expanded(
                               child: Column(
@@ -441,7 +429,12 @@ class _Step2Peptides extends StatelessWidget {
           ),
           OutlinedButton.icon(
             onPressed: () async {
-              final picked = await _pickPeptide(context);
+              final picked = await _pickPeptide(
+                context,
+                defaultLabelColorHex: defaultPeptideLabelColorHex(
+                  peptides.length,
+                ),
+              );
               if (picked != null) onAdd(picked);
             },
             style: OutlinedButton.styleFrom(
@@ -454,7 +447,7 @@ class _Step2Peptides extends StatelessWidget {
             ),
             icon: const Icon(Icons.add_rounded),
             label: Text(
-              'ADD PEPTIDE',
+              'ADD TO STACK',
               style: AppTypography.button.copyWith(color: AppColors.primary),
             ),
           ),
@@ -536,8 +529,8 @@ class _Step3Review extends StatelessWidget {
                         Container(
                           width: 6,
                           height: 6,
-                          decoration: const BoxDecoration(
-                            color: AppColors.primary,
+                          decoration: BoxDecoration(
+                            color: peptideLabelColor(p.labelColorHex),
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -630,7 +623,10 @@ ProtocolPeptide _cloneProtocolPeptide(ProtocolPeptide p) {
 }
 
 /// Opens the peptide picker and returns a configured ProtocolPeptide.
-Future<ProtocolPeptide?> _pickPeptide(BuildContext context) async {
+Future<ProtocolPeptide?> _pickPeptide(
+  BuildContext context, {
+  required String defaultLabelColorHex,
+}) async {
   final slug = await showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
@@ -649,6 +645,7 @@ Future<ProtocolPeptide?> _pickPeptide(BuildContext context) async {
       dose: 0,
       frequency: 'as_needed',
       route: 'subcutaneous',
+      labelColorHex: defaultLabelColorHex,
     );
   } else {
     final peptide = context.read<PeptideProvider>().findBySlug(slug);
@@ -661,6 +658,7 @@ Future<ProtocolPeptide?> _pickPeptide(BuildContext context) async {
       frequency: peptide.defaultFrequency,
       route: peptide.defaultRoute,
       cycleWeeks: peptide.typicalCycleWeeks,
+      labelColorHex: defaultLabelColorHex,
     );
   }
 
@@ -879,6 +877,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
   late String _unit;
   late String _frequency;
   late String _route;
+  late String _labelColorHex;
   late List<String> _times;
   late Set<int> _selectedWeekdays;
   bool get _isCustomPeptide => widget.initial.peptideSlug == _customPeptideSlug;
@@ -908,6 +907,9 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
     _unit = widget.initial.doseUnit;
     _frequency = widget.initial.frequency;
     _route = widget.initial.route;
+    _labelColorHex = widget.initial.labelColorHex.isNotEmpty
+        ? widget.initial.labelColorHex
+        : defaultPeptideLabelColorHex(0);
     _times = _normalizeTimes(
       widget.initial.scheduledTimes.isEmpty
           ? _firstWeekdayTimes(widget.initial.weekdayDoses)
@@ -1078,6 +1080,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
       ..cycleWeeks = _parsedCycleWeeks.clamp(0, 104).toInt()
       ..washoutWeeks = _parsedWashoutWeeks.clamp(0, 52).toInt()
       ..syringeUnits = _parsedSyringeUnits > 0 ? _parsedSyringeUnits : 0
+      ..labelColorHex = _labelColorHex
       ..scheduledTimes = _times
       ..weekdayDoses = weekdayDoses;
     Navigator.of(context).pop(updated);
@@ -1154,6 +1157,27 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                     ),
                     const SizedBox(height: AppSpacing.lg),
                   ],
+
+                  Text('LABEL COLOR', style: AppTypography.systemLabel),
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      for (final hex in kPeptideLabelColorHexes)
+                        _ColorChip(
+                          hex: hex,
+                          selected: _labelColorHex == hex,
+                          onTap: () => setState(() => _labelColorHex = hex),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    'Match this color to the pen or vial label you use in real life.',
+                    style: AppTypography.disclaimer,
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
 
                   // Dose + unit
                   Row(
@@ -1642,6 +1666,57 @@ class _Chip extends StatelessWidget {
           label,
           style: AppTypography.labelMedium.copyWith(
             color: selected ? AppColors.primary : AppColors.textSecondary,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ColorChip extends StatelessWidget {
+  const _ColorChip({
+    required this.hex,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String hex;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = peptideLabelColor(hex);
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.selectionClick();
+        onTap();
+      },
+      child: AnimatedContainer(
+        duration: AppDurations.fast,
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: selected ? 0.26 : 0.14),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: selected ? color : AppColors.border,
+            width: selected ? 2 : 1,
+          ),
+          boxShadow: selected
+              ? [
+                  BoxShadow(
+                    color: color.withValues(alpha: 0.28),
+                    blurRadius: 10,
+                  ),
+                ]
+              : null,
+        ),
+        child: Center(
+          child: PeptideLabelSwatch(
+            hex: hex,
+            size: 18,
+            borderColor: AppColors.background,
           ),
         ),
       ),

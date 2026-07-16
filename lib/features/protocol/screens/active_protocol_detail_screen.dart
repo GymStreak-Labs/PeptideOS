@@ -8,6 +8,7 @@ import '../../../models/dose_log.dart';
 import '../../../models/protocol.dart';
 import '../providers/dose_log_provider.dart';
 import '../providers/protocol_provider.dart';
+import '../widgets/peptide_label_color.dart';
 import 'create_protocol_screen.dart';
 
 /// Shows all peptides in an active (or paused) protocol with adherence stats,
@@ -177,7 +178,7 @@ class _ActiveProtocolDetailScreenState
 
                     // Peptides
                     Text(
-                      'PEPTIDES (${_protocol.peptides.length})',
+                      'STACK (${_protocol.peptides.length})',
                       style: AppTypography.systemLabel,
                     ),
                     const SizedBox(height: AppSpacing.sm),
@@ -742,18 +743,7 @@ class _PeptideRowCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(
-                  Icons.biotech_rounded,
-                  color: AppColors.primary,
-                ),
-              ),
+              PeptideLabelAvatar(hex: peptide.labelColorHex),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
