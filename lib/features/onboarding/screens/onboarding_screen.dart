@@ -408,7 +408,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
 
               // 22: Review request at the end → Auth handoff. Paywall is
-              // post-auth so RevenueCat/AppRefer attach events to Firebase UID.
+              // post-auth so Superwall/AppRefer attach events to Firebase UID.
               ReviewGatePage(onNext: _handoffToAuth),
             ],
           ),

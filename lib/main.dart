@@ -22,7 +22,6 @@ import 'data/repositories/peptide_library_repository.dart';
 import 'data/repositories/protocol_repository.dart';
 import 'data/repositories/user_settings_repository.dart';
 import 'data/services/auth_service.dart';
-import 'data/services/subscription_service.dart';
 import 'data/services/superwall_bridge_service.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/screens/account_deleted_screen.dart';
@@ -30,7 +29,6 @@ import 'features/auth/screens/auth_screen.dart';
 import 'features/library/providers/peptide_provider.dart';
 import 'features/onboarding/services/onboarding_draft_service.dart';
 import 'features/onboarding/screens/onboarding_screen.dart';
-import 'features/onboarding/widgets/paywall_page.dart';
 import 'features/profile/providers/settings_provider.dart';
 import 'features/progress/providers/body_metric_provider.dart';
 import 'features/protocol/providers/dose_log_provider.dart';
@@ -39,8 +37,8 @@ import 'features/subscription/providers/subscription_provider.dart';
 import 'services/notification_service.dart';
 
 /// AppRefer is injected via --dart-define so test/live keys can stay out of
-/// source. RevenueCat and Meta App Events use public SDK/app identifiers in
-/// source. Release builds fail fast if this value is missing; local/dev builds
+/// source. Meta App Events uses public SDK/app identifiers in source. Release
+/// builds fail fast if this value is missing; local/dev builds
 /// can still run without attribution. AppRefer is configured on the first
 /// visible app frame so install attribution is captured before onboarding/auth.
 ///
@@ -95,14 +93,13 @@ Future<void> main() async {
       _validateReleaseAttributionConfig();
       _validateReleaseSuperwallConfig();
 
-      // RevenueCat — safe no-op if key still TODO.
-      await SubscriptionService.instance.configure();
+      // Superwall is the sole purchase, restore, and entitlement provider.
       await SuperwallBridgeService.instance.configure();
 
       // Gleap support — safe no-op if GLEAP_SDK_TOKEN is not injected.
       await SupportService.instance.initialize();
 
-      // Stable install ID on Crashlytics / Analytics / RC / Gleap. AppRefer
+      // Stable install ID on Crashlytics / Analytics / Superwall / Gleap. AppRefer
       // receives the same ID once it is configured on the first visible frame.
       await AnalyticsService().initializeIdentity();
 
@@ -149,8 +146,8 @@ Future<void> _configureAppRefer() async {
     );
     final appReferId = await AppReferSDK.getDeviceId();
     if (appReferId != null) {
-      await SubscriptionService.instance.setAttributes({
-        'appreferId': appReferId,
+      await SuperwallBridgeService.instance.setUserAttributes({
+        'apprefer_id': appReferId,
       });
     }
     await analytics.syncAppReferIdentity();
@@ -165,14 +162,14 @@ void _validateReleaseAttributionConfig() {
 }
 
 void _validateReleaseSuperwallConfig() {
-  if (!kReleaseMode || !SuperwallBridgeService.releaseRequiresPlatformApiKey) {
-    return;
+  if (!kReleaseMode) return;
+  if (!SuperwallBridgeService.enabled) {
+    throw StateError('Release builds require Superwall to be enabled.');
   }
   if (SuperwallBridgeService.hasPlatformApiKey) return;
   throw StateError(
     'Release builds require --dart-define=SUPERWALL_IOS_API_KEY or '
-    '--dart-define=SUPERWALL_ANDROID_API_KEY unless Superwall is explicitly '
-    'disabled or native fallback is explicitly forced.',
+    '--dart-define=SUPERWALL_ANDROID_API_KEY.',
   );
 }
 
@@ -240,7 +237,11 @@ class PepModApp extends StatelessWidget {
           create: (ctx) => SubscriptionProvider(
             settingsProvider: ctx.read<SettingsProvider>(),
           ),
-          update: (_, __, previous) => previous ?? SubscriptionProvider(),
+          update: (_, settings, previous) {
+            final provider = previous ?? SubscriptionProvider();
+            provider.setSettingsProvider(settings);
+            return provider;
+          },
         ),
         // ── User-scoped data providers ─────────────────────────────────────
         ChangeNotifierProxyProvider<AuthProvider, PeptideProvider>(
@@ -399,7 +400,7 @@ class _AppRootState extends State<_AppRoot> {
     }
 
     // Onboarding story runs first; auth comes before the paywall so attribution
-    // and RevenueCat purchase events attach to a stable Firebase UID.
+    // and Superwall purchase events attach to a stable Firebase UID.
     if (settings.isLoading && auth.isSignedIn) return const _Splash();
     if (!settings.settings.onboardingCompleted && !auth.isSignedIn) {
       if (!_handoffStateLoaded) return const _Splash();
@@ -408,6 +409,7 @@ class _AppRootState extends State<_AppRoot> {
     }
 
     if (!auth.isSignedIn) return const AuthScreen();
+    if (!auth.isSubscriptionIdentityReady) return const _Splash();
 
     if (!settings.settings.onboardingCompleted) {
       if (!_onboardingReplayAttempted && !_replayingOnboardingDraft) {
@@ -439,13 +441,13 @@ class _AppRootState extends State<_AppRoot> {
     final reviewAccount = settings.settings.reviewAccount;
     if (_postAuthPaywallPending &&
         !reviewAccount &&
-        !SubscriptionService.forcePremium &&
+        !SuperwallBridgeService.forcePremium &&
         !subscription.isPremium) {
       return _PostAuthPaywallGate(onComplete: _clearPostAuthPaywall);
     }
     if (_postAuthPaywallPending &&
         (reviewAccount ||
-            SubscriptionService.forcePremium ||
+            SuperwallBridgeService.forcePremium ||
             subscription.isPremium)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         unawaited(_clearPostAuthPaywall());
@@ -467,9 +469,7 @@ class _PostAuthPaywallGate extends StatefulWidget {
 
 class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
   bool _viewLogged = false;
-  bool _offeringsLoadStarted = false;
   bool _superwallAttempted = false;
-  bool _showNativeFallback = false;
   bool _showRemoteUnavailable = false;
 
   @override
@@ -478,21 +478,14 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
     if (_viewLogged) return;
     _viewLogged = true;
     unawaited(AnalyticsService().logPaywallViewed('post_auth_onboarding'));
-    if (!_offeringsLoadStarted) {
-      _offeringsLoadStarted = true;
-      final sub = context.read<SubscriptionProvider>();
-      if (!sub.isLoadingOfferings && sub.offerings == null) {
-        unawaited(sub.loadOfferings());
-      }
-    }
     _presentSuperwallIfAvailable();
   }
 
   void _presentSuperwallIfAvailable() {
-    if (_superwallAttempted || _showNativeFallback) return;
+    if (_superwallAttempted) return;
     final bridge = SuperwallBridgeService.instance;
     if (!bridge.canPresentPaywalls) {
-      _showFallbackOrUnavailable();
+      _showUnavailable();
       return;
     }
 
@@ -510,19 +503,11 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
         await widget.onComplete();
         return;
       }
-      _showFallbackOrUnavailable();
+      _showUnavailable();
     });
   }
 
-  void _showFallbackOrUnavailable() {
-    setState(() {
-      if (SuperwallBridgeService.canUseNativeFallback) {
-        _showNativeFallback = true;
-      } else {
-        _showRemoteUnavailable = true;
-      }
-    });
-  }
+  void _showUnavailable() => setState(() => _showRemoteUnavailable = true);
 
   void _retrySuperwall() {
     setState(() {
@@ -532,66 +517,8 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
     _presentSuperwallIfAvailable();
   }
 
-  Future<void> _handleSubscribe(int selectedPlan) async {
-    final sub = context.read<SubscriptionProvider>();
-    final planId = 'onboarding_plan_$selectedPlan';
-
-    if (!sub.isLoadingOfferings && sub.offerings == null) {
-      await sub.loadOfferings();
-    }
-    if (!mounted) return;
-
-    final offerings = sub.offerings;
-    final pkg = offerings == null
-        ? null
-        : sub.packageForOnboardingPlan(selectedPlan);
-
-    if (pkg == null) {
-      unawaited(
-        AnalyticsService().logPurchaseFailed(planId, 'package_unavailable'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            sub.offeringsError ??
-                'Subscription plans are not available right now. Please try again.',
-          ),
-        ),
-      );
-      return;
-    }
-
-    unawaited(AnalyticsService().logPurchaseInitiated(pkg.identifier));
-    final result = await sub.purchase(pkg);
-    if (!mounted) return;
-    if (result.success) {
-      await widget.onComplete();
-    } else if (result.cancelled) {
-      return;
-    } else if (result.error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(result.error!)));
-    }
-  }
-
   Future<void> _handleRestore() async {
     final sub = context.read<SubscriptionProvider>();
-    if (SuperwallBridgeService.handlesPurchases &&
-        SuperwallBridgeService.instance.canPresentPaywalls) {
-      final restored = await SuperwallBridgeService.instance.restorePurchases();
-      await sub.refresh();
-      if (!mounted) return;
-      if (restored || sub.isPremium) {
-        await widget.onComplete();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No purchases found to restore.')),
-        );
-      }
-      return;
-    }
-
     final result = await sub.restore();
     if (!mounted) return;
     if (result.success && result.isPremium) {
@@ -607,22 +534,13 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
 
   @override
   Widget build(BuildContext context) {
-    final sub = context.watch<SubscriptionProvider>();
     if (_showRemoteUnavailable) {
       return _RemotePaywallUnavailable(
         onRetry: _retrySuperwall,
         onRestore: _handleRestore,
       );
     }
-    if (!_showNativeFallback) return const _Splash();
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: PaywallPage(
-        onSubscribe: _handleSubscribe,
-        onRestore: _handleRestore,
-        showSpecialOffer: sub.showSpecialOffer,
-      ),
-    );
+    return const _Splash();
   }
 }
 

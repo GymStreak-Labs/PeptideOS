@@ -15,7 +15,7 @@ const bool _googleSignInEnabled = bool.fromEnvironment('ENABLE_GOOGLE_SIGN_IN');
 /// Gate shown after onboarding when no Firebase user is signed in.
 ///
 /// The UID gives us attribution + cross-device sync — anonymous mode would
-/// leak installs across the RevenueCat / AppRefer boundary, so we require
+/// leak installs across the Superwall / AppRefer boundary, so we require
 /// sign-in before the app shell loads.
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
