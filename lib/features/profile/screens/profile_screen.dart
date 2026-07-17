@@ -16,6 +16,8 @@ import '../../auth/providers/auth_provider.dart';
 import '../../protocol/providers/dose_log_provider.dart';
 import '../../protocol/providers/protocol_provider.dart';
 import '../../progress/providers/body_metric_provider.dart';
+import '../../subscription/providers/subscription_provider.dart';
+import '../../subscription/screens/soft_paywall_sheet.dart';
 import '../providers/settings_provider.dart';
 
 /// Profile / You tab — user info, subscription, preferences, data, legal.
@@ -26,10 +28,15 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final settingsProvider = context.watch<SettingsProvider>();
     final settings = settingsProvider.settings;
-    final user = context.watch<AuthProvider>().currentUser;
+    final subscription = context.watch<SubscriptionProvider>();
+    final auth = context.watch<AuthProvider>();
+    final user = auth.currentUser;
     final accountValue = user?.email?.isNotEmpty == true
         ? user!.email!
         : 'Signed in';
+    final isPremium =
+        subscription.isPremium ||
+        _storedSubscriptionIsPremium(settings.subscriptionState);
 
     return CustomScrollView(
       slivers: [
@@ -60,12 +67,30 @@ class ProfileScreen extends StatelessWidget {
             ),
             child: _AvatarCard(
               settings: settings,
+              isPremium: isPremium,
               onEdit: () => _editName(context, settings.name),
             ),
           ),
         ),
 
         const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.xl)),
+
+        // ── Premium ───────────────────────────────────────────────────
+        _SectionHeader(label: 'PREMIUM'),
+        _Tile(
+          icon: Icons.workspace_premium_rounded,
+          label: isPremium ? 'PepMod Pro' : 'Upgrade to Pro',
+          value: isPremium ? 'Active' : 'Unlock unlimited protocols',
+          iconColor: AppColors.primary,
+          onTap: isPremium
+              ? null
+              : () {
+                  HapticFeedback.selectionClick();
+                  unawaited(_openProfileUpgrade(context));
+                },
+        ),
+
+        const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.base)),
 
         // ── Account ───────────────────────────────────────────────────
         _SectionHeader(label: 'ACCOUNT'),
@@ -127,9 +152,11 @@ class ProfileScreen extends StatelessWidget {
         _Tile(
           icon: Icons.delete_outline_rounded,
           label: 'Clear all data',
-          value: 'Reset app',
+          value: auth.isClearingAppData ? 'Clearing…' : 'Reset app',
           iconColor: AppColors.warning,
-          onTap: () => _confirmClearData(context),
+          onTap: auth.isClearingAppData
+              ? null
+              : () => _confirmClearData(context),
         ),
 
         // ── Support ────────────────────────────────────────────────────
@@ -246,6 +273,16 @@ class ProfileScreen extends StatelessWidget {
     }
   }
 
+  Future<void> _openProfileUpgrade(BuildContext context) async {
+    final purchased = await showSoftPaywall(
+      context,
+      source: 'profile_upgrade',
+      reason: 'Upgrade from Profile',
+    );
+    if (!context.mounted || !purchased) return;
+    await context.read<SubscriptionProvider>().refresh();
+  }
+
   Future<void> _exportData(BuildContext context) async {
     final protocols = context.read<ProtocolProvider>().all;
     final logs = context.read<DoseLogProvider>().recent30;
@@ -337,7 +374,7 @@ class ProfileScreen extends StatelessWidget {
         ),
         title: Text('Clear all data?', style: AppTypography.h3),
         content: Text(
-          'This deletes all protocols, dose logs, and body metrics. The peptide library is preserved. This cannot be undone.',
+          'This deletes all protocols, dose logs, and body metrics, then restarts onboarding. Your account, subscription, and peptide library are preserved. This cannot be undone.',
           style: AppTypography.bodyMedium,
         ),
         actions: [
@@ -365,13 +402,65 @@ class ProfileScreen extends StatelessWidget {
     if (ok != true) return;
     if (!context.mounted) return;
 
-    await context.read<SettingsProvider>().resetAll();
-    if (!context.mounted) return;
-    await context.read<ProtocolProvider>().refresh();
-    if (!context.mounted) return;
-    await context.read<DoseLogProvider>().refresh();
-    if (!context.mounted) return;
-    await context.read<BodyMetricProvider>().refresh();
+    final navigator = Navigator.of(context, rootNavigator: true);
+    unawaited(
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        useRootNavigator: true,
+        builder: (_) => PopScope(
+          canPop: false,
+          child: AlertDialog(
+            backgroundColor: AppColors.surfaceContainer,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+              side: const BorderSide(color: AppColors.border),
+            ),
+            title: Text('Clearing data…', style: AppTypography.h3),
+            content: Row(
+              children: [
+                const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.primary,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Text(
+                    'Keep PepMod open while your tracking data is removed.',
+                    style: AppTypography.bodyMedium,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    void closeProgress() {
+      if (navigator.mounted && navigator.canPop()) navigator.pop();
+    }
+
+    try {
+      await context.read<AuthProvider>().clearAppData();
+    } catch (e) {
+      closeProgress();
+      debugPrint('Clear app data failed: $e');
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Could not clear data. Check your connection and retry.',
+          ),
+        ),
+      );
+      return;
+    }
+    closeProgress();
     if (!context.mounted) return;
     ScaffoldMessenger.of(
       context,
@@ -614,17 +703,30 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
+bool _storedSubscriptionIsPremium(String state) {
+  switch (state.trim().toLowerCase()) {
+    case 'premium':
+    case 'pro':
+    case 'active':
+      return true;
+    default:
+      return false;
+  }
+}
+
 // ── Avatar card ───────────────────────────────────────────────────────────
 class _AvatarCard extends StatelessWidget {
-  const _AvatarCard({required this.settings, required this.onEdit});
+  const _AvatarCard({
+    required this.settings,
+    required this.isPremium,
+    required this.onEdit,
+  });
   final UserSettings settings;
+  final bool isPremium;
   final VoidCallback onEdit;
 
   @override
   Widget build(BuildContext context) {
-    final isPro =
-        settings.subscriptionState == 'pro' ||
-        settings.subscriptionState == 'active';
     return AppCard(
       onTap: onEdit,
       borderColor: AppColors.borderCyan,
@@ -664,19 +766,24 @@ class _AvatarCard extends StatelessWidget {
                     vertical: 2,
                   ),
                   decoration: BoxDecoration(
-                    color: (isPro ? AppColors.primary : AppColors.textTertiary)
-                        .withValues(alpha: 0.15),
+                    color:
+                        (isPremium ? AppColors.primary : AppColors.textTertiary)
+                            .withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(4),
                     border: Border.all(
                       color:
-                          (isPro ? AppColors.primary : AppColors.textTertiary)
+                          (isPremium
+                                  ? AppColors.primary
+                                  : AppColors.textTertiary)
                               .withValues(alpha: 0.5),
                     ),
                   ),
                   child: Text(
-                    isPro ? 'PRO' : 'FREE',
+                    isPremium ? 'PRO' : 'FREE',
                     style: AppTypography.systemLabel.copyWith(
-                      color: isPro ? AppColors.primary : AppColors.textTertiary,
+                      color: isPremium
+                          ? AppColors.primary
+                          : AppColors.textTertiary,
                       fontSize: 9,
                     ),
                   ),
@@ -848,7 +955,7 @@ const _termsText =
     'Full Terms: https://appstorecopilot.com/legal/yzh32x5v/terms';
 
 const _privacyText =
-    'PepMod uses Firebase for authentication and cloud data storage, RevenueCat and Superwall for subscriptions and paywalls, AppRefer and Meta/Facebook App Events for attribution, and Firebase/Crashlytics for analytics and diagnostics. '
+    'PepMod uses Firebase for authentication and cloud data storage, Superwall for subscriptions and paywalls, AppRefer and Meta/Facebook App Events for attribution, and Firebase/Crashlytics for analytics and diagnostics. '
     'We do not sell your personal information. You can delete your account and saved app data from within the app.\n\n'
     'Full Privacy Policy: https://appstorecopilot.com/legal/yzh32x5v/privacy';
 

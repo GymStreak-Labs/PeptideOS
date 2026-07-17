@@ -15,10 +15,14 @@ const bool _googleSignInEnabled = bool.fromEnvironment('ENABLE_GOOGLE_SIGN_IN');
 /// Gate shown after onboarding when no Firebase user is signed in.
 ///
 /// The UID gives us attribution + cross-device sync — anonymous mode would
-/// leak installs across the RevenueCat / AppRefer boundary, so we require
+/// leak installs across the Superwall / AppRefer boundary, so we require
 /// sign-in before the app shell loads.
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+  const AuthScreen({super.key, this.createAccountByDefault = false});
+
+  /// New onboarding should continue into account creation. Returning signed-
+  /// out users still land on sign-in when this is false.
+  final bool createAccountByDefault;
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -81,9 +85,15 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void _openEmailFlow() {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const EmailAuthScreen()));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => EmailAuthScreen(
+          initialMode: widget.createAccountByDefault
+              ? EmailAuthMode.createAccount
+              : EmailAuthMode.signIn,
+        ),
+      ),
+    );
   }
 
   @override
