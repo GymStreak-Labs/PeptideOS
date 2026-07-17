@@ -4,6 +4,38 @@ import 'package:peptide_os/features/subscription/providers/subscription_provider
 import 'package:superwallkit_flutter/superwallkit_flutter.dart' as sw;
 
 void main() {
+  group('Superwall identity readiness', () {
+    test('rejects anonymous status before Firebase identification', () {
+      expect(
+        SuperwallBridgeService.hasResolvedIdentityFor(
+          identifiedUserId: null,
+          identityTransitionInProgress: false,
+        ),
+        isFalse,
+      );
+    });
+
+    test('rejects status while Firebase identity is switching', () {
+      expect(
+        SuperwallBridgeService.hasResolvedIdentityFor(
+          identifiedUserId: 'firebase-user',
+          identityTransitionInProgress: true,
+        ),
+        isFalse,
+      );
+    });
+
+    test('accepts status only after Firebase identity resolves', () {
+      expect(
+        SuperwallBridgeService.hasResolvedIdentityFor(
+          identifiedUserId: 'firebase-user',
+          identityTransitionInProgress: false,
+        ),
+        isTrue,
+      );
+    });
+  });
+
   group('Superwall premium entitlement classification', () {
     test('requires the premium entitlement', () {
       final status = sw.SubscriptionStatusActive(

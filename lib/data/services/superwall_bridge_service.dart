@@ -88,6 +88,10 @@ class SuperwallBridgeService {
 
   bool get isConfigured => _configured;
   bool get canPresentPaywalls => enabled && _configured;
+  bool get hasResolvedIdentity => hasResolvedIdentityFor(
+    identifiedUserId: _identifiedUserId,
+    identityTransitionInProgress: _identityTransitionInProgress,
+  );
   Stream<SuperwallAccessStatus> get accessStatusStream =>
       _accessController.stream;
   SuperwallAccessStatus get lastKnownAccessStatus =>
@@ -263,7 +267,10 @@ class SuperwallBridgeService {
       _setAccessStatus(SuperwallAccessStatus.premium);
       return SuperwallAccessStatus.premium;
     }
-    if (!_configured) return lastKnownAccessStatus;
+    // PepMod paywalls are account-bound. An anonymous SDK status must never be
+    // treated as authoritative for the signed-in Firebase user because it can
+    // overwrite a legacy subscriber's cached Pro access during an update.
+    if (!_configured || !hasResolvedIdentity) return lastKnownAccessStatus;
     try {
       final status = await sw.Superwall.shared.getSubscriptionStatus().timeout(
         _sdkTimeout,
@@ -291,7 +298,7 @@ class SuperwallBridgeService {
     // Native SDKs can briefly emit the anonymous user's inactive status while
     // identify() is switching to the Firebase UID. Ignoring that event avoids
     // overwriting a legacy subscriber's cached Pro access during an update.
-    if (_identityTransitionInProgress) return;
+    if (!hasResolvedIdentity) return;
     final access = _applySubscriptionStatus(status);
     if (access == SuperwallAccessStatus.unknown) return;
     unawaited(
@@ -320,6 +327,14 @@ class SuperwallBridgeService {
     if (_accessStatus == status) return;
     _accessStatus = status;
     _accessController.add(lastKnownAccessStatus);
+  }
+
+  @visibleForTesting
+  static bool hasResolvedIdentityFor({
+    required String? identifiedUserId,
+    required bool identityTransitionInProgress,
+  }) {
+    return identifiedUserId != null && !identityTransitionInProgress;
   }
 
   @visibleForTesting
