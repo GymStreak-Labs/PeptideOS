@@ -141,25 +141,27 @@ class DoseLogProvider extends ChangeNotifier {
     String? site,
     String? notes,
   }) async {
-    dose.takenAt = takenAt ?? DateTime.now();
-    dose.skipped = false;
-    if (amount != null) dose.amountTaken = amount;
-    if (site != null) dose.injectionSite = site;
-    if (notes != null) dose.notes = notes;
-    await _save(dose);
+    final updated = dose.copyWith(
+      takenAt: takenAt ?? DateTime.now(),
+      amountTaken: amount,
+      injectionSite: site,
+      notes: notes,
+      skipped: false,
+    );
+    await _save(updated);
   }
 
   Future<void> skipDose(DoseLog dose, {String? notes}) async {
-    dose.skipped = true;
-    dose.takenAt = null;
-    if (notes != null) dose.notes = notes;
-    await _save(dose);
+    final updated = dose.copyWith(
+      clearTakenAt: true,
+      notes: notes,
+      skipped: true,
+    );
+    await _save(updated);
   }
 
   Future<void> undoDose(DoseLog dose) async {
-    dose.takenAt = null;
-    dose.skipped = false;
-    await _save(dose);
+    await _save(dose.copyWith(clearTakenAt: true, skipped: false));
   }
 
   Future<void> _save(DoseLog dose) async {
@@ -168,6 +170,7 @@ class DoseLogProvider extends ChangeNotifier {
       await _repo.upsert(_uid, dose);
     } catch (e) {
       debugPrint('doseLog save failed: $e');
+      rethrow;
     }
   }
 

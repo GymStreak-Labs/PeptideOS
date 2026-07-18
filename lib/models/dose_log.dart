@@ -35,6 +35,43 @@ class DoseLog {
   bool get isTaken => takenAt != null && !skipped;
   bool get isPending => takenAt == null && !skipped;
 
+  /// Return an edited copy without mutating the stream-owned instance.
+  ///
+  /// Linkage, schedule, unit, and syringe fields are preserved unless a
+  /// caller explicitly replaces them. [clearTakenAt] is used for status
+  /// corrections because a nullable parameter alone cannot distinguish
+  /// "keep the current value" from "set this value to null".
+  DoseLog copyWith({
+    String? uuid,
+    String? protocolUuid,
+    String? protocolPeptideUuid,
+    String? peptideName,
+    DateTime? scheduledAt,
+    DateTime? takenAt,
+    bool clearTakenAt = false,
+    double? amountTaken,
+    String? units,
+    double? syringeUnits,
+    String? injectionSite,
+    String? notes,
+    bool? skipped,
+  }) {
+    return DoseLog(
+      uuid: uuid ?? this.uuid,
+      protocolUuid: protocolUuid ?? this.protocolUuid,
+      protocolPeptideUuid: protocolPeptideUuid ?? this.protocolPeptideUuid,
+      peptideName: peptideName ?? this.peptideName,
+      scheduledAt: scheduledAt ?? this.scheduledAt,
+      takenAt: clearTakenAt ? null : takenAt ?? this.takenAt,
+      amountTaken: amountTaken ?? this.amountTaken,
+      units: units ?? this.units,
+      syringeUnits: syringeUnits ?? this.syringeUnits,
+      injectionSite: injectionSite ?? this.injectionSite,
+      notes: notes ?? this.notes,
+      skipped: skipped ?? this.skipped,
+    );
+  }
+
   /// True if the dose was scheduled for a past moment and hasn't been logged.
   bool isMissed(DateTime now) =>
       isPending && scheduledAt.isBefore(now.subtract(const Duration(hours: 3)));

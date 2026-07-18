@@ -12,6 +12,7 @@ import '../../protocol/providers/dose_log_provider.dart';
 import '../../protocol/providers/protocol_provider.dart';
 import '../../protocol/screens/active_protocol_detail_screen.dart';
 import '../../protocol/widgets/empty_state.dart';
+import '../../protocol/widgets/log_dose_sheet.dart';
 import '../providers/body_metric_provider.dart';
 import '../widgets/log_metric_sheet.dart';
 
@@ -51,13 +52,21 @@ class ProgressScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('SYS.PROGRESS // BIOMETRICS',
-                            style: AppTypography.systemLabel),
+                        Text(
+                          'SYS.PROGRESS // BIOMETRICS',
+                          style: AppTypography.systemLabel,
+                        ),
                         const SizedBox(height: AppSpacing.sm),
                         Text('Progress', style: AppTypography.h1),
                       ],
                     ),
                   ),
+                  _HeaderIconButton(
+                    icon: Icons.history_rounded,
+                    onTap: () =>
+                        _openDoseHistorySheet(context, protocolProvider.active),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
                   _HeaderIconButton(
                     icon: Icons.add_rounded,
                     onTap: () => _openLogSheet(context),
@@ -71,7 +80,8 @@ class ProgressScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.screenHorizontal),
+                horizontal: AppSpacing.screenHorizontal,
+              ),
               child: Row(
                 children: [
                   Expanded(
@@ -112,7 +122,8 @@ class ProgressScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.screenHorizontal),
+                horizontal: AppSpacing.screenHorizontal,
+              ),
               child: _AdherenceChartCard(logs: doseProvider.recent30),
             ),
           ),
@@ -123,7 +134,8 @@ class ProgressScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.screenHorizontal),
+                horizontal: AppSpacing.screenHorizontal,
+              ),
               child: _WeightChartCard(
                 entries: metricProvider.all,
                 latestKg: metricProvider.latestWeightKg,
@@ -138,9 +150,9 @@ class ProgressScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.screenHorizontal),
-              child: Text('PROTOCOL.HISTORY',
-                  style: AppTypography.systemLabel),
+                horizontal: AppSpacing.screenHorizontal,
+              ),
+              child: Text('PROTOCOL.HISTORY', style: AppTypography.systemLabel),
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.sm)),
@@ -149,7 +161,8 @@ class ProgressScreen extends StatelessWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.screenHorizontal),
+                  horizontal: AppSpacing.screenHorizontal,
+                ),
                 child: AppCard(
                   child: Padding(
                     padding: const EdgeInsets.all(AppSpacing.md),
@@ -164,7 +177,8 @@ class ProgressScreen extends StatelessWidget {
           else
             SliverPadding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.screenHorizontal),
+                horizontal: AppSpacing.screenHorizontal,
+              ),
               sliver: SliverList.separated(
                 itemCount: protocolProvider.all.length,
                 separatorBuilder: (_, __) =>
@@ -187,7 +201,8 @@ class ProgressScreen extends StatelessWidget {
             ),
 
           const SliverToBoxAdapter(
-              child: SizedBox(height: AppSpacing.screenBottom)),
+            child: SizedBox(height: AppSpacing.screenBottom),
+          ),
         ],
       ),
     );
@@ -199,6 +214,18 @@ class ProgressScreen extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => const LogMetricSheet(),
+    );
+  }
+
+  Future<void> _openDoseHistorySheet(
+    BuildContext context,
+    List<Protocol> protocols,
+  ) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => DoseHistorySheet(protocols: protocols),
     );
   }
 }
@@ -259,7 +286,10 @@ class _StatTile extends StatelessWidget {
           const SizedBox(height: AppSpacing.xs),
           Text(
             value,
-            style: AppTypography.heroMedium.copyWith(color: color, fontSize: 24),
+            style: AppTypography.heroMedium.copyWith(
+              color: color,
+              fontSize: 24,
+            ),
           ),
           Text(hint, style: AppTypography.bodySmall),
         ],
@@ -284,8 +314,11 @@ class _AdherenceChartCard extends StatelessWidget {
     }
 
     for (final d in logs) {
-      final day = DateTime(d.scheduledAt.year, d.scheduledAt.month,
-          d.scheduledAt.day);
+      final day = DateTime(
+        d.scheduledAt.year,
+        d.scheduledAt.month,
+        d.scheduledAt.day,
+      );
       final diff = today.difference(day).inDays;
       final idx = 29 - diff;
       if (idx < 0 || idx > 29) continue;
@@ -301,8 +334,9 @@ class _AdherenceChartCard extends StatelessWidget {
     final bars = <BarChartGroupData>[];
     for (var i = 0; i < 30; i++) {
       final s = byDay[i]!;
-      final pct =
-          s.scheduled == 0 ? 0.0 : (s.taken / s.scheduled).clamp(0.0, 1.0);
+      final pct = s.scheduled == 0
+          ? 0.0
+          : (s.taken / s.scheduled).clamp(0.0, 1.0);
       bars.add(
         BarChartGroupData(
           x: i,
@@ -312,8 +346,8 @@ class _AdherenceChartCard extends StatelessWidget {
               color: pct >= 1.0
                   ? AppColors.primary
                   : pct >= 0.5
-                      ? AppColors.primary.withValues(alpha: 0.6)
-                      : AppColors.border,
+                  ? AppColors.primary.withValues(alpha: 0.6)
+                  : AppColors.border,
               width: 6,
               borderRadius: BorderRadius.circular(2),
             ),
@@ -329,12 +363,17 @@ class _AdherenceChartCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Text('ADHERENCE // 30.DAY',
-                    style: AppTypography.systemLabel),
+                child: Text(
+                  'ADHERENCE // 30.DAY',
+                  style: AppTypography.systemLabel,
+                ),
               ),
-              Text('100%',
-                  style: AppTypography.labelSmall
-                      .copyWith(color: AppColors.textTertiary)),
+              Text(
+                '100%',
+                style: AppTypography.labelSmall.copyWith(
+                  color: AppColors.textTertiary,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: AppSpacing.md),
@@ -356,12 +395,18 @@ class _AdherenceChartCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('30d ago',
-                  style: AppTypography.labelSmall
-                      .copyWith(color: AppColors.textTertiary)),
-              Text('today',
-                  style: AppTypography.labelSmall
-                      .copyWith(color: AppColors.textTertiary)),
+              Text(
+                '30d ago',
+                style: AppTypography.labelSmall.copyWith(
+                  color: AppColors.textTertiary,
+                ),
+              ),
+              Text(
+                'today',
+                style: AppTypography.labelSmall.copyWith(
+                  color: AppColors.textTertiary,
+                ),
+              ),
             ],
           ),
         ],
@@ -381,10 +426,10 @@ class _DayStat {
   final int taken;
 
   _DayStat copyWith({int? scheduled, int? taken}) => _DayStat(
-        date: date,
-        scheduled: scheduled ?? this.scheduled,
-        taken: taken ?? this.taken,
-      );
+    date: date,
+    scheduled: scheduled ?? this.scheduled,
+    taken: taken ?? this.taken,
+  );
 }
 
 // ── Weight chart ──────────────────────────────────────────────────────────
@@ -427,8 +472,12 @@ class _WeightChartCard extends StatelessWidget {
       spots.add(FlSpot(i.toDouble(), weighted[i].weightKg!));
     }
 
-    final minY = weighted.map((e) => e.weightKg!).reduce((a, b) => a < b ? a : b);
-    final maxY = weighted.map((e) => e.weightKg!).reduce((a, b) => a > b ? a : b);
+    final minY = weighted
+        .map((e) => e.weightKg!)
+        .reduce((a, b) => a < b ? a : b);
+    final maxY = weighted
+        .map((e) => e.weightKg!)
+        .reduce((a, b) => a > b ? a : b);
     final padding = ((maxY - minY) * 0.1).clamp(0.5, 5.0);
 
     return AppCard(
@@ -438,8 +487,10 @@ class _WeightChartCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Text('WEIGHT // TREND',
-                    style: AppTypography.systemLabel),
+                child: Text(
+                  'WEIGHT // TREND',
+                  style: AppTypography.systemLabel,
+                ),
               ),
               if (latestKg != null)
                 Text(
@@ -459,10 +510,8 @@ class _WeightChartCard extends StatelessWidget {
                   show: true,
                   drawVerticalLine: false,
                   horizontalInterval: ((maxY - minY) / 2).clamp(0.5, 50.0),
-                  getDrawingHorizontalLine: (_) => FlLine(
-                    color: AppColors.gridLine,
-                    strokeWidth: 1,
-                  ),
+                  getDrawingHorizontalLine: (_) =>
+                      FlLine(color: AppColors.gridLine, strokeWidth: 1),
                 ),
                 borderData: FlBorderData(show: false),
                 titlesData: const FlTitlesData(show: false),
@@ -557,27 +606,44 @@ class _ProtocolHistoryCard extends StatelessWidget {
                 Text(
                   '${protocol.peptides.length} peptides · ${_formatDate(protocol.startDate)}'
                   '${protocol.endDate != null ? ' → ${_formatDate(protocol.endDate!)}' : ''}',
-                  style: AppTypography.bodySmall
-                      .copyWith(fontFamily: 'JetBrainsMono'),
+                  style: AppTypography.bodySmall.copyWith(
+                    fontFamily: 'JetBrainsMono',
+                  ),
                 ),
               ],
             ),
           ),
           Text(
             label,
-            style: AppTypography.systemLabel.copyWith(color: color, fontSize: 9),
+            style: AppTypography.systemLabel.copyWith(
+              color: color,
+              fontSize: 9,
+            ),
           ),
           const SizedBox(width: AppSpacing.sm),
-          Icon(Icons.chevron_right_rounded,
-              color: AppColors.textTertiary, size: AppSpacing.iconMedium),
+          Icon(
+            Icons.chevron_right_rounded,
+            color: AppColors.textTertiary,
+            size: AppSpacing.iconMedium,
+          ),
         ],
       ),
     );
   }
 
   static const _months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
   String _formatDate(DateTime d) => '${_months[d.month - 1]} ${d.day}';
 }
