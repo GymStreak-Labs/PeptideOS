@@ -1497,6 +1497,7 @@ class _FieldLabel extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.xs),
         Container(
+          clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             color: AppColors.inputFill,
             borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
