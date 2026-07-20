@@ -358,4 +358,8 @@ const kInjectionSites = <({String key, String label})>[
   (key: 'right-thigh', label: 'Right Thigh'),
   (key: 'left-delt', label: 'Left Deltoid'),
   (key: 'right-delt', label: 'Right Deltoid'),
+  (key: 'left-glute', label: 'Left Glute'),
+  (key: 'right-glute', label: 'Right Glute'),
+  (key: 'left-triceps', label: 'Left Triceps'),
+  (key: 'right-triceps', label: 'Right Triceps'),
 ];
