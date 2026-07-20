@@ -15,10 +15,10 @@ When you create or sign in to an account, we may collect your email address, dis
 When you use PepMod, you may enter information such as protocols, selected peptides, dose logs, reminders, vial details, body metrics, notes, preferences, and onboarding responses. This information is used to provide the app's tracking and educational features.
 
 ### Purchase and subscription information
-If you start a trial or subscription, purchase information is processed by Apple, Google Play, and RevenueCat. We receive subscription status, product identifiers, transaction identifiers, entitlement status, and related purchase metadata so we can unlock paid features and provide customer support.
+If you start a trial or subscription, purchase information is processed by Apple, Google Play, RevenueCat, and Superwall. We receive subscription status, product identifiers, transaction identifiers, entitlement status, paywall interaction data, and related purchase metadata so we can unlock paid features, present subscription offers, and provide customer support.
 
 ### Attribution, analytics, and device information
-We may collect or receive device and app event information such as app installs, app opens, paywall views, trial starts, purchases, device identifiers permitted by the platform, advertising attribution identifiers, diagnostic data, and basic usage events. We use Firebase, RevenueCat, AppRefer, Meta/Facebook App Events, Crashlytics, and similar service providers to measure app performance, understand marketing effectiveness, prevent duplicate attribution, and improve the product.
+We may collect or receive device and app event information such as app installs, app opens, paywall views, trial starts, purchases, device identifiers permitted by the platform, advertising attribution identifiers, diagnostic data, and basic usage events. We use Firebase, RevenueCat, Superwall, AppRefer, Meta/Facebook App Events, Crashlytics, and similar service providers to measure app performance, understand marketing effectiveness, prevent duplicate attribution, and improve the product.
 
 ### Notifications
 If you enable notifications, PepMod uses notification settings and schedule information to send reminders you request. You can disable notifications in your device settings.
@@ -42,6 +42,7 @@ We do not sell your personal information. We may share information with service 
 
 - **Firebase / Google Cloud** for authentication, database, analytics, crash reporting, and app infrastructure.
 - **RevenueCat** for subscription entitlement and purchase management.
+- **Superwall** for paywall presentation, subscription offer experimentation, and paywall analytics.
 - **Apple and Google Play** for app distribution, subscriptions, payments, and refunds.
 - **AppRefer** for advertising attribution and campaign measurement.
 - **Meta/Facebook App Events** for advertising measurement where permitted by your platform settings.

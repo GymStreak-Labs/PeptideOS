@@ -15,10 +15,14 @@ const bool _googleSignInEnabled = bool.fromEnvironment('ENABLE_GOOGLE_SIGN_IN');
 /// Gate shown after onboarding when no Firebase user is signed in.
 ///
 /// The UID gives us attribution + cross-device sync — anonymous mode would
-/// leak installs across the RevenueCat / AppRefer boundary, so we require
+/// leak installs across the Superwall / AppRefer boundary, so we require
 /// sign-in before the app shell loads.
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+  const AuthScreen({super.key, this.createAccountByDefault = false});
+
+  /// New onboarding should continue into account creation. Returning signed-
+  /// out users still land on sign-in when this is false.
+  final bool createAccountByDefault;
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -81,9 +85,15 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void _openEmailFlow() {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const EmailAuthScreen()));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => EmailAuthScreen(
+          initialMode: widget.createAccountByDefault
+              ? EmailAuthMode.createAccount
+              : EmailAuthMode.signIn,
+        ),
+      ),
+    );
   }
 
   @override
@@ -108,14 +118,14 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               const SizedBox(height: AppSpacing.sm),
               Text(
-                'Secure your protocol',
+                'Save your personalised\nprotocol',
                 style: AppTypography.h1,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.sm),
               Text(
-                'Your protocols sync encrypted to your account so nothing '
-                'is lost between devices.',
+                'Keep your roadmap, schedule, dose logs, and reminders attached '
+                'to your account before the protocol unlocks.',
                 style: AppTypography.bodyMedium.copyWith(
                   color: AppColors.textSecondary,
                 ),

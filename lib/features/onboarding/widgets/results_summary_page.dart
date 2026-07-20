@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 
-/// Screen 13: Personalised Results Summary — "Your protocol is ready."
+/// Personalised Results Summary - "Your protocol is ready."
 /// Echoes the user's inputs back at them. The sunk-cost payoff.
 class ResultsSummaryPage extends StatelessWidget {
   const ResultsSummaryPage({
     super.key,
     required this.selectedGoals,
+    required this.confidenceNeeds,
     required this.experienceLevel,
     required this.frustration,
     required this.selectedPeptides,
@@ -15,6 +16,7 @@ class ResultsSummaryPage extends StatelessWidget {
   });
 
   final Set<String> selectedGoals;
+  final Set<String> confidenceNeeds;
   final String experienceLevel;
   final String frustration;
   final Set<String> selectedPeptides;
@@ -30,6 +32,11 @@ class ResultsSummaryPage extends StatelessWidget {
 
   String get _frustrationDisplay =>
       frustration.isEmpty ? 'Missing doses' : frustration;
+
+  String get _confidenceDisplay {
+    if (confidenceNeeds.isEmpty) return 'Dose math · Site rotation';
+    return confidenceNeeds.join(' · ');
+  }
 
   String get _peptidesDisplay {
     if (selectedPeptides.isEmpty) return 'BPC-157, TB-500';
@@ -60,8 +67,7 @@ class ResultsSummaryPage extends StatelessWidget {
           children: [
             const SizedBox(height: AppSpacing.huge),
 
-            Text('SYS.PROFILE // COMPILED',
-                style: AppTypography.systemLabel),
+            Text('SYS.PROFILE // COMPILED', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.md),
             Text(
               'Your protocol\nis ready',
@@ -88,10 +94,7 @@ class ResultsSummaryPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _SummaryRow(
-                            label: 'GOALS',
-                            value: _goalsDisplay,
-                          ),
+                          _SummaryRow(label: 'GOALS', value: _goalsDisplay),
                           const SizedBox(height: AppSpacing.md),
                           _SummaryRow(
                             label: 'EXPERIENCE',
@@ -101,6 +104,11 @@ class ResultsSummaryPage extends StatelessWidget {
                           _SummaryRow(
                             label: 'FRUSTRATION',
                             value: _frustrationDisplay,
+                          ),
+                          const SizedBox(height: AppSpacing.md),
+                          _SummaryRow(
+                            label: 'CONFIDENCE',
+                            value: _confidenceDisplay,
                           ),
                           const SizedBox(height: AppSpacing.md),
                           _SummaryRow(
@@ -140,10 +148,7 @@ class ResultsSummaryPage extends StatelessWidget {
                                 label: 'PEPTIDES\nTRACKED',
                               ),
                               const SizedBox(width: AppSpacing.sm),
-                              _DataTile(
-                                value: '12',
-                                label: 'WEEK\nDURATION',
-                              ),
+                              _DataTile(value: '12', label: 'WEEK\nDURATION'),
                             ],
                           ),
                         ],
@@ -153,10 +158,8 @@ class ResultsSummaryPage extends StatelessWidget {
                     const SizedBox(height: AppSpacing.lg),
 
                     Text(
-                      'We\'ll track every dose, compute exact reconstitution, and surface insights as your data builds.',
-                      style: AppTypography.bodyMedium.copyWith(
-                        height: 1.6,
-                      ),
+                      'We\'ll keep dose logs, reconstitution math, and trend records together as your data builds.',
+                      style: AppTypography.bodyMedium.copyWith(height: 1.6),
                     ),
 
                     const SizedBox(height: AppSpacing.lg),
@@ -167,10 +170,7 @@ class ResultsSummaryPage extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.base),
 
-            PrimaryButton(
-              label: 'SEE WHAT\'S INSIDE',
-              onPressed: onNext,
-            ),
+            PrimaryButton(label: 'SEE WHAT\'S INSIDE', onPressed: onNext),
             const SizedBox(height: AppSpacing.xxl),
           ],
         ),
@@ -230,9 +230,7 @@ class _DataTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.background.withValues(alpha: 0.6),
           borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
-          border: Border.all(
-            color: AppColors.primary.withValues(alpha: 0.3),
-          ),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
           boxShadow: [
             BoxShadow(
               color: AppColors.primary.withValues(alpha: 0.1),

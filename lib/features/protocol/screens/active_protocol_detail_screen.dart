@@ -8,6 +8,8 @@ import '../../../models/dose_log.dart';
 import '../../../models/protocol.dart';
 import '../providers/dose_log_provider.dart';
 import '../providers/protocol_provider.dart';
+import '../widgets/peptide_label_color.dart';
+import 'create_protocol_screen.dart';
 
 /// Shows all peptides in an active (or paused) protocol with adherence stats,
 /// pause / resume / end controls, and per-peptide edit/remove.
@@ -42,6 +44,9 @@ class _ActiveProtocolDetailScreenState
 
     final last7 = _adherenceLastNDays(doseProvider.recent30, 7);
     final allTime = _adherenceAllTime(doseProvider.recent30);
+    final protocolHistory = provider.history
+        .where((p) => p.uuid != _protocol.uuid)
+        .toList();
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -165,11 +170,15 @@ class _ActiveProtocolDetailScreenState
                         ],
                       ),
                     ),
+                    const SizedBox(height: AppSpacing.cardGap),
+                    _CycleStatusCard(protocol: _protocol),
+                    const SizedBox(height: AppSpacing.cardGap),
+                    _ProtocolHistoryList(protocols: protocolHistory),
                     const SizedBox(height: AppSpacing.xl),
 
                     // Peptides
                     Text(
-                      'PEPTIDES (${_protocol.peptides.length})',
+                      'STACK (${_protocol.peptides.length})',
                       style: AppTypography.systemLabel,
                     ),
                     const SizedBox(height: AppSpacing.sm),
@@ -182,6 +191,12 @@ class _ActiveProtocolDetailScreenState
 
                     // Actions
                     if (_protocol.status == ProtocolStatus.active) ...[
+                      PrimaryButton(
+                        label: 'EDIT PROTOCOL',
+                        icon: Icons.edit_rounded,
+                        onPressed: _editProtocol,
+                      ),
+                      const SizedBox(height: AppSpacing.cardGap),
                       PrimaryButton(
                         label: 'PAUSE PROTOCOL',
                         icon: Icons.pause_rounded,
@@ -200,6 +215,12 @@ class _ActiveProtocolDetailScreenState
                         onPressed: () => _confirmEnd(provider),
                       ),
                     ] else if (_protocol.status == ProtocolStatus.paused) ...[
+                      PrimaryButton(
+                        label: 'EDIT PROTOCOL',
+                        icon: Icons.edit_rounded,
+                        onPressed: _editProtocol,
+                      ),
+                      const SizedBox(height: AppSpacing.cardGap),
                       PrimaryButton(
                         label: 'RESUME PROTOCOL',
                         icon: Icons.play_arrow_rounded,
@@ -240,6 +261,19 @@ class _ActiveProtocolDetailScreenState
         ),
       ),
     );
+  }
+
+  Future<void> _editProtocol() async {
+    HapticFeedback.lightImpact();
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => CreateProtocolScreen(initialProtocol: _protocol),
+      ),
+    );
+    if (!mounted) return;
+    await context.read<ProtocolProvider>().refresh();
+    if (!mounted) return;
+    setState(() {});
   }
 
   Future<void> _confirmEnd(ProtocolProvider provider) async {
@@ -423,6 +457,232 @@ class _StatTile extends StatelessWidget {
   }
 }
 
+class _CycleStatusCard extends StatelessWidget {
+  const _CycleStatusCard({required this.protocol});
+  final Protocol protocol;
+
+  @override
+  Widget build(BuildContext context) {
+    final now = DateTime.now();
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('CYCLE.STATUS', style: AppTypography.systemLabel),
+          const SizedBox(height: AppSpacing.sm),
+          for (final peptide in protocol.peptides) ...[
+            _CycleStatusRow(
+              peptide: peptide,
+              protocolStart: protocol.startDate,
+              now: now,
+            ),
+            if (peptide != protocol.peptides.last)
+              const SizedBox(height: AppSpacing.base),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _CycleStatusRow extends StatelessWidget {
+  const _CycleStatusRow({
+    required this.peptide,
+    required this.protocolStart,
+    required this.now,
+  });
+
+  final ProtocolPeptide peptide;
+  final DateTime protocolStart;
+  final DateTime now;
+
+  @override
+  Widget build(BuildContext context) {
+    final (label, detail, color) = _state();
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 8,
+          height: 8,
+          margin: const EdgeInsets.only(top: 6),
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 6),
+            ],
+          ),
+        ),
+        const SizedBox(width: AppSpacing.sm),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(peptide.peptideName, style: AppTypography.labelLarge),
+              const SizedBox(height: 2),
+              Text(label, style: AppTypography.bodySmall),
+              Text(
+                detail,
+                style: AppTypography.tabular.copyWith(
+                  fontSize: 12,
+                  color: AppColors.textTertiary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  (String, String, Color) _state() {
+    final today = DateTime(now.year, now.month, now.day);
+    final cycleEnd = peptide.cycleEndDate(protocolStart);
+    if (cycleEnd == null) {
+      return (
+        'Continuous tracking',
+        'No fixed cycle window',
+        AppColors.primary,
+      );
+    }
+
+    if (peptide.isInActiveCycle(protocolStart: protocolStart, date: today)) {
+      final day = today
+          .difference(
+            DateTime(
+              protocolStart.year,
+              protocolStart.month,
+              protocolStart.day,
+            ),
+          )
+          .inDays;
+      final week = (day ~/ 7) + 1;
+      return (
+        'Week ${week.clamp(1, peptide.cycleWeeks)} of ${peptide.cycleWeeks}',
+        'Cycle ends ${_formatDate(cycleEnd)}',
+        AppColors.primary,
+      );
+    }
+
+    if (peptide.isInWashout(protocolStart: protocolStart, date: today)) {
+      final washoutEnd = peptide.washoutEndDate(protocolStart)!;
+      final restDay = today.difference(cycleEnd).inDays;
+      final restWeek = (restDay ~/ 7) + 1;
+      return (
+        'Rest week ${restWeek.clamp(1, peptide.washoutWeeks)} of ${peptide.washoutWeeks}',
+        'Rest window ends ${_formatDate(washoutEnd)}',
+        AppColors.danger,
+      );
+    }
+
+    final washoutEnd = peptide.washoutEndDate(protocolStart);
+    return (
+      'Cycle complete',
+      washoutEnd == null || washoutEnd == cycleEnd
+          ? 'Completed ${_formatDate(cycleEnd)}'
+          : 'Rest window ended ${_formatDate(washoutEnd)}',
+      AppColors.textTertiary,
+    );
+  }
+
+  static String _formatDate(DateTime d) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${months[d.month - 1]} ${d.day}';
+  }
+}
+
+class _ProtocolHistoryList extends StatelessWidget {
+  const _ProtocolHistoryList({required this.protocols});
+  final List<Protocol> protocols;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('PROTOCOL.HISTORY', style: AppTypography.systemLabel),
+          const SizedBox(height: AppSpacing.sm),
+          if (protocols.isEmpty)
+            Text(
+              'No paused or ended protocols yet.',
+              style: AppTypography.bodySmall,
+            )
+          else
+            for (final p in protocols) ...[
+              GestureDetector(
+                onTap: () {
+                  HapticFeedback.lightImpact();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ActiveProtocolDetailScreen(protocol: p),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(p.name, style: AppTypography.labelLarge),
+                            Text(
+                              '${p.status.label} · ${_formatDate(p.startDate)}',
+                              style: AppTypography.bodySmall,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right_rounded,
+                        color: AppColors.textTertiary,
+                        size: AppSpacing.iconMedium,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+        ],
+      ),
+    );
+  }
+
+  String _formatDate(DateTime d) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${months[d.month - 1]} ${d.day}, ${d.year}';
+  }
+}
+
 class _PeptideRowCard extends StatelessWidget {
   const _PeptideRowCard({required this.peptide});
   final ProtocolPeptide peptide;
@@ -451,16 +711,21 @@ class _PeptideRowCard extends StatelessWidget {
   String _scheduleSummary() {
     if (!peptide.usesCustomWeekdays) {
       return '${_formatAmount(peptide.dosePerInjection)} ${peptide.doseUnit} · '
-          '${_freqLabel(peptide.frequency)}';
+          '${_freqLabel(peptide.frequency)}${_syringeSummary(peptide.syringeUnits)}';
     }
     final days = [...peptide.weekdayDoses]
       ..sort((a, b) => a.weekday.compareTo(b.weekday));
     return days
         .map(
           (d) =>
-              '${_weekdayLabel(d.weekday)} ${_formatAmount(d.dosePerInjection)} ${d.doseUnit}',
+              '${_weekdayLabel(d.weekday)} ${_formatAmount(d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(d.syringeUnits)}',
         )
         .join(', ');
+  }
+
+  String _syringeSummary(double value) {
+    if (value <= 0) return '';
+    return ' · ${_formatAmount(value)} syringe units';
   }
 
   String _routeLabel(String key) {
@@ -478,18 +743,7 @@ class _PeptideRowCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(
-                  Icons.biotech_rounded,
-                  color: AppColors.primary,
-                ),
-              ),
+              PeptideLabelAvatar(hex: peptide.labelColorHex),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
@@ -515,13 +769,19 @@ class _PeptideRowCard extends StatelessWidget {
               _Tag(label: _routeLabel(peptide.route)),
               if (peptide.cycleWeeks > 0)
                 _Tag(label: '${peptide.cycleWeeks}wk cycle'),
+              if (peptide.washoutWeeks > 0)
+                _Tag(label: '${peptide.washoutWeeks}wk rest'),
+              if (peptide.syringeUnits > 0)
+                _Tag(
+                  label: '${_formatAmount(peptide.syringeUnits)} syringe units',
+                ),
               if (peptide.usesCustomWeekdays)
                 for (final d in ([
                   ...peptide.weekdayDoses,
                 ]..sort((a, b) => a.weekday.compareTo(b.weekday))))
                   _Tag(
                     label:
-                        '${_weekdayLabel(d.weekday)} ${_formatAmount(d.dosePerInjection)} ${d.doseUnit}',
+                        '${_weekdayLabel(d.weekday)} ${_formatAmount(d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(d.syringeUnits)}',
                   ),
               for (final t in peptide.scheduledTimes) _Tag(label: t),
             ],

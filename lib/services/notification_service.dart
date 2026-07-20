@@ -8,6 +8,9 @@ import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../models/dose_log.dart';
+import '../models/protocol.dart';
+
+enum ProtocolReminderKind { cycleEnds, washoutEnds }
 
 /// Schedules local notifications for upcoming peptide doses.
 ///
@@ -106,7 +109,7 @@ class NotificationService {
       await _plugin.zonedSchedule(
         id,
         'Time for your dose',
-        '${log.peptideName} · ${log.amountTaken.toStringAsFixed(0)} ${log.units}',
+        'Your scheduled protocol reminder is ready.',
         scheduled,
         const NotificationDetails(
           android: AndroidNotificationDetails(
@@ -129,6 +132,60 @@ class NotificationService {
     }
   }
 
+  Future<void> scheduleProtocolReminder({
+    required String protocolUuid,
+    required String protocolPeptideUuid,
+    required String peptideName,
+    required ProtocolReminderKind kind,
+    required DateTime scheduledAt,
+  }) async {
+    if (!_initialized) await initialize();
+    if (!_initialized) return;
+    if (scheduledAt.isBefore(DateTime.now())) return;
+
+    final id = _protocolReminderId(
+      protocolUuid: protocolUuid,
+      protocolPeptideUuid: protocolPeptideUuid,
+      kind: kind,
+    );
+    final scheduled = tz.TZDateTime.from(scheduledAt, tz.local);
+    final (title, body) = switch (kind) {
+      ProtocolReminderKind.cycleEnds => (
+        'Protocol checkpoint',
+        'A cycle-window reminder is due today. Review your tracking plan.',
+      ),
+      ProtocolReminderKind.washoutEnds => (
+        'Rest period checkpoint',
+        'A rest-period reminder is due today. Review your tracking plan.',
+      ),
+    };
+
+    try {
+      await _plugin.zonedSchedule(
+        id,
+        title,
+        body,
+        scheduled,
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            _channelId,
+            _channelName,
+            channelDescription: _channelDescription,
+            importance: Importance.defaultImportance,
+            priority: Priority.defaultPriority,
+          ),
+          iOS: DarwinNotificationDetails(),
+        ),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.dateAndTime,
+      );
+    } catch (e) {
+      debugPrint('NotificationService: protocol reminder failed: $e');
+    }
+  }
+
   Future<void> cancelDoseReminder(String doseUuid) async {
     if (!_initialized) await initialize();
     if (!_initialized) return;
@@ -139,13 +196,41 @@ class NotificationService {
     }
   }
 
-  Future<void> cancelAll() async {
+  Future<void> cancelProtocolRemindersForProtocol(Protocol protocol) async {
     if (!_initialized) await initialize();
     if (!_initialized) return;
+    for (final peptide in protocol.peptides) {
+      for (final kind in ProtocolReminderKind.values) {
+        try {
+          await _plugin.cancel(
+            _protocolReminderId(
+              protocolUuid: protocol.uuid,
+              protocolPeptideUuid: peptide.uuid,
+              kind: kind,
+            ),
+          );
+        } catch (e) {
+          debugPrint(
+            'NotificationService: cancel protocol reminder failed: $e',
+          );
+        }
+      }
+    }
+  }
+
+  Future<void> cancelAll({bool strict = false}) async {
+    if (!_initialized) await initialize();
+    if (!_initialized) {
+      if (strict) {
+        throw StateError('Notification service could not be initialized.');
+      }
+      return;
+    }
     try {
       await _plugin.cancelAll();
     } catch (e) {
       debugPrint('NotificationService: cancelAll failed: $e');
+      if (strict) rethrow;
     }
   }
 
@@ -157,5 +242,15 @@ class NotificationService {
       hash = (hash * 31 + codeUnit) & 0x7FFFFFFF;
     }
     return hash;
+  }
+
+  int _protocolReminderId({
+    required String protocolUuid,
+    required String protocolPeptideUuid,
+    required ProtocolReminderKind kind,
+  }) {
+    return _notificationIdForUuid(
+      'protocol|$protocolUuid|$protocolPeptideUuid|${kind.name}',
+    );
   }
 }

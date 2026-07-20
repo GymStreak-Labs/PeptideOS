@@ -7,7 +7,7 @@ import 'colors.dart';
 /// - **Space Grotesk** — geometric sans-serif for headings & body. Modern, slightly technical.
 /// - **JetBrains Mono** — monospace for data numbers, doses, timers. Signals "tech/system readout".
 ///
-/// Cross-platform via google_fonts.
+/// Cross-platform via bundled font assets.
 abstract final class AppTypography {
   static const String _display = 'SpaceGrotesk';
   static const String _mono = 'JetBrainsMono';

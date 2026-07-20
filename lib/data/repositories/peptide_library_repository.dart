@@ -26,7 +26,7 @@ class PeptideLibraryRepository {
       final remote = snap.docs
           .map((d) => Peptide.fromMap(d.id, d.data()))
           .toList(growable: false);
-      return remote.isEmpty ? bundledSeed : remote;
+      return _mergeWithBundled(remote);
     });
   }
 
@@ -64,6 +64,16 @@ class PeptideLibraryRepository {
     final remote = snap.docs
         .map((d) => Peptide.fromMap(d.id, d.data()))
         .toList(growable: false);
-    return remote.isEmpty ? bundledSeed : remote;
+    return _mergeWithBundled(remote);
+  }
+
+  List<Peptide> _mergeWithBundled(List<Peptide> remote) {
+    final bySlug = <String, Peptide>{
+      for (final p in bundledSeed) p.slug: p,
+      for (final p in remote) p.slug: p,
+    };
+    final merged = bySlug.values.toList()
+      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    return merged;
   }
 }

@@ -14,7 +14,7 @@ import '../../../models/protocol.dart';
 /// Local handoff between pre-auth onboarding and post-auth Firestore state.
 ///
 /// Onboarding intentionally collects personalization before sign-in, then
-/// shows auth before the paywall so AppRefer / RevenueCat purchases attach to
+/// shows auth before the paywall so AppRefer / Superwall purchases attach to
 /// a stable Firebase UID. The selected protocol/profile data is staged here,
 /// then replayed once Firebase gives us that UID.
 class OnboardingDraftService {
@@ -23,6 +23,9 @@ class OnboardingDraftService {
   static const String _draftKey = 'peptideos_onboarding_draft_v1';
   static const String _postAuthPaywallPendingKey =
       'pepmod_post_auth_paywall_pending_v1';
+  static const String _postAuthPaywallFlowVersionKey =
+      'pepmod_post_auth_paywall_flow_version';
+  static const int _currentPostAuthPaywallFlowVersion = 2;
 
   static Future<void> save(OnboardingDraft draft) async {
     final prefs = await SharedPreferences.getInstance();
@@ -44,19 +47,45 @@ class OnboardingDraftService {
 
   static Future<void> clear() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_draftKey);
+    final removed = await prefs.remove(_draftKey);
+    if (!removed && prefs.containsKey(_draftKey)) {
+      throw StateError('Failed to clear the onboarding draft.');
+    }
   }
 
   static Future<bool> hasDraft() async => (await load()) != null;
 
   static Future<void> setPostAuthPaywallPending(bool pending) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_postAuthPaywallPendingKey, pending);
+    final saved = await prefs.setBool(_postAuthPaywallPendingKey, pending);
+    if (!saved) {
+      throw StateError('Failed to update the post-auth paywall state.');
+    }
+    if (pending) {
+      final versionSaved = await prefs.setInt(
+        _postAuthPaywallFlowVersionKey,
+        _currentPostAuthPaywallFlowVersion,
+      );
+      if (!versionSaved) {
+        throw StateError('Failed to version the post-auth paywall state.');
+      }
+    } else {
+      await prefs.remove(_postAuthPaywallFlowVersionKey);
+    }
   }
 
   static Future<bool> isPostAuthPaywallPending() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_postAuthPaywallPendingKey) ?? false;
+    final pending = prefs.getBool(_postAuthPaywallPendingKey) ?? false;
+    if (!pending) return false;
+    final version = prefs.getInt(_postAuthPaywallFlowVersionKey);
+    if (version == _currentPostAuthPaywallFlowVersion) return true;
+
+    // Older builds used an unversioned latch. Never surface a hard paywall to
+    // an already-onboarded user merely because they installed this update.
+    await prefs.setBool(_postAuthPaywallPendingKey, false);
+    await prefs.remove(_postAuthPaywallFlowVersionKey);
+    return false;
   }
 
   static Future<void> replayAfterAuth({
@@ -75,9 +104,12 @@ class OnboardingDraftService {
         name: draft.firstName,
         birthDate: draft.birthDate,
         goals: draft.goals,
+        confidenceNeeds: draft.confidenceNeeds,
         experience: draft.experience,
         frustration: draft.frustration,
+        notificationsEnabled: draft.notificationsEnabled,
       );
+      protocols.setNotificationsEnabled(draft.notificationsEnabled);
 
       await AnalyticsService().sendAppReferAdvancedMatching(
         email: email,
@@ -98,6 +130,7 @@ class OnboardingDraftService {
               slug: lib.slug,
               name: lib.name,
               dose: lib.defaultDoseMcg,
+              unit: lib.defaultDoseUnit,
               frequency: lib.defaultFrequency,
               route: lib.defaultRoute,
               cycleWeeks: lib.typicalCycleWeeks,
@@ -137,9 +170,11 @@ class OnboardingDraft {
     required this.firstName,
     required this.birthDate,
     required this.goals,
+    required this.confidenceNeeds,
     required this.experience,
     required this.frustration,
     required this.selectedPeptides,
+    required this.notificationsEnabled,
   });
 
   final String firstName;
@@ -147,17 +182,21 @@ class OnboardingDraft {
   /// ISO-8601 date only (`yyyy-MM-dd`) for AppRefer advanced matching.
   final String birthDate;
   final List<String> goals;
+  final List<String> confidenceNeeds;
   final String experience;
   final String frustration;
   final List<String> selectedPeptides;
+  final bool notificationsEnabled;
 
   Map<String, dynamic> toMap() => <String, dynamic>{
     'firstName': firstName,
     'birthDate': birthDate,
     'goals': goals,
+    'confidenceNeeds': confidenceNeeds,
     'experience': experience,
     'frustration': frustration,
     'selectedPeptides': selectedPeptides,
+    'notificationsEnabled': notificationsEnabled,
   };
 
   factory OnboardingDraft.fromMap(Map<String, dynamic> data) {
@@ -167,11 +206,15 @@ class OnboardingDraft {
       goals: (data['goals'] as List<dynamic>? ?? const [])
           .map((e) => e.toString())
           .toList(),
+      confidenceNeeds: (data['confidenceNeeds'] as List<dynamic>? ?? const [])
+          .map((e) => e.toString())
+          .toList(),
       experience: (data['experience'] as String?) ?? '',
       frustration: (data['frustration'] as String?) ?? '',
       selectedPeptides: (data['selectedPeptides'] as List<dynamic>? ?? const [])
           .map((e) => e.toString())
           .toList(),
+      notificationsEnabled: (data['notificationsEnabled'] as bool?) ?? false,
     );
   }
 }

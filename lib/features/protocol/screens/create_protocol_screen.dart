@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
+import '../../../core/utils/decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/peptide.dart';
 import '../../../models/protocol.dart';
@@ -11,10 +12,15 @@ import '../../subscription/providers/subscription_provider.dart';
 import '../../subscription/screens/soft_paywall_sheet.dart';
 import '../providers/dose_log_provider.dart';
 import '../providers/protocol_provider.dart';
+import '../widgets/peptide_label_color.dart';
+
+const _customPeptideSlug = 'custom';
 
 /// 3-step protocol builder: name → add peptides → start date + review.
 class CreateProtocolScreen extends StatefulWidget {
-  const CreateProtocolScreen({super.key});
+  const CreateProtocolScreen({super.key, this.initialProtocol});
+
+  final Protocol? initialProtocol;
 
   @override
   State<CreateProtocolScreen> createState() => _CreateProtocolScreenState();
@@ -24,10 +30,25 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
   final _pageController = PageController();
   int _step = 0;
 
-  final _nameController = TextEditingController(text: 'My Protocol');
+  late final TextEditingController _nameController;
   final List<ProtocolPeptide> _peptides = [];
   DateTime _startDate = DateTime.now();
   bool _saving = false;
+
+  bool get _isEditing => widget.initialProtocol != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final initial = widget.initialProtocol;
+    _nameController = TextEditingController(
+      text: initial?.name ?? 'My Protocol',
+    );
+    if (initial != null) {
+      _startDate = initial.startDate;
+      _peptides.addAll(initial.peptides.map(_cloneProtocolPeptide));
+    }
+  }
 
   @override
   void dispose() {
@@ -87,11 +108,21 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
     }
     setState(() => _saving = true);
     try {
-      await context.read<ProtocolProvider>().createProtocol(
-        name: _nameController.text.trim(),
-        startDate: _startDate,
-        peptides: _peptides,
-      );
+      final provider = context.read<ProtocolProvider>();
+      if (_isEditing) {
+        await provider.updateProtocol(
+          protocol: widget.initialProtocol!,
+          name: _nameController.text.trim(),
+          startDate: _startDate,
+          peptides: _peptides,
+        );
+      } else {
+        await provider.createProtocol(
+          name: _nameController.text.trim(),
+          startDate: _startDate,
+          peptides: _peptides,
+        );
+      }
       if (!mounted) return;
       await context.read<DoseLogProvider>().refresh();
       if (!mounted) return;
@@ -147,11 +178,13 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'SYS.PROTOCOL // NEW',
+                          _isEditing
+                              ? 'SYS.PROTOCOL // EDIT'
+                              : 'SYS.PROTOCOL // NEW',
                           style: AppTypography.systemLabel,
                         ),
                         Text(
-                          'Build Protocol · Step ${_step + 1} / 3',
+                          '${_isEditing ? 'Edit' : 'Build'} Protocol · Step ${_step + 1} / 3',
                           style: AppTypography.h3,
                         ),
                       ],
@@ -233,7 +266,9 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
             Padding(
               padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
               child: PrimaryButton(
-                label: _step == 2 ? 'CREATE PROTOCOL' : 'NEXT',
+                label: _step == 2
+                    ? (_isEditing ? 'SAVE CHANGES' : 'CREATE PROTOCOL')
+                    : 'NEXT',
                 icon: _step == 2 ? Icons.check_rounded : null,
                 isLoading: _saving,
                 onPressed: _canAdvance ? _next : null,
@@ -314,10 +349,10 @@ class _Step2Peptides extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Add peptides', style: AppTypography.h2),
+          Text('Build your stack', style: AppTypography.h2),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Pick from the library and configure dose, frequency, and cycle.',
+            'Add one peptide or stack multiple compounds. Configure each label, dose, frequency, and cycle.',
             style: AppTypography.bodyMedium,
           ),
           const SizedBox(height: AppSpacing.lg),
@@ -359,20 +394,7 @@ class _Step2Peptides extends StatelessWidget {
                         },
                         child: Row(
                           children: [
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withValues(
-                                  alpha: 0.12,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Icon(
-                                Icons.biotech_rounded,
-                                color: AppColors.primary,
-                              ),
-                            ),
+                            PeptideLabelAvatar(hex: p.labelColorHex),
                             const SizedBox(width: AppSpacing.md),
                             Expanded(
                               child: Column(
@@ -407,7 +429,12 @@ class _Step2Peptides extends StatelessWidget {
           ),
           OutlinedButton.icon(
             onPressed: () async {
-              final picked = await _pickPeptide(context);
+              final picked = await _pickPeptide(
+                context,
+                defaultLabelColorHex: defaultPeptideLabelColorHex(
+                  peptides.length,
+                ),
+              );
               if (picked != null) onAdd(picked);
             },
             style: OutlinedButton.styleFrom(
@@ -420,7 +447,7 @@ class _Step2Peptides extends StatelessWidget {
             ),
             icon: const Icon(Icons.add_rounded),
             label: Text(
-              'ADD PEPTIDE',
+              'ADD TO STACK',
               style: AppTypography.button.copyWith(color: AppColors.primary),
             ),
           ),
@@ -502,8 +529,8 @@ class _Step3Review extends StatelessWidget {
                         Container(
                           width: 6,
                           height: 6,
-                          decoration: const BoxDecoration(
-                            color: AppColors.primary,
+                          decoration: BoxDecoration(
+                            color: peptideLabelColor(p.labelColorHex),
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -573,21 +600,33 @@ String _weekdayLabel(int weekday) => switch (weekday) {
 String _scheduleSummary(ProtocolPeptide p) {
   if (!p.usesCustomWeekdays) {
     return '${_formatAmount(p.dosePerInjection)} ${p.doseUnit} · '
-        '${_freqLabel(p.frequency)}';
+        '${_freqLabel(p.frequency)}${_syringeSummary(p.syringeUnits)}';
   }
   final days = [...p.weekdayDoses]
     ..sort((a, b) => a.weekday.compareTo(b.weekday));
   final summary = days
       .map(
         (d) =>
-            '${_weekdayLabel(d.weekday)} ${_formatAmount(d.dosePerInjection)} ${d.doseUnit}',
+            '${_weekdayLabel(d.weekday)} ${_formatAmount(d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(d.syringeUnits)}',
       )
       .join(', ');
   return summary.isEmpty ? 'Custom days' : summary;
 }
 
+String _syringeSummary(double value) {
+  if (value <= 0) return '';
+  return ' · ${_formatAmount(value)} syringe units';
+}
+
+ProtocolPeptide _cloneProtocolPeptide(ProtocolPeptide p) {
+  return ProtocolPeptide.fromMap(p.toMap());
+}
+
 /// Opens the peptide picker and returns a configured ProtocolPeptide.
-Future<ProtocolPeptide?> _pickPeptide(BuildContext context) async {
+Future<ProtocolPeptide?> _pickPeptide(
+  BuildContext context, {
+  required String defaultLabelColorHex,
+}) async {
   final slug = await showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
@@ -597,18 +636,31 @@ Future<ProtocolPeptide?> _pickPeptide(BuildContext context) async {
   if (slug == null) return null;
   if (!context.mounted) return null;
 
-  final peptide = context.read<PeptideProvider>().findBySlug(slug);
-  if (peptide == null) return null;
-
   final provider = context.read<ProtocolProvider>();
-  final draft = provider.buildPeptide(
-    slug: peptide.slug,
-    name: peptide.name,
-    dose: peptide.defaultDoseMcg,
-    frequency: peptide.defaultFrequency,
-    route: peptide.defaultRoute,
-    cycleWeeks: peptide.typicalCycleWeeks,
-  );
+  final ProtocolPeptide draft;
+  if (slug == _customPeptideSlug) {
+    draft = provider.buildPeptide(
+      slug: _customPeptideSlug,
+      name: 'Custom peptide',
+      dose: 0,
+      frequency: 'as_needed',
+      route: 'subcutaneous',
+      labelColorHex: defaultLabelColorHex,
+    );
+  } else {
+    final peptide = context.read<PeptideProvider>().findBySlug(slug);
+    if (peptide == null) return null;
+    draft = provider.buildPeptide(
+      slug: peptide.slug,
+      name: peptide.name,
+      dose: peptide.defaultDoseMcg,
+      unit: peptide.defaultDoseUnit,
+      frequency: peptide.defaultFrequency,
+      route: peptide.defaultRoute,
+      cycleWeeks: peptide.typicalCycleWeeks,
+      labelColorHex: defaultLabelColorHex,
+    );
+  }
 
   return showModalBottomSheet<ProtocolPeptide>(
     context: context,
@@ -715,11 +767,59 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
               const SizedBox(height: AppSpacing.base),
               Expanded(
                 child: ListView.separated(
-                  itemCount: peptides.length,
+                  itemCount: peptides.length + 1,
                   separatorBuilder: (_, __) =>
                       const SizedBox(height: AppSpacing.sm),
                   itemBuilder: (_, i) {
-                    final p = peptides[i];
+                    if (i == 0) {
+                      return AppCard(
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          Navigator.of(context).pop(_customPeptideSlug);
+                        },
+                        borderColor: AppColors.borderCyan,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withValues(
+                                  alpha: 0.12,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(
+                                Icons.add_rounded,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                            const SizedBox(width: AppSpacing.md),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Custom peptide',
+                                    style: AppTypography.labelLarge,
+                                  ),
+                                  Text(
+                                    'Track your own entry',
+                                    style: AppTypography.bodySmall,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right_rounded,
+                              color: AppColors.textTertiary,
+                              size: AppSpacing.iconMedium,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    final p = peptides[i - 1];
                     return AppCard(
                       onTap: () {
                         HapticFeedback.selectionClick();
@@ -768,26 +868,53 @@ class _PeptideConfigSheet extends StatefulWidget {
 }
 
 class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
+  late final TextEditingController _nameCtrl;
   late final TextEditingController _doseCtrl;
+  late final TextEditingController _syringeUnitsCtrl;
+  late final TextEditingController _cycleWeeksCtrl;
+  late final TextEditingController _washoutWeeksCtrl;
   final Map<int, TextEditingController> _weekdayDoseCtrls = {};
   late String _unit;
   late String _frequency;
   late String _route;
-  late String _time;
+  late String _labelColorHex;
+  late List<String> _times;
   late Set<int> _selectedWeekdays;
+  bool get _isCustomPeptide => widget.initial.peptideSlug == _customPeptideSlug;
 
   @override
   void initState() {
     super.initState();
+    _nameCtrl = TextEditingController(text: widget.initial.peptideName);
     _doseCtrl = TextEditingController(
       text: _formatAmount(widget.initial.dosePerInjection),
+    );
+    _syringeUnitsCtrl = TextEditingController(
+      text: widget.initial.syringeUnits > 0
+          ? _formatAmount(widget.initial.syringeUnits)
+          : '',
+    );
+    _cycleWeeksCtrl = TextEditingController(
+      text: widget.initial.cycleWeeks > 0
+          ? widget.initial.cycleWeeks.toString()
+          : '',
+    );
+    _washoutWeeksCtrl = TextEditingController(
+      text: widget.initial.washoutWeeks > 0
+          ? widget.initial.washoutWeeks.toString()
+          : '',
     );
     _unit = widget.initial.doseUnit;
     _frequency = widget.initial.frequency;
     _route = widget.initial.route;
-    _time = widget.initial.scheduledTimes.isEmpty
-        ? '08:00'
-        : widget.initial.scheduledTimes.first;
+    _labelColorHex = widget.initial.labelColorHex.isNotEmpty
+        ? widget.initial.labelColorHex
+        : defaultPeptideLabelColorHex(0);
+    _times = _normalizeTimes(
+      widget.initial.scheduledTimes.isEmpty
+          ? _firstWeekdayTimes(widget.initial.weekdayDoses)
+          : widget.initial.scheduledTimes,
+    );
     _selectedWeekdays = widget.initial.weekdayDoses
         .map((d) => d.weekday)
         .toSet();
@@ -801,7 +928,11 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
 
   @override
   void dispose() {
+    _nameCtrl.dispose();
     _doseCtrl.dispose();
+    _syringeUnitsCtrl.dispose();
+    _cycleWeeksCtrl.dispose();
+    _washoutWeeksCtrl.dispose();
     for (final controller in _weekdayDoseCtrls.values) {
       controller.dispose();
     }
@@ -823,7 +954,36 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
   }
 
   double get _parsedBaseDose =>
-      double.tryParse(_doseCtrl.text) ?? widget.initial.dosePerInjection;
+      parseDecimalInput(_doseCtrl.text) ?? widget.initial.dosePerInjection;
+
+  double get _parsedSyringeUnits =>
+      parseDecimalInput(_syringeUnitsCtrl.text) ?? 0;
+
+  int get _parsedCycleWeeks => int.tryParse(_cycleWeeksCtrl.text) ?? 0;
+
+  int get _parsedWashoutWeeks => int.tryParse(_washoutWeeksCtrl.text) ?? 0;
+
+  List<String> _firstWeekdayTimes(List<ProtocolWeekdayDose> doses) {
+    if (doses.isEmpty) return const <String>['08:00'];
+    return doses.first.scheduledTimes;
+  }
+
+  List<String> _normalizeTimes(List<String> times) {
+    final normalized = <String>{};
+    for (final time in times) {
+      final parts = time.split(':');
+      if (parts.length != 2) continue;
+      final hour = int.tryParse(parts[0]);
+      final minute = int.tryParse(parts[1]);
+      if (hour == null || minute == null) continue;
+      if (hour < 0 || hour > 23 || minute < 0 || minute > 59) continue;
+      normalized.add(
+        '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}',
+      );
+    }
+    return normalized.isEmpty ? <String>['08:00'] : normalized.toList()
+      ..sort();
+  }
 
   void _selectFrequency(String frequency) {
     setState(() {
@@ -846,6 +1006,39 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
     });
   }
 
+  Future<void> _addTime() async {
+    final picked = await _pickTimeOfDay(_times.isEmpty ? '08:00' : _times.last);
+    if (picked == null) return;
+    setState(() => _times = _normalizeTimes([..._times, picked]));
+  }
+
+  Future<void> _editTime(String current) async {
+    final picked = await _pickTimeOfDay(current);
+    if (picked == null) return;
+    setState(() {
+      _times = _normalizeTimes([
+        for (final t in _times)
+          if (t == current) picked else t,
+      ]);
+    });
+  }
+
+  void _removeTime(String time) {
+    if (_times.length == 1) return;
+    setState(() => _times = _times.where((t) => t != time).toList());
+  }
+
+  Future<String?> _pickTimeOfDay(String current) async {
+    final parts = current.split(':');
+    final initial = TimeOfDay(
+      hour: int.tryParse(parts.isNotEmpty ? parts[0] : '') ?? 8,
+      minute: int.tryParse(parts.length > 1 ? parts[1] : '') ?? 0,
+    );
+    final picked = await showTimePicker(context: context, initialTime: initial);
+    if (picked == null) return null;
+    return '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+  }
+
   List<ProtocolWeekdayDose> _buildWeekdayDoses(double fallbackDose) {
     final weekdays = _selectedWeekdays.toList()..sort();
     return [
@@ -853,16 +1046,23 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
         ProtocolWeekdayDose(
           weekday: weekday,
           dosePerInjection:
-              double.tryParse(_weekdayDoseCtrls[weekday]?.text ?? '') ??
+              parseDecimalInput(_weekdayDoseCtrls[weekday]?.text ?? '') ??
               fallbackDose,
           doseUnit: _unit,
-          scheduledTimes: [_time],
+          syringeUnits: _parsedSyringeUnits > 0 ? _parsedSyringeUnits : 0,
+          scheduledTimes: _times,
         ),
     ];
   }
 
-  bool get _canSave =>
-      _frequency != kCustomWeekdayFrequency || _selectedWeekdays.isNotEmpty;
+  bool get _canSave {
+    if (_isCustomPeptide && _nameCtrl.text.trim().isEmpty) return false;
+    if (_parsedBaseDose <= 0) return false;
+    if (_frequency == kCustomWeekdayFrequency && _selectedWeekdays.isEmpty) {
+      return false;
+    }
+    return _times.isNotEmpty;
+  }
 
   void _save() {
     final dose = _parsedBaseDose;
@@ -870,11 +1070,18 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
         ? _buildWeekdayDoses(dose)
         : <ProtocolWeekdayDose>[];
     final updated = widget.initial
+      ..peptideName = _isCustomPeptide
+          ? _nameCtrl.text.trim()
+          : widget.initial.peptideName
       ..dosePerInjection = dose
       ..doseUnit = _unit
       ..frequency = _frequency
       ..route = _route
-      ..scheduledTimes = [_time]
+      ..cycleWeeks = _parsedCycleWeeks.clamp(0, 104).toInt()
+      ..washoutWeeks = _parsedWashoutWeeks.clamp(0, 52).toInt()
+      ..syringeUnits = _parsedSyringeUnits > 0 ? _parsedSyringeUnits : 0
+      ..labelColorHex = _labelColorHex
+      ..scheduledTimes = _times
       ..weekdayDoses = weekdayDoses;
     Navigator.of(context).pop(updated);
   }
@@ -915,7 +1122,61 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                   const SizedBox(height: AppSpacing.lg),
                   Text('CONFIG.PEPTIDE', style: AppTypography.systemLabel),
                   const SizedBox(height: AppSpacing.sm),
-                  Text(widget.initial.peptideName, style: AppTypography.h2),
+                  Text(
+                    _isCustomPeptide
+                        ? _nameCtrl.text.trim().isEmpty
+                              ? 'Custom peptide'
+                              : _nameCtrl.text.trim()
+                        : widget.initial.peptideName,
+                    style: AppTypography.h2,
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+
+                  if (_isCustomPeptide) ...[
+                    _FieldLabel(
+                      label: 'NAME',
+                      child: TextField(
+                        controller: _nameCtrl,
+                        onChanged: (_) => setState(() {}),
+                        textCapitalization: TextCapitalization.words,
+                        style: AppTypography.bodyLarge,
+                        decoration: InputDecoration(
+                          hintText: 'Enter peptide name',
+                          hintStyle: AppTypography.bodyMedium.copyWith(
+                            color: AppColors.textDisabled,
+                          ),
+                          border: InputBorder.none,
+                          isDense: true,
+                          filled: false,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.md,
+                            vertical: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                  ],
+
+                  Text('LABEL COLOR', style: AppTypography.systemLabel),
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      for (final hex in kPeptideLabelColorHexes)
+                        _ColorChip(
+                          hex: hex,
+                          selected: _labelColorHex == hex,
+                          onTap: () => setState(() => _labelColorHex = hex),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    'Match this color to the pen or vial label you use in real life.',
+                    style: AppTypography.disclaimer,
+                  ),
                   const SizedBox(height: AppSpacing.lg),
 
                   // Dose + unit
@@ -927,14 +1188,11 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                           label: 'DOSE',
                           child: TextField(
                             controller: _doseCtrl,
+                            onChanged: (_) => setState(() {}),
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
                             ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'[\d.]'),
-                              ),
-                            ],
+                            inputFormatters: const [decimalInputFormatter],
                             style: AppTypography.heroSmall.copyWith(
                               fontSize: 18,
                             ),
@@ -954,13 +1212,47 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                         child: _FieldLabel(
                           label: 'UNIT',
                           child: _SegmentedToggle(
-                            options: const ['mcg', 'mg'],
+                            options: const ['mcg', 'mg', 'IU'],
                             selected: _unit,
                             onSelect: (v) => setState(() => _unit = v),
                           ),
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: AppSpacing.base),
+                  _FieldLabel(
+                    label: 'SYRINGE UNITS OPTIONAL',
+                    child: TextField(
+                      controller: _syringeUnitsCtrl,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      inputFormatters: const [decimalInputFormatter],
+                      style: AppTypography.tabular.copyWith(fontSize: 16),
+                      decoration: InputDecoration(
+                        hintText: 'e.g. 12.5',
+                        hintStyle: AppTypography.bodySmall.copyWith(
+                          color: AppColors.textDisabled,
+                        ),
+                        suffixText: 'syringe units',
+                        suffixStyle: AppTypography.bodySmall.copyWith(
+                          color: AppColors.textTertiary,
+                        ),
+                        border: InputBorder.none,
+                        isDense: true,
+                        filled: false,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.md,
+                          vertical: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    'Optional user-entered U-100 syringe markings for tracking only.',
+                    style: AppTypography.disclaimer,
                   ),
                   const SizedBox(height: AppSpacing.lg),
 
@@ -1020,14 +1312,13 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                                 label: '${_weekdayLabel(weekday)} DOSE',
                                 child: TextField(
                                   controller: _weekdayDoseCtrls[weekday],
+                                  onChanged: (_) => setState(() {}),
                                   keyboardType:
                                       const TextInputType.numberWithOptions(
                                         decimal: true,
                                       ),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                      RegExp(r'[\d.]'),
-                                    ),
+                                  inputFormatters: const [
+                                    decimalInputFormatter,
                                   ],
                                   style: AppTypography.tabular.copyWith(
                                     fontSize: 16,
@@ -1076,38 +1367,90 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
 
-                  // Time
-                  _FieldLabel(
-                    label: 'TIME',
-                    child: InkWell(
-                      onTap: () async {
-                        final parts = _time.split(':');
-                        final initial = TimeOfDay(
-                          hour: int.tryParse(parts[0]) ?? 8,
-                          minute: int.tryParse(parts[1]) ?? 0,
-                        );
-                        final t = await showTimePicker(
-                          context: context,
-                          initialTime: initial,
-                        );
-                        if (t != null) {
-                          setState(
-                            () => _time =
-                                '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}',
-                          );
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.md,
-                          vertical: 14,
-                        ),
-                        child: Text(
-                          _time,
-                          style: AppTypography.tabular.copyWith(fontSize: 18),
+                  // Cycle + rest windows
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _FieldLabel(
+                          label: 'CYCLE WEEKS',
+                          child: TextField(
+                            controller: _cycleWeeksCtrl,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            style: AppTypography.tabular.copyWith(fontSize: 16),
+                            decoration: const InputDecoration(
+                              hintText: 'None',
+                              border: InputBorder.none,
+                              isDense: true,
+                              filled: false,
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: AppSpacing.md,
+                                vertical: 14,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      const SizedBox(width: AppSpacing.cardGap),
+                      Expanded(
+                        child: _FieldLabel(
+                          label: 'REST WEEKS',
+                          child: TextField(
+                            controller: _washoutWeeksCtrl,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            style: AppTypography.tabular.copyWith(fontSize: 16),
+                            decoration: const InputDecoration(
+                              hintText: 'None',
+                              border: InputBorder.none,
+                              isDense: true,
+                              filled: false,
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: AppSpacing.md,
+                                vertical: 14,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    'Cycle and rest windows organize tracking history. PepMod will not schedule future doses after the cycle window ends.',
+                    style: AppTypography.disclaimer,
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+
+                  // Reminder times
+                  Text('REMINDER TIMES', style: AppTypography.systemLabel),
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      for (final time in _times)
+                        _TimeChip(
+                          label: time,
+                          canRemove: _times.length > 1,
+                          onTap: () => _editTime(time),
+                          onRemove: () => _removeTime(time),
+                        ),
+                      _Chip(
+                        label: 'Add time',
+                        selected: false,
+                        onTap: _addTime,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    'Each selected time creates its own tracking row and reminder on scheduled days.',
+                    style: AppTypography.disclaimer,
                   ),
                   const SizedBox(height: AppSpacing.xl),
 
@@ -1211,6 +1554,73 @@ class _SegmentedToggle extends StatelessWidget {
   }
 }
 
+class _TimeChip extends StatelessWidget {
+  const _TimeChip({
+    required this.label,
+    required this.canRemove,
+    required this.onTap,
+    required this.onRemove,
+  });
+
+  final String label;
+  final bool canRemove;
+  final VoidCallback onTap;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.selectionClick();
+        onTap();
+      },
+      child: AnimatedContainer(
+        duration: AppDurations.fast,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.primary.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: AppColors.primary, width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primary.withValues(alpha: 0.2),
+              blurRadius: 6,
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: AppTypography.labelMedium.copyWith(
+                color: AppColors.primary,
+              ),
+            ),
+            if (canRemove) ...[
+              const SizedBox(width: AppSpacing.xs),
+              GestureDetector(
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  onRemove();
+                },
+                child: const Icon(
+                  Icons.close_rounded,
+                  color: AppColors.primary,
+                  size: 14,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _Chip extends StatelessWidget {
   const _Chip({
     required this.label,
@@ -1256,6 +1666,57 @@ class _Chip extends StatelessWidget {
           label,
           style: AppTypography.labelMedium.copyWith(
             color: selected ? AppColors.primary : AppColors.textSecondary,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ColorChip extends StatelessWidget {
+  const _ColorChip({
+    required this.hex,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String hex;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = peptideLabelColor(hex);
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.selectionClick();
+        onTap();
+      },
+      child: AnimatedContainer(
+        duration: AppDurations.fast,
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: selected ? 0.26 : 0.14),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: selected ? color : AppColors.border,
+            width: selected ? 2 : 1,
+          ),
+          boxShadow: selected
+              ? [
+                  BoxShadow(
+                    color: color.withValues(alpha: 0.28),
+                    blurRadius: 10,
+                  ),
+                ]
+              : null,
+        ),
+        child: Center(
+          child: PeptideLabelSwatch(
+            hex: hex,
+            size: 18,
+            borderColor: AppColors.background,
           ),
         ),
       ),

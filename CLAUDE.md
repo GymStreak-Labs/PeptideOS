@@ -3,7 +3,7 @@
 ## Overview
 Intelligent peptide protocol manager. Track doses, calculate reconstitution, manage protocols, and optimise your peptide journey with AI-powered insights.
 
-Public app name: **PepMod**. Historical internal package/bundle identifiers still use `peptide_os` / `peptideOs`; do not rename those unless Firebase, RevenueCat, AppRefer, Meta, App Store, and Play Console integrations are migrated together.
+Public app name: **PepMod**. Historical internal package/bundle identifiers still use `peptide_os` / `peptideOs`; do not rename those unless Firebase, Superwall, the retained legacy RevenueCat provider records, AppRefer, Meta, App Store, and Play Console integrations are migrated together.
 
 ## Tech Stack
 - **Framework**: Flutter 3.41.4
@@ -11,7 +11,7 @@ Public app name: **PepMod**. Historical internal package/bundle identifiers stil
 - **Fonts**: Space Grotesk (body) + JetBrains Mono (data) via `google_fonts`
 - **Backend**: Firebase (Auth, Firestore) — Phase 2, replaces Isar. Firestore offline persistence enabled.
 - **Auth**: Firebase Auth — Apple (iOS), Email/password, and Google once mobile OAuth is provisioned. Anonymous mode is intentionally disabled so AppRefer attribution survives cross-device.
-- **Subscriptions**: RevenueCat (`purchases_flutter` 8.x), entitlement `premium`. Public SDK keys are live in source.
+- **Subscriptions**: Superwall (`superwallkit_flutter` 2.x) owns paywall presentation, purchases, restores, subscription status, and access. Only the active Superwall entitlement whose identifier is exactly `premium` grants Pro.
 - **Attribution**: AppRefer Flutter SDK 0.4.1 (`configure` on app start with API key + advanced matching on sign-in).
 - **Ad events**: Facebook App Events + App Tracking Transparency (ATT prompt requested on first visible app session; Facebook/AppRefer attribution starts only after the ATT request path has run).
 - **Notifications**: `flutter_local_notifications` 18.x + `timezone` + `flutter_timezone` — real scheduling wired in Phase 2.
@@ -20,19 +20,21 @@ Public app name: **PepMod**. Historical internal package/bundle identifiers stil
 - **IDs**: `uuid` 4.5 — Firestore doc IDs + DoseLog cross-reference keys.
 
 ## Credential placeholders (search for these before release)
-RevenueCat public SDK keys and Meta App Events identifiers are live in source.
-The remaining placeholder lives in source code for visibility:
+Meta App Events identifiers are live in source.
+The remaining placeholders live in source code for visibility:
 - `lib/main.dart` — `APPREFER_API_KEY` (read via `--dart-define`; live/test values are stored in Mission Control vault)
+- `lib/data/services/superwall_bridge_service.dart` — `SUPERWALL_IOS_API_KEY` / `SUPERWALL_ANDROID_API_KEY` (read via `--dart-define`; public SDK keys are stored in Mission Control vault)
 - Gleap support SDK token is read via `--dart-define=GLEAP_SDK_TOKEN`; live value is stored in Mission Control vault as `peptideos-gleap-sdk-token`. Missing token safely falls back to `support@gymstreak.com`.
 - No TODOs for Firebase — using the dedicated `pepmod-prod` project (iOS + Android apps already registered).
 
-Use `--dart-define=FORCE_PREMIUM=true` to bypass RC for internal testing.
+Use `--dart-define=FORCE_PREMIUM=true` only as an explicit internal/reviewer bypass. Normal release builds use Superwall and must include the platform Superwall SDK key.
 
 ## Provisioned third-party app IDs
 - AppRefer app: `app_74601f5191f` (GymStreak Labs org). Live/test SDK keys are stored in Mission Control vault as `peptideos-apprefer-api-key` and `peptideos-apprefer-test-api-key`.
-- RevenueCat -> AppRefer webhook: `AppRefer PepMod` / `whintgrca0bff17a9` points to `https://apprefer.com/api/webhook/revenuecat/app_74601f5191f`, sends both production and sandbox events for all apps/event types, and uses `Authorization: Bearer <vault:peptideos-apprefer-revenuecat-webhook-auth-header>`. The raw AppRefer webhook secret is stored as `peptideos-apprefer-revenuecat-webhook-secret` and encrypted in the AppRefer app config.
+- Legacy RevenueCat provider project/webhook: retained temporarily outside the app runtime until Superwall provider cutover and transaction-deduplicated AppRefer attribution are proven. The existing `AppRefer PepMod` webhook must not be deleted early. It points to `https://apprefer.com/api/webhook/revenuecat/app_74601f5191f`; its credentials remain in Mission Control vault and must never be added to the client.
 - Meta app: `1657843155413563` (GymStreak business portfolio). Client token and URL scheme are stored in Mission Control vault as `peptideos-meta-client-token` and `peptideos-meta-url-scheme`; source is also configured for Facebook App Events on iOS + Android.
 - Gleap support: project `PepMod` / `6a245300938ecfa0b363283c` in the GymStreak Labs Gleap org. App-side SDK integration is wired with hidden floating button and Profile -> Contact support entrypoint. Client token must be injected via `GLEAP_SDK_TOKEN`; AppStoreCopilot/MCP uses the PepMod service-account API token stored as `peptideos-gleap-api-token`.
+- Superwall: full runtime subscription owner. Public project keys are injected via `SUPERWALL_IOS_API_KEY` and `SUPERWALL_ANDROID_API_KEY`. Target account: `joe+pepmod@gymstreaklabs.com` in the GymStreak Labs profile. Superwall performs purchases and restores directly and is the authoritative subscription-status source.
 
 ## Bundle ID
 - iOS: `com.gymstreaklabs.peptideOs`
@@ -192,9 +194,9 @@ Essential (awaited, pre-`runApp`):
 1. `WidgetsFlutterBinding.ensureInitialized()` + portrait lock + status bar style
 2. `initializeFirebase()` — also enables offline persistence
 3. `FlutterError.onError` → Crashlytics
-4. `SubscriptionService.configure()` — safe no-op if RC key still TODO
+4. Configure Superwall with the platform SDK key and begin authoritative subscription-status resolution
 5. `AppReferSDK.configure()` — safe no-op if API key still TODO
-6. `AnalyticsService().initializeIdentity()` — stable install ID stamped on Crashlytics / Analytics / RC / AppRefer
+6. `AnalyticsService().initializeIdentity()` — stable install ID stamped on Crashlytics / Analytics / Superwall / AppRefer
 7. `PeptideLibraryRepository().seedIfEmpty()` — fire-and-forget
 8. `runApp(PepModApp())`
 
@@ -207,7 +209,8 @@ Deferred (post-first-frame):
 1. `AuthProvider.isInitialized == false` → splash
 2. User not signed in **and** onboarding not yet completed → `OnboardingScreen`
 3. User not signed in → `AuthScreen` (Apple / Google / Email)
-4. Signed in + onboarded → `AppShell`
+4. Signed in + genuinely completing a new onboarding version → versioned post-auth Superwall hard-paywall latch
+5. Signed in + already onboarded → `AppShell` without an update-triggered hard paywall
 
 Providers own the UID swap: every user-scoped provider has `setUid(String)` and
 a `ChangeNotifierProxyProvider<AuthProvider, T>` in `PepModApp` triggers it
@@ -216,8 +219,19 @@ on auth state change. One provider instance survives sign-in / sign-out.
 ## Free tier gating
 `SubscriptionProvider` exposes `canAddProtocol(count)` and `canAddPeptide(count)`:
 - Free plan: 1 protocol, 1 peptide per protocol.
-- `showSoftPaywall(ctx, source, reason)` (`features/subscription/screens/soft_paywall_sheet.dart`) presents an upgrade sheet and returns `true` on successful purchase.
+- `showSoftPaywall(ctx, source, reason)` (`features/subscription/screens/soft_paywall_sheet.dart`) registers the corresponding Superwall placement. Purchase and restore stay inside Superwall; there is no RevenueCat/native purchase fallback.
 - Wired at `protocol_home_screen.dart` (create button) and `create_protocol_screen.dart` (add peptide button).
+
+## Superwall subscriptions
+- Superwall is the only runtime subscription SDK and owns purchases, restores, paywall presentation, and authoritative subscription status.
+- Required placement names: `post_auth_onboarding`, `soft_gate_create_protocol`, `soft_gate_add_peptide`, and `profile_upgrade`.
+- Product IDs/base plans/offers must match App Store Connect and Google Play source-of-truth rows. No app-side purchase controller forwards transactions to another provider.
+- Identity is Firebase UID; safe attributes include `firebase_uid`, `install_id`, `apprefer_id`, and `subscription_tier`. Do not send peptide selections, DOB, or health free text.
+- Grant Pro only when Superwall reports an active entitlement with the exact identifier `premium`. Other active entitlements do not unlock PepMod.
+- A locally cached premium value is only a temporary continuity hint while Superwall status is unresolved. It prevents a previously premium user from being downgraded during startup/network uncertainty, but it never overrides an authoritative inactive Superwall readback.
+- Existing onboarded users must never see a hard paywall merely because they updated the app. The post-auth hard paywall is eligible only when the current session completes genuinely new onboarding and sets the versioned paywall latch; consuming the latch is one-time and must not be synthesized from an app-version upgrade.
+- Unknown, unavailable, or unconfigured Superwall state does not grant new premium access. Soft placements may fail closed, while already-onboarded users continue into the app instead of being trapped behind an update-triggered hard paywall.
+- The old RevenueCat provider project and webhook are retained outside runtime only until Superwall store reporting and AppRefer attribution parity are proven. Do not restore its SDK/runtime path and do not delete the provider resources without explicit cutover approval.
 
 ## Data Architecture (Phase 1)
 
@@ -233,7 +247,8 @@ on auth state change. One provider instance survives sign-in / sign-out.
 - `ProtocolProvider` — CRUD + `_generateDoseLogs` materialises the next 7 days of schedule rows on create / resume / app-open (`scheduleHorizonDays = 7`)
 - `DoseLogProvider` — today + recent30, adherence% today, adherence% 30d, currentStreak, totalLogged, mutations log/skip/undo/logAdHoc
 - `BodyMetricProvider` — CRUD for weight/BF/measurements
-- `SettingsProvider` — reactive wrapper around the `UserSettings` singleton, `completeOnboarding({goals, experience, frustration})`, `resetAll()` which wipes user data (preserves seeded library)
+- `SettingsProvider` — reactive wrapper around the `UserSettings` singleton and onboarding/profile mutations.
+- `AuthProvider.clearAppData()` — Profile reset coordinator: deletes dose logs, protocols, and body metrics in bounded server batches; cancels reminders and stale onboarding handoff state; then resets settings last while preserving Auth, subscription/reviewer flags, and the shared peptide library.
 
 ### Isar extension imports
 Any file calling `.filter()`, `.sortByX()`, `.findAll()` MUST import `package:isar/isar.dart` directly — extensions are only visible when the defining package is imported in the consumer file. Providers already do this.
@@ -259,30 +274,36 @@ Any file calling `.filter()`, `.sortByX()`, `.findAll()` MUST import `package:is
 7. Portrait-locked — peptide tracking is a focused one-hand experience
 8. Neon accents used surgically — only on actionable/status elements, never decorative
 
-## Onboarding Flow (18 screens + auth + post-auth paywall — conversion-optimised v4)
+## Onboarding Flow (23 screens + auth + post-auth paywall — conversion-optimised v5)
 1. Age Gate → 2. Hook → 3. Disclaimer → 4. First Name →
-5. Birth Date → 6. Goals → 7. Experience → 8. Frustration →
-9. Peptides → 10. Calculator Demo (aha moment) →
-11. Processing (HUD radar) → 12. Protocol Preview →
-13. Results Summary → 14. Feature Showcase →
-15. Value: Protocol Timeline → 16. Value: Unit Conversion →
-17. Value: Progress Signals → 18. Review Gate (`in_app_review`) →
-19. Firebase Auth → 20. Hard Paywall.
+5. Goals → 6. Goals Reassurance → 7. Experience → 8. Frustration →
+9. Confidence → 10. Confidence Reassurance → 11. Peptides →
+12. Calculator Demo (aha moment) → 13. Processing (HUD radar) →
+14. Protocol Preview → 15. Results Summary → 16. 60-day Roadmap →
+17. Feature Showcase → 18. Notification Warm-up →
+19. Value: Protocol Timeline → 20. Value: Unit Conversion →
+21. Value: Progress Signals → 22. Birth Date →
+23. Review Gate (`in_app_review`) → 24. Firebase Auth →
+25. Hard Paywall.
 
 Fake testimonial/social-proof cards are intentionally hidden from the current
-flow. The native review request sits at the end of onboarding, just before auth.
-Onboarding has a custom back button on every page after the age gate.
+flow. The native review request sits immediately before auth. Birth date is
+deliberately late because precise DOB entry is higher-friction than the earlier
+preference steps. Onboarding has a custom back button on every page after the
+age gate.
 
-Notification permission is no longer requested inline — ask for it elsewhere.
-
-Paywall narrative: the processing screen sets up "we reserved a protocol for you", then Firebase Auth happens before the hard paywall so RevenueCat/AppRefer events are attached to a stable UID. The paywall countdown ties back with `YOUR PERSONALISED PROTOCOL IS RESERVED FOR [15:00]` above the Best Value card. Hero headline: "Start your optimised protocol today".
+Paywall narrative: the processing screen sets up the reserved protocol, then Firebase Auth happens before the new-onboarding hard paywall so Superwall/AppRefer events attach to a stable UID. Superwall remotely owns the paywall copy, current two-minute launch-offer countdown, products, restore action, and legal links.
 
 ## Key Dependencies
 - `google_fonts: ^6.2.1` — Space Grotesk + JetBrains Mono
 - `in_app_review: ^2.0.10` — native review prompt on the Review Gate screen
 
 ## Environment Variables
-(To be filled during development)
+- `APPREFER_API_KEY` — AppRefer live/test API key (release builds require it).
+- `GLEAP_SDK_TOKEN` — Gleap client SDK token.
+- `FORCE_PREMIUM=true` — explicit internal/reviewer premium bypass; absent from normal tester and production builds.
+- `ENABLE_GOOGLE_SIGN_IN=true` — exposes Google sign-in once mobile OAuth is ready.
+- `SUPERWALL_IOS_API_KEY` / `SUPERWALL_ANDROID_API_KEY` — Superwall public SDK keys for the PepMod project.
 
 ## Legal
 - Wellness/tracker app — NOT a medical device

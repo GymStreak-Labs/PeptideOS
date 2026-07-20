@@ -15,9 +15,11 @@ class UserSettings {
     this.subscriptionState = 'free',
     this.reviewAccount = false,
     List<String>? selectedGoals,
+    List<String>? confidenceNeeds,
     this.experience = '',
     this.frustration = '',
-  }) : selectedGoals = selectedGoals ?? <String>[];
+  }) : selectedGoals = selectedGoals ?? <String>[],
+       confidenceNeeds = confidenceNeeds ?? <String>[];
 
   /// Display name — defaults to "Biohacker" if nothing supplied in onboarding.
   String name;
@@ -31,10 +33,12 @@ class UserSettings {
   bool darkMode;
 
   /// Cached subscription state: `free` / `premium`. Firestore copy of the
-  /// RevenueCat entitlement so UI can gate without waiting on RC.
+  /// Last authoritative Superwall entitlement state. During an SDK/store
+  /// status refresh, a cached premium value prevents an update-time lockout.
   String subscriptionState;
   bool reviewAccount;
   List<String> selectedGoals;
+  List<String> confidenceNeeds;
   String experience;
   String frustration;
 
@@ -49,6 +53,7 @@ class UserSettings {
     String? subscriptionState,
     bool? reviewAccount,
     List<String>? selectedGoals,
+    List<String>? confidenceNeeds,
     String? experience,
     String? frustration,
   }) {
@@ -63,6 +68,7 @@ class UserSettings {
       subscriptionState: subscriptionState ?? this.subscriptionState,
       reviewAccount: reviewAccount ?? this.reviewAccount,
       selectedGoals: selectedGoals ?? this.selectedGoals,
+      confidenceNeeds: confidenceNeeds ?? this.confidenceNeeds,
       experience: experience ?? this.experience,
       frustration: frustration ?? this.frustration,
     );
@@ -79,6 +85,7 @@ class UserSettings {
     'subscriptionState': subscriptionState,
     'reviewAccount': reviewAccount,
     'selectedGoals': selectedGoals,
+    'confidenceNeeds': confidenceNeeds,
     'experience': experience,
     'frustration': frustration,
   };
@@ -99,6 +106,9 @@ class UserSettings {
                   const [])
               .map((e) => e.toString())
               .toList(),
+      confidenceNeeds: (data['confidenceNeeds'] as List<dynamic>? ?? const [])
+          .map((e) => e.toString())
+          .toList(),
       experience: (data['experience'] as String?) ?? '',
       frustration: (data['frustration'] as String?) ?? '',
     );

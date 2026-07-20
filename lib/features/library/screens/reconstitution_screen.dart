@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/utils/decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
 import '../widgets/syringe_visual.dart';
 
@@ -21,9 +21,9 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
   final _waterMlController = TextEditingController(text: '2');
   final _doseMcgController = TextEditingController(text: '250');
 
-  double get _peptideMg => double.tryParse(_peptideMgController.text) ?? 0;
-  double get _waterMl => double.tryParse(_waterMlController.text) ?? 0;
-  double get _doseMcg => double.tryParse(_doseMcgController.text) ?? 0;
+  double get _peptideMg => parseDecimalInput(_peptideMgController.text) ?? 0;
+  double get _waterMl => parseDecimalInput(_waterMlController.text) ?? 0;
+  double get _doseMcg => parseDecimalInput(_doseMcgController.text) ?? 0;
 
   // ── Calculations ─────────────────────────────────────────────────────
   /// Concentration in mcg per ml after reconstitution.
@@ -194,18 +194,23 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                                     style: AppTypography.systemLabel),
                                 const SizedBox(height: AppSpacing.sm),
                                 Row(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.baseline,
-                                  textBaseline: TextBaseline.alphabetic,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Text(
-                                      _syringeUnits.toStringAsFixed(1),
-                                      style: AppTypography.heroMedium.copyWith(
-                                        color: _isDoseDanger
-                                            ? AppColors.danger
-                                            : _isDoseWarning
-                                                ? AppColors.warning
-                                                : AppColors.primary,
+                                    Flexible(
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          _syringeUnits.toStringAsFixed(1),
+                                          style: AppTypography.heroMedium
+                                              .copyWith(
+                                            color: _isDoseDanger
+                                                ? AppColors.danger
+                                                : _isDoseWarning
+                                                    ? AppColors.warning
+                                                    : AppColors.primary,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(width: AppSpacing.xs),
@@ -357,9 +362,7 @@ class _InputField extends StatelessWidget {
                   onChanged: onChanged,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
-                  ],
+                  inputFormatters: const [decimalInputFormatter],
                   style: AppTypography.heroSmall.copyWith(fontSize: 20),
                   decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -393,7 +396,6 @@ class _DataRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
@@ -402,9 +404,19 @@ class _DataRow extends StatelessWidget {
             fontSize: 9,
           ),
         ),
-        Text(
-          value,
-          style: AppTypography.tabular.copyWith(fontSize: 13),
+        const SizedBox(width: AppSpacing.sm),
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerRight,
+              child: Text(
+                value,
+                style: AppTypography.tabular.copyWith(fontSize: 13),
+              ),
+            ),
+          ),
         ),
       ],
     );

@@ -1,7 +1,7 @@
 name: peptide_os
 description: "Intelligent peptide protocol manager — track doses, calculate reconstitution, manage protocols."
 publish_to: 'none'
-version: 1.0.2+13
+version: 1.0.4+20
 
 environment:
   sdk: ^3.11.1
@@ -26,7 +26,6 @@ dependencies:
   crypto: ^3.0.6
 
   # ── Monetisation ─────────────────────────────────────────────────────
-  purchases_flutter: ^8.4.0
   superwallkit_flutter: ^2.4.12
 
   # ── Attribution ──────────────────────────────────────────────────────
@@ -59,6 +58,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  fake_cloud_firestore: ^3.1.0
 
 dependency_overrides:
   # path_provider_foundation 2.6.0 pulls in the objective_c native asset, which
@@ -72,3 +72,11 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/animations/
+
+  fonts:
+    - family: SpaceGrotesk
+      fonts:
+        - asset: assets/fonts/SpaceGrotesk.ttf
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono.ttf

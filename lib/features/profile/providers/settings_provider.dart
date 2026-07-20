@@ -76,33 +76,22 @@ class SettingsProvider extends ChangeNotifier {
     required String name,
     required String birthDate,
     required List<String> goals,
+    required List<String> confidenceNeeds,
     required String experience,
     required String frustration,
+    required bool notificationsEnabled,
   }) async {
     await update((s) {
       s.name = name.isEmpty ? s.name : name;
       s.firstName = name;
       s.birthDate = birthDate;
       s.selectedGoals = goals;
+      s.confidenceNeeds = confidenceNeeds;
       s.experience = experience;
       s.frustration = frustration;
+      s.notificationsEnabled = notificationsEnabled;
       s.onboardingCompleted = true;
     });
-  }
-
-  /// Wipe the per-user settings doc back to defaults. Used by the "Clear all
-  /// data" button. The stream will pick up the new doc contents.
-  Future<void> resetAll() async {
-    if (_uid.isEmpty) {
-      _settings = UserSettings();
-      notifyListeners();
-      return;
-    }
-    try {
-      await _repo.reset(_uid);
-    } catch (e) {
-      debugPrint('SettingsProvider reset failed: $e');
-    }
   }
 
   /// Cached subscription tier — written by the subscription provider so the

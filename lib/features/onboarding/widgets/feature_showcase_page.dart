@@ -18,25 +18,25 @@ class _FeatureShowcasePageState extends State<FeatureShowcasePage> {
 
   static const _features = [
     _Feature(
-      'AI.INSIGHT',
-      'Accumulating\nIntelligence',
-      'The longer you use PepMod, the smarter it gets. Your AI mentor correlates protocol changes with outcomes — surfacing patterns you\'d never spot yourself.',
-      Icons.auto_awesome_rounded,
-      AppColors.aiInsightBright,
+      'SYS.CALC',
+      'Dose Math\nIn Context',
+      'Keep vial size, water volume, dose, and units-to-draw beside the protocol you are actually tracking.',
+      Icons.calculate_rounded,
+      AppColors.primary,
     ),
     _Feature(
       'SYS.BODYMAP',
       'Injection Site\nRotation',
-      'Interactive body map tracks every injection site. Colour-coded healing status and smart rotation suggestions prevent tissue damage.',
+      'Remember every site you log and keep rotation history attached to the dose record.',
       Icons.accessibility_new_rounded,
-      AppColors.primary,
+      AppColors.secondary,
     ),
     _Feature(
-      'SYS.INVENTORY',
-      'Vial Tracking\n& Expiry Alerts',
-      'Track doses remaining per vial. Get alerts before reconstituted peptides expire. Know your cost-per-dose and when to reorder.',
-      Icons.inventory_2_rounded,
-      AppColors.secondary,
+      'SYS.ARC',
+      'Protocol Arc\nOver Time',
+      'See planned doses, logged doses, adherence, and body metrics build into one timeline.',
+      Icons.timeline_rounded,
+      AppColors.aiInsightBright,
     ),
   ];
 
@@ -61,11 +61,13 @@ class _FeatureShowcasePageState extends State<FeatureShowcasePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('SYS.FEATURES // SHOWCASE',
-                    style: AppTypography.systemLabel),
+                Text(
+                  'SYS.FEATURES // SHOWCASE',
+                  style: AppTypography.systemLabel,
+                ),
                 const SizedBox(height: AppSpacing.md),
                 Text(
-                  'Built for\npeptide users.',
+                  'Everything you need.\nOne app.',
                   style: AppTypography.h1.copyWith(fontSize: 28),
                 ),
               ],
@@ -132,9 +134,7 @@ class _FeatureShowcasePageState extends State<FeatureShowcasePage> {
 
                         Text(
                           feature.description,
-                          style: AppTypography.bodyMedium.copyWith(
-                            height: 1.6,
-                          ),
+                          style: AppTypography.bodyMedium.copyWith(height: 1.6),
                         ),
                       ],
                     ),
@@ -177,10 +177,7 @@ class _FeatureShowcasePageState extends State<FeatureShowcasePage> {
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.screenHorizontal,
             ),
-            child: PrimaryButton(
-              label: 'CONTINUE',
-              onPressed: widget.onNext,
-            ),
+            child: PrimaryButton(label: 'CONTINUE', onPressed: widget.onNext),
           ),
 
           const SizedBox(height: AppSpacing.xxl),

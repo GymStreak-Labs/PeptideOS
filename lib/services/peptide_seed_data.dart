@@ -17,6 +17,7 @@ class PeptideSeedData {
             description: e.description,
             typicalDose: e.typicalDose,
             defaultDoseMcg: e.defaultDoseMcg,
+            defaultDoseUnit: e.defaultDoseUnit,
             defaultFrequency: e.defaultFrequency,
             halfLife: e.halfLife,
             typicalCycleWeeks: e.cycleWeeks,
@@ -30,6 +31,23 @@ class PeptideSeedData {
   }
 
   static const _entries = <_Seed>[
+    _Seed(
+      slug: 'hcg',
+      name: 'HCG',
+      category: PeptideCategory.other,
+      description:
+          'Human chorionic gonadotropin (HCG) is a glycoprotein hormone used in regulated clinical settings and frequently discussed alongside peptide protocols. This entry is provided as a neutral tracking reference for user-entered schedules.',
+      typicalDose: 'User-entered IU',
+      defaultDoseMcg: 0,
+      defaultDoseUnit: 'IU',
+      defaultFrequency: 'as_needed',
+      halfLife: '~24-36 hours',
+      cycleWeeks: 0,
+      route: 'subcutaneous',
+      stack: [],
+      notes:
+          'Prescription-only in many jurisdictions. Track only what has already been directed by a qualified healthcare professional; PepMod does not provide HCG dosing guidance.',
+    ),
     _Seed(
       slug: 'bpc-157',
       name: 'BPC-157',
@@ -617,6 +635,7 @@ class _Seed {
     required this.description,
     required this.typicalDose,
     required this.defaultDoseMcg,
+    this.defaultDoseUnit = 'mcg',
     required this.defaultFrequency,
     required this.halfLife,
     required this.cycleWeeks,
@@ -631,6 +650,7 @@ class _Seed {
   final String description;
   final String typicalDose;
   final double defaultDoseMcg;
+  final String defaultDoseUnit;
   final String defaultFrequency;
   final String halfLife;
   final int cycleWeeks;

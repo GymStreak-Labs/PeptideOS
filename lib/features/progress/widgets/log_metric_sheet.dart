@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
+import '../../../core/utils/decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/body_metric.dart';
 import '../providers/body_metric_provider.dart';
@@ -35,11 +36,11 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
   }
 
   Future<void> _save() async {
-    final weight = double.tryParse(_weightCtrl.text);
-    final bf = double.tryParse(_bfCtrl.text);
-    final waist = double.tryParse(_waistCtrl.text);
-    final chest = double.tryParse(_chestCtrl.text);
-    final arm = double.tryParse(_armCtrl.text);
+    final weight = parseDecimalInput(_weightCtrl.text);
+    final bf = parseDecimalInput(_bfCtrl.text);
+    final waist = parseDecimalInput(_waistCtrl.text);
+    final chest = parseDecimalInput(_chestCtrl.text);
+    final arm = parseDecimalInput(_armCtrl.text);
 
     if (weight == null && bf == null && waist == null && chest == null && arm == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -234,9 +235,7 @@ class _Field extends StatelessWidget {
                   controller: controller,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[\d.]'))
-                  ],
+                  inputFormatters: const [decimalInputFormatter],
                   style: AppTypography.heroSmall.copyWith(fontSize: 17),
                   decoration: const InputDecoration(
                     border: InputBorder.none,
