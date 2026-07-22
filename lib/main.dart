@@ -22,7 +22,6 @@ import 'data/repositories/protocol_repository.dart';
 import 'data/repositories/user_settings_repository.dart';
 import 'data/services/auth_service.dart';
 import 'data/services/subscription_service.dart';
-import 'data/services/superwall_bridge_service.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/screens/account_deleted_screen.dart';
 import 'features/auth/screens/auth_screen.dart';
@@ -95,7 +94,6 @@ Future<void> main() async {
 
       // RevenueCat — safe no-op if key still TODO.
       await SubscriptionService.instance.configure();
-      await SuperwallBridgeService.instance.configure();
 
       // Gleap support — safe no-op if GLEAP_SDK_TOKEN is not injected.
       await SupportService.instance.initialize();
@@ -447,8 +445,6 @@ class _PostAuthPaywallGate extends StatefulWidget {
 class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
   bool _viewLogged = false;
   bool _offeringsLoadStarted = false;
-  bool _superwallAttempted = false;
-  bool _showNativeFallback = false;
 
   @override
   void didChangeDependencies() {
@@ -463,33 +459,6 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
         unawaited(sub.loadOfferings());
       }
     }
-    _presentSuperwallIfAvailable();
-  }
-
-  void _presentSuperwallIfAvailable() {
-    if (_superwallAttempted || _showNativeFallback) return;
-    final bridge = SuperwallBridgeService.instance;
-    if (!bridge.canPresentPaywalls) {
-      _showNativeFallback = true;
-      return;
-    }
-
-    _superwallAttempted = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final result = await bridge.presentPlacement(
-        SuperwallPlacements.postAuthOnboarding,
-        params: const {
-          'source': 'post_auth_onboarding',
-          'surface': 'hard_paywall',
-        },
-      );
-      if (!mounted) return;
-      if (result == SuperwallPlacementResult.completedPremium) {
-        await widget.onComplete();
-        return;
-      }
-      setState(() => _showNativeFallback = true);
-    });
   }
 
   Future<void> _handleSubscribe(int selectedPlan) async {
@@ -553,7 +522,6 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
   @override
   Widget build(BuildContext context) {
     final sub = context.watch<SubscriptionProvider>();
-    if (!_showNativeFallback) return const _Splash();
     return Scaffold(
       backgroundColor: AppColors.background,
       body: PaywallPage(

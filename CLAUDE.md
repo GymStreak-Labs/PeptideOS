@@ -11,7 +11,7 @@ Public app name: **PepMod**. Historical internal package/bundle identifiers stil
 - **Fonts**: Space Grotesk (body) + JetBrains Mono (data) via `google_fonts`
 - **Backend**: Firebase (Auth, Firestore) — Phase 2, replaces Isar. Firestore offline persistence enabled.
 - **Auth**: Firebase Auth — Apple (iOS), Email/password, and Google once mobile OAuth is provisioned. Anonymous mode is intentionally disabled so AppRefer attribution survives cross-device.
-- **Subscriptions**: RevenueCat (`purchases_flutter` 8.x), entitlement `premium`, with Superwall (`superwallkit_flutter` 2.x) as the paywall presentation layer. RevenueCat remains entitlement truth and purchase processor in the bridge phase.
+- **Subscriptions**: RevenueCat (`purchases_flutter` 8.x), entitlement `premium`. Public SDK keys are live in source.
 - **Attribution**: AppRefer Flutter SDK 0.4.1 (`configure` on app start with API key + advanced matching on sign-in).
 - **Ad events**: Facebook App Events + App Tracking Transparency (ATT prompt requested on first visible app session; Facebook/AppRefer attribution starts only after the ATT request path has run).
 - **Notifications**: `flutter_local_notifications` 18.x + `timezone` + `flutter_timezone` — real scheduling wired in Phase 2.
@@ -23,18 +23,16 @@ Public app name: **PepMod**. Historical internal package/bundle identifiers stil
 RevenueCat public SDK keys and Meta App Events identifiers are live in source.
 The remaining placeholder lives in source code for visibility:
 - `lib/main.dart` — `APPREFER_API_KEY` (read via `--dart-define`; live/test values are stored in Mission Control vault)
-- `lib/data/services/superwall_bridge_service.dart` — `SUPERWALL_IOS_API_KEY` / `SUPERWALL_ANDROID_API_KEY` (read via `--dart-define`; public SDK keys should be stored in Mission Control vault once the PepMod Superwall project is provisioned)
 - Gleap support SDK token is read via `--dart-define=GLEAP_SDK_TOKEN`; live value is stored in Mission Control vault as `peptideos-gleap-sdk-token`. Missing token safely falls back to `support@gymstreak.com`.
 - No TODOs for Firebase — using the dedicated `pepmod-prod` project (iOS + Android apps already registered).
 
-Use `--dart-define=FORCE_PREMIUM=true` to bypass RC for internal testing. Use `--dart-define=SUPERWALL_FORCE_NATIVE_PAYWALL=true` as the Superwall kill switch; native RevenueCat paywalls remain as fallback when Superwall is disabled, unconfigured, or errors.
+Use `--dart-define=FORCE_PREMIUM=true` to bypass RC for internal testing.
 
 ## Provisioned third-party app IDs
 - AppRefer app: `app_74601f5191f` (GymStreak Labs org). Live/test SDK keys are stored in Mission Control vault as `peptideos-apprefer-api-key` and `peptideos-apprefer-test-api-key`.
 - RevenueCat -> AppRefer webhook: `AppRefer PepMod` / `whintgrca0bff17a9` points to `https://apprefer.com/api/webhook/revenuecat/app_74601f5191f`, sends both production and sandbox events for all apps/event types, and uses `Authorization: Bearer <vault:peptideos-apprefer-revenuecat-webhook-auth-header>`. The raw AppRefer webhook secret is stored as `peptideos-apprefer-revenuecat-webhook-secret` and encrypted in the AppRefer app config.
 - Meta app: `1657843155413563` (GymStreak business portfolio). Client token and URL scheme are stored in Mission Control vault as `peptideos-meta-client-token` and `peptideos-meta-url-scheme`; source is also configured for Facebook App Events on iOS + Android.
 - Gleap support: project `PepMod` / `6a245300938ecfa0b363283c` in the GymStreak Labs Gleap org. App-side SDK integration is wired with hidden floating button and Profile -> Contact support entrypoint. Client token must be injected via `GLEAP_SDK_TOKEN`; AppStoreCopilot/MCP uses the PepMod service-account API token stored as `peptideos-gleap-api-token`.
-- Superwall: bridge code is wired, but live project keys must be injected via `SUPERWALL_IOS_API_KEY` and `SUPERWALL_ANDROID_API_KEY`. Target account: `joe+pepmod@gymstreaklabs.com` in the GymStreak Labs profile. App access remains gated by RevenueCat `premium`; Superwall only presents/suppresses paywalls and forwards purchase attempts through RevenueCat.
 
 ## Bundle ID
 - iOS: `com.gymstreaklabs.peptideOs`
@@ -218,16 +216,8 @@ on auth state change. One provider instance survives sign-in / sign-out.
 ## Free tier gating
 `SubscriptionProvider` exposes `canAddProtocol(count)` and `canAddPeptide(count)`:
 - Free plan: 1 protocol, 1 peptide per protocol.
-- `showSoftPaywall(ctx, source, reason)` (`features/subscription/screens/soft_paywall_sheet.dart`) first tries Superwall placements when configured, then falls back to the native upgrade sheet if Superwall is unavailable or errors.
+- `showSoftPaywall(ctx, source, reason)` (`features/subscription/screens/soft_paywall_sheet.dart`) presents an upgrade sheet and returns `true` on successful purchase.
 - Wired at `protocol_home_screen.dart` (create button) and `create_protocol_screen.dart` (add peptide button).
-
-## Superwall bridge
-- Configure after RevenueCat in `main.dart` via `SuperwallBridgeService.instance.configure()`.
-- Required placement names: `post_auth_onboarding`, `soft_gate_create_protocol`, and `soft_gate_add_peptide`.
-- Superwall must use product IDs/base plans/offers that exist in RevenueCat/App Store Connect/Google Play; the app purchase controller maps Superwall purchases to RevenueCat `purchaseStoreProduct` / `purchaseSubscriptionOption`.
-- Identity is Firebase UID; safe attributes include `firebase_uid`, `install_id`, `apprefer_id`, and `subscription_tier`.
-- `SubscriptionService.premiumStatusStream` mirrors RevenueCat entitlement status into `Superwall.setSubscriptionStatus()`.
-- Native onboarding and soft paywalls stay in source as the fallback path and for the `SUPERWALL_FORCE_NATIVE_PAYWALL=true` kill switch.
 
 ## Data Architecture (Phase 1)
 
@@ -292,14 +282,7 @@ Paywall narrative: the processing screen sets up "we reserved a protocol for you
 - `in_app_review: ^2.0.10` — native review prompt on the Review Gate screen
 
 ## Environment Variables
-- `APPREFER_API_KEY` — AppRefer live/test API key (release builds require it).
-- `GLEAP_SDK_TOKEN` — Gleap client SDK token.
-- `FORCE_PREMIUM=true` — bypass RevenueCat for internal testing.
-- `ENABLE_GOOGLE_SIGN_IN=true` — exposes Google sign-in once mobile OAuth is ready.
-- `SUPERWALL_ENABLED=false` — fully disables Superwall bridge.
-- `SUPERWALL_FORCE_NATIVE_PAYWALL=true` — keeps Superwall configured off the presentation path and uses native RevenueCat paywalls.
-- `SUPERWALL_IOS_API_KEY` / `SUPERWALL_ANDROID_API_KEY` — Superwall public SDK keys for the PepMod project.
-- `SUPERWALL_ENTITLEMENT_ID` — defaults to `premium`; change only if the Superwall dashboard entitlement identifier intentionally diverges.
+(To be filled during development)
 
 ## Legal
 - Wellness/tracker app — NOT a medical device

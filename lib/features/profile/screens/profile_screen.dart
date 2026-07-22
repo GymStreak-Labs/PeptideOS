@@ -848,7 +848,7 @@ const _termsText =
     'Full Terms: https://appstorecopilot.com/legal/yzh32x5v/terms';
 
 const _privacyText =
-    'PepMod uses Firebase for authentication and cloud data storage, RevenueCat and Superwall for subscriptions and paywalls, AppRefer and Meta/Facebook App Events for attribution, and Firebase/Crashlytics for analytics and diagnostics. '
+    'PepMod uses Firebase for authentication and cloud data storage, RevenueCat for subscriptions, AppRefer and Meta/Facebook App Events for attribution, and Firebase/Crashlytics for analytics and diagnostics. '
     'We do not sell your personal information. You can delete your account and saved app data from within the app.\n\n'
     'Full Privacy Policy: https://appstorecopilot.com/legal/yzh32x5v/privacy';
 
