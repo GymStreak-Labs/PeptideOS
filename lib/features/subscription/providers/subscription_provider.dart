@@ -1,103 +1,126 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
+import '../../../data/services/subscription_service.dart';
 import '../../../core/services/analytics_service.dart';
-import '../../../data/services/superwall_bridge_service.dart';
 import '../../profile/providers/settings_provider.dart';
 
-/// Reactive Superwall entitlement state used by PepMod's feature gates.
-///
-/// A cached premium setting is honored only while Superwall is unresolved.
-/// Once Superwall provides an authoritative `premium` or `free` result, that
-/// result is persisted and becomes the sole runtime access source.
+/// Exposes premium status + offerings to the UI. Subscribes to the underlying
+/// [SubscriptionService] stream so paywall + gating re-render on entitlement
+/// changes.
 class SubscriptionProvider extends ChangeNotifier {
   SubscriptionProvider({
-    SuperwallBridgeService? service,
+    SubscriptionService? service,
     SettingsProvider? settingsProvider,
     AnalyticsService? analytics,
-  }) : _service = service ?? SuperwallBridgeService.instance,
+  }) : _service = service ?? SubscriptionService.instance,
        _settingsProvider = settingsProvider,
        _analytics = analytics ?? AnalyticsService() {
-    _status = _service.lastKnownAccessStatus;
-    _sub = _service.accessStatusStream.listen(_handleUpdate);
+    _isPremium = _service.lastKnownPremium;
+    _sub = _service.premiumStatusStream.listen(_handleUpdate);
     unawaited(refresh());
   }
 
-  final SuperwallBridgeService _service;
+  final SubscriptionService _service;
+  final SettingsProvider? _settingsProvider;
   final AnalyticsService _analytics;
-  SettingsProvider? _settingsProvider;
-  StreamSubscription<SuperwallAccessStatus>? _sub;
 
-  SuperwallAccessStatus _status = SuperwallAccessStatus.unknown;
+  StreamSubscription<bool>? _sub;
 
-  SuperwallAccessStatus get status => _status;
-  bool get isAuthoritative => _status != SuperwallAccessStatus.unknown;
-  bool get isPremium => resolvePremiumAccess(
-    status: _status,
-    cachedPremium: _hasCachedPremium,
-    forcePremium: SuperwallBridgeService.forcePremium,
-  );
-  bool get isFree => isAuthoritative && !isPremium;
+  bool _isPremium = false;
+  bool _loadingOfferings = false;
+  Offerings? _offerings;
+  String? _offeringsError;
 
+  bool get isPremium => _isPremium;
+  bool get isFree => !_isPremium;
+  bool get isLoadingOfferings => _loadingOfferings;
+  Offerings? get offerings => _offerings;
+  String? get offeringsError => _offeringsError;
+  bool get showSpecialOffer => _service.shouldShowSpecialOffer(_offerings);
+
+  /// Onboarding paywall plan index:
+  /// 0 = special annual, 1 = annual, 2 = weekly.
+  Package? packageForOnboardingPlan(int planIndex) {
+    return _service.packageForOnboardingPlan(_offerings, planIndex);
+  }
+
+  Package? get defaultUpgradePackage =>
+      _service.defaultUpgradePackage(_offerings);
+
+  /// Per-free-user hard limits. Enforced by the UI through [canAddPeptide] /
+  /// [canAddProtocol] before calling into the data providers.
   static const int freePeptideLimit = 1;
   static const int freeProtocolLimit = 1;
 
   bool canAddProtocol(int currentCount) =>
-      isPremium || currentCount < freeProtocolLimit;
+      _isPremium || currentCount < freeProtocolLimit;
 
   bool canAddPeptide(int currentCount) =>
-      isPremium || currentCount < freePeptideLimit;
+      _isPremium || currentCount < freePeptideLimit;
 
-  void setSettingsProvider(SettingsProvider settingsProvider) {
-    if (identical(_settingsProvider, settingsProvider)) return;
-    _settingsProvider = settingsProvider;
-    notifyListeners();
-  }
-
-  void _handleUpdate(SuperwallAccessStatus status) {
-    _status = status;
-    if (status == SuperwallAccessStatus.premium) {
-      unawaited(_settingsProvider?.setSubscriptionState('premium'));
-    } else if (status == SuperwallAccessStatus.free) {
-      unawaited(_settingsProvider?.setSubscriptionState('free'));
-    }
-    // Unknown is intentionally never persisted as free.
+  void _handleUpdate(bool premium) {
+    _isPremium = premium;
+    _settingsProvider?.setSubscriptionState(premium ? 'premium' : 'free');
     notifyListeners();
   }
 
   Future<void> refresh() async {
     try {
-      _handleUpdate(await _service.refreshAccessStatus());
+      final premium = await _service.isPremium();
+      _handleUpdate(premium);
     } catch (e) {
       debugPrint('SubscriptionProvider refresh failed: $e');
     }
   }
 
-  Future<SuperwallRestoreResult> restore() async {
-    final result = await _service.restorePurchases();
+  Future<void> loadOfferings() async {
+    _loadingOfferings = true;
+    _offeringsError = null;
+    notifyListeners();
+    try {
+      final o = await _service.getOfferings();
+      _offerings = o;
+      if (o == null) {
+        _offeringsError = 'Unable to load plans. Check your connection.';
+      }
+    } catch (e) {
+      _offeringsError = 'Unable to load plans.';
+      debugPrint('SubscriptionProvider loadOfferings failed: $e');
+    }
+    _loadingOfferings = false;
+    notifyListeners();
+  }
+
+  Future<PurchaseResult> purchase(Package package) async {
+    unawaited(_analytics.logPurchaseInitiated(package.identifier));
+    final result = await _service.purchasePackage(package);
     if (result.success) {
-      unawaited(_analytics.logPurchaseRestored());
-      await refresh();
+      final product = package.storeProduct;
+      unawaited(
+        _analytics.logPurchaseCompleted(package.identifier, product.price),
+      );
+    } else if (result.cancelled) {
+      unawaited(_analytics.logPurchaseCancelled(package.identifier));
+    } else {
+      unawaited(
+        _analytics.logPurchaseFailed(
+          package.identifier,
+          result.error ?? 'unknown',
+        ),
+      );
     }
     return result;
   }
 
-  bool get _hasCachedPremium {
-    final raw = _settingsProvider?.settings.subscriptionState
-        .trim()
-        .toLowerCase();
-    return raw == 'premium' || raw == 'pro' || raw == 'active';
-  }
-
-  @visibleForTesting
-  static bool resolvePremiumAccess({
-    required SuperwallAccessStatus status,
-    required bool cachedPremium,
-    bool forcePremium = false,
-  }) {
-    if (forcePremium || status == SuperwallAccessStatus.premium) return true;
-    return status == SuperwallAccessStatus.unknown && cachedPremium;
+  Future<RestoreResult> restore() async {
+    final result = await _service.restorePurchases();
+    if (result.success) {
+      unawaited(_analytics.logPurchaseRestored());
+    }
+    return result;
   }
 
   @override

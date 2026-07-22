@@ -33,8 +33,7 @@ class UserSettings {
   bool darkMode;
 
   /// Cached subscription state: `free` / `premium`. Firestore copy of the
-  /// Last authoritative Superwall entitlement state. During an SDK/store
-  /// status refresh, a cached premium value prevents an update-time lockout.
+  /// RevenueCat entitlement so UI can gate without waiting on RC.
   String subscriptionState;
   bool reviewAccount;
   List<String> selectedGoals;

@@ -8,6 +8,7 @@ import 'package:peptide_os/features/onboarding/widgets/calculator_demo_page.dart
 import 'package:peptide_os/features/onboarding/widgets/confidence_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/first_name_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/notification_page.dart';
+import 'package:peptide_os/features/onboarding/widgets/paywall_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/processing_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/protocol_preview_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/protocol_roadmap_page.dart';
@@ -90,12 +91,7 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
   }
 
   List<Widget> get _pages => [
-    FirstNamePage(
-      firstName: 'Joe',
-      isActive: _index == 0,
-      onChanged: (_) {},
-      onNext: _next,
-    ),
+    FirstNamePage(firstName: 'Joe', onChanged: (_) {}, onNext: _next),
     ConfidencePage(
       selectedNeeds: _confidenceNeeds,
       onToggle: (_) {},
@@ -124,6 +120,11 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
       onNext: _next,
     ),
     NotificationPage(onEnable: () async => true, onNext: _next),
+    PaywallPage(
+      onSubscribe: (_) async {},
+      onRestore: () {},
+      onReviewerBypass: () async {},
+    ),
     const _TodayMockScreen(),
     const _ConverterMockScreen(),
     const _ProgressMockScreen(),

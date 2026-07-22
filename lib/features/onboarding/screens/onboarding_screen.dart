@@ -29,10 +29,10 @@ import '../widgets/feature_showcase_page.dart';
 /// Full onboarding flow — conversion-optimised v5.
 ///
 /// Phase 1 — Emotional Mirror:   Age Gate → Hook → Disclaimer
-/// Phase 2 — Personalisation:    Name → Goals → Experience → Frustration → Confidence → Peptides
+/// Phase 2 — Personalisation:    Name → Birth Date → Goals → Experience → Frustration → Confidence → Peptides
 /// Phase 3 — Aha Moment:         Calculator Demo
 /// Phase 4 — Reveal:             Processing → Protocol Preview → Results Summary → 60-day roadmap
-/// Phase 5 — Value & Handoff:    Feature Showcase → Notifications → Value Screens → Birth Date → Review → Auth → Paywall
+/// Phase 5 — Value & Handoff:    Feature Showcase → Notifications → Value Screens → Review → Auth → Paywall
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key, this.onReadyForAuth});
 
@@ -53,6 +53,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     'hook',
     'disclaimer',
     'first_name',
+    'birth_date',
     'goals',
     'goals_reassurance',
     'experience',
@@ -70,7 +71,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     'value_protocol',
     'value_conversion',
     'value_progress',
-    'birth_date',
     'review_gate',
   ];
 
@@ -222,14 +222,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               // 3: First name
               FirstNamePage(
                 firstName: _firstName,
-                isActive: _currentPage == 3,
                 onChanged: (value) {
                   setState(() => _firstName = value);
                 },
                 onNext: _nextPage,
               ),
 
-              // 4: Goals
+              // 4: Birth date
+              BirthDatePage(
+                birthDate: _birthDate,
+                onChanged: (value) {
+                  setState(() => _birthDate = value);
+                },
+                onNext: _nextPage,
+              ),
+
+              // 5: Goals
               GoalsPage(
                 selectedGoals: _selectedGoals,
                 onToggle: (goal) {
@@ -244,7 +252,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 5: Reassurance after goals
+              // 6: Reassurance after goals
               OnboardingPage(
                 systemLabel: 'SYS.GUIDE // CALIBRATED',
                 title: 'You are already\nahead.',
@@ -256,7 +264,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 6: Experience Level
+              // 7: Experience Level
               ExperiencePage(
                 selected: _experienceLevel,
                 onSelect: (level) {
@@ -265,14 +273,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 7: Biggest Frustration
+              // 8: Biggest Frustration
               FrustrationPage(
                 selected: _frustration,
                 onSelect: (f) => setState(() => _frustration = f),
                 onNext: _nextPage,
               ),
 
-              // 8: Confidence Signals
+              // 9: Confidence Signals
               ConfidencePage(
                 selectedNeeds: _selectedConfidenceNeeds,
                 onToggle: (need) {
@@ -287,7 +295,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 9: Reassurance after confidence signals
+              // 10: Reassurance after confidence signals
               OnboardingPage(
                 systemLabel: 'SYS.CLARITY // READY',
                 title: 'We will give you\na guided place to start.',
@@ -299,7 +307,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 10: Current/Planned Peptides
+              // 11: Current/Planned Peptides
               PeptideSelectPage(
                 selectedPeptides: _selectedPeptides,
                 onToggle: (p) {
@@ -316,25 +324,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // ── Phase 3: Aha Moment ───────────────────────────────
 
-              // 11: Unit Converter Demo
+              // 12: Unit Converter Demo
               CalculatorDemoPage(peptideName: _firstPeptide, onNext: _nextPage),
 
               // ── Phase 4: Reveal ───────────────────────────────────
 
-              // 12: Building Your Protocol (processing)
+              // 13: Building Your Protocol (processing)
               ProcessingPage(
                 onNext: _nextPage,
                 selectedPeptides: _selectedPeptides,
                 selectedGoals: _selectedGoals,
               ),
 
-              // 13: Protocol Preview
+              // 14: Protocol Preview
               ProtocolPreviewPage(
                 peptides: _selectedPeptides,
                 onNext: _nextPage,
               ),
 
-              // 14: Personalised Results Summary
+              // 15: Personalised Results Summary
               ResultsSummaryPage(
                 selectedGoals: _selectedGoals,
                 confidenceNeeds: _selectedConfidenceNeeds,
@@ -344,7 +352,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 15: 60-day Roadmap
+              // 16: 60-day Roadmap
               ProtocolRoadmapPage(
                 selectedGoals: _selectedGoals,
                 confidenceNeeds: _selectedConfidenceNeeds,
@@ -354,16 +362,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // ── Phase 5: Value & Handoff ─────────────────────────
 
-              // 16: Feature Showcase
+              // 17: Feature Showcase
               FeatureShowcasePage(onNext: _nextPage),
 
-              // 17: Notification permission warm-up
+              // 18: Notification permission warm-up
               NotificationPage(
                 onEnable: _requestNotifications,
                 onNext: _nextPage,
               ),
 
-              // 18: Value screen — protocol organization
+              // 19: Value screen — protocol organization
               OnboardingPage(
                 systemLabel: 'SYS.VALUE // PROTOCOL',
                 title: 'Everything stays\nin one protocol.',
@@ -375,7 +383,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 19: Value screen — unit conversion
+              // 20: Value screen — unit conversion
               OnboardingPage(
                 systemLabel: 'SYS.VALUE // CONVERT',
                 title: 'Unit conversion\nwithout second guessing.',
@@ -387,7 +395,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 20: Value screen — trend tracking
+              // 21: Value screen — trend tracking
               OnboardingPage(
                 systemLabel: 'SYS.VALUE // SIGNAL',
                 title: 'See your tracking\ndata over time.',
@@ -399,18 +407,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onNext: _nextPage,
               ),
 
-              // 21: Birth date — deliberately late, after the user has seen
-              // the personalised value, because precise DOB entry is tedious.
-              BirthDatePage(
-                birthDate: _birthDate,
-                onChanged: (value) {
-                  setState(() => _birthDate = value);
-                },
-                onNext: _nextPage,
-              ),
-
               // 22: Review request at the end → Auth handoff. Paywall is
-              // post-auth so Superwall/AppRefer attach events to Firebase UID.
+              // post-auth so RevenueCat/AppRefer attach events to Firebase UID.
               ReviewGatePage(onNext: _handoffToAuth),
             ],
           ),

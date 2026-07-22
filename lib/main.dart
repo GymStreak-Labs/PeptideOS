@@ -15,20 +15,20 @@ import 'core/firebase/firebase_init.dart';
 import 'core/services/analytics_service.dart';
 import 'core/services/support_service.dart';
 import 'core/theme/theme.dart';
-import 'core/widgets/widgets.dart';
 import 'data/repositories/body_metric_repository.dart';
 import 'data/repositories/dose_log_repository.dart';
 import 'data/repositories/peptide_library_repository.dart';
 import 'data/repositories/protocol_repository.dart';
 import 'data/repositories/user_settings_repository.dart';
 import 'data/services/auth_service.dart';
-import 'data/services/superwall_bridge_service.dart';
+import 'data/services/subscription_service.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/screens/account_deleted_screen.dart';
 import 'features/auth/screens/auth_screen.dart';
 import 'features/library/providers/peptide_provider.dart';
 import 'features/onboarding/services/onboarding_draft_service.dart';
 import 'features/onboarding/screens/onboarding_screen.dart';
+import 'features/onboarding/widgets/paywall_page.dart';
 import 'features/profile/providers/settings_provider.dart';
 import 'features/progress/providers/body_metric_provider.dart';
 import 'features/protocol/providers/dose_log_provider.dart';
@@ -37,8 +37,8 @@ import 'features/subscription/providers/subscription_provider.dart';
 import 'services/notification_service.dart';
 
 /// AppRefer is injected via --dart-define so test/live keys can stay out of
-/// source. Meta App Events uses public SDK/app identifiers in source. Release
-/// builds fail fast if this value is missing; local/dev builds
+/// source. RevenueCat and Meta App Events use public SDK/app identifiers in
+/// source. Release builds fail fast if this value is missing; local/dev builds
 /// can still run without attribution. AppRefer is configured on the first
 /// visible app frame so install attribution is captured before onboarding/auth.
 ///
@@ -91,15 +91,14 @@ Future<void> main() async {
       };
 
       _validateReleaseAttributionConfig();
-      _validateReleaseSuperwallConfig();
 
-      // Superwall is the sole purchase, restore, and entitlement provider.
-      await SuperwallBridgeService.instance.configure();
+      // RevenueCat — safe no-op if key still TODO.
+      await SubscriptionService.instance.configure();
 
       // Gleap support — safe no-op if GLEAP_SDK_TOKEN is not injected.
       await SupportService.instance.initialize();
 
-      // Stable install ID on Crashlytics / Analytics / Superwall / Gleap. AppRefer
+      // Stable install ID on Crashlytics / Analytics / RC / Gleap. AppRefer
       // receives the same ID once it is configured on the first visible frame.
       await AnalyticsService().initializeIdentity();
 
@@ -146,8 +145,8 @@ Future<void> _configureAppRefer() async {
     );
     final appReferId = await AppReferSDK.getDeviceId();
     if (appReferId != null) {
-      await SuperwallBridgeService.instance.setUserAttributes({
-        'apprefer_id': appReferId,
+      await SubscriptionService.instance.setAttributes({
+        'appreferId': appReferId,
       });
     }
     await analytics.syncAppReferIdentity();
@@ -159,18 +158,6 @@ Future<void> _configureAppRefer() async {
 void _validateReleaseAttributionConfig() {
   if (!kReleaseMode || _hasAppReferApiKey) return;
   throw StateError('Release builds require --dart-define=APPREFER_API_KEY.');
-}
-
-void _validateReleaseSuperwallConfig() {
-  if (!kReleaseMode) return;
-  if (!SuperwallBridgeService.enabled) {
-    throw StateError('Release builds require Superwall to be enabled.');
-  }
-  if (SuperwallBridgeService.hasPlatformApiKey) return;
-  throw StateError(
-    'Release builds require --dart-define=SUPERWALL_IOS_API_KEY or '
-    '--dart-define=SUPERWALL_ANDROID_API_KEY.',
-  );
 }
 
 Future<void> _initFacebookEvents(TrackingStatus trackingStatus) async {
@@ -237,11 +224,7 @@ class PepModApp extends StatelessWidget {
           create: (ctx) => SubscriptionProvider(
             settingsProvider: ctx.read<SettingsProvider>(),
           ),
-          update: (_, settings, previous) {
-            final provider = previous ?? SubscriptionProvider();
-            provider.setSettingsProvider(settings);
-            return provider;
-          },
+          update: (_, __, previous) => previous ?? SubscriptionProvider(),
         ),
         // ── User-scoped data providers ─────────────────────────────────────
         ChangeNotifierProxyProvider<AuthProvider, PeptideProvider>(
@@ -400,18 +383,15 @@ class _AppRootState extends State<_AppRoot> {
     }
 
     // Onboarding story runs first; auth comes before the paywall so attribution
-    // and Superwall purchase events attach to a stable Firebase UID.
+    // and RevenueCat purchase events attach to a stable Firebase UID.
     if (settings.isLoading && auth.isSignedIn) return const _Splash();
     if (!settings.settings.onboardingCompleted && !auth.isSignedIn) {
       if (!_handoffStateLoaded) return const _Splash();
-      if (_preAuthOnboardingReady) {
-        return const AuthScreen(createAccountByDefault: true);
-      }
+      if (_preAuthOnboardingReady) return const AuthScreen();
       return OnboardingScreen(onReadyForAuth: _markReadyForAuth);
     }
 
     if (!auth.isSignedIn) return const AuthScreen();
-    if (!auth.isSubscriptionIdentityReady) return const _Splash();
 
     if (!settings.settings.onboardingCompleted) {
       if (!_onboardingReplayAttempted && !_replayingOnboardingDraft) {
@@ -443,13 +423,13 @@ class _AppRootState extends State<_AppRoot> {
     final reviewAccount = settings.settings.reviewAccount;
     if (_postAuthPaywallPending &&
         !reviewAccount &&
-        !SuperwallBridgeService.forcePremium &&
+        !SubscriptionService.forcePremium &&
         !subscription.isPremium) {
       return _PostAuthPaywallGate(onComplete: _clearPostAuthPaywall);
     }
     if (_postAuthPaywallPending &&
         (reviewAccount ||
-            SuperwallBridgeService.forcePremium ||
+            SubscriptionService.forcePremium ||
             subscription.isPremium)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         unawaited(_clearPostAuthPaywall());
@@ -471,8 +451,7 @@ class _PostAuthPaywallGate extends StatefulWidget {
 
 class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
   bool _viewLogged = false;
-  bool _superwallAttempted = false;
-  bool _showRemoteUnavailable = false;
+  bool _offeringsLoadStarted = false;
 
   @override
   void didChangeDependencies() {
@@ -480,43 +459,56 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
     if (_viewLogged) return;
     _viewLogged = true;
     unawaited(AnalyticsService().logPaywallViewed('post_auth_onboarding'));
-    _presentSuperwallIfAvailable();
+    if (!_offeringsLoadStarted) {
+      _offeringsLoadStarted = true;
+      final sub = context.read<SubscriptionProvider>();
+      if (!sub.isLoadingOfferings && sub.offerings == null) {
+        unawaited(sub.loadOfferings());
+      }
+    }
   }
 
-  void _presentSuperwallIfAvailable() {
-    if (_superwallAttempted) return;
-    final bridge = SuperwallBridgeService.instance;
-    if (!bridge.canPresentPaywalls) {
-      _showUnavailable();
+  Future<void> _handleSubscribe(int selectedPlan) async {
+    final sub = context.read<SubscriptionProvider>();
+    final planId = 'onboarding_plan_$selectedPlan';
+
+    if (!sub.isLoadingOfferings && sub.offerings == null) {
+      await sub.loadOfferings();
+    }
+    if (!mounted) return;
+
+    final offerings = sub.offerings;
+    final pkg = offerings == null
+        ? null
+        : sub.packageForOnboardingPlan(selectedPlan);
+
+    if (pkg == null) {
+      unawaited(
+        AnalyticsService().logPurchaseFailed(planId, 'package_unavailable'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            sub.offeringsError ??
+                'Subscription plans are not available right now. Please try again.',
+          ),
+        ),
+      );
       return;
     }
 
-    _superwallAttempted = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final result = await bridge.presentPlacement(
-        SuperwallPlacements.postAuthOnboarding,
-        params: const {
-          'source': 'post_auth_onboarding',
-          'surface': 'hard_paywall',
-        },
-      );
-      if (!mounted) return;
-      if (result == SuperwallPlacementResult.completedPremium) {
-        await widget.onComplete();
-        return;
-      }
-      _showUnavailable();
-    });
-  }
-
-  void _showUnavailable() => setState(() => _showRemoteUnavailable = true);
-
-  void _retrySuperwall() {
-    setState(() {
-      _superwallAttempted = false;
-      _showRemoteUnavailable = false;
-    });
-    _presentSuperwallIfAvailable();
+    unawaited(AnalyticsService().logPurchaseInitiated(pkg.identifier));
+    final result = await sub.purchase(pkg);
+    if (!mounted) return;
+    if (result.success) {
+      await widget.onComplete();
+    } else if (result.cancelled) {
+      return;
+    } else if (result.error != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(result.error!)));
+    }
   }
 
   Future<void> _handleRestore() async {
@@ -534,72 +526,20 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (_showRemoteUnavailable) {
-      return _RemotePaywallUnavailable(
-        onRetry: _retrySuperwall,
-        onRestore: _handleRestore,
-      );
-    }
-    return const _Splash();
+  Future<void> _handleReviewerBypass() async {
+    await widget.onComplete();
   }
-}
-
-class _RemotePaywallUnavailable extends StatelessWidget {
-  const _RemotePaywallUnavailable({
-    required this.onRetry,
-    required this.onRestore,
-  });
-
-  final VoidCallback onRetry;
-  final Future<void> Function() onRestore;
 
   @override
   Widget build(BuildContext context) {
+    final sub = context.watch<SubscriptionProvider>();
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'SYS.PRO // CONNECTION',
-                style: AppTypography.systemLabel,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppSpacing.md),
-              Text(
-                'PepMod Pro is not available right now',
-                style: AppTypography.h2,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                'Please try again or restore an existing purchase.',
-                style: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              PrimaryButton(label: 'TRY AGAIN', onPressed: onRetry),
-              const SizedBox(height: AppSpacing.sm),
-              TextButton(
-                onPressed: onRestore,
-                child: Text(
-                  'Restore purchases',
-                  style: AppTypography.bodySmall.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+      body: PaywallPage(
+        onSubscribe: _handleSubscribe,
+        onRestore: _handleRestore,
+        onReviewerBypass: _handleReviewerBypass,
+        showSpecialOffer: sub.showSpecialOffer,
       ),
     );
   }

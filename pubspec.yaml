@@ -1,7 +1,7 @@
 name: peptide_os
 description: "Intelligent peptide protocol manager — track doses, calculate reconstitution, manage protocols."
 publish_to: 'none'
-version: 1.0.4+20
+version: 1.0.5+21
 
 environment:
   sdk: ^3.11.1
@@ -26,7 +26,7 @@ dependencies:
   crypto: ^3.0.6
 
   # ── Monetisation ─────────────────────────────────────────────────────
-  superwallkit_flutter: ^2.4.12
+  purchases_flutter: ^8.4.0
 
   # ── Attribution ──────────────────────────────────────────────────────
   apprefer:

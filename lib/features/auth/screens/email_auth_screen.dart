@@ -11,31 +11,23 @@ import '../providers/auth_provider.dart';
 /// [AuthScreen] — the AuthProvider's stream will swap the app root once the
 /// sign-in succeeds so we simply pop once Firebase reports success.
 class EmailAuthScreen extends StatefulWidget {
-  const EmailAuthScreen({super.key, this.initialMode = EmailAuthMode.signIn});
-
-  final EmailAuthMode initialMode;
+  const EmailAuthScreen({super.key});
 
   @override
   State<EmailAuthScreen> createState() => _EmailAuthScreenState();
 }
 
-enum EmailAuthMode { signIn, createAccount, forgotPassword }
+enum _Mode { signIn, createAccount, forgotPassword }
 
 class _EmailAuthScreenState extends State<EmailAuthScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  late EmailAuthMode _mode;
+  _Mode _mode = _Mode.signIn;
   bool _busy = false;
   String? _error;
   String? _info;
-
-  @override
-  void initState() {
-    super.initState();
-    _mode = widget.initialMode;
-  }
 
   @override
   void dispose() {
@@ -44,7 +36,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
     super.dispose();
   }
 
-  void _setMode(EmailAuthMode mode) {
+  void _setMode(_Mode mode) {
     setState(() {
       _mode = mode;
       _error = null;
@@ -69,18 +61,18 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
 
     try {
       switch (_mode) {
-        case EmailAuthMode.signIn:
+        case _Mode.signIn:
           _logSelected('email_sign_in');
           await auth.signInWithEmail(email: email, password: password);
           _completeAuthRoute();
           break;
-        case EmailAuthMode.createAccount:
+        case _Mode.createAccount:
           _logSelected('email_create');
           await auth.createAccountWithEmail(email: email, password: password);
           _logCreated('email');
           _completeAuthRoute();
           break;
-        case EmailAuthMode.forgotPassword:
+        case _Mode.forgotPassword:
           await auth.sendPasswordResetEmail(email);
           if (mounted) {
             setState(() {
@@ -120,22 +112,22 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
 
   String get _title {
     switch (_mode) {
-      case EmailAuthMode.signIn:
+      case _Mode.signIn:
         return 'Sign in';
-      case EmailAuthMode.createAccount:
+      case _Mode.createAccount:
         return 'Create account';
-      case EmailAuthMode.forgotPassword:
+      case _Mode.forgotPassword:
         return 'Reset password';
     }
   }
 
   String get _submitLabel {
     switch (_mode) {
-      case EmailAuthMode.signIn:
+      case _Mode.signIn:
         return 'SIGN IN';
-      case EmailAuthMode.createAccount:
+      case _Mode.createAccount:
         return 'CREATE ACCOUNT';
-      case EmailAuthMode.forgotPassword:
+      case _Mode.forgotPassword:
         return 'SEND RESET LINK';
     }
   }
@@ -150,7 +142,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
   }
 
   String? _validatePassword(String? v) {
-    if (_mode == EmailAuthMode.forgotPassword) return null;
+    if (_mode == _Mode.forgotPassword) return null;
     final value = v ?? '';
     if (value.isEmpty) return 'Enter a password';
     if (value.length < 6) return 'At least 6 characters';
@@ -184,9 +176,9 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
               children: [
                 Text(
-                  'SYS.AUTH // ${_mode == EmailAuthMode.createAccount
+                  'SYS.AUTH // ${_mode == _Mode.createAccount
                       ? 'NEW_USER'
-                      : _mode == EmailAuthMode.forgotPassword
+                      : _mode == _Mode.forgotPassword
                       ? 'RESET'
                       : 'RETURN_USER'}',
                   style: AppTypography.systemLabel,
@@ -199,13 +191,12 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                   validator: _validateEmail,
                   enabled: !_busy,
                 ),
-                if (_mode != EmailAuthMode.forgotPassword) ...[
+                if (_mode != _Mode.forgotPassword) ...[
                   const SizedBox(height: AppSpacing.md),
                   _PasswordField(
                     controller: _passwordController,
                     validator: _validatePassword,
                     enabled: !_busy,
-                    isCreatingAccount: _mode == EmailAuthMode.createAccount,
                     onSubmitted: (_) => _submit(),
                   ),
                 ],
@@ -234,23 +225,23 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                   onPressed: _busy ? null : _submit,
                 ),
                 const SizedBox(height: AppSpacing.md),
-                if (_mode == EmailAuthMode.signIn)
+                if (_mode == _Mode.signIn)
                   _LinkRow(
                     items: [
                       _LinkItem(
                         label: 'Forgot password?',
-                        onTap: () => _setMode(EmailAuthMode.forgotPassword),
+                        onTap: () => _setMode(_Mode.forgotPassword),
                       ),
                       _LinkItem(
                         label: 'Create account',
-                        onTap: () => _setMode(EmailAuthMode.createAccount),
+                        onTap: () => _setMode(_Mode.createAccount),
                       ),
                     ],
                   ),
-                if (_mode == EmailAuthMode.createAccount)
+                if (_mode == _Mode.createAccount)
                   Center(
                     child: GestureDetector(
-                      onTap: () => _setMode(EmailAuthMode.signIn),
+                      onTap: () => _setMode(_Mode.signIn),
                       child: Text(
                         'Already have an account? Sign in',
                         style: AppTypography.bodySmall.copyWith(
@@ -259,10 +250,10 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                       ),
                     ),
                   ),
-                if (_mode == EmailAuthMode.forgotPassword)
+                if (_mode == _Mode.forgotPassword)
                   Center(
                     child: GestureDetector(
-                      onTap: () => _setMode(EmailAuthMode.signIn),
+                      onTap: () => _setMode(_Mode.signIn),
                       child: Text(
                         'Back to sign in',
                         style: AppTypography.bodySmall.copyWith(
@@ -316,14 +307,12 @@ class _PasswordField extends StatefulWidget {
     required this.controller,
     required this.validator,
     required this.enabled,
-    required this.isCreatingAccount,
     required this.onSubmitted,
   });
 
   final TextEditingController controller;
   final FormFieldValidator<String> validator;
   final bool enabled;
-  final bool isCreatingAccount;
   final ValueChanged<String> onSubmitted;
 
   @override
@@ -340,11 +329,7 @@ class _PasswordFieldState extends State<_PasswordField> {
       enabled: widget.enabled,
       obscureText: _obscure,
       textInputAction: TextInputAction.done,
-      autofillHints: [
-        widget.isCreatingAccount
-            ? AutofillHints.newPassword
-            : AutofillHints.password,
-      ],
+      autofillHints: const [AutofillHints.password],
       onFieldSubmitted: widget.onSubmitted,
       style: AppTypography.bodyMedium.copyWith(color: AppColors.textPrimary),
       cursorColor: AppColors.primary,
