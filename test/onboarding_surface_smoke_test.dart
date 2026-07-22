@@ -27,6 +27,7 @@ void main() {
       ),
     );
     await tester.pump(const Duration(milliseconds: 1200));
+    await tester.pump(const Duration(milliseconds: 700));
   }
 
   testWidgets('new onboarding surfaces render on phone-sized viewports', (
