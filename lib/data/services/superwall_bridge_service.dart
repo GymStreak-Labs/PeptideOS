@@ -217,52 +217,7 @@ class SuperwallBridgeService {
     _premiumSub = null;
   }
 
-  @visibleForTesting
-  static ({String productId, String? basePlanId, String? offerId})
-  normalizeGooglePlayProductTarget(
-    String productId, {
-    String? basePlanId,
-    String? offerId,
-  }) {
-    final rawProductId = _trimOrNull(productId) ?? productId;
-    var targetProductId = rawProductId;
-    var targetBasePlanId = _trimOrNull(basePlanId);
-    var targetOfferId = normalizeGooglePlayOfferId(offerId);
-
-    final segments = rawProductId.split(':');
-    if (segments.length >= 2) {
-      targetProductId = segments.first.trim();
-      targetBasePlanId ??= _trimOrNull(segments[1]);
-      if (segments.length >= 3) {
-        targetOfferId ??= normalizeGooglePlayOfferId(
-          segments.sublist(2).join(':'),
-        );
-      }
-    }
-
-    return (
-      productId: targetProductId,
-      basePlanId: targetBasePlanId,
-      offerId: targetOfferId,
-    );
-  }
-
-  @visibleForTesting
-  static String? normalizeGooglePlayOfferId(String? offerId) {
-    final trimmed = _trimOrNull(offerId);
-    if (trimmed == null) return null;
-    final lower = trimmed.toLowerCase();
-    if (lower == 'sw-none' || lower == 'none' || lower == 'null') {
-      return null;
-    }
-    return trimmed;
-  }
-
   static String? _nonEmpty(String? value) {
-    return _trimOrNull(value);
-  }
-
-  static String? _trimOrNull(String? value) {
     final trimmed = value?.trim();
     return trimmed == null || trimmed.isEmpty ? null : trimmed;
   }
@@ -297,25 +252,15 @@ class _RevenueCatSuperwallPurchaseController extends sw.PurchaseController {
     String? offerId,
   ) async {
     try {
-      final target = SuperwallBridgeService.normalizeGooglePlayProductTarget(
-        productId,
-        basePlanId: basePlanId,
-        offerId: offerId,
-      );
-      final product = await _storeProduct(
-        target.productId,
-        basePlanId: target.basePlanId,
-      );
+      final product = await _storeProduct(productId);
       if (product == null) {
-        return sw.PurchaseResult.failed(
-          'Product unavailable: ${target.productId}',
-        );
+        return sw.PurchaseResult.failed('Product unavailable: $productId');
       }
 
       final option = selectGoogleSubscriptionOption(
         product,
-        basePlanId: target.basePlanId,
-        offerId: target.offerId,
+        basePlanId: basePlanId,
+        offerId: offerId,
       );
       final info = option == null
           ? await rc.Purchases.purchaseStoreProduct(product)
@@ -356,9 +301,7 @@ class _RevenueCatSuperwallPurchaseController extends sw.PurchaseController {
     if (options == null || options.isEmpty) return product.defaultOption;
 
     final normalizedBasePlanId = _trimOrNull(basePlanId);
-    final normalizedOfferId = SuperwallBridgeService.normalizeGooglePlayOfferId(
-      offerId,
-    );
+    final normalizedOfferId = _trimOrNull(offerId);
     if (normalizedBasePlanId == null) {
       return product.defaultOption ?? options.first;
     }
@@ -386,41 +329,10 @@ class _RevenueCatSuperwallPurchaseController extends sw.PurchaseController {
     return product.defaultOption ?? options.first;
   }
 
-  Future<rc.StoreProduct?> _storeProduct(
-    String productId, {
-    String? basePlanId,
-  }) async {
-    final normalizedBasePlanId = _trimOrNull(basePlanId);
-    final identifiers = {
-      productId,
-      if (normalizedBasePlanId != null) '$productId:$normalizedBasePlanId',
-    }.toList(growable: false);
-    final products = await _allStoreProducts(identifiers);
+  Future<rc.StoreProduct?> _storeProduct(String productId) async {
+    final products = await rc.Purchases.getProducts([productId]);
     if (products.isEmpty) return null;
-    if (normalizedBasePlanId != null) {
-      final requestedStoreProductId = '$productId:$normalizedBasePlanId';
-      for (final product in products) {
-        if (product.identifier == requestedStoreProductId) return product;
-      }
-      for (final product in products) {
-        if (product.identifier == productId) return product;
-      }
-    }
     return products.first;
-  }
-
-  Future<List<rc.StoreProduct>> _allStoreProducts(
-    List<String> productIdentifiers,
-  ) async {
-    final subscriptionProducts = await rc.Purchases.getProducts(
-      productIdentifiers,
-      productCategory: rc.ProductCategory.subscription,
-    );
-    final nonSubscriptionProducts = await rc.Purchases.getProducts(
-      productIdentifiers,
-      productCategory: rc.ProductCategory.nonSubscription,
-    );
-    return [...subscriptionProducts, ...nonSubscriptionProducts];
   }
 
   sw.PurchaseResult _handleCustomerInfo(rc.CustomerInfo info) {
