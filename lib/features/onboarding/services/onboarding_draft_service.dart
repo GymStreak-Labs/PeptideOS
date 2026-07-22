@@ -14,7 +14,7 @@ import '../../../models/protocol.dart';
 /// Local handoff between pre-auth onboarding and post-auth Firestore state.
 ///
 /// Onboarding intentionally collects personalization before sign-in, then
-/// shows auth before the paywall so AppRefer / Superwall purchases attach to
+/// shows auth before the paywall so AppRefer / RevenueCat purchases attach to
 /// a stable Firebase UID. The selected protocol/profile data is staged here,
 /// then replayed once Firebase gives us that UID.
 class OnboardingDraftService {
@@ -23,9 +23,6 @@ class OnboardingDraftService {
   static const String _draftKey = 'peptideos_onboarding_draft_v1';
   static const String _postAuthPaywallPendingKey =
       'pepmod_post_auth_paywall_pending_v1';
-  static const String _postAuthPaywallFlowVersionKey =
-      'pepmod_post_auth_paywall_flow_version';
-  static const int _currentPostAuthPaywallFlowVersion = 2;
 
   static Future<void> save(OnboardingDraft draft) async {
     final prefs = await SharedPreferences.getInstance();
@@ -47,45 +44,19 @@ class OnboardingDraftService {
 
   static Future<void> clear() async {
     final prefs = await SharedPreferences.getInstance();
-    final removed = await prefs.remove(_draftKey);
-    if (!removed && prefs.containsKey(_draftKey)) {
-      throw StateError('Failed to clear the onboarding draft.');
-    }
+    await prefs.remove(_draftKey);
   }
 
   static Future<bool> hasDraft() async => (await load()) != null;
 
   static Future<void> setPostAuthPaywallPending(bool pending) async {
     final prefs = await SharedPreferences.getInstance();
-    final saved = await prefs.setBool(_postAuthPaywallPendingKey, pending);
-    if (!saved) {
-      throw StateError('Failed to update the post-auth paywall state.');
-    }
-    if (pending) {
-      final versionSaved = await prefs.setInt(
-        _postAuthPaywallFlowVersionKey,
-        _currentPostAuthPaywallFlowVersion,
-      );
-      if (!versionSaved) {
-        throw StateError('Failed to version the post-auth paywall state.');
-      }
-    } else {
-      await prefs.remove(_postAuthPaywallFlowVersionKey);
-    }
+    await prefs.setBool(_postAuthPaywallPendingKey, pending);
   }
 
   static Future<bool> isPostAuthPaywallPending() async {
     final prefs = await SharedPreferences.getInstance();
-    final pending = prefs.getBool(_postAuthPaywallPendingKey) ?? false;
-    if (!pending) return false;
-    final version = prefs.getInt(_postAuthPaywallFlowVersionKey);
-    if (version == _currentPostAuthPaywallFlowVersion) return true;
-
-    // Older builds used an unversioned latch. Never surface a hard paywall to
-    // an already-onboarded user merely because they installed this update.
-    await prefs.setBool(_postAuthPaywallPendingKey, false);
-    await prefs.remove(_postAuthPaywallFlowVersionKey);
-    return false;
+    return prefs.getBool(_postAuthPaywallPendingKey) ?? false;
   }
 
   static Future<void> replayAfterAuth({

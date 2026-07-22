@@ -17,7 +17,6 @@ Optional service-label overrides:
   PEPMOD_GLEAP_TOKEN_SERVICE
   PEPMOD_SUPERWALL_IOS_KEY_SERVICE
   PEPMOD_SUPERWALL_ANDROID_KEY_SERVICE
-  PEPMOD_MC_VAULT_KEYCHAIN
 EOF
 }
 
@@ -57,7 +56,6 @@ PEPMOD_APPREFER_KEY_SERVICE="${PEPMOD_APPREFER_KEY_SERVICE:-peptideos-apprefer-a
 PEPMOD_GLEAP_TOKEN_SERVICE="${PEPMOD_GLEAP_TOKEN_SERVICE:-peptideos-gleap-sdk-token}" \
 PEPMOD_SUPERWALL_IOS_KEY_SERVICE="${PEPMOD_SUPERWALL_IOS_KEY_SERVICE:-pepmod-superwall-ios-api-key}" \
 PEPMOD_SUPERWALL_ANDROID_KEY_SERVICE="${PEPMOD_SUPERWALL_ANDROID_KEY_SERVICE:-pepmod-superwall-android-api-key}" \
-PEPMOD_MC_VAULT_KEYCHAIN="${PEPMOD_MC_VAULT_KEYCHAIN:-$HOME/Library/Keychains/mc-vault-db}" \
 python3 - "$defines_file" <<'PY'
 import json
 import os
@@ -65,11 +63,6 @@ import subprocess
 import sys
 
 path = sys.argv[1]
-vault_path = os.environ["PEPMOD_MC_VAULT_KEYCHAIN"]
-
-if not os.path.exists(vault_path):
-    print("error: mc-vault keychain was not found.", file=sys.stderr)
-    sys.exit(69)
 
 entries = {}
 missing = []
@@ -87,14 +80,7 @@ secrets = [
 
 for define_name, service_name, required in secrets:
     result = subprocess.run(
-        [
-            "/usr/bin/security",
-            "find-generic-password",
-            "-s",
-            service_name,
-            "-w",
-            vault_path,
-        ],
+        ["/usr/bin/security", "find-generic-password", "-s", service_name, "-w"],
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
         text=True,

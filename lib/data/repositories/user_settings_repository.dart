@@ -7,7 +7,7 @@ import '../../models/user_settings.dart';
 /// Stored at `users/{uid}/settings/profile` — always a single doc per user.
 class UserSettingsRepository {
   UserSettingsRepository({FirebaseFirestore? firestore})
-    : _firestore = firestore ?? FirebaseFirestore.instance;
+      : _firestore = firestore ?? FirebaseFirestore.instance;
 
   static const String _docId = 'profile';
 
@@ -34,16 +34,6 @@ class UserSettingsRepository {
     return UserSettings.fromMap(data);
   }
 
-  /// Server-authoritative read for destructive flows that preserve selected
-  /// account-level fields. This must fail offline instead of falling back to a
-  /// stale cache and overwriting reviewer/subscription flags.
-  Future<UserSettings> fetchFromServer(String uid) async {
-    final snap = await _doc(uid).get(const GetOptions(source: Source.server));
-    final data = snap.data();
-    if (data == null) return UserSettings();
-    return UserSettings.fromMap(data);
-  }
-
   Future<void> save(String uid, UserSettings settings) async {
     await _doc(uid).set(settings.toMap());
   }
@@ -63,18 +53,8 @@ class UserSettingsRepository {
     return fresh;
   }
 
-  /// Resets personal preferences/onboarding while keeping account-level flags.
-  Future<void> reset(
-    String uid, {
-    required String subscriptionState,
-    required bool reviewAccount,
-  }) async {
-    await save(
-      uid,
-      UserSettings(
-        subscriptionState: subscriptionState,
-        reviewAccount: reviewAccount,
-      ),
-    );
+  /// Destructive — wipes the per-user settings doc. Used by "Clear all data".
+  Future<void> reset(String uid) async {
+    await save(uid, UserSettings());
   }
 }

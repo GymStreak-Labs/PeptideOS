@@ -1,39 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Destructive cleanup for app resets and account deletion.
+/// Destructive user-data cleanup for account deletion.
 ///
 /// Firestore cannot cascade-delete subcollections from a client document
-/// delete, so each user-owned collection is wiped explicitly in bounded
-/// batches.
+/// delete, so account deletion explicitly wipes every user-owned collection
+/// before deleting `users/{uid}`.
 class UserDataRepository {
-  UserDataRepository({FirebaseFirestore? firestore, int batchSize = 400})
-    : _firestore = firestore ?? FirebaseFirestore.instance,
-      _batchSize = _validatedBatchSize(batchSize);
+  UserDataRepository({FirebaseFirestore? firestore})
+    : _firestore = firestore ?? FirebaseFirestore.instance;
 
-  static const _appDataCollections = <String>[
-    'doseLogs',
+  static const _batchSize = 400;
+  static const _userCollections = <String>[
+    'settings',
     'protocols',
+    'doseLogs',
     'bodyMetrics',
   ];
 
   final FirebaseFirestore _firestore;
-  final int _batchSize;
-
-  /// Clears tracking data while preserving the Firebase account, user root,
-  /// settings, subscription identity, and shared peptide library.
-  Future<void> deleteAppDataForUser(String uid) async {
-    _validateUid(uid);
-    final userRef = _firestore.collection('users').doc(uid);
-    for (final collectionName in _appDataCollections) {
-      await _deleteCollection(userRef.collection(collectionName));
-    }
-  }
 
   Future<void> deleteAllForUser(String uid) async {
-    _validateUid(uid);
     final userRef = _firestore.collection('users').doc(uid);
-    await deleteAppDataForUser(uid);
-    await _deleteCollection(userRef.collection('settings'));
+    for (final collectionName in _userCollections) {
+      await _deleteCollection(userRef.collection(collectionName));
+    }
     await userRef.delete();
   }
 
@@ -41,9 +31,7 @@ class UserDataRepository {
     CollectionReference<Map<String, dynamic>> collection,
   ) async {
     while (true) {
-      final snapshot = await collection
-          .limit(_batchSize)
-          .get(const GetOptions(source: Source.server));
+      final snapshot = await collection.limit(_batchSize).get();
       if (snapshot.docs.isEmpty) return;
 
       final batch = _firestore.batch();
@@ -52,18 +40,5 @@ class UserDataRepository {
       }
       await batch.commit();
     }
-  }
-
-  void _validateUid(String uid) {
-    if (uid.trim().isEmpty) {
-      throw ArgumentError.value(uid, 'uid', 'Must not be empty.');
-    }
-  }
-
-  static int _validatedBatchSize(int value) {
-    if (value < 1 || value > 500) {
-      throw RangeError.range(value, 1, 500, 'batchSize');
-    }
-    return value;
   }
 }

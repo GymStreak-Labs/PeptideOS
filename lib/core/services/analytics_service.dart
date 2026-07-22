@@ -5,11 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../data/services/subscription_service.dart';
 import '../../data/services/superwall_bridge_service.dart';
 import 'support_service.dart';
 
 /// Analytics singleton — wraps Firebase Analytics + stamps a stable install ID
-/// on Crashlytics, Superwall, AppRefer, and Gleap so attribution/support can tie
+/// on Crashlytics, RC, AppRefer, and Gleap so attribution/support can tie
 /// installs to users.
 ///
 /// Usage: `AnalyticsService().logPaywallViewed('onboarding');`.
@@ -35,7 +36,7 @@ class AnalyticsService {
   String? get installId => _installId;
 
   /// Generate or load a persistent install ID and propagate it to
-  /// Crashlytics, Analytics, Superwall, and AppRefer.
+  /// Crashlytics, Analytics, RevenueCat, and AppRefer.
   Future<void> initializeIdentity() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -52,6 +53,11 @@ class AnalyticsService {
         await _analytics.setUserProperty(name: 'install_id', value: _installId);
       } catch (_) {}
       try {
+        await SubscriptionService.instance.setAttributes({
+          'install_id': _installId!,
+        });
+      } catch (_) {}
+      try {
         await SupportService.instance.attachInstallIdentity(_installId!);
       } catch (_) {}
       try {
@@ -65,7 +71,7 @@ class AnalyticsService {
     }
   }
 
-  /// Set authenticated user identity across Analytics and Crashlytics, then
+  /// Set authenticated user identity across Analytics, Crashlytics, RC, and
   /// AppRefer. Call after successful auth sign-in.
   Future<void> identifyAuthenticatedUser({
     required String userId,
@@ -96,6 +102,25 @@ class AnalyticsService {
       if (subscriptionTier != null) {
         await c.setCustomKey('subscription_tier', subscriptionTier);
       }
+    } catch (_) {}
+
+    try {
+      final attributes = <String, String>{
+        '\$email': email,
+        '\$displayName': displayName ?? '',
+        'install_id': _installId ?? 'unknown',
+        'firebase_uid': userId,
+      };
+      final appReferId = await AppReferSDK.getDeviceId();
+      if (appReferId != null) attributes['appreferId'] = appReferId;
+      await SubscriptionService.instance.setAttributes(attributes);
+    } catch (_) {}
+    try {
+      await SuperwallBridgeService.instance.identifyUser(
+        userId: userId,
+        installId: _installId,
+        subscriptionTier: subscriptionTier,
+      );
     } catch (_) {}
 
     try {
@@ -157,6 +182,9 @@ class AnalyticsService {
     try {
       final appReferId = await AppReferSDK.getDeviceId();
       if (appReferId != null) {
+        await SubscriptionService.instance.setAttributes({
+          'appreferId': appReferId,
+        });
         await SuperwallBridgeService.instance.setUserAttributes({
           'apprefer_id': appReferId,
         });

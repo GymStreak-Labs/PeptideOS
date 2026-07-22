@@ -1,7 +1,7 @@
 name: peptide_os
 description: "Intelligent peptide protocol manager — track doses, calculate reconstitution, manage protocols."
 publish_to: 'none'
-version: 1.0.4+20
+version: 1.0.4+15
 
 environment:
   sdk: ^3.11.1
@@ -26,7 +26,7 @@ dependencies:
   crypto: ^3.0.6
 
   # ── Monetisation ─────────────────────────────────────────────────────
-  superwallkit_flutter: ^2.4.12
+  purchases_flutter: ^8.4.0
 
   # ── Attribution ──────────────────────────────────────────────────────
   apprefer:
@@ -53,12 +53,12 @@ dependencies:
   timezone: ^0.9.4
   flutter_timezone: ^3.0.1
   url_launcher: ^6.3.2
+  superwallkit_flutter: ^2.4.12
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  fake_cloud_firestore: ^3.1.0
 
 dependency_overrides:
   # path_provider_foundation 2.6.0 pulls in the objective_c native asset, which

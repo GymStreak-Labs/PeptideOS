@@ -94,6 +94,21 @@ class SettingsProvider extends ChangeNotifier {
     });
   }
 
+  /// Wipe the per-user settings doc back to defaults. Used by the "Clear all
+  /// data" button. The stream will pick up the new doc contents.
+  Future<void> resetAll() async {
+    if (_uid.isEmpty) {
+      _settings = UserSettings();
+      notifyListeners();
+      return;
+    }
+    try {
+      await _repo.reset(_uid);
+    } catch (e) {
+      debugPrint('SettingsProvider reset failed: $e');
+    }
+  }
+
   /// Cached subscription tier — written by the subscription provider so the
   /// rest of the app can gate without round-tripping RC.
   Future<void> setSubscriptionState(String state) async {
