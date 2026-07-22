@@ -69,7 +69,11 @@ void main() {
   ) async {
     await pumpPhoneSurface(
       tester,
-      PaywallPage(onSubscribe: (_) async {}, onRestore: () {}),
+      PaywallPage(
+        onSubscribe: (_) async {},
+        onRestore: () {},
+        onReviewerBypass: () async {},
+      ),
       size: const Size(390, 900),
     );
 
@@ -78,6 +82,35 @@ void main() {
       findsOneWidget,
     );
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('seven headline taps trigger reviewer bypass without purchase', (
+    tester,
+  ) async {
+    var bypassCount = 0;
+    var purchaseCount = 0;
+    await pumpPhoneSurface(
+      tester,
+      PaywallPage(
+        onSubscribe: (_) async => purchaseCount++,
+        onRestore: () {},
+        onReviewerBypass: () async => bypassCount++,
+      ),
+      size: const Size(390, 900),
+    );
+
+    final headline = find.text('Everything to run\nyour protocol right.');
+    for (var tap = 0; tap < 6; tap++) {
+      await tester.tap(headline);
+    }
+    await tester.pump();
+    expect(bypassCount, 0);
+    expect(purchaseCount, 0);
+
+    await tester.tap(headline);
+    await tester.pump();
+    expect(bypassCount, 1);
+    expect(purchaseCount, 0);
   });
 }
 

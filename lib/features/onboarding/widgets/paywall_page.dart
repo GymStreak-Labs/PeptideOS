@@ -13,11 +13,13 @@ class PaywallPage extends StatefulWidget {
     super.key,
     required this.onSubscribe,
     required this.onRestore,
+    required this.onReviewerBypass,
     this.showSpecialOffer = true,
   });
 
   final Future<void> Function(int selectedPlan) onSubscribe;
   final VoidCallback onRestore;
+  final Future<void> Function() onReviewerBypass;
   final bool showSpecialOffer;
 
   @override
@@ -233,7 +235,7 @@ class _PaywallPageState extends State<PaywallPage>
                 if (_secretTapCount >= 7) {
                   _secretTapCount = 0;
                   HapticFeedback.heavyImpact();
-                  unawaited(_submitSelectedPlan());
+                  unawaited(widget.onReviewerBypass());
                 }
               },
               child: Text(

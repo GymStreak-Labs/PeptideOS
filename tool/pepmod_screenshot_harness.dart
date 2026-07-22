@@ -120,7 +120,11 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
       onNext: _next,
     ),
     NotificationPage(onEnable: () async => true, onNext: _next),
-    PaywallPage(onSubscribe: (_) async {}, onRestore: () {}),
+    PaywallPage(
+      onSubscribe: (_) async {},
+      onRestore: () {},
+      onReviewerBypass: () async {},
+    ),
     const _TodayMockScreen(),
     const _ConverterMockScreen(),
     const _ProgressMockScreen(),
