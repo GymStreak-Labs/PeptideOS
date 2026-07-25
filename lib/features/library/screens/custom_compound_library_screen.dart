@@ -622,7 +622,6 @@ class _ChoiceChip extends StatelessWidget {
       child: AnimatedContainer(
         duration: AppDurations.fast,
         constraints: const BoxConstraints(minHeight: 40),
-        alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.sm,
           vertical: AppSpacing.sm,
