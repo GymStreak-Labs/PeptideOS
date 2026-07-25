@@ -14,9 +14,14 @@ import 'create_protocol_screen.dart';
 /// Shows all peptides in an active (or paused) protocol with adherence stats,
 /// pause / resume / end controls, and per-peptide edit/remove.
 class ActiveProtocolDetailScreen extends StatefulWidget {
-  const ActiveProtocolDetailScreen({super.key, required this.protocol});
+  const ActiveProtocolDetailScreen({
+    super.key,
+    required this.protocol,
+    this.timelineDate,
+  });
 
   final Protocol protocol;
+  final DateTime? timelineDate;
 
   @override
   State<ActiveProtocolDetailScreen> createState() =>
@@ -172,6 +177,13 @@ class _ActiveProtocolDetailScreenState
                     ),
                     const SizedBox(height: AppSpacing.cardGap),
                     _CycleStatusCard(protocol: _protocol),
+                    if (_protocol.peptides.any((p) => p.phases.isNotEmpty)) ...[
+                      const SizedBox(height: AppSpacing.cardGap),
+                      _PhaseTimelineCard(
+                        protocol: _protocol,
+                        today: widget.timelineDate,
+                      ),
+                    ],
                     const SizedBox(height: AppSpacing.cardGap),
                     _ProtocolHistoryList(protocols: protocolHistory),
                     const SizedBox(height: AppSpacing.xl),
@@ -482,6 +494,197 @@ class _CycleStatusCard extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _PhaseTimelineCard extends StatelessWidget {
+  const _PhaseTimelineCard({required this.protocol, this.today});
+
+  final Protocol protocol;
+  final DateTime? today;
+
+  @override
+  Widget build(BuildContext context) {
+    final effectiveToday = today ?? DateTime.now();
+    return AppCard(
+      borderColor: AppColors.borderCyan,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('PHASE.TIMELINE', style: AppTypography.systemLabel),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            'Week ranges are anchored to ${_shortDate(protocol.startDate)}.',
+            style: AppTypography.bodySmall,
+          ),
+          const SizedBox(height: AppSpacing.base),
+          for (final peptide in protocol.peptides.where(
+            (p) => p.phases.isNotEmpty,
+          )) ...[
+            Text(peptide.peptideName, style: AppTypography.labelLarge),
+            const SizedBox(height: AppSpacing.sm),
+            for (final phase in peptide.phases) ...[
+              _PhaseTimelineRow(
+                phase: phase,
+                protocolStart: protocol.startDate,
+                active:
+                    peptide
+                        .phaseForDate(
+                          protocolStart: protocol.startDate,
+                          date: effectiveToday,
+                        )
+                        ?.uuid ==
+                    phase.uuid,
+              ),
+              if (phase != peptide.phases.last)
+                const SizedBox(height: AppSpacing.sm),
+            ],
+            if (peptide !=
+                protocol.peptides.where((p) => p.phases.isNotEmpty).last)
+              const SizedBox(height: AppSpacing.base),
+          ],
+        ],
+      ),
+    );
+  }
+
+  static String _shortDate(DateTime date) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${months[date.month - 1]} ${date.day}';
+  }
+}
+
+class _PhaseTimelineRow extends StatelessWidget {
+  const _PhaseTimelineRow({
+    required this.phase,
+    required this.protocolStart,
+    required this.active,
+  });
+
+  final ProtocolPhase phase;
+  final DateTime protocolStart;
+  final bool active;
+
+  @override
+  Widget build(BuildContext context) {
+    final start = phase.startsOn(protocolStart);
+    final inclusiveEnd = phase
+        .endsOn(protocolStart)
+        .subtract(const Duration(days: 1));
+    final range = phase.startWeek == phase.endWeek
+        ? 'WEEK ${phase.startWeek}'
+        : 'WEEKS ${phase.startWeek}–${phase.endWeek}';
+    final amount = phase.dosePerInjection == null
+        ? 'Base amount'
+        : '${_amount(phase.dosePerInjection!)} ${phase.doseUnit ?? ''}';
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 10,
+          height: 10,
+          margin: const EdgeInsets.only(top: 5),
+          decoration: BoxDecoration(
+            color: active ? AppColors.primary : AppColors.surfaceElevated,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: active ? AppColors.primary : AppColors.border,
+            ),
+            boxShadow: active
+                ? [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.4),
+                      blurRadius: 6,
+                    ),
+                  ]
+                : null,
+          ),
+        ),
+        const SizedBox(width: AppSpacing.sm),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(phase.name, style: AppTypography.labelMedium),
+                  ),
+                  if (active)
+                    Text(
+                      'CURRENT',
+                      style: AppTypography.systemLabel.copyWith(fontSize: 8),
+                    ),
+                ],
+              ),
+              Text(
+                '$range · ${_date(start)}–${_date(inclusiveEnd)}',
+                style: AppTypography.tabular.copyWith(
+                  fontSize: 11,
+                  color: AppColors.textTertiary,
+                ),
+              ),
+              Text(
+                '$amount · ${_frequency(phase.frequency)}',
+                style: AppTypography.bodySmall,
+              ),
+              if (phase.note.trim().isNotEmpty)
+                Text(
+                  phase.note.trim(),
+                  style: AppTypography.disclaimer,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  static String _amount(double value) => value == value.roundToDouble()
+      ? value.toStringAsFixed(0)
+      : value.toStringAsFixed(1);
+
+  static String _frequency(String? key) {
+    if (key == null) return 'Base schedule';
+    return kFrequencies
+        .firstWhere(
+          (frequency) => frequency.key == key,
+          orElse: () => kFrequencies.first,
+        )
+        .label;
+  }
+
+  static String _date(DateTime date) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${months[date.month - 1]} ${date.day}';
   }
 }
 
