@@ -68,6 +68,47 @@ void main() {
       expect(input.calculate().exceedsSyringeCapacity, isTrue);
     });
 
+    test('converts IU to IU-per-mL draw units without mass conversion', () {
+      const input = ConversionInput(
+        vialAmount: 10000,
+        diluentVolumeMl: 2,
+        desiredAmount: 250,
+        quantityMode: ConversionQuantityMode.internationalUnits,
+        syringe: ConversionSyringe.units30,
+      );
+
+      final result = input.calculate();
+
+      expect(result.isValid, isTrue);
+      expect(input.comparableVialAmount, 10000);
+      expect(input.comparableDesiredAmount, 250);
+      expect(result.concentrationPerMl, 5000);
+      expect(result.drawVolumeMl, closeTo(0.05, 0.000001));
+      expect(result.drawUnits, closeTo(5, 0.000001));
+    });
+
+    test('IU mode rejects invalid totals and flags syringe capacity', () {
+      const aboveVial = ConversionInput(
+        vialAmount: 1000,
+        diluentVolumeMl: 2,
+        desiredAmount: 1001,
+        quantityMode: ConversionQuantityMode.internationalUnits,
+        syringe: ConversionSyringe.units100,
+      );
+      const aboveCapacity = ConversionInput(
+        vialAmount: 1000,
+        diluentVolumeMl: 2,
+        desiredAmount: 200,
+        quantityMode: ConversionQuantityMode.internationalUnits,
+        syringe: ConversionSyringe.units30,
+      );
+
+      expect(aboveVial.calculate().isValid, isFalse);
+      expect(aboveVial.calculate().error, contains('greater than'));
+      expect(aboveCapacity.calculate().drawUnits, 40);
+      expect(aboveCapacity.calculate().exceedsSyringeCapacity, isTrue);
+    });
+
     test('rejects zero values and amount above the vial total', () {
       const zero = ConversionInput(
         vialAmountMg: 0,
@@ -116,6 +157,51 @@ void main() {
     expect(decoded.input.desiredAmountUnit, ConversionAmountUnit.milligrams);
     expect(decoded.input.syringe, ConversionSyringe.units50);
   });
+
+  test('saved IU calculation round-trips its explicit quantity mode', () {
+    final original = SavedVialCalculation(
+      id: 'iu-calc',
+      createdAt: DateTime.utc(2026, 7, 25),
+      input: const ConversionInput(
+        vialAmount: 10000,
+        diluentVolumeMl: 2,
+        desiredAmount: 250,
+        quantityMode: ConversionQuantityMode.internationalUnits,
+        syringe: ConversionSyringe.units30,
+      ),
+    );
+
+    final map = original.toMap();
+    final decoded = SavedVialCalculation.fromMap(map);
+
+    expect(
+      (map['input'] as Map<String, dynamic>)['quantityMode'],
+      'internationalUnits',
+    );
+    expect(
+      decoded.input.quantityMode,
+      ConversionQuantityMode.internationalUnits,
+    );
+    expect(decoded.label, '10000 IU + 2 mL');
+    expect(decoded.detail, '250 IU · 30u');
+  });
+
+  test(
+    'legacy saved input without quantity mode remains a mass conversion',
+    () {
+      final decoded = ConversionInput.fromMap({
+        'vialAmountMg': 5,
+        'diluentVolumeMl': 2,
+        'desiredAmount': 250,
+        'desiredAmountUnit': 'micrograms',
+        'syringe': 'units100',
+      });
+
+      expect(decoded.quantityMode, ConversionQuantityMode.mass);
+      expect(decoded.vialAmount, 5);
+      expect(decoded.calculate().drawUnits, 10);
+    },
+  );
 
   testWidgets('workspace labels sources and saves entered calculation', (
     tester,
@@ -212,6 +298,58 @@ void main() {
       const Offset(0, -1000),
     );
     await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('IU mode is explicit and calculates only from IU inputs', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      MaterialApp(theme: AppTheme.dark, home: const ReconstitutionScreen()),
+    );
+    await tester.tap(find.byKey(const Key('quantity-mode-internationalUnits')));
+    await tester.pump();
+
+    expect(find.byKey(const Key('iu-mode-safety-copy')), findsOne);
+    expect(
+      find.text('IU stays IU. PepMod does not convert IU to or from mg/mcg.'),
+      findsOne,
+    );
+    expect(
+      find.text('Source: IU on your vial and mL of diluent added.'),
+      findsOne,
+    );
+
+    await tester.enterText(
+      find.descendant(
+        of: find.byKey(const Key('vial-amount-field')),
+        matching: find.byType(TextField),
+      ),
+      '10000',
+    );
+    await tester.enterText(
+      find.descendant(
+        of: find.byKey(const Key('diluent-volume-field')),
+        matching: find.byType(TextField),
+      ),
+      '2',
+    );
+    await tester.enterText(
+      find.byKey(const Key('desired-amount-field')),
+      '250',
+    );
+    await tester.pump();
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('draw-units-result')),
+      250,
+      scrollable: find.byType(Scrollable).first,
+    );
+
+    expect(find.text('5'), findsOne);
+    expect(find.text('5000 IU/mL'), findsOne);
     expect(tester.takeException(), isNull);
   });
 }

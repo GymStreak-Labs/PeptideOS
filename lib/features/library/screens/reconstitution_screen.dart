@@ -33,6 +33,7 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
   late final TextEditingController _diluentController;
   late final TextEditingController _desiredController;
   late ConversionAmountUnit _desiredUnit;
+  late ConversionQuantityMode _quantityMode;
   late ConversionSyringe _syringe;
   late List<SavedVialCalculation> _saved;
 
@@ -51,15 +52,17 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
     );
     _desiredUnit =
         initial?.desiredAmountUnit ?? ConversionAmountUnit.micrograms;
+    _quantityMode = initial?.quantityMode ?? ConversionQuantityMode.mass;
     _syringe = initial?.syringe ?? ConversionSyringe.units100;
     _saved = List<SavedVialCalculation>.from(widget.savedCalculations);
   }
 
   ConversionInput get _input => ConversionInput(
-    vialAmountMg: parseDecimalInput(_vialController.text) ?? 0,
+    vialAmount: parseDecimalInput(_vialController.text) ?? 0,
     diluentVolumeMl: parseDecimalInput(_diluentController.text) ?? 0,
     desiredAmount: parseDecimalInput(_desiredController.text) ?? 0,
     desiredAmountUnit: _desiredUnit,
+    quantityMode: _quantityMode,
     syringe: _syringe,
   );
 
@@ -105,10 +108,11 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
   void _loadSaved(SavedVialCalculation item) {
     final input = item.input;
     setState(() {
-      _vialController.text = _editableNumber(input.vialAmountMg);
+      _vialController.text = _editableNumber(input.vialAmount);
       _diluentController.text = _editableNumber(input.diluentVolumeMl);
       _desiredController.text = _editableNumber(input.desiredAmount);
       _desiredUnit = input.desiredAmountUnit;
+      _quantityMode = input.quantityMode;
       _syringe = input.syringe;
     });
     HapticFeedback.selectionClick();
@@ -120,6 +124,7 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
       _diluentController.clear();
       _desiredController.clear();
       _desiredUnit = ConversionAmountUnit.micrograms;
+      _quantityMode = ConversionQuantityMode.mass;
       _syringe = ConversionSyringe.units100;
     });
   }
@@ -153,10 +158,27 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                     const SizedBox(height: AppSpacing.sm),
                     const _SafetyBanner(),
                     const SizedBox(height: AppSpacing.xl),
+                    _QuantityModeSelector(
+                      value: _quantityMode,
+                      onChanged: (mode) {
+                        setState(() {
+                          _quantityMode = mode;
+                          if (mode ==
+                              ConversionQuantityMode.internationalUnits) {
+                            _desiredUnit = ConversionAmountUnit.micrograms;
+                          }
+                        });
+                      },
+                    ),
+                    const SizedBox(height: AppSpacing.xl),
                     _SectionTitle(
                       step: '01',
                       title: 'Vial + diluent',
-                      caption: 'Source: labels on your vial and diluent.',
+                      caption:
+                          _quantityMode ==
+                              ConversionQuantityMode.internationalUnits
+                          ? 'Source: IU on your vial and mL of diluent added.'
+                          : 'Source: labels on your vial and diluent.',
                     ),
                     const SizedBox(height: AppSpacing.md),
                     Row(
@@ -167,7 +189,11 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                             key: const Key('vial-amount-field'),
                             label: 'VIAL AMOUNT',
                             helper: 'Amount printed on vial',
-                            suffix: 'mg',
+                            suffix:
+                                _quantityMode ==
+                                    ConversionQuantityMode.internationalUnits
+                                ? 'IU'
+                                : 'mg',
                             controller: _vialController,
                             onChanged: (_) => setState(() {}),
                           ),
@@ -189,12 +215,17 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                     _SectionTitle(
                       step: '02',
                       title: 'Amount to convert',
-                      caption: 'Source: an amount you were already given.',
+                      caption:
+                          _quantityMode ==
+                              ConversionQuantityMode.internationalUnits
+                          ? 'Enter an IU amount you were already given.'
+                          : 'Source: an amount you were already given.',
                     ),
                     const SizedBox(height: AppSpacing.md),
                     _DesiredAmountField(
                       controller: _desiredController,
                       unit: _desiredUnit,
+                      quantityMode: _quantityMode,
                       onUnitChanged: (unit) =>
                           setState(() => _desiredUnit = unit),
                       onChanged: () => setState(() {}),
@@ -216,6 +247,7 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                     _ResultCard(
                       result: result,
                       syringe: _syringe,
+                      quantityMode: _quantityMode,
                       onSave: result.isValid ? _saveCalculation : null,
                     ),
                     if (_saved.isNotEmpty) ...[
@@ -328,6 +360,83 @@ class _SafetyBanner extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _QuantityModeSelector extends StatelessWidget {
+  const _QuantityModeSelector({required this.value, required this.onChanged});
+
+  final ConversionQuantityMode value;
+  final ValueChanged<ConversionQuantityMode> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('MEASUREMENT.MODE', style: AppTypography.systemLabel),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          'Use the same unit family printed on the vial.',
+          style: AppTypography.bodySmall,
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Row(
+          children: [
+            for (final mode in ConversionQuantityMode.values) ...[
+              if (mode != ConversionQuantityMode.values.first)
+                const SizedBox(width: AppSpacing.cardGap),
+              Expanded(
+                child: GestureDetector(
+                  key: Key('quantity-mode-${mode.name}'),
+                  onTap: () => onChanged(mode),
+                  child: AnimatedContainer(
+                    duration: AppDurations.fast,
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    decoration: BoxDecoration(
+                      color: mode == value
+                          ? AppColors.primary.withValues(alpha: 0.1)
+                          : AppColors.inputFill,
+                      borderRadius: BorderRadius.circular(
+                        AppSpacing.inputRadius,
+                      ),
+                      border: Border.all(
+                        color: mode == value
+                            ? AppColors.borderCyan
+                            : AppColors.border,
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          mode.label,
+                          style: AppTypography.labelLarge.copyWith(
+                            color: mode == value
+                                ? AppColors.primary
+                                : AppColors.textPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(mode.caption, style: AppTypography.bodySmall),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+        if (value == ConversionQuantityMode.internationalUnits) ...[
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            'IU stays IU. PepMod does not convert IU to or from mg/mcg.',
+            key: const Key('iu-mode-safety-copy'),
+            style: AppTypography.bodySmall.copyWith(color: AppColors.primary),
+          ),
+        ],
+      ],
     );
   }
 }
@@ -453,12 +562,14 @@ class _DesiredAmountField extends StatelessWidget {
   const _DesiredAmountField({
     required this.controller,
     required this.unit,
+    required this.quantityMode,
     required this.onUnitChanged,
     required this.onChanged,
   });
 
   final TextEditingController controller;
   final ConversionAmountUnit unit;
+  final ConversionQuantityMode quantityMode;
   final ValueChanged<ConversionAmountUnit> onUnitChanged;
   final VoidCallback onChanged;
 
@@ -492,8 +603,37 @@ class _DesiredAmountField extends StatelessWidget {
             ),
           ),
           const SizedBox(width: AppSpacing.sm),
-          _UnitToggle(unit: unit, onChanged: onUnitChanged),
+          if (quantityMode == ConversionQuantityMode.internationalUnits)
+            const _FixedIuBadge()
+          else
+            _UnitToggle(unit: unit, onChanged: onUnitChanged),
         ],
+      ),
+    );
+  }
+}
+
+class _FixedIuBadge extends StatelessWidget {
+  const _FixedIuBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.primary.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: AppColors.borderCyan),
+      ),
+      child: Text(
+        'IU',
+        style: AppTypography.tabular.copyWith(
+          fontSize: 12,
+          color: AppColors.primary,
+        ),
       ),
     );
   }
@@ -595,11 +735,13 @@ class _ResultCard extends StatelessWidget {
   const _ResultCard({
     required this.result,
     required this.syringe,
+    required this.quantityMode,
     required this.onSave,
   });
 
   final ConversionResult result;
   final ConversionSyringe syringe;
+  final ConversionQuantityMode quantityMode;
   final VoidCallback? onSave;
 
   @override
@@ -667,7 +809,8 @@ class _ResultCard extends StatelessWidget {
                     const SizedBox(height: AppSpacing.lg),
                     _DataRow(
                       label: 'CONCENTRATION',
-                      value: '${result.formattedConcentration} mcg/mL',
+                      value:
+                          '${result.formattedConcentration} ${quantityMode == ConversionQuantityMode.internationalUnits ? 'IU/mL' : 'mcg/mL'}',
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     _DataRow(
@@ -819,10 +962,11 @@ class _DataRow extends StatelessWidget {
 }
 
 bool _sameInput(ConversionInput a, ConversionInput b) =>
-    a.vialAmountMg == b.vialAmountMg &&
+    a.vialAmount == b.vialAmount &&
     a.diluentVolumeMl == b.diluentVolumeMl &&
     a.desiredAmount == b.desiredAmount &&
     a.desiredAmountUnit == b.desiredAmountUnit &&
+    a.quantityMode == b.quantityMode &&
     a.syringe == b.syringe;
 
 String _editableNumber(double value) {

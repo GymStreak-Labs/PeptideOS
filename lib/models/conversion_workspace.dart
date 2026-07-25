@@ -7,6 +7,19 @@ enum ConversionAmountUnit {
   final String label;
 }
 
+/// The label family used on both sides of the conversion.
+///
+/// International units are intentionally isolated from mass. PepMod can
+/// convert IU-per-mL to a draw volume, but never IU to or from mg/mcg.
+enum ConversionQuantityMode {
+  mass('Mass', 'mg / mcg'),
+  internationalUnits('IU', 'IU only');
+
+  const ConversionQuantityMode(this.label, this.caption);
+  final String label;
+  final String caption;
+}
+
 /// Common U-100 insulin syringe capacities.
 ///
 /// U-100 means 100 syringe units per millilitre. Capacity changes what can fit
@@ -30,26 +43,45 @@ enum ConversionSyringe {
 /// User-provided values for a reconstitution unit conversion.
 class ConversionInput {
   const ConversionInput({
-    required this.vialAmountMg,
+    double? vialAmount,
+    double? vialAmountMg,
     required this.diluentVolumeMl,
     required this.desiredAmount,
-    required this.desiredAmountUnit,
+    this.desiredAmountUnit = ConversionAmountUnit.micrograms,
+    this.quantityMode = ConversionQuantityMode.mass,
     required this.syringe,
-  });
+  }) : assert(vialAmount != null || vialAmountMg != null),
+       vialAmount = vialAmount ?? vialAmountMg ?? 0;
 
-  final double vialAmountMg;
+  /// Amount printed on the vial, in mg for mass mode or IU for IU mode.
+  final double vialAmount;
   final double diluentVolumeMl;
   final double desiredAmount;
   final ConversionAmountUnit desiredAmountUnit;
+  final ConversionQuantityMode quantityMode;
   final ConversionSyringe syringe;
+
+  /// Compatibility accessor for call sites and saved records created before
+  /// explicit quantity modes were introduced.
+  double get vialAmountMg => vialAmount;
 
   double get desiredAmountMcg =>
       desiredAmountUnit == ConversionAmountUnit.milligrams
       ? desiredAmount * 1000
       : desiredAmount;
 
+  double get comparableDesiredAmount =>
+      quantityMode == ConversionQuantityMode.internationalUnits
+      ? desiredAmount
+      : desiredAmountMcg;
+
+  double get comparableVialAmount =>
+      quantityMode == ConversionQuantityMode.internationalUnits
+      ? vialAmount
+      : vialAmount * 1000;
+
   ConversionResult calculate() {
-    if (!_isPositiveFinite(vialAmountMg) ||
+    if (!_isPositiveFinite(vialAmount) ||
         !_isPositiveFinite(diluentVolumeMl) ||
         !_isPositiveFinite(desiredAmount)) {
       return const ConversionResult.invalid(
@@ -57,18 +89,17 @@ class ConversionInput {
       );
     }
 
-    final vialAmountMcg = vialAmountMg * 1000;
-    if (desiredAmountMcg > vialAmountMcg) {
+    if (comparableDesiredAmount > comparableVialAmount) {
       return const ConversionResult.invalid(
         'Desired amount is greater than the amount entered for this vial.',
       );
     }
 
-    final concentrationMcgPerMl = vialAmountMcg / diluentVolumeMl;
-    final drawVolumeMl = desiredAmountMcg / concentrationMcgPerMl;
+    final concentrationPerMl = comparableVialAmount / diluentVolumeMl;
+    final drawVolumeMl = comparableDesiredAmount / concentrationPerMl;
     final drawUnits = drawVolumeMl * 100;
 
-    if (!concentrationMcgPerMl.isFinite ||
+    if (!concentrationPerMl.isFinite ||
         !drawVolumeMl.isFinite ||
         !drawUnits.isFinite) {
       return const ConversionResult.invalid(
@@ -77,7 +108,7 @@ class ConversionInput {
     }
 
     return ConversionResult(
-      concentrationMcgPerMl: concentrationMcgPerMl,
+      concentrationPerMl: concentrationPerMl,
       drawVolumeMl: drawVolumeMl,
       drawUnits: drawUnits,
       exceedsSyringeCapacity: drawUnits > syringe.capacityUnits,
@@ -85,22 +116,28 @@ class ConversionInput {
   }
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-    'vialAmountMg': vialAmountMg,
+    'vialAmount': vialAmount,
     'diluentVolumeMl': diluentVolumeMl,
     'desiredAmount': desiredAmount,
     'desiredAmountUnit': desiredAmountUnit.name,
+    'quantityMode': quantityMode.name,
     'syringe': syringe.name,
   };
 
   factory ConversionInput.fromMap(Map<String, dynamic> data) {
     return ConversionInput(
-      vialAmountMg: _asDouble(data['vialAmountMg']),
+      vialAmount: _asDouble(data['vialAmount'] ?? data['vialAmountMg']),
       diluentVolumeMl: _asDouble(data['diluentVolumeMl']),
       desiredAmount: _asDouble(data['desiredAmount']),
       desiredAmountUnit: _enumByName(
         ConversionAmountUnit.values,
         data['desiredAmountUnit'],
         ConversionAmountUnit.micrograms,
+      ),
+      quantityMode: _enumByName(
+        ConversionQuantityMode.values,
+        data['quantityMode'],
+        ConversionQuantityMode.mass,
       ),
       syringe: _enumByName(
         ConversionSyringe.values,
@@ -115,19 +152,19 @@ class ConversionInput {
 
 class ConversionResult {
   const ConversionResult({
-    required this.concentrationMcgPerMl,
+    required this.concentrationPerMl,
     required this.drawVolumeMl,
     required this.drawUnits,
     required this.exceedsSyringeCapacity,
   }) : error = null;
 
   const ConversionResult.invalid(this.error)
-    : concentrationMcgPerMl = 0,
+    : concentrationPerMl = 0,
       drawVolumeMl = 0,
       drawUnits = 0,
       exceedsSyringeCapacity = false;
 
-  final double concentrationMcgPerMl;
+  final double concentrationPerMl;
   final double drawVolumeMl;
   final double drawUnits;
   final bool exceedsSyringeCapacity;
@@ -135,12 +172,14 @@ class ConversionResult {
 
   bool get isValid => error == null;
 
+  double get concentrationMcgPerMl => concentrationPerMl;
+
   /// Keeps small draw values readable without implying false precision.
   String get formattedDrawUnits => _formatNumber(drawUnits, maxDecimals: 2);
   String get formattedDrawVolumeMl =>
       _formatNumber(drawVolumeMl, maxDecimals: 3);
   String get formattedConcentration =>
-      _formatNumber(concentrationMcgPerMl, maxDecimals: 1);
+      _formatNumber(concentrationPerMl, maxDecimals: 1);
 }
 
 /// A reusable, user-scoped calculation snapshot.
@@ -156,12 +195,14 @@ class SavedVialCalculation {
   final ConversionInput input;
 
   String get label =>
-      '${_formatNumber(input.vialAmountMg, maxDecimals: 2)} mg + '
+      '${_formatNumber(input.vialAmount, maxDecimals: 2)} '
+      '${input.quantityMode == ConversionQuantityMode.internationalUnits ? 'IU' : 'mg'} + '
       '${_formatNumber(input.diluentVolumeMl, maxDecimals: 2)} mL';
 
   String get detail =>
       '${_formatNumber(input.desiredAmount, maxDecimals: 2)} '
-      '${input.desiredAmountUnit.label} · ${input.syringe.capacityUnits}u';
+      '${input.quantityMode == ConversionQuantityMode.internationalUnits ? 'IU' : input.desiredAmountUnit.label} '
+      '· ${input.syringe.capacityUnits}u';
 
   Map<String, dynamic> toMap() => <String, dynamic>{
     'id': id,

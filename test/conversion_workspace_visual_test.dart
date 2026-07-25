@@ -19,11 +19,11 @@ void main() {
           key: const Key('workspace-golden'),
           child: ReconstitutionScreen(
             initialInput: const ConversionInput(
-              vialAmountMg: 5,
+              vialAmount: 10000,
               diluentVolumeMl: 2,
               desiredAmount: 250,
-              desiredAmountUnit: ConversionAmountUnit.micrograms,
-              syringe: ConversionSyringe.units100,
+              quantityMode: ConversionQuantityMode.internationalUnits,
+              syringe: ConversionSyringe.units30,
             ),
             savedCalculations: [
               SavedVialCalculation(

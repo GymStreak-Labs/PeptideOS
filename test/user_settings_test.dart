@@ -46,23 +46,38 @@ void main() {
             syringe: ConversionSyringe.units100,
           ),
         ),
+        SavedVialCalculation(
+          id: 'saved-iu',
+          createdAt: DateTime.utc(2026, 7, 25),
+          input: const ConversionInput(
+            vialAmount: 10000,
+            diluentVolumeMl: 2,
+            desiredAmount: 250,
+            quantityMode: ConversionQuantityMode.internationalUnits,
+            syringe: ConversionSyringe.units30,
+          ),
+        ),
       ],
     );
 
     final map = settings.toMap();
     final encoded = map['savedVialCalculations'] as List<dynamic>;
-    expect(encoded.single, isA<Map<String, dynamic>>());
+    expect(encoded, everyElement(isA<Map<String, dynamic>>()));
     expect(
-      (encoded.single as Map<String, dynamic>)['input'],
+      (encoded.first as Map<String, dynamic>)['input'],
       isA<Map<String, dynamic>>(),
     );
 
     final restored = UserSettings.fromMap(map);
-    expect(restored.savedVialCalculations, hasLength(1));
-    expect(restored.savedVialCalculations.single.id, 'saved-1');
+    expect(restored.savedVialCalculations, hasLength(2));
+    expect(restored.savedVialCalculations.first.id, 'saved-1');
     expect(
-      restored.savedVialCalculations.single.input.syringe,
+      restored.savedVialCalculations.first.input.syringe,
       ConversionSyringe.units100,
+    );
+    expect(
+      restored.savedVialCalculations.last.input.quantityMode,
+      ConversionQuantityMode.internationalUnits,
     );
   });
 }
