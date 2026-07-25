@@ -14,6 +14,7 @@ class UserDataRepository {
     'doseLogs',
     'protocols',
     'bodyMetrics',
+    'customCompounds',
   ];
 
   final FirebaseFirestore _firestore;

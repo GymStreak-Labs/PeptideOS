@@ -16,6 +16,7 @@ import 'core/services/analytics_service.dart';
 import 'core/services/support_service.dart';
 import 'core/theme/theme.dart';
 import 'data/repositories/body_metric_repository.dart';
+import 'data/repositories/custom_compound_repository.dart';
 import 'data/repositories/dose_log_repository.dart';
 import 'data/repositories/peptide_library_repository.dart';
 import 'data/repositories/protocol_repository.dart';
@@ -26,6 +27,7 @@ import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/screens/account_deleted_screen.dart';
 import 'features/auth/screens/auth_screen.dart';
 import 'features/library/providers/peptide_provider.dart';
+import 'features/library/providers/custom_compound_provider.dart';
 import 'features/onboarding/services/onboarding_draft_service.dart';
 import 'features/onboarding/screens/onboarding_screen.dart';
 import 'features/onboarding/widgets/paywall_page.dart';
@@ -231,6 +233,22 @@ class PepModApp extends StatelessWidget {
           create: (_) => PeptideProvider(PeptideLibraryRepository()),
           update: (_, __, previous) =>
               previous ?? PeptideProvider(PeptideLibraryRepository()),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, CustomCompoundProvider>(
+          create: (_) => CustomCompoundProvider(
+            FirestoreCustomCompoundRepository(),
+            uid: '',
+          ),
+          update: (_, auth, previous) {
+            final provider =
+                previous ??
+                CustomCompoundProvider(
+                  FirestoreCustomCompoundRepository(),
+                  uid: auth.uid,
+                );
+            provider.setUid(auth.uid);
+            return provider;
+          },
         ),
         ChangeNotifierProxyProvider2<
           AuthProvider,

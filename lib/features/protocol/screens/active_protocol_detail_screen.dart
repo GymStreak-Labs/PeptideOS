@@ -14,9 +14,14 @@ import 'create_protocol_screen.dart';
 /// Shows all peptides in an active (or paused) protocol with adherence stats,
 /// pause / resume / end controls, and per-peptide edit/remove.
 class ActiveProtocolDetailScreen extends StatefulWidget {
-  const ActiveProtocolDetailScreen({super.key, required this.protocol});
+  const ActiveProtocolDetailScreen({
+    super.key,
+    required this.protocol,
+    this.timelineDate,
+  });
 
   final Protocol protocol;
+  final DateTime? timelineDate;
 
   @override
   State<ActiveProtocolDetailScreen> createState() =>
@@ -172,6 +177,13 @@ class _ActiveProtocolDetailScreenState
                     ),
                     const SizedBox(height: AppSpacing.cardGap),
                     _CycleStatusCard(protocol: _protocol),
+                    if (_protocol.peptides.any((p) => p.phases.isNotEmpty)) ...[
+                      const SizedBox(height: AppSpacing.cardGap),
+                      _PhaseTimelineCard(
+                        protocol: _protocol,
+                        today: widget.timelineDate,
+                      ),
+                    ],
                     const SizedBox(height: AppSpacing.cardGap),
                     _ProtocolHistoryList(protocols: protocolHistory),
                     const SizedBox(height: AppSpacing.xl),
@@ -485,6 +497,201 @@ class _CycleStatusCard extends StatelessWidget {
   }
 }
 
+class _PhaseTimelineCard extends StatelessWidget {
+  const _PhaseTimelineCard({required this.protocol, this.today});
+
+  final Protocol protocol;
+  final DateTime? today;
+
+  @override
+  Widget build(BuildContext context) {
+    final effectiveToday = today ?? DateTime.now();
+    return AppCard(
+      borderColor: AppColors.borderCyan,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('PHASE.TIMELINE', style: AppTypography.systemLabel),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            'Week ranges are anchored to ${_shortDate(protocol.startDate)}.',
+            style: AppTypography.bodySmall,
+          ),
+          const SizedBox(height: AppSpacing.base),
+          for (final peptide in protocol.peptides.where(
+            (p) => p.phases.isNotEmpty,
+          )) ...[
+            Text(peptide.peptideName, style: AppTypography.labelLarge),
+            const SizedBox(height: AppSpacing.sm),
+            for (final phase in peptide.phases) ...[
+              _PhaseTimelineRow(
+                phase: phase,
+                protocolStart: protocol.startDate,
+                active:
+                    peptide
+                        .phaseForDate(
+                          protocolStart: protocol.startDate,
+                          date: effectiveToday,
+                        )
+                        ?.uuid ==
+                    phase.uuid,
+              ),
+              if (phase != peptide.phases.last)
+                const SizedBox(height: AppSpacing.sm),
+            ],
+            if (peptide !=
+                protocol.peptides.where((p) => p.phases.isNotEmpty).last)
+              const SizedBox(height: AppSpacing.base),
+          ],
+        ],
+      ),
+    );
+  }
+
+  static String _shortDate(DateTime date) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${months[date.month - 1]} ${date.day}';
+  }
+}
+
+class _PhaseTimelineRow extends StatelessWidget {
+  const _PhaseTimelineRow({
+    required this.phase,
+    required this.protocolStart,
+    required this.active,
+  });
+
+  final ProtocolPhase phase;
+  final DateTime protocolStart;
+  final bool active;
+
+  @override
+  Widget build(BuildContext context) {
+    final start = phase.startsOn(protocolStart);
+    final inclusiveEnd = phase
+        .endsOn(protocolStart)
+        .subtract(const Duration(days: 1));
+    final range = phase.startWeek == phase.endWeek
+        ? 'WEEK ${phase.startWeek}'
+        : 'WEEKS ${phase.startWeek}–${phase.endWeek}';
+    final amount =
+        phase.frequency == kCustomWeekdayFrequency &&
+            phase.weekdayDoses.isNotEmpty
+        ? 'Per-day amounts'
+        : phase.dosePerInjection == null
+        ? 'Base amount'
+        : '${_amount(phase.dosePerInjection!)} ${phase.doseUnit ?? ''}';
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 10,
+          height: 10,
+          margin: const EdgeInsets.only(top: 5),
+          decoration: BoxDecoration(
+            color: active ? AppColors.primary : AppColors.surfaceElevated,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: active ? AppColors.primary : AppColors.border,
+            ),
+            boxShadow: active
+                ? [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.4),
+                      blurRadius: 6,
+                    ),
+                  ]
+                : null,
+          ),
+        ),
+        const SizedBox(width: AppSpacing.sm),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(phase.name, style: AppTypography.labelMedium),
+                  ),
+                  if (active)
+                    Text(
+                      'CURRENT',
+                      style: AppTypography.systemLabel.copyWith(fontSize: 8),
+                    ),
+                ],
+              ),
+              Text(
+                '$range · ${_date(start)}–${_date(inclusiveEnd)}',
+                style: AppTypography.tabular.copyWith(
+                  fontSize: 11,
+                  color: AppColors.textTertiary,
+                ),
+              ),
+              Text(
+                '$amount · ${_frequency(phase.frequency)}',
+                style: AppTypography.bodySmall,
+              ),
+              if (phase.note.trim().isNotEmpty)
+                Text(
+                  phase.note.trim(),
+                  style: AppTypography.disclaimer,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  static String _amount(double value) => value == value.roundToDouble()
+      ? value.toStringAsFixed(0)
+      : value.toStringAsFixed(1);
+
+  static String _frequency(String? key) {
+    if (key == null) return 'Base schedule';
+    return kFrequencies
+        .firstWhere(
+          (frequency) => frequency.key == key,
+          orElse: () => kFrequencies.first,
+        )
+        .label;
+  }
+
+  static String _date(DateTime date) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${months[date.month - 1]} ${date.day}';
+  }
+}
+
 class _CycleStatusRow extends StatelessWidget {
   const _CycleStatusRow({
     required this.peptide,
@@ -709,6 +916,11 @@ class _PeptideRowCard extends StatelessWidget {
   };
 
   String _scheduleSummary() {
+    if (peptide.isBlend) {
+      return '${_formatAmount(peptide.syringeUnits)} syringe units · '
+          '${_freqLabel(peptide.frequency)} · '
+          '${peptide.blendVial!.constituents.length} compounds';
+    }
     if (!peptide.usesCustomWeekdays) {
       return '${_formatAmount(peptide.dosePerInjection)} ${peptide.doseUnit} · '
           '${_freqLabel(peptide.frequency)}${_syringeSummary(peptide.syringeUnits)}';
@@ -761,6 +973,48 @@ class _PeptideRowCard extends StatelessWidget {
               ),
             ],
           ),
+          if (peptide.isBlend) ...[
+            const SizedBox(height: AppSpacing.md),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(AppSpacing.md),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.06),
+                borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
+                border: Border.all(color: AppColors.borderCyan),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('PER DRAW', style: AppTypography.systemLabel),
+                  const SizedBox(height: AppSpacing.xs),
+                  for (final item in peptide.blendVial!.constituents)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 3),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              item.name,
+                              style: AppTypography.bodySmall,
+                            ),
+                          ),
+                          Text(
+                            '${_formatAmount(peptide.blendVial!.amountPerDraw(item))} ${item.unit}',
+                            style: AppTypography.tabular.copyWith(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    '${_formatAmount(peptide.blendVial!.diluentMl)} mL vial · U-100',
+                    style: AppTypography.disclaimer,
+                  ),
+                ],
+              ),
+            ),
+          ],
           const SizedBox(height: AppSpacing.md),
           Wrap(
             spacing: AppSpacing.sm,

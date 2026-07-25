@@ -24,6 +24,7 @@ void main() {
       expect(schedule!.dosePerInjection, 250);
       expect(schedule.doseUnit, 'mcg');
       expect(schedule.scheduledTimes, ['08:00']);
+      expect(peptide.phases, isEmpty);
     });
 
     test('does not schedule any frequency before the protocol start date', () {
@@ -195,6 +196,209 @@ void main() {
       expect(restored.weekdayDoses.single.doseUnit, 'mg');
       expect(restored.weekdayDoses.single.syringeUnits, 8);
       expect(restored.weekdayDoses.single.scheduledTimes, ['08:45']);
+    });
+
+    test('applies amount and schedule overrides only inside phase weeks', () {
+      final peptide = ProtocolPeptide(
+        uuid: 'pp-phase',
+        peptideName: 'Custom peptide',
+        dosePerInjection: 100,
+        doseUnit: 'mcg',
+        frequency: 'daily',
+        scheduledTimes: const ['08:00'],
+        phases: [
+          ProtocolPhase(
+            uuid: 'phase-1',
+            name: 'Weeks 2–3',
+            startWeek: 2,
+            endWeek: 3,
+            dosePerInjection: 150,
+            doseUnit: 'mcg',
+            syringeUnits: 12,
+            frequency: 'weekly',
+            scheduledTimes: const ['19:30'],
+            note: 'User-entered tracking change',
+          ),
+        ],
+      );
+      final start = DateTime(2026, 6, 1);
+
+      final week1 = peptide.scheduleForDate(
+        protocolStart: start,
+        date: DateTime(2026, 6, 2),
+      );
+      final phaseStart = peptide.scheduleForDate(
+        protocolStart: start,
+        date: DateTime(2026, 6, 8),
+      );
+      final phaseOffDay = peptide.scheduleForDate(
+        protocolStart: start,
+        date: DateTime(2026, 6, 9),
+      );
+      final afterPhase = peptide.scheduleForDate(
+        protocolStart: start,
+        date: DateTime(2026, 6, 22),
+      );
+
+      expect(week1?.dosePerInjection, 100);
+      expect(phaseStart?.dosePerInjection, 150);
+      expect(phaseStart?.syringeUnits, 12);
+      expect(phaseStart?.scheduledTimes, ['19:30']);
+      expect(phaseOffDay, isNull);
+      expect(afterPhase?.dosePerInjection, 100);
+      expect(afterPhase?.scheduledTimes, ['08:00']);
+    });
+
+    test('anchors every-other-day overrides to their phase start', () {
+      final peptide = ProtocolPeptide(
+        dosePerInjection: 100,
+        frequency: 'daily',
+        phases: [
+          ProtocolPhase(
+            uuid: 'phase-eod',
+            name: 'Phase EOD',
+            startWeek: 2,
+            endWeek: 2,
+            dosePerInjection: 125,
+            doseUnit: 'mcg',
+            frequency: 'eod',
+            scheduledTimes: const ['09:00'],
+          ),
+        ],
+      );
+      final start = DateTime(2026, 6, 1);
+
+      expect(
+        peptide.scheduleForDate(
+          protocolStart: start,
+          date: DateTime(2026, 6, 8),
+        ),
+        isNotNull,
+      );
+      expect(
+        peptide.scheduleForDate(
+          protocolStart: start,
+          date: DateTime(2026, 6, 9),
+        ),
+        isNull,
+      );
+      expect(
+        peptide.scheduleForDate(
+          protocolStart: start,
+          date: DateTime(2026, 6, 10),
+        ),
+        isNotNull,
+      );
+    });
+
+    test(
+      'uses phase-specific custom weekdays, amounts, and reminder times',
+      () {
+        final peptide = ProtocolPeptide(
+          dosePerInjection: 100,
+          doseUnit: 'mcg',
+          frequency: 'daily',
+          scheduledTimes: const ['08:00'],
+          phases: [
+            ProtocolPhase(
+              uuid: 'phase-custom',
+              name: 'Custom tracking window',
+              startWeek: 2,
+              endWeek: 3,
+              dosePerInjection: 100,
+              doseUnit: 'mcg',
+              frequency: kCustomWeekdayFrequency,
+              weekdayDoses: [
+                ProtocolWeekdayDose(
+                  weekday: DateTime.tuesday,
+                  dosePerInjection: 125,
+                  doseUnit: 'mcg',
+                  syringeUnits: 10,
+                  scheduledTimes: const ['07:15'],
+                ),
+                ProtocolWeekdayDose(
+                  weekday: DateTime.friday,
+                  dosePerInjection: 175,
+                  doseUnit: 'mcg',
+                  syringeUnits: 14,
+                  scheduledTimes: const ['19:45', '21:15'],
+                ),
+              ],
+            ),
+          ],
+        );
+        final start = DateTime(2026, 6, 1);
+
+        final monday = peptide.scheduleForDate(
+          protocolStart: start,
+          date: DateTime(2026, 6, 8),
+        );
+        final tuesday = peptide.scheduleForDate(
+          protocolStart: start,
+          date: DateTime(2026, 6, 9),
+        );
+        final friday = peptide.scheduleForDate(
+          protocolStart: start,
+          date: DateTime(2026, 6, 12),
+        );
+
+        expect(monday, isNull);
+        expect(tuesday?.dosePerInjection, 125);
+        expect(tuesday?.syringeUnits, 10);
+        expect(tuesday?.scheduledTimes, ['07:15']);
+        expect(friday?.dosePerInjection, 175);
+        expect(friday?.syringeUnits, 14);
+        expect(friday?.scheduledTimes, ['19:45', '21:15']);
+
+        final restored = ProtocolPeptide.fromMap(peptide.toMap());
+        final restoredPhase = restored.phases.single;
+        expect(restoredPhase.frequency, kCustomWeekdayFrequency);
+        expect(restoredPhase.weekdayDoses, hasLength(2));
+        expect(restoredPhase.weekdayDoses.last.scheduledTimes, [
+          '19:45',
+          '21:15',
+        ]);
+      },
+    );
+
+    test('round-trips phase configuration without migrating legacy fields', () {
+      final peptide = ProtocolPeptide(
+        uuid: 'pp-1',
+        peptideName: 'Custom peptide',
+        dosePerInjection: 2,
+        doseUnit: 'mg',
+        frequency: 'twice_weekly',
+        phases: [
+          ProtocolPhase(
+            uuid: 'phase-2',
+            name: 'Second window',
+            startWeek: 4,
+            endWeek: 6,
+            note: 'Review saved tracking plan',
+            dosePerInjection: 2.5,
+            doseUnit: 'mg',
+            syringeUnits: 15,
+            frequency: 'weekly',
+            scheduledTimes: const ['07:15', '20:15'],
+          ),
+        ],
+      );
+
+      final map = peptide.toMap();
+      final restored = ProtocolPeptide.fromMap(map);
+      final phase = restored.phases.single;
+
+      expect(restored.frequency, 'twice_weekly');
+      expect(restored.dosePerInjection, 2);
+      expect(phase.uuid, 'phase-2');
+      expect(phase.name, 'Second window');
+      expect(phase.startWeek, 4);
+      expect(phase.endWeek, 6);
+      expect(phase.note, 'Review saved tracking plan');
+      expect(phase.dosePerInjection, 2.5);
+      expect(phase.syringeUnits, 15);
+      expect(phase.frequency, 'weekly');
+      expect(phase.scheduledTimes, ['07:15', '20:15']);
     });
 
     test('cloned peptide maps can be edited without mutating the source', () {

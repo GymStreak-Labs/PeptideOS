@@ -10,7 +10,7 @@ import 'package:timezone/timezone.dart' as tz;
 import '../models/dose_log.dart';
 import '../models/protocol.dart';
 
-enum ProtocolReminderKind { cycleEnds, washoutEnds }
+enum ProtocolReminderKind { cycleEnds, washoutEnds, phaseStarts }
 
 /// Schedules local notifications for upcoming peptide doses.
 ///
@@ -138,6 +138,7 @@ class NotificationService {
     required String peptideName,
     required ProtocolReminderKind kind,
     required DateTime scheduledAt,
+    String reminderKey = '',
   }) async {
     if (!_initialized) await initialize();
     if (!_initialized) return;
@@ -147,6 +148,7 @@ class NotificationService {
       protocolUuid: protocolUuid,
       protocolPeptideUuid: protocolPeptideUuid,
       kind: kind,
+      reminderKey: reminderKey,
     );
     final scheduled = tz.TZDateTime.from(scheduledAt, tz.local);
     final (title, body) = switch (kind) {
@@ -157,6 +159,10 @@ class NotificationService {
       ProtocolReminderKind.washoutEnds => (
         'Rest period checkpoint',
         'A rest-period reminder is due today. Review your tracking plan.',
+      ),
+      ProtocolReminderKind.phaseStarts => (
+        'Protocol phase checkpoint',
+        'A new tracking phase starts today. Review your saved schedule.',
       ),
     };
 
@@ -201,6 +207,7 @@ class NotificationService {
     if (!_initialized) return;
     for (final peptide in protocol.peptides) {
       for (final kind in ProtocolReminderKind.values) {
+        if (kind == ProtocolReminderKind.phaseStarts) continue;
         try {
           await _plugin.cancel(
             _protocolReminderId(
@@ -213,6 +220,20 @@ class NotificationService {
           debugPrint(
             'NotificationService: cancel protocol reminder failed: $e',
           );
+        }
+      }
+      for (final phase in peptide.phases) {
+        try {
+          await _plugin.cancel(
+            _protocolReminderId(
+              protocolUuid: protocol.uuid,
+              protocolPeptideUuid: peptide.uuid,
+              kind: ProtocolReminderKind.phaseStarts,
+              reminderKey: phase.uuid,
+            ),
+          );
+        } catch (e) {
+          debugPrint('NotificationService: cancel phase reminder failed: $e');
         }
       }
     }
@@ -248,9 +269,11 @@ class NotificationService {
     required String protocolUuid,
     required String protocolPeptideUuid,
     required ProtocolReminderKind kind,
+    String reminderKey = '',
   }) {
+    final suffix = reminderKey.isEmpty ? '' : '|$reminderKey';
     return _notificationIdForUuid(
-      'protocol|$protocolUuid|$protocolPeptideUuid|${kind.name}',
+      'protocol|$protocolUuid|$protocolPeptideUuid|${kind.name}$suffix',
     );
   }
 }

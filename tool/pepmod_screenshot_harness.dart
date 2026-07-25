@@ -1,9 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import 'package:peptide_os/core/theme/theme.dart';
 import 'package:peptide_os/core/widgets/widgets.dart';
-import 'package:peptide_os/features/library/widgets/syringe_visual.dart';
+import 'package:peptide_os/data/repositories/custom_compound_repository.dart';
+import 'package:peptide_os/features/library/providers/custom_compound_provider.dart';
+import 'package:peptide_os/features/library/screens/custom_compound_library_screen.dart';
+import 'package:peptide_os/features/library/screens/reconstitution_screen.dart';
 import 'package:peptide_os/features/onboarding/widgets/calculator_demo_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/confidence_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/first_name_page.dart';
@@ -13,6 +19,11 @@ import 'package:peptide_os/features/onboarding/widgets/processing_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/protocol_preview_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/protocol_roadmap_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/results_summary_page.dart';
+import 'package:peptide_os/features/protocol/screens/create_protocol_screen.dart';
+import 'package:peptide_os/models/blend_vial.dart';
+import 'package:peptide_os/models/conversion_workspace.dart';
+import 'package:peptide_os/models/custom_compound.dart';
+import 'package:peptide_os/models/protocol.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -143,10 +154,33 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
       },
     ),
     const _TodayMockScreen(),
-    const _ConverterMockScreen(),
+    ReconstitutionScreen(
+      initialInput: const ConversionInput(
+        vialAmountMg: 5,
+        diluentVolumeMl: 2,
+        desiredAmount: 250,
+        desiredAmountUnit: ConversionAmountUnit.micrograms,
+        syringe: ConversionSyringe.units100,
+      ),
+      savedCalculations: [
+        SavedVialCalculation(
+          id: 'preview',
+          createdAt: DateTime.utc(2026, 7, 25),
+          input: const ConversionInput(
+            vialAmountMg: 10,
+            diluentVolumeMl: 2,
+            desiredAmount: 500,
+            desiredAmountUnit: ConversionAmountUnit.micrograms,
+            syringe: ConversionSyringe.units50,
+          ),
+        ),
+      ],
+    ),
     const _ProgressMockScreen(),
     const _LibraryMockScreen(),
     const _ProfileMockScreen(),
+    const _CustomCompoundHarness(),
+    const _BlendVialMockScreen(),
   ];
 
   static void _noop() {}
@@ -186,6 +220,110 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
         ],
       ),
     );
+  }
+}
+
+class _CustomCompoundHarness extends StatelessWidget {
+  const _CustomCompoundHarness();
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => CustomCompoundProvider(_PreviewCompoundStore(), uid: 'ui'),
+      child: const CustomCompoundLibraryScreen(),
+    );
+  }
+}
+
+class _BlendVialMockScreen extends StatelessWidget {
+  const _BlendVialMockScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: Align(
+        alignment: Alignment.bottomCenter,
+        child: BlendVialConfigSheet(
+          initial: ProtocolPeptide(
+            uuid: 'screenshot-blend',
+            peptideSlug: 'custom-blend',
+            peptideName: 'Recovery blend',
+            dosePerInjection: 10,
+            doseUnit: 'syringe units',
+            frequency: 'twice_weekly',
+            route: 'subcutaneous',
+            syringeUnits: 10,
+            labelColorHex: '#05D9E8',
+            scheduledTimes: const ['08:00'],
+            blendVial: const BlendVial(
+              constituents: [
+                BlendConstituent(
+                  name: 'Compound A',
+                  vialAmount: 10,
+                  unit: 'mg',
+                ),
+                BlendConstituent(name: 'Compound B', vialAmount: 5, unit: 'mg'),
+                BlendConstituent(
+                  name: 'Compound C',
+                  vialAmount: 1000,
+                  unit: 'mcg',
+                ),
+              ],
+              diluentMl: 2,
+              drawSyringeUnits: 10,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PreviewCompoundStore implements CustomCompoundStore {
+  final _controller = StreamController<List<CustomCompound>>.broadcast(
+    sync: true,
+  );
+  final _compounds = <CustomCompound>[
+    CustomCompound(
+      id: 'amber',
+      name: 'Recovery vial',
+      vialAmount: 10,
+      vialUnit: 'mg',
+      trackingUnit: 'mcg',
+      route: 'subcutaneous',
+      notes: 'Amber label',
+      createdAt: DateTime(2026, 7, 20),
+      updatedAt: DateTime(2026, 7, 24),
+    ),
+    CustomCompound(
+      id: 'blue',
+      name: 'Travel vial',
+      vialAmount: 5,
+      vialUnit: 'mg',
+      trackingUnit: 'mcg',
+      route: 'subcutaneous',
+      notes: 'Blue label',
+      createdAt: DateTime(2026, 7, 21),
+      updatedAt: DateTime(2026, 7, 25),
+    ),
+  ];
+
+  @override
+  Stream<List<CustomCompound>> watchAll(String uid) async* {
+    yield _compounds;
+    yield* _controller.stream;
+  }
+
+  @override
+  Future<void> upsert(String uid, CustomCompound compound) async {
+    final index = _compounds.indexWhere((item) => item.id == compound.id);
+    if (index == -1) {
+      _compounds.add(compound);
+    } else {
+      _compounds[index] = compound;
+    }
+    _controller.add(List.unmodifiable(_compounds));
   }
 }
 
@@ -738,117 +876,6 @@ class _DoseRow extends StatelessWidget {
   }
 }
 
-class _ConverterMockScreen extends StatelessWidget {
-  const _ConverterMockScreen();
-
-  @override
-  Widget build(BuildContext context) {
-    return _AppFrame(
-      tabIndex: 2,
-      child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _ScreenHeader(
-              systemLabel: 'SYS.CONVERT // UNITS',
-              title: 'Unit\nConverter',
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.screenHorizontal,
-              ),
-              child: AppCard(
-                borderColor: AppColors.borderCyan,
-                glowColor: AppColors.primaryGlow,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SyringeVisual(
-                      fillFraction: 0.10,
-                      totalUnits: 100,
-                      fillUnits: 10,
-                      height: 260,
-                    ),
-                    const SizedBox(width: AppSpacing.base),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('DRAW VOLUME', style: AppTypography.systemLabel),
-                          const SizedBox(height: AppSpacing.xs),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: [
-                              Text(
-                                '10.0',
-                                style: AppTypography.heroLarge.copyWith(
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                              const SizedBox(width: AppSpacing.xs),
-                              Text('units', style: AppTypography.unit),
-                            ],
-                          ),
-                          const SizedBox(height: AppSpacing.lg),
-                          const _DataTile(
-                            label: 'PEPTIDE',
-                            value: '5mg BPC-157',
-                          ),
-                          const SizedBox(height: AppSpacing.sm),
-                          const _DataTile(label: 'BAC WATER', value: '2ml'),
-                          const SizedBox(height: AppSpacing.sm),
-                          const _DataTile(label: 'TARGET', value: '250mcg'),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: AppSpacing.cardGap),
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.screenHorizontal,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _MetricCard(
-                      label: 'CONCENTRATION',
-                      value: '2500',
-                      unit: 'mcg/ml',
-                    ),
-                  ),
-                  SizedBox(width: AppSpacing.cardGap),
-                  Expanded(
-                    child: _MetricCard(
-                      label: 'DOSES / VIAL',
-                      value: '20',
-                      unit: 'doses',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: AppSpacing.base),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.screenHorizontal,
-              ),
-              child: Text(
-                'Educational unit conversion only. Not medical advice.',
-                style: AppTypography.disclaimer,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _ProgressMockScreen extends StatelessWidget {
   const _ProgressMockScreen();
 
@@ -1223,36 +1250,6 @@ class _DataTile extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           Text(value, style: AppTypography.labelLarge),
-        ],
-      ),
-    );
-  }
-}
-
-class _MetricCard extends StatelessWidget {
-  const _MetricCard({
-    required this.label,
-    required this.value,
-    required this.unit,
-  });
-  final String label;
-  final String value;
-  final String unit;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      padding: const EdgeInsets.all(AppSpacing.base),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: AppTypography.systemLabel.copyWith(fontSize: 9)),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            value,
-            style: AppTypography.h2.copyWith(color: AppColors.primary),
-          ),
-          Text(unit, style: AppTypography.unit),
         ],
       ),
     );

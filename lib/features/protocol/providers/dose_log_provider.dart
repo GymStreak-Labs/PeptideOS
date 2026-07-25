@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../data/repositories/dose_log_repository.dart';
+import '../../../models/blend_vial.dart';
 import '../../../models/dose_log.dart';
 
 /// Reactive view over today + last-30-day dose logs. Reads from Firestore via
@@ -147,6 +148,9 @@ class DoseLogProvider extends ChangeNotifier {
       injectionSite: site,
       notes: notes,
       skipped: false,
+      blendSnapshot: dose.blendSnapshot?.copyWith(
+        drawSyringeUnits: amount ?? dose.amountTaken,
+      ),
     );
     await _save(updated);
   }
@@ -185,6 +189,7 @@ class DoseLogProvider extends ChangeNotifier {
     String notes = '',
     DateTime? scheduledAt,
     DateTime? takenAt,
+    BlendVial? blendSnapshot,
   }) async {
     final happenedAt = takenAt ?? scheduledAt ?? DateTime.now();
     final dose = DoseLog(
@@ -199,6 +204,7 @@ class DoseLogProvider extends ChangeNotifier {
       syringeUnits: syringeUnits,
       injectionSite: injectionSite,
       notes: notes,
+      blendSnapshot: blendSnapshot,
     );
     await _save(dose);
   }

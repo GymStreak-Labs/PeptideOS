@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import '../../../data/repositories/dose_log_repository.dart';
 import '../../../data/repositories/protocol_repository.dart';
 import '../../../models/dose_log.dart';
+import '../../../models/blend_vial.dart';
 import '../../../models/protocol.dart';
 import '../../../services/notification_service.dart';
 
@@ -320,6 +321,7 @@ class ProtocolProvider extends ChangeNotifier {
               units: schedule.doseUnit,
               syringeUnits: schedule.syringeUnits,
               injectionSite: site,
+              blendSnapshot: schedule.blendVial,
             ),
           );
         }
@@ -349,10 +351,27 @@ class ProtocolProvider extends ChangeNotifier {
 
   Future<void> _rescheduleProtocolReminders(Protocol p) async {
     if (p.status != ProtocolStatus.active) return;
-    await NotificationService.instance.cancelProtocolRemindersForProtocol(p);
     if (!_notificationsEnabled) return;
+    await NotificationService.instance.cancelProtocolRemindersForProtocol(p);
 
     for (final peptide in p.peptides) {
+      for (final phase in peptide.phases) {
+        final phaseStart = phase.startsOn(p.startDate);
+        await NotificationService.instance.scheduleProtocolReminder(
+          protocolUuid: p.uuid,
+          protocolPeptideUuid: peptide.uuid,
+          peptideName: peptide.peptideName,
+          kind: ProtocolReminderKind.phaseStarts,
+          reminderKey: phase.uuid,
+          scheduledAt: DateTime(
+            phaseStart.year,
+            phaseStart.month,
+            phaseStart.day,
+            9,
+          ),
+        );
+      }
+
       final cycleEnd = peptide.cycleEndDate(p.startDate);
       if (cycleEnd == null) continue;
       await NotificationService.instance.scheduleProtocolReminder(
@@ -392,9 +411,15 @@ class ProtocolProvider extends ChangeNotifier {
     int washoutWeeks = 0,
     double syringeUnits = 0,
     String labelColorHex = '',
+    String sourceCompoundId = '',
+    DateTime? sourceCompoundUpdatedAt,
+    double vialAmountSnapshot = 0,
+    String vialUnitSnapshot = '',
+    String compoundNotesSnapshot = '',
     List<String>? times,
     List<String>? sites,
     List<ProtocolWeekdayDose>? weekdayDoses,
+    BlendVial? blendVial,
   }) {
     return ProtocolPeptide(
       uuid: _uuid.v4(),
@@ -408,9 +433,15 @@ class ProtocolProvider extends ChangeNotifier {
       washoutWeeks: washoutWeeks,
       syringeUnits: syringeUnits,
       labelColorHex: labelColorHex,
+      sourceCompoundId: sourceCompoundId,
+      sourceCompoundUpdatedAt: sourceCompoundUpdatedAt,
+      vialAmountSnapshot: vialAmountSnapshot,
+      vialUnitSnapshot: vialUnitSnapshot,
+      compoundNotesSnapshot: compoundNotesSnapshot,
       scheduledTimes: times ?? const ['08:00'],
       injectionSites: sites ?? const [],
       weekdayDoses: weekdayDoses ?? const [],
+      blendVial: blendVial,
     );
   }
 

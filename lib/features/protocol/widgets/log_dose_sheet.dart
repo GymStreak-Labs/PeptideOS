@@ -53,6 +53,17 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   Future<void> _log() async {
     final amount =
         parseDecimalInput(_amountCtrl.text) ?? widget.dose.amountTaken;
+    final editedBlend = widget.dose.blendSnapshot?.copyWith(
+      drawSyringeUnits: amount,
+    );
+    if (editedBlend != null && !editedBlend.isValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Draw must be greater than zero and within the vial.'),
+        ),
+      );
+      return;
+    }
     final actualDay = widget.dose.takenAt ?? widget.dose.scheduledAt;
     final takenAt = DateTime(
       actualDay.year,
@@ -125,6 +136,10 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
     final labelColorHex = _labelColorForDose(
       context.watch<ProtocolProvider>().all,
     );
+    final blendPreview = widget.dose.blendSnapshot?.copyWith(
+      drawSyringeUnits:
+          parseDecimalInput(_amountCtrl.text) ?? widget.dose.amountTaken,
+    );
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -185,10 +200,17 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                       Expanded(
                         flex: 2,
                         child: _LabeledField(
-                          label: 'AMOUNT',
-                          suffix: widget.dose.units,
+                          label: widget.dose.blendSnapshot != null
+                              ? 'DRAW'
+                              : 'AMOUNT',
+                          suffix: widget.dose.blendSnapshot != null
+                              ? 'units'
+                              : widget.dose.units,
                           child: TextField(
                             controller: _amountCtrl,
+                            onChanged: blendPreview == null
+                                ? null
+                                : (_) => setState(() {}),
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: true,
                             ),
@@ -256,6 +278,58 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                   ),
 
                   const SizedBox(height: AppSpacing.lg),
+                  if (blendPreview case final blend?) ...[
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(AppSpacing.md),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.06),
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.inputRadius,
+                        ),
+                        border: Border.all(color: AppColors.borderCyan),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'BLEND SNAPSHOT // PER DRAW',
+                            style: AppTypography.systemLabel,
+                          ),
+                          const SizedBox(height: AppSpacing.xs),
+                          if (!blend.isValid)
+                            Text(
+                              'Draw must be greater than zero and within the vial.',
+                              style: AppTypography.bodySmall.copyWith(
+                                color: AppColors.warning,
+                              ),
+                            )
+                          else
+                            for (final item in blend.constituents)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 3),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        item.name,
+                                        style: AppTypography.bodySmall,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${_formatAmount(blend.amountPerDraw(item))} ${item.unit}',
+                                      style: AppTypography.tabular.copyWith(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                  ],
                   if (widget.dose.syringeUnits > 0) ...[
                     Text(
                       '${_formatAmount(widget.dose.syringeUnits)} syringe units recorded for this dose.',
@@ -666,6 +740,19 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
 
   Future<void> _save() async {
     if (!_canSave) return;
+    final amount =
+        parseDecimalInput(_amountCtrl.text) ?? _target.peptide.dosePerInjection;
+    final blendSnapshot = _target.peptide.blendVial?.copyWith(
+      drawSyringeUnits: amount,
+    );
+    if (blendSnapshot != null && !blendSnapshot.isValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Draw must be greater than zero and within the vial.'),
+        ),
+      );
+      return;
+    }
     final loggedAt = DateTime(
       _date.year,
       _date.month,
@@ -686,15 +773,14 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
         protocolUuid: _target.protocol.uuid,
         protocolPeptideUuid: _target.peptide.uuid,
         peptideName: _target.peptide.peptideName,
-        amount:
-            parseDecimalInput(_amountCtrl.text) ??
-            _target.peptide.dosePerInjection,
+        amount: amount,
         units: _units,
         syringeUnits: _syringeUnits,
         injectionSite: _site,
         notes: _notesCtrl.text,
         scheduledAt: loggedAt,
         takenAt: loggedAt,
+        blendSnapshot: blendSnapshot,
       );
       if (!mounted) return;
       HapticFeedback.mediumImpact();
