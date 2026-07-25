@@ -74,6 +74,7 @@ void main() {
         onSubscribe: (_) async {},
         onRestore: () {},
         onReviewerBypass: () async {},
+        planPrices: _localizedPlanPrices,
       ),
       size: const Size(390, 900),
     );
@@ -82,6 +83,30 @@ void main() {
       find.text('Everything to run\nyour protocol right.'),
       findsOneWidget,
     );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('paywall renders localized store prices without USD hardcoding', (
+    tester,
+  ) async {
+    await pumpPhoneSurface(
+      tester,
+      PaywallPage(
+        onSubscribe: (_) async {},
+        onRestore: () {},
+        onReviewerBypass: () async {},
+        planPrices: _localizedPlanPrices,
+      ),
+      size: const Size(390, 900),
+    );
+
+    expect(find.text('CA\$39.99'), findsOneWidget);
+    expect(find.text('CA\$79.99'), findsNWidgets(2));
+    expect(find.text('CA\$12.99'), findsOneWidget);
+    expect(find.text('ACTIVATE PRO - CA\$39.99/year'), findsOneWidget);
+    expect(find.text('\$29.99'), findsNothing);
+    expect(find.text('\$59.99'), findsNothing);
+    expect(find.text('\$9.99'), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
@@ -116,3 +141,21 @@ void main() {
 }
 
 void _noop() {}
+
+const _localizedPlanPrices = <int, PaywallPlanPrice>{
+  0: PaywallPlanPrice(
+    localizedPrice: 'CA\$39.99',
+    amount: 39.99,
+    currencyCode: 'CAD',
+  ),
+  1: PaywallPlanPrice(
+    localizedPrice: 'CA\$79.99',
+    amount: 79.99,
+    currencyCode: 'CAD',
+  ),
+  2: PaywallPlanPrice(
+    localizedPrice: 'CA\$12.99',
+    amount: 12.99,
+    currencyCode: 'CAD',
+  ),
+};

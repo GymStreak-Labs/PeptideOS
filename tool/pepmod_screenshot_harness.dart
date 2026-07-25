@@ -124,6 +124,23 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
       onSubscribe: (_) async {},
       onRestore: () {},
       onReviewerBypass: () async {},
+      planPrices: const {
+        0: PaywallPlanPrice(
+          localizedPrice: '\$29.99',
+          amount: 29.99,
+          currencyCode: 'USD',
+        ),
+        1: PaywallPlanPrice(
+          localizedPrice: '\$59.99',
+          amount: 59.99,
+          currencyCode: 'USD',
+        ),
+        2: PaywallPlanPrice(
+          localizedPrice: '\$9.99',
+          amount: 9.99,
+          currencyCode: 'USD',
+        ),
+      },
     ),
     const _TodayMockScreen(),
     const _ConverterMockScreen(),
