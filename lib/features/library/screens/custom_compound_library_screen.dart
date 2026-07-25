@@ -33,7 +33,10 @@ class _CustomCompoundLibraryScreenState
         foregroundColor: AppColors.background,
         onPressed: () => _openEditor(context),
         icon: const Icon(Icons.add_rounded),
-        label: Text('NEW PRESET', style: AppTypography.button),
+        label: Text(
+          'ADD COMPOUND',
+          style: AppTypography.button.copyWith(color: AppColors.background),
+        ),
       ),
       body: SafeArea(
         child: CustomScrollView(
