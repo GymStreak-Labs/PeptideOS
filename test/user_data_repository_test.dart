@@ -2,6 +2,7 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:peptide_os/data/repositories/user_data_repository.dart';
 import 'package:peptide_os/data/repositories/user_settings_repository.dart';
+import 'package:peptide_os/models/conversion_workspace.dart';
 import 'package:peptide_os/models/user_settings.dart';
 
 void main() {
@@ -127,5 +128,33 @@ void main() {
     expect(reset.notificationsEnabled, isFalse);
     expect(reset.subscriptionState, 'premium');
     expect(reset.reviewAccount, isTrue);
+  });
+
+  test('saved vial calculation survives repository save and fetch', () async {
+    final firestore = FakeFirebaseFirestore();
+    final repository = UserSettingsRepository(firestore: firestore);
+    const uid = 'conversion-user';
+    final saved = SavedVialCalculation(
+      id: 'vial-1',
+      createdAt: DateTime.utc(2026, 7, 25),
+      input: const ConversionInput(
+        vialAmountMg: 5,
+        diluentVolumeMl: 2,
+        desiredAmount: 250,
+        desiredAmountUnit: ConversionAmountUnit.micrograms,
+        syringe: ConversionSyringe.units50,
+      ),
+    );
+
+    await repository.save(uid, UserSettings(savedVialCalculations: [saved]));
+    final fetched = await repository.fetch(uid);
+
+    expect(fetched.savedVialCalculations, hasLength(1));
+    expect(fetched.savedVialCalculations.single.id, 'vial-1');
+    expect(fetched.savedVialCalculations.single.input.vialAmountMg, 5);
+    expect(
+      fetched.savedVialCalculations.single.input.syringe,
+      ConversionSyringe.units50,
+    );
   });
 }

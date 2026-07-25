@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/peptide.dart';
+import '../../../models/conversion_workspace.dart';
 import '../../protocol/widgets/empty_state.dart';
+import '../../profile/providers/settings_provider.dart';
 import '../providers/peptide_provider.dart';
 import 'custom_compound_library_screen.dart';
 import 'peptide_detail_screen.dart';
@@ -49,8 +51,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('SYS.DATABASE // COMPOUNDS',
-                            style: AppTypography.systemLabel),
+                        Text(
+                          'SYS.DATABASE // COMPOUNDS',
+                          style: AppTypography.systemLabel,
+                        ),
                         const SizedBox(height: AppSpacing.sm),
                         Text('Library', style: AppTypography.h1),
                       ],
@@ -74,9 +78,20 @@ class _LibraryScreenState extends State<LibraryScreen> {
                     tooltip: 'Unit converter',
                     onTap: () {
                       HapticFeedback.lightImpact();
+                      final settingsProvider = context.read<SettingsProvider>();
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => const ReconstitutionScreen(),
+                          builder: (_) => ReconstitutionScreen(
+                            savedCalculations:
+                                settingsProvider.settings.savedVialCalculations,
+                            onSavedCalculationsChanged: (calculations) =>
+                                settingsProvider.update(
+                                  (settings) => settings.savedVialCalculations =
+                                      List<SavedVialCalculation>.from(
+                                        calculations,
+                                      ),
+                                ),
+                          ),
                         ),
                       );
                     },
@@ -90,7 +105,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.screenHorizontal),
+                horizontal: AppSpacing.screenHorizontal,
+              ),
               child: _SearchBar(
                 value: _query,
                 onChanged: (v) => setState(() => _query = v),
@@ -107,7 +123,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.screenHorizontal),
+                  horizontal: AppSpacing.screenHorizontal,
+                ),
                 children: [
                   _CategoryChip(
                     label: 'All',
@@ -121,8 +138,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
                         child: _CategoryChip(
                           label: cat.label,
                           selected: _category == cat,
-                          onTap: () =>
-                              setState(() => _category = cat == _category ? null : cat),
+                          onTap: () => setState(
+                            () => _category = cat == _category ? null : cat,
+                          ),
                         ),
                       ),
                 ],
@@ -168,7 +186,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
           else
             SliverPadding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.screenHorizontal),
+                horizontal: AppSpacing.screenHorizontal,
+              ),
               sliver: SliverList.separated(
                 itemCount: results.length,
                 separatorBuilder: (_, __) =>
@@ -190,7 +209,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
             ),
 
           const SliverToBoxAdapter(
-              child: SizedBox(height: AppSpacing.screenBottom)),
+            child: SizedBox(height: AppSpacing.screenBottom),
+          ),
         ],
       ),
     );
@@ -207,8 +227,7 @@ class _SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: AppSpacing.inputHeight,
-      padding:
-          const EdgeInsets.symmetric(horizontal: AppSpacing.inputPadding),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.inputPadding),
       decoration: BoxDecoration(
         color: AppColors.inputFill,
         borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
@@ -216,8 +235,11 @@ class _SearchBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.search_rounded,
-              color: AppColors.textTertiary, size: AppSpacing.iconMedium),
+          const Icon(
+            Icons.search_rounded,
+            color: AppColors.textTertiary,
+            size: AppSpacing.iconMedium,
+          ),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: TextField(
@@ -225,8 +247,9 @@ class _SearchBar extends StatelessWidget {
               style: AppTypography.bodyMedium,
               decoration: InputDecoration(
                 hintText: 'Search peptides...',
-                hintStyle: AppTypography.bodyMedium
-                    .copyWith(color: AppColors.textDisabled),
+                hintStyle: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.textDisabled,
+                ),
                 border: InputBorder.none,
                 isDense: true,
                 filled: false,
@@ -260,7 +283,9 @@ class _CategoryChip extends StatelessWidget {
       child: AnimatedContainer(
         duration: AppDurations.fast,
         padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
         decoration: BoxDecoration(
           color: selected
               ? AppColors.primary.withValues(alpha: 0.15)
@@ -312,8 +337,11 @@ class _PeptideCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: AppColors.borderCyan),
             ),
-            child: const Icon(Icons.biotech_rounded,
-                color: AppColors.primary, size: AppSpacing.iconLarge),
+            child: const Icon(
+              Icons.biotech_rounded,
+              color: AppColors.primary,
+              size: AppSpacing.iconLarge,
+            ),
           ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
@@ -329,14 +357,18 @@ class _PeptideCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   peptide.typicalDose,
-                  style: AppTypography.bodySmall
-                      .copyWith(fontFamily: 'JetBrainsMono'),
+                  style: AppTypography.bodySmall.copyWith(
+                    fontFamily: 'JetBrainsMono',
+                  ),
                 ),
               ],
             ),
           ),
-          Icon(Icons.chevron_right_rounded,
-              color: AppColors.textTertiary, size: AppSpacing.iconMedium),
+          Icon(
+            Icons.chevron_right_rounded,
+            color: AppColors.textTertiary,
+            size: AppSpacing.iconMedium,
+          ),
         ],
       ),
     );
