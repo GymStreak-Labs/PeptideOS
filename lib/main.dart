@@ -544,10 +544,6 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
     }
   }
 
-  Future<void> _handleReviewerBypass() async {
-    await widget.onComplete();
-  }
-
   @override
   Widget build(BuildContext context) {
     final sub = context.watch<SubscriptionProvider>();
@@ -566,7 +562,6 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
       body: PaywallPage(
         onSubscribe: _handleSubscribe,
         onRestore: _handleRestore,
-        onReviewerBypass: _handleReviewerBypass,
         planPrices: planPrices,
         showSpecialOffer: sub.showSpecialOffer,
       ),

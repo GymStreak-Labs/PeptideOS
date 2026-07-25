@@ -134,7 +134,6 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
     PaywallPage(
       onSubscribe: (_) async {},
       onRestore: () {},
-      onReviewerBypass: () async {},
       planPrices: const {
         0: PaywallPlanPrice(
           localizedPrice: '\$29.99',

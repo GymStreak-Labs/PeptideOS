@@ -81,6 +81,8 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<!-- App Tracking Transparency prompt (shown on first app open). -->
 	<key>NSUserTrackingUsageDescription</key>
 	<string>We use this to measure the effectiveness of our ads so we can keep PepMod free to try.</string>
