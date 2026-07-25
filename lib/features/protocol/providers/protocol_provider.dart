@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import '../../../data/repositories/dose_log_repository.dart';
 import '../../../data/repositories/protocol_repository.dart';
 import '../../../models/dose_log.dart';
+import '../../../models/blend_vial.dart';
 import '../../../models/protocol.dart';
 import '../../../services/notification_service.dart';
 
@@ -320,6 +321,7 @@ class ProtocolProvider extends ChangeNotifier {
               units: schedule.doseUnit,
               syringeUnits: schedule.syringeUnits,
               injectionSite: site,
+              blendSnapshot: schedule.blendVial,
             ),
           );
         }
@@ -395,6 +397,7 @@ class ProtocolProvider extends ChangeNotifier {
     List<String>? times,
     List<String>? sites,
     List<ProtocolWeekdayDose>? weekdayDoses,
+    BlendVial? blendVial,
   }) {
     return ProtocolPeptide(
       uuid: _uuid.v4(),
@@ -411,6 +414,7 @@ class ProtocolProvider extends ChangeNotifier {
       scheduledTimes: times ?? const ['08:00'],
       injectionSites: sites ?? const [],
       weekdayDoses: weekdayDoses ?? const [],
+      blendVial: blendVial,
     );
   }
 

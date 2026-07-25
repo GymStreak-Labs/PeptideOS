@@ -5,6 +5,9 @@ import 'package:peptide_os/features/onboarding/widgets/confidence_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/notification_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/paywall_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/protocol_roadmap_page.dart';
+import 'package:peptide_os/features/protocol/screens/create_protocol_screen.dart';
+import 'package:peptide_os/models/blend_vial.dart';
+import 'package:peptide_os/models/protocol.dart';
 
 void main() {
   Future<void> pumpPhoneSurface(
@@ -137,6 +140,41 @@ void main() {
     await tester.pump();
     expect(bypassCount, 1);
     expect(purchaseCount, 0);
+  });
+
+  testWidgets('pre-blended vial editor renders a clear per-draw preview', (
+    tester,
+  ) async {
+    await pumpPhoneSurface(
+      tester,
+      BlendVialConfigSheet(
+        initial: ProtocolPeptide(
+          uuid: 'blend-test',
+          peptideSlug: 'custom-blend',
+          peptideName: 'Recovery blend',
+          dosePerInjection: 10,
+          doseUnit: 'syringe units',
+          frequency: 'twice_weekly',
+          syringeUnits: 10,
+          blendVial: const BlendVial(
+            constituents: [
+              BlendConstituent(name: 'Compound A', vialAmount: 10, unit: 'mg'),
+              BlendConstituent(name: 'Compound B', vialAmount: 5, unit: 'mg'),
+            ],
+            diluentMl: 2,
+            drawSyringeUnits: 10,
+          ),
+        ),
+      ),
+      size: const Size(390, 844),
+    );
+
+    expect(find.text('Pre-blended vial'), findsOneWidget);
+    expect(find.text('10.0 units = 0.10 mL'), findsOneWidget);
+    expect(find.text('0.50 mg'), findsOneWidget);
+    expect(find.text('0.25 mg'), findsOneWidget);
+    expect(find.text('SAVE BLEND'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }
 

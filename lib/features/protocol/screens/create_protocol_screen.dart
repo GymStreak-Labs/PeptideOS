@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/utils/decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../models/blend_vial.dart';
 import '../../../models/peptide.dart';
 import '../../../models/protocol.dart';
 import '../../library/providers/peptide_provider.dart';
@@ -15,6 +16,7 @@ import '../providers/protocol_provider.dart';
 import '../widgets/peptide_label_color.dart';
 
 const _customPeptideSlug = 'custom';
+const _blendVialSlug = 'custom-blend';
 
 /// 3-step protocol builder: name → add peptides → start date + review.
 class CreateProtocolScreen extends StatefulWidget {
@@ -598,6 +600,10 @@ String _weekdayLabel(int weekday) => switch (weekday) {
 };
 
 String _scheduleSummary(ProtocolPeptide p) {
+  if (p.isBlend) {
+    return '${_formatAmount(p.syringeUnits)} syringe units · '
+        '${_freqLabel(p.frequency)} · ${p.blendVial!.constituents.length} compounds';
+  }
   if (!p.usesCustomWeekdays) {
     return '${_formatAmount(p.dosePerInjection)} ${p.doseUnit} · '
         '${_freqLabel(p.frequency)}${_syringeSummary(p.syringeUnits)}';
@@ -638,7 +644,26 @@ Future<ProtocolPeptide?> _pickPeptide(
 
   final provider = context.read<ProtocolProvider>();
   final ProtocolPeptide draft;
-  if (slug == _customPeptideSlug) {
+  if (slug == _blendVialSlug) {
+    draft = provider.buildPeptide(
+      slug: _blendVialSlug,
+      name: 'Custom blend',
+      dose: 10,
+      unit: 'syringe units',
+      frequency: 'as_needed',
+      route: 'subcutaneous',
+      syringeUnits: 10,
+      labelColorHex: defaultLabelColorHex,
+      blendVial: const BlendVial(
+        constituents: [
+          BlendConstituent(name: '', vialAmount: 0, unit: 'mg'),
+          BlendConstituent(name: '', vialAmount: 0, unit: 'mg'),
+        ],
+        diluentMl: 2,
+        drawSyringeUnits: 10,
+      ),
+    );
+  } else if (slug == _customPeptideSlug) {
     draft = provider.buildPeptide(
       slug: _customPeptideSlug,
       name: 'Custom peptide',
@@ -666,7 +691,9 @@ Future<ProtocolPeptide?> _pickPeptide(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (_) => _PeptideConfigSheet(initial: draft),
+    builder: (_) => draft.peptideSlug == _blendVialSlug
+        ? BlendVialConfigSheet(initial: draft)
+        : _PeptideConfigSheet(initial: draft),
   );
 }
 
@@ -678,7 +705,9 @@ Future<ProtocolPeptide?> _editPeptide(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (_) => _PeptideConfigSheet(initial: p),
+    builder: (_) => p.isBlend
+        ? BlendVialConfigSheet(initial: p)
+        : _PeptideConfigSheet(initial: p),
   );
 }
 
@@ -767,11 +796,59 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
               const SizedBox(height: AppSpacing.base),
               Expanded(
                 child: ListView.separated(
-                  itemCount: peptides.length + 1,
+                  itemCount: peptides.length + 2,
                   separatorBuilder: (_, __) =>
                       const SizedBox(height: AppSpacing.sm),
                   itemBuilder: (_, i) {
                     if (i == 0) {
+                      return AppCard(
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          Navigator.of(context).pop(_blendVialSlug);
+                        },
+                        borderColor: AppColors.warning.withValues(alpha: 0.7),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: AppColors.warning.withValues(
+                                  alpha: 0.12,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(
+                                Icons.science_rounded,
+                                color: AppColors.warning,
+                              ),
+                            ),
+                            const SizedBox(width: AppSpacing.md),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Pre-blended vial',
+                                    style: AppTypography.labelLarge,
+                                  ),
+                                  Text(
+                                    'One vial · one draw · multiple compounds',
+                                    style: AppTypography.bodySmall,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right_rounded,
+                              color: AppColors.textTertiary,
+                              size: AppSpacing.iconMedium,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    if (i == 1) {
                       return AppCard(
                         onTap: () {
                           HapticFeedback.selectionClick();
@@ -819,7 +896,7 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                         ),
                       );
                     }
-                    final p = peptides[i - 1];
+                    final p = peptides[i - 2];
                     return AppCard(
                       onTap: () {
                         HapticFeedback.selectionClick();
@@ -853,6 +930,755 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ── Pre-blended vial config sheet ──────────────────────────────────────────
+class BlendVialConfigSheet extends StatefulWidget {
+  const BlendVialConfigSheet({super.key, required this.initial});
+
+  final ProtocolPeptide initial;
+
+  @override
+  State<BlendVialConfigSheet> createState() => _BlendVialConfigSheetState();
+}
+
+class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
+  late final TextEditingController _nameCtrl;
+  late final TextEditingController _diluentCtrl;
+  late final TextEditingController _drawCtrl;
+  late final TextEditingController _cycleWeeksCtrl;
+  late final TextEditingController _washoutWeeksCtrl;
+  final List<_BlendConstituentControllers> _constituents = [];
+  late String _frequency;
+  late String _route;
+  late String _labelColorHex;
+  late List<String> _times;
+  late Set<int> _selectedWeekdays;
+
+  @override
+  void initState() {
+    super.initState();
+    final blend = widget.initial.blendVial;
+    _nameCtrl = TextEditingController(text: widget.initial.peptideName);
+    _diluentCtrl = TextEditingController(
+      text: _formatEditableAmount(blend?.diluentMl ?? 2),
+    );
+    _drawCtrl = TextEditingController(
+      text: _formatEditableAmount(
+        blend?.drawSyringeUnits ?? widget.initial.syringeUnits,
+      ),
+    );
+    _cycleWeeksCtrl = TextEditingController(
+      text: widget.initial.cycleWeeks > 0
+          ? widget.initial.cycleWeeks.toString()
+          : '',
+    );
+    _washoutWeeksCtrl = TextEditingController(
+      text: widget.initial.washoutWeeks > 0
+          ? widget.initial.washoutWeeks.toString()
+          : '',
+    );
+    final source = blend?.constituents ?? const <BlendConstituent>[];
+    if (source.length >= 2) {
+      _constituents.addAll(
+        source.map(_BlendConstituentControllers.fromConstituent),
+      );
+    } else {
+      _constituents
+        ..add(_BlendConstituentControllers())
+        ..add(_BlendConstituentControllers());
+    }
+    _frequency = widget.initial.frequency;
+    _route = widget.initial.route;
+    _labelColorHex = widget.initial.labelColorHex.isEmpty
+        ? defaultPeptideLabelColorHex(0)
+        : widget.initial.labelColorHex;
+    _times = _normalizeTimes(widget.initial.scheduledTimes);
+    _selectedWeekdays = widget.initial.weekdayDoses
+        .map((dose) => dose.weekday)
+        .toSet();
+    if (_frequency == kCustomWeekdayFrequency && _selectedWeekdays.isEmpty) {
+      _selectedWeekdays.add(DateTime.now().weekday);
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameCtrl.dispose();
+    _diluentCtrl.dispose();
+    _drawCtrl.dispose();
+    _cycleWeeksCtrl.dispose();
+    _washoutWeeksCtrl.dispose();
+    for (final constituent in _constituents) {
+      constituent.dispose();
+    }
+    super.dispose();
+  }
+
+  double get _diluentMl => parseDecimalInput(_diluentCtrl.text) ?? 0;
+  double get _drawUnits => parseDecimalInput(_drawCtrl.text) ?? 0;
+
+  BlendVial get _blend => BlendVial(
+    constituents: _constituents
+        .map((controllers) => controllers.toConstituent())
+        .toList(),
+    diluentMl: _diluentMl,
+    drawSyringeUnits: _drawUnits,
+  );
+
+  bool get _canSave =>
+      _nameCtrl.text.trim().isNotEmpty &&
+      _blend.isValid &&
+      _times.isNotEmpty &&
+      (_frequency != kCustomWeekdayFrequency || _selectedWeekdays.isNotEmpty);
+
+  void _addConstituent() {
+    HapticFeedback.selectionClick();
+    setState(() => _constituents.add(_BlendConstituentControllers()));
+  }
+
+  void _removeConstituent(int index) {
+    if (_constituents.length <= 2) return;
+    HapticFeedback.selectionClick();
+    final removed = _constituents.removeAt(index);
+    removed.dispose();
+    setState(() {});
+  }
+
+  void _toggleWeekday(int weekday) {
+    HapticFeedback.selectionClick();
+    setState(() {
+      if (_selectedWeekdays.contains(weekday)) {
+        _selectedWeekdays.remove(weekday);
+      } else {
+        _selectedWeekdays.add(weekday);
+      }
+    });
+  }
+
+  Future<void> _addTime() async {
+    final picked = await _pickTime(_times.isEmpty ? '08:00' : _times.last);
+    if (picked == null) return;
+    setState(() => _times = _normalizeTimes([..._times, picked]));
+  }
+
+  Future<void> _editTime(String current) async {
+    final picked = await _pickTime(current);
+    if (picked == null) return;
+    setState(() {
+      _times = _normalizeTimes([
+        for (final value in _times)
+          if (value == current) picked else value,
+      ]);
+    });
+  }
+
+  Future<String?> _pickTime(String value) async {
+    final parts = value.split(':');
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+        hour: int.tryParse(parts.isNotEmpty ? parts[0] : '') ?? 8,
+        minute: int.tryParse(parts.length > 1 ? parts[1] : '') ?? 0,
+      ),
+    );
+    if (picked == null) return null;
+    return '${picked.hour.toString().padLeft(2, '0')}:'
+        '${picked.minute.toString().padLeft(2, '0')}';
+  }
+
+  List<String> _normalizeTimes(List<String> values) {
+    final result = <String>{};
+    for (final value in values) {
+      final parts = value.split(':');
+      if (parts.length != 2) continue;
+      final hour = int.tryParse(parts[0]);
+      final minute = int.tryParse(parts[1]);
+      if (hour == null || minute == null) continue;
+      if (hour < 0 || hour > 23 || minute < 0 || minute > 59) continue;
+      result.add(
+        '${hour.toString().padLeft(2, '0')}:'
+        '${minute.toString().padLeft(2, '0')}',
+      );
+    }
+    return result.isEmpty ? <String>['08:00'] : (result.toList()..sort());
+  }
+
+  void _save() {
+    final blend = _blend;
+    if (!blend.isValid) return;
+    final updated = ProtocolPeptide.fromMap(widget.initial.toMap())
+      ..peptideSlug = _blendVialSlug
+      ..peptideName = _nameCtrl.text.trim()
+      ..dosePerInjection = _drawUnits
+      ..doseUnit = 'syringe units'
+      ..frequency = _frequency
+      ..route = _route
+      ..cycleWeeks = (int.tryParse(_cycleWeeksCtrl.text) ?? 0)
+          .clamp(0, 104)
+          .toInt()
+      ..washoutWeeks = (int.tryParse(_washoutWeeksCtrl.text) ?? 0)
+          .clamp(0, 52)
+          .toInt()
+      ..syringeUnits = _drawUnits
+      ..labelColorHex = _labelColorHex
+      ..scheduledTimes = _times
+      ..weekdayDoses = _frequency == kCustomWeekdayFrequency
+          ? [
+              for (final weekday in (_selectedWeekdays.toList()..sort()))
+                ProtocolWeekdayDose(
+                  weekday: weekday,
+                  dosePerInjection: _drawUnits,
+                  doseUnit: 'syringe units',
+                  syringeUnits: _drawUnits,
+                  scheduledTimes: _times,
+                ),
+            ]
+          : <ProtocolWeekdayDose>[]
+      ..blendVial = blend;
+    Navigator.of(context).pop(updated);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final blend = _blend;
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Container(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.92,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainer,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(AppSpacing.sheetRadius),
+          ),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: SafeArea(
+          top: false,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: AppSpacing.sheetHandleWidth,
+                    height: AppSpacing.sheetHandleHeight,
+                    decoration: BoxDecoration(
+                      color: AppColors.border,
+                      borderRadius: BorderRadius.circular(
+                        AppSpacing.sheetHandleHeight,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                Text('CONFIG.BLEND', style: AppTypography.systemLabel),
+                const SizedBox(height: AppSpacing.sm),
+                Text('Pre-blended vial', style: AppTypography.h2),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  'Enter exactly what is printed on the vial. PepMod converts the draw into a per-compound snapshot.',
+                  style: AppTypography.bodySmall,
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                _FieldLabel(
+                  label: 'BLEND NAME',
+                  child: TextField(
+                    controller: _nameCtrl,
+                    onChanged: (_) => setState(() {}),
+                    textCapitalization: TextCapitalization.words,
+                    style: AppTypography.bodyLarge,
+                    decoration: const InputDecoration(
+                      hintText: 'e.g. Recovery blend',
+                      border: InputBorder.none,
+                      filled: false,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: AppSpacing.md,
+                        vertical: 14,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                Row(
+                  children: [
+                    Text('VIAL CONTENTS', style: AppTypography.systemLabel),
+                    const Spacer(),
+                    Text(
+                      '${_constituents.length} compounds',
+                      style: AppTypography.bodySmall,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                for (var index = 0; index < _constituents.length; index++) ...[
+                  _BlendConstituentEditor(
+                    index: index,
+                    controllers: _constituents[index],
+                    canRemove: _constituents.length > 2,
+                    onChanged: () => setState(() {}),
+                    onRemove: () => _removeConstituent(index),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                ],
+                OutlinedButton(
+                  onPressed: _addConstituent,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                    side: const BorderSide(color: AppColors.borderCyan),
+                    minimumSize: const Size.fromHeight(44),
+                  ),
+                  child: Text(
+                    '+ ADD COMPOUND',
+                    style: AppTypography.button.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _FieldLabel(
+                        label: 'DILUENT VOLUME',
+                        child: TextField(
+                          controller: _diluentCtrl,
+                          onChanged: (_) => setState(() {}),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          inputFormatters: const [decimalInputFormatter],
+                          style: AppTypography.tabular.copyWith(fontSize: 16),
+                          decoration: const InputDecoration(
+                            hintText: '2',
+                            suffixText: 'mL',
+                            border: InputBorder.none,
+                            filled: false,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: AppSpacing.md,
+                              vertical: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.cardGap),
+                    Expanded(
+                      child: _FieldLabel(
+                        label: 'DRAW',
+                        child: TextField(
+                          controller: _drawCtrl,
+                          onChanged: (_) => setState(() {}),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          inputFormatters: const [decimalInputFormatter],
+                          style: AppTypography.tabular.copyWith(fontSize: 16),
+                          decoration: const InputDecoration(
+                            hintText: '10',
+                            suffixText: 'units',
+                            border: InputBorder.none,
+                            filled: false,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: AppSpacing.md,
+                              vertical: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  'Uses U-100 syringe markings (100 units = 1 mL). Values are user-entered tracking data.',
+                  style: AppTypography.disclaimer,
+                ),
+                const SizedBox(height: AppSpacing.base),
+                _BlendPreview(blend: blend),
+                const SizedBox(height: AppSpacing.lg),
+                Text('SCHEDULE', style: AppTypography.systemLabel),
+                const SizedBox(height: AppSpacing.sm),
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
+                  children: [
+                    for (final option in kFrequencies)
+                      _Chip(
+                        label: option.label,
+                        selected: _frequency == option.key,
+                        onTap: () => setState(() {
+                          _frequency = option.key;
+                          if (_frequency == kCustomWeekdayFrequency &&
+                              _selectedWeekdays.isEmpty) {
+                            _selectedWeekdays.add(DateTime.now().weekday);
+                          }
+                        }),
+                      ),
+                  ],
+                ),
+                if (_frequency == kCustomWeekdayFrequency) ...[
+                  const SizedBox(height: AppSpacing.base),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      for (
+                        var weekday = DateTime.monday;
+                        weekday <= DateTime.sunday;
+                        weekday++
+                      )
+                        _Chip(
+                          label: _weekdayLabel(weekday),
+                          selected: _selectedWeekdays.contains(weekday),
+                          onTap: () => _toggleWeekday(weekday),
+                        ),
+                    ],
+                  ),
+                ],
+                const SizedBox(height: AppSpacing.base),
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
+                  children: [
+                    for (final time in _times)
+                      _TimeChip(
+                        label: time,
+                        canRemove: _times.length > 1,
+                        onTap: () => _editTime(time),
+                        onRemove: () => setState(() {
+                          if (_times.length > 1) _times.remove(time);
+                        }),
+                      ),
+                    _Chip(label: 'Add time', selected: false, onTap: _addTime),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                Text('ROUTE', style: AppTypography.systemLabel),
+                const SizedBox(height: AppSpacing.sm),
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
+                  children: [
+                    for (final option in kRoutes)
+                      _Chip(
+                        label: option.label,
+                        selected: _route == option.key,
+                        onTap: () => setState(() => _route = option.key),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _FieldLabel(
+                        label: 'CYCLE WEEKS',
+                        child: TextField(
+                          controller: _cycleWeeksCtrl,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          style: AppTypography.tabular.copyWith(fontSize: 16),
+                          decoration: const InputDecoration(
+                            hintText: 'None',
+                            border: InputBorder.none,
+                            filled: false,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: AppSpacing.md,
+                              vertical: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.cardGap),
+                    Expanded(
+                      child: _FieldLabel(
+                        label: 'REST WEEKS',
+                        child: TextField(
+                          controller: _washoutWeeksCtrl,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          style: AppTypography.tabular.copyWith(fontSize: 16),
+                          decoration: const InputDecoration(
+                            hintText: 'None',
+                            border: InputBorder.none,
+                            filled: false,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: AppSpacing.md,
+                              vertical: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                Text('LABEL COLOR', style: AppTypography.systemLabel),
+                const SizedBox(height: AppSpacing.sm),
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
+                  children: [
+                    for (final hex in kPeptideLabelColorHexes)
+                      _ColorChip(
+                        hex: hex,
+                        selected: _labelColorHex == hex,
+                        onTap: () => setState(() => _labelColorHex = hex),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.base),
+                Text(
+                  'Unit conversion only. PepMod does not recommend a blend, dose, frequency, or reconstitution method.',
+                  style: AppTypography.disclaimer.copyWith(
+                    color: AppColors.warning,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                PrimaryButton(
+                  label: 'SAVE BLEND',
+                  onPressed: _canSave ? _save : null,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Center(
+                  child: TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(
+                      'Cancel',
+                      style: AppTypography.labelMedium.copyWith(
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static String _formatEditableAmount(double value) =>
+      value == value.roundToDouble()
+      ? value.toStringAsFixed(0)
+      : value.toStringAsFixed(2);
+}
+
+class _BlendConstituentControllers {
+  _BlendConstituentControllers({
+    String name = '',
+    String amount = '',
+    this.unit = 'mg',
+  }) : name = TextEditingController(text: name),
+       amount = TextEditingController(text: amount);
+
+  factory _BlendConstituentControllers.fromConstituent(
+    BlendConstituent constituent,
+  ) {
+    return _BlendConstituentControllers(
+      name: constituent.name,
+      amount: constituent.vialAmount == constituent.vialAmount.roundToDouble()
+          ? constituent.vialAmount.toStringAsFixed(0)
+          : constituent.vialAmount.toStringAsFixed(2),
+      unit: constituent.unit,
+    );
+  }
+
+  final TextEditingController name;
+  final TextEditingController amount;
+  String unit;
+
+  BlendConstituent toConstituent() => BlendConstituent(
+    name: name.text.trim(),
+    vialAmount: parseDecimalInput(amount.text) ?? 0,
+    unit: unit,
+  );
+
+  void dispose() {
+    name.dispose();
+    amount.dispose();
+  }
+}
+
+class _BlendConstituentEditor extends StatelessWidget {
+  const _BlendConstituentEditor({
+    required this.index,
+    required this.controllers,
+    required this.canRemove,
+    required this.onChanged,
+    required this.onRemove,
+  });
+
+  final int index;
+  final _BlendConstituentControllers controllers;
+  final bool canRemove;
+  final VoidCallback onChanged;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text('COMPOUND ${index + 1}', style: AppTypography.systemLabel),
+              const Spacer(),
+              if (canRemove)
+                TextButton(
+                  onPressed: onRemove,
+                  child: Text(
+                    'REMOVE',
+                    style: AppTypography.systemLabel.copyWith(
+                      color: AppColors.textTertiary,
+                      fontSize: 9,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          TextField(
+            controller: controllers.name,
+            onChanged: (_) => onChanged(),
+            textCapitalization: TextCapitalization.words,
+            style: AppTypography.bodyLarge,
+            decoration: const InputDecoration(
+              hintText: 'Name from vial label',
+              border: InputBorder.none,
+              filled: false,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: controllers.amount,
+                  onChanged: (_) => onChanged(),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  inputFormatters: const [decimalInputFormatter],
+                  style: AppTypography.tabular.copyWith(fontSize: 16),
+                  decoration: const InputDecoration(
+                    hintText: 'Vial amount',
+                    border: InputBorder.none,
+                    filled: false,
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              SizedBox(
+                width: 92,
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: controllers.unit,
+                    isExpanded: true,
+                    icon: Text(
+                      'v',
+                      style: AppTypography.labelLarge.copyWith(
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
+                    dropdownColor: AppColors.surfaceContainer,
+                    style: AppTypography.labelMedium,
+                    items: const [
+                      DropdownMenuItem(value: 'mcg', child: Text('mcg')),
+                      DropdownMenuItem(value: 'mg', child: Text('mg')),
+                      DropdownMenuItem(value: 'IU', child: Text('IU')),
+                    ],
+                    onChanged: (value) {
+                      if (value == null) return;
+                      controllers.unit = value;
+                      onChanged();
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BlendPreview extends StatelessWidget {
+  const _BlendPreview({required this.blend});
+
+  final BlendVial blend;
+
+  String _amount(double value) {
+    if (value >= 100) return value.toStringAsFixed(0);
+    if (value >= 10) return value.toStringAsFixed(1);
+    return value.toStringAsFixed(2);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      borderColor: blend.isValid ? AppColors.borderCyan : AppColors.border,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('DRAW PREVIEW', style: AppTypography.systemLabel),
+          const SizedBox(height: AppSpacing.sm),
+          if (!blend.isValid)
+            Text(
+              blend.drawVolumeMl > blend.diluentMl && blend.diluentMl > 0
+                  ? 'Draw cannot exceed the vial volume.'
+                  : 'Complete at least two compounds, diluent volume, and draw.',
+              style: AppTypography.bodySmall.copyWith(
+                color: AppColors.textTertiary,
+              ),
+            )
+          else ...[
+            Text(
+              '${_amount(blend.drawSyringeUnits)} units = '
+              '${_amount(blend.drawVolumeMl)} mL',
+              style: AppTypography.tabular.copyWith(
+                fontSize: 16,
+                color: AppColors.primary,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            for (final constituent in blend.constituents)
+              Padding(
+                padding: const EdgeInsets.only(top: AppSpacing.xs),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        constituent.name,
+                        style: AppTypography.bodyMedium,
+                      ),
+                    ),
+                    Text(
+                      '${_amount(blend.amountPerDraw(constituent))} '
+                      '${constituent.unit}',
+                      style: AppTypography.tabular.copyWith(fontSize: 13),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ],
       ),
     );
   }

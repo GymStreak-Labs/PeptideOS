@@ -13,6 +13,9 @@ import 'package:peptide_os/features/onboarding/widgets/processing_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/protocol_preview_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/protocol_roadmap_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/results_summary_page.dart';
+import 'package:peptide_os/features/protocol/screens/create_protocol_screen.dart';
+import 'package:peptide_os/models/blend_vial.dart';
+import 'package:peptide_os/models/protocol.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -147,6 +150,7 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
     const _ProgressMockScreen(),
     const _LibraryMockScreen(),
     const _ProfileMockScreen(),
+    const _BlendVialMockScreen(),
   ];
 
   static void _noop() {}
@@ -184,6 +188,51 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _BlendVialMockScreen extends StatelessWidget {
+  const _BlendVialMockScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: Align(
+        alignment: Alignment.bottomCenter,
+        child: BlendVialConfigSheet(
+          initial: ProtocolPeptide(
+            uuid: 'screenshot-blend',
+            peptideSlug: 'custom-blend',
+            peptideName: 'Recovery blend',
+            dosePerInjection: 10,
+            doseUnit: 'syringe units',
+            frequency: 'twice_weekly',
+            route: 'subcutaneous',
+            syringeUnits: 10,
+            labelColorHex: '#05D9E8',
+            scheduledTimes: const ['08:00'],
+            blendVial: const BlendVial(
+              constituents: [
+                BlendConstituent(
+                  name: 'Compound A',
+                  vialAmount: 10,
+                  unit: 'mg',
+                ),
+                BlendConstituent(name: 'Compound B', vialAmount: 5, unit: 'mg'),
+                BlendConstituent(
+                  name: 'Compound C',
+                  vialAmount: 1000,
+                  unit: 'mcg',
+                ),
+              ],
+              diluentMl: 2,
+              drawSyringeUnits: 10,
+            ),
+          ),
+        ),
       ),
     );
   }

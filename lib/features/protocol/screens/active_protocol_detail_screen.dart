@@ -709,6 +709,11 @@ class _PeptideRowCard extends StatelessWidget {
   };
 
   String _scheduleSummary() {
+    if (peptide.isBlend) {
+      return '${_formatAmount(peptide.syringeUnits)} syringe units · '
+          '${_freqLabel(peptide.frequency)} · '
+          '${peptide.blendVial!.constituents.length} compounds';
+    }
     if (!peptide.usesCustomWeekdays) {
       return '${_formatAmount(peptide.dosePerInjection)} ${peptide.doseUnit} · '
           '${_freqLabel(peptide.frequency)}${_syringeSummary(peptide.syringeUnits)}';
@@ -761,6 +766,48 @@ class _PeptideRowCard extends StatelessWidget {
               ),
             ],
           ),
+          if (peptide.isBlend) ...[
+            const SizedBox(height: AppSpacing.md),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(AppSpacing.md),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.06),
+                borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
+                border: Border.all(color: AppColors.borderCyan),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('PER DRAW', style: AppTypography.systemLabel),
+                  const SizedBox(height: AppSpacing.xs),
+                  for (final item in peptide.blendVial!.constituents)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 3),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              item.name,
+                              style: AppTypography.bodySmall,
+                            ),
+                          ),
+                          Text(
+                            '${_formatAmount(peptide.blendVial!.amountPerDraw(item))} ${item.unit}',
+                            style: AppTypography.tabular.copyWith(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    '${_formatAmount(peptide.blendVial!.diluentMl)} mL vial · U-100',
+                    style: AppTypography.disclaimer,
+                  ),
+                ],
+              ),
+            ),
+          ],
           const SizedBox(height: AppSpacing.md),
           Wrap(
             spacing: AppSpacing.sm,
