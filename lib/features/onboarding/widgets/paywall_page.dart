@@ -5,6 +5,19 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/constants/legal_links.dart';
 
+@immutable
+class PaywallPlanPrice {
+  const PaywallPlanPrice({
+    required this.localizedPrice,
+    required this.amount,
+    required this.currencyCode,
+  });
+
+  final String localizedPrice;
+  final double amount;
+  final String currencyCode;
+}
+
 /// Hard paywall — premium conversion design adapted to PepMod cyberpunk.
 ///
 /// Layout: hero, product proof, feature rows, pricing cards, fixed CTA.
@@ -14,12 +27,14 @@ class PaywallPage extends StatefulWidget {
     required this.onSubscribe,
     required this.onRestore,
     required this.onReviewerBypass,
+    this.planPrices = const {},
     this.showSpecialOffer = true,
   });
 
   final Future<void> Function(int selectedPlan) onSubscribe;
   final VoidCallback onRestore;
   final Future<void> Function() onReviewerBypass;
+  final Map<int, PaywallPlanPrice> planPrices;
   final bool showSpecialOffer;
 
   @override
@@ -99,6 +114,25 @@ class _PaywallPageState extends State<PaywallPage>
     final m = (_countdownSeconds ~/ 60).toString().padLeft(2, '0');
     final s = (_countdownSeconds % 60).toString().padLeft(2, '0');
     return '$m:$s';
+  }
+
+  PaywallPlanPrice? _priceForPlan(int planIndex) =>
+      widget.planPrices[planIndex];
+
+  String _localizedPriceForPlan(int planIndex) =>
+      _priceForPlan(planIndex)?.localizedPrice ?? '—';
+
+  int? get _specialOfferSavingsPercent {
+    final special = _priceForPlan(0);
+    final annual = _priceForPlan(1);
+    if (special == null ||
+        annual == null ||
+        special.currencyCode != annual.currencyCode ||
+        annual.amount <= 0 ||
+        special.amount >= annual.amount) {
+      return null;
+    }
+    return ((1 - (special.amount / annual.amount)) * 100).round();
   }
 
   Future<void> _submitSelectedPlan() async {
@@ -383,15 +417,14 @@ class _PaywallPageState extends State<PaywallPage>
               index: 1,
               label: 'Annual',
               tag: '3-DAY FREE TRIAL',
-              price: '\$59.99',
+              price: _localizedPriceForPlan(1),
               period: '/year',
-              monthly: 'Just \$5.00/mo',
             ),
             const SizedBox(height: 10),
             _buildPlanCard(
               index: 2,
               label: 'Weekly',
-              price: '\$9.99',
+              price: _localizedPriceForPlan(2),
               period: '/week',
             ),
           ],
@@ -501,23 +534,24 @@ class _PaywallPageState extends State<PaywallPage>
                       ),
                       const Spacer(),
                       // Save badge
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.textPrimary,
-                          borderRadius: BorderRadius.circular(3),
-                        ),
-                        child: Text(
-                          'SAVE 50%',
-                          style: AppTypography.systemLabel.copyWith(
-                            fontSize: 8,
-                            color: AppColors.background,
+                      if (_specialOfferSavingsPercent case final savings?)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.textPrimary,
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                          child: Text(
+                            'SAVE $savings%',
+                            style: AppTypography.systemLabel.copyWith(
+                              fontSize: 8,
+                              color: AppColors.background,
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 );
@@ -599,7 +633,7 @@ class _PaywallPageState extends State<PaywallPage>
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'Just \$2.50/mo',
+                          'Annual access',
                           style: AppTypography.bodySmall.copyWith(fontSize: 11),
                         ),
                       ],
@@ -608,22 +642,22 @@ class _PaywallPageState extends State<PaywallPage>
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      // Strikethrough original price
-                      Text(
-                        '\$59.99',
-                        style: AppTypography.tabular.copyWith(
-                          fontSize: 12,
-                          color: AppColors.textDisabled,
-                          decoration: TextDecoration.lineThrough,
-                          decorationColor: AppColors.textDisabled,
+                      if (_specialOfferSavingsPercent != null)
+                        Text(
+                          _localizedPriceForPlan(1),
+                          style: AppTypography.tabular.copyWith(
+                            fontSize: 12,
+                            color: AppColors.textDisabled,
+                            decoration: TextDecoration.lineThrough,
+                            decorationColor: AppColors.textDisabled,
+                          ),
                         ),
-                      ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.baseline,
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Text(
-                            '\$29.99',
+                            _localizedPriceForPlan(0),
                             style: AppTypography.heroSmall.copyWith(
                               fontSize: 20,
                               color: isSelected
@@ -937,10 +971,13 @@ class _PaywallPageState extends State<PaywallPage>
   // ═══════════════════════════════════════════════════════
 
   Widget _buildFixedCta(double bottomPadding) {
+    final selectedPrice = _priceForPlan(_selectedPlan)?.localizedPrice;
     final label = switch (_selectedPlan) {
-      0 => 'ACTIVATE PRO - \$29.99/year',
+      0 when selectedPrice != null => 'ACTIVATE PRO - $selectedPrice/year',
+      0 => 'ACTIVATE PRO',
       1 => 'START FREE TRIAL',
-      2 => 'SUBSCRIBE - \$9.99/week',
+      2 when selectedPrice != null => 'SUBSCRIBE - $selectedPrice/week',
+      2 => 'SUBSCRIBE',
       _ => 'START FREE TRIAL',
     };
 

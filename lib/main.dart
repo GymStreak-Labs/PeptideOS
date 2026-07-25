@@ -533,12 +533,23 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
   @override
   Widget build(BuildContext context) {
     final sub = context.watch<SubscriptionProvider>();
+    final planPrices = <int, PaywallPlanPrice>{};
+    for (final planIndex in const [0, 1, 2]) {
+      final product = sub.packageForOnboardingPlan(planIndex)?.storeProduct;
+      if (product == null) continue;
+      planPrices[planIndex] = PaywallPlanPrice(
+        localizedPrice: product.priceString,
+        amount: product.price,
+        currencyCode: product.currencyCode,
+      );
+    }
     return Scaffold(
       backgroundColor: AppColors.background,
       body: PaywallPage(
         onSubscribe: _handleSubscribe,
         onRestore: _handleRestore,
         onReviewerBypass: _handleReviewerBypass,
+        planPrices: planPrices,
         showSpecialOffer: sub.showSpecialOffer,
       ),
     );
