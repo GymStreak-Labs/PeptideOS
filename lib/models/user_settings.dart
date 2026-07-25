@@ -1,3 +1,5 @@
+import 'conversion_workspace.dart';
+
 /// Units preference.
 enum UnitSystem { metric, imperial }
 
@@ -16,10 +18,13 @@ class UserSettings {
     this.reviewAccount = false,
     List<String>? selectedGoals,
     List<String>? confidenceNeeds,
+    List<SavedVialCalculation>? savedVialCalculations,
     this.experience = '',
     this.frustration = '',
   }) : selectedGoals = selectedGoals ?? <String>[],
-       confidenceNeeds = confidenceNeeds ?? <String>[];
+       confidenceNeeds = confidenceNeeds ?? <String>[],
+       savedVialCalculations =
+           savedVialCalculations ?? <SavedVialCalculation>[];
 
   /// Display name — defaults to "Biohacker" if nothing supplied in onboarding.
   String name;
@@ -38,6 +43,7 @@ class UserSettings {
   bool reviewAccount;
   List<String> selectedGoals;
   List<String> confidenceNeeds;
+  List<SavedVialCalculation> savedVialCalculations;
   String experience;
   String frustration;
 
@@ -53,6 +59,7 @@ class UserSettings {
     bool? reviewAccount,
     List<String>? selectedGoals,
     List<String>? confidenceNeeds,
+    List<SavedVialCalculation>? savedVialCalculations,
     String? experience,
     String? frustration,
   }) {
@@ -68,6 +75,8 @@ class UserSettings {
       reviewAccount: reviewAccount ?? this.reviewAccount,
       selectedGoals: selectedGoals ?? this.selectedGoals,
       confidenceNeeds: confidenceNeeds ?? this.confidenceNeeds,
+      savedVialCalculations:
+          savedVialCalculations ?? this.savedVialCalculations,
       experience: experience ?? this.experience,
       frustration: frustration ?? this.frustration,
     );
@@ -85,6 +94,9 @@ class UserSettings {
     'reviewAccount': reviewAccount,
     'selectedGoals': selectedGoals,
     'confidenceNeeds': confidenceNeeds,
+    'savedVialCalculations': savedVialCalculations
+        .map((item) => item.toMap())
+        .toList(),
     'experience': experience,
     'frustration': frustration,
   };
@@ -108,6 +120,17 @@ class UserSettings {
       confidenceNeeds: (data['confidenceNeeds'] as List<dynamic>? ?? const [])
           .map((e) => e.toString())
           .toList(),
+      savedVialCalculations:
+          (data['savedVialCalculations'] as List<dynamic>? ?? const [])
+              .whereType<Map>()
+              .map(
+                (item) => SavedVialCalculation.fromMap(
+                  Map<String, dynamic>.from(item),
+                ),
+              )
+              .where((item) => item.id.isNotEmpty)
+              .take(8)
+              .toList(),
       experience: (data['experience'] as String?) ?? '',
       frustration: (data['frustration'] as String?) ?? '',
     );
