@@ -102,10 +102,12 @@ class ProtocolPeptide {
     List<String>? injectionSites,
     List<String>? scheduledTimes,
     List<ProtocolWeekdayDose>? weekdayDoses,
+    List<ProtocolPhase>? phases,
     this.blendVial,
   }) : injectionSites = injectionSites ?? <String>[],
        scheduledTimes = scheduledTimes ?? <String>['08:00'],
-       weekdayDoses = weekdayDoses ?? <ProtocolWeekdayDose>[];
+       weekdayDoses = weekdayDoses ?? <ProtocolWeekdayDose>[],
+       phases = phases ?? <ProtocolPhase>[];
 
   String uuid;
   String peptideSlug;
@@ -129,6 +131,7 @@ class ProtocolPeptide {
   List<String> injectionSites;
   List<String> scheduledTimes;
   List<ProtocolWeekdayDose> weekdayDoses;
+  List<ProtocolPhase> phases;
   BlendVial? blendVial;
 
   bool get usesCustomWeekdays =>
@@ -150,32 +153,72 @@ class ProtocolPeptide {
       return null;
     }
 
+    final phase = phaseForDate(protocolStart: startDay, date: targetDay);
+    final effectiveFrequency = phase?.frequency ?? frequency;
+    final effectiveDose = phase?.dosePerInjection ?? dosePerInjection;
+    final effectiveUnit = phase?.doseUnit ?? doseUnit;
+    final effectiveSyringeUnits = phase?.syringeUnits ?? syringeUnits;
+    final effectiveTimes = phase != null && phase.scheduledTimes.isNotEmpty
+        ? phase.scheduledTimes
+        : scheduledTimes;
+    final effectiveWeekdayDoses = phase != null && phase.weekdayDoses.isNotEmpty
+        ? phase.weekdayDoses
+        : weekdayDoses;
+    final effectiveStart = phase == null
+        ? startDay
+        : startDay.add(Duration(days: (phase.startWeek - 1) * 7));
+    final usesEffectiveCustomWeekdays =
+        effectiveFrequency == kCustomWeekdayFrequency &&
+        effectiveWeekdayDoses.isNotEmpty;
+
     ProtocolWeekdayDose? weekdayDose;
-    if (usesCustomWeekdays) {
-      for (final dose in weekdayDoses) {
+    if (usesEffectiveCustomWeekdays) {
+      for (final dose in effectiveWeekdayDoses) {
         if (dose.weekday == targetDay.weekday) {
           weekdayDose = dose;
           break;
         }
       }
     }
-    if (usesCustomWeekdays && weekdayDose == null) return null;
+    if (usesEffectiveCustomWeekdays && weekdayDose == null) return null;
 
-    if (!usesCustomWeekdays &&
-        !isDosingDayForFrequency(frequency, startDay, targetDay)) {
+    if (!usesEffectiveCustomWeekdays &&
+        !isDosingDayForFrequency(
+          effectiveFrequency,
+          effectiveStart,
+          targetDay,
+        )) {
       return null;
     }
 
-    final times = weekdayDose?.scheduledTimes ?? scheduledTimes;
+    final times = weekdayDose?.scheduledTimes ?? effectiveTimes;
     return ProtocolDoseSchedule(
-      dosePerInjection: weekdayDose?.dosePerInjection ?? dosePerInjection,
-      doseUnit: weekdayDose?.doseUnit ?? doseUnit,
-      syringeUnits: weekdayDose?.syringeUnits ?? syringeUnits,
+      dosePerInjection: weekdayDose?.dosePerInjection ?? effectiveDose,
+      doseUnit: weekdayDose?.doseUnit ?? effectiveUnit,
+      syringeUnits: weekdayDose?.syringeUnits ?? effectiveSyringeUnits,
       scheduledTimes: times.isEmpty ? const <String>['08:00'] : times,
       blendVial: blendVial?.copyWith(
-        drawSyringeUnits: weekdayDose?.syringeUnits ?? syringeUnits,
+        drawSyringeUnits: weekdayDose?.syringeUnits ?? effectiveSyringeUnits,
       ),
     );
+  }
+
+  ProtocolPhase? phaseForDate({
+    required DateTime protocolStart,
+    required DateTime date,
+  }) {
+    final startDay = DateTime(
+      protocolStart.year,
+      protocolStart.month,
+      protocolStart.day,
+    );
+    final targetDay = DateTime(date.year, date.month, date.day);
+    if (targetDay.isBefore(startDay)) return null;
+    final week = (targetDay.difference(startDay).inDays ~/ 7) + 1;
+    for (final phase in phases) {
+      if (phase.containsWeek(week)) return phase;
+    }
+    return null;
   }
 
   DateTime? cycleEndDate(DateTime protocolStart) {
@@ -234,6 +277,7 @@ class ProtocolPeptide {
     'injectionSites': injectionSites,
     'scheduledTimes': scheduledTimes,
     'weekdayDoses': weekdayDoses.map((d) => d.toMap()).toList(),
+    'phases': phases.map((p) => p.toMap()).toList(),
     'blendVial': blendVial?.toMap(),
   };
 
@@ -273,6 +317,16 @@ class ProtocolPeptide {
           )
           .where((d) => d.isValid)
           .toList(),
+      phases:
+          (data['phases'] as List<dynamic>? ?? const [])
+              .map(
+                (e) => ProtocolPhase.fromMap(
+                  Map<String, dynamic>.from(e as Map<dynamic, dynamic>),
+                ),
+              )
+              .where((phase) => phase.isValid)
+              .toList()
+            ..sort((a, b) => a.startWeek.compareTo(b.startWeek)),
       blendVial: data['blendVial'] is Map
           ? BlendVial.fromMap(
               Map<String, dynamic>.from(
@@ -280,6 +334,98 @@ class ProtocolPeptide {
               ),
             )
           : null,
+    );
+  }
+}
+
+/// A user-defined tracking window that temporarily overrides the peptide's
+/// base schedule. Week numbers are one-based and anchored to protocol start.
+class ProtocolPhase {
+  ProtocolPhase({
+    required this.uuid,
+    required this.name,
+    required this.startWeek,
+    required this.endWeek,
+    this.note = '',
+    this.dosePerInjection,
+    this.doseUnit,
+    this.syringeUnits,
+    this.frequency,
+    List<String>? scheduledTimes,
+    List<ProtocolWeekdayDose>? weekdayDoses,
+  }) : scheduledTimes = scheduledTimes ?? <String>[],
+       weekdayDoses = weekdayDoses ?? <ProtocolWeekdayDose>[];
+
+  String uuid;
+  String name;
+  int startWeek;
+  int endWeek;
+  String note;
+  double? dosePerInjection;
+  String? doseUnit;
+  double? syringeUnits;
+  String? frequency;
+  List<String> scheduledTimes;
+  List<ProtocolWeekdayDose> weekdayDoses;
+
+  bool get isValid =>
+      uuid.isNotEmpty &&
+      name.trim().isNotEmpty &&
+      startWeek > 0 &&
+      endWeek >= startWeek &&
+      (dosePerInjection == null || dosePerInjection! > 0);
+
+  bool containsWeek(int week) => week >= startWeek && week <= endWeek;
+
+  DateTime startsOn(DateTime protocolStart) {
+    final startDay = DateTime(
+      protocolStart.year,
+      protocolStart.month,
+      protocolStart.day,
+    );
+    return startDay.add(Duration(days: (startWeek - 1) * 7));
+  }
+
+  DateTime endsOn(DateTime protocolStart) => startsOn(
+    protocolStart,
+  ).add(Duration(days: (endWeek - startWeek + 1) * 7));
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
+    'uuid': uuid,
+    'name': name,
+    'startWeek': startWeek,
+    'endWeek': endWeek,
+    'note': note,
+    'dosePerInjection': dosePerInjection,
+    'doseUnit': doseUnit,
+    'syringeUnits': syringeUnits,
+    'frequency': frequency,
+    'scheduledTimes': scheduledTimes,
+    'weekdayDoses': weekdayDoses.map((d) => d.toMap()).toList(),
+  };
+
+  factory ProtocolPhase.fromMap(Map<String, dynamic> data) {
+    return ProtocolPhase(
+      uuid: (data['uuid'] as String?) ?? '',
+      name: (data['name'] as String?) ?? '',
+      startWeek: (data['startWeek'] as num?)?.toInt() ?? 0,
+      endWeek: (data['endWeek'] as num?)?.toInt() ?? 0,
+      note: (data['note'] as String?) ?? '',
+      dosePerInjection: (data['dosePerInjection'] as num?)?.toDouble(),
+      doseUnit: data['doseUnit'] as String?,
+      syringeUnits: (data['syringeUnits'] as num?)?.toDouble(),
+      frequency: data['frequency'] as String?,
+      scheduledTimes: (data['scheduledTimes'] as List<dynamic>? ?? const [])
+          .map((e) => e.toString())
+          .toList(),
+      weekdayDoses: (data['weekdayDoses'] as List<dynamic>? ?? const [])
+          .map(
+            (e) => ProtocolWeekdayDose.fromMap(
+              Map<String, dynamic>.from(e as Map<dynamic, dynamic>),
+            ),
+          )
+          .where((dose) => dose.isValid)
+          .toList(),
     );
   }
 }

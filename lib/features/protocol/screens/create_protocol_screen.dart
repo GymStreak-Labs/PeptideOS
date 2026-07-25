@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/utils/decimal_input.dart';
@@ -603,13 +604,18 @@ String _weekdayLabel(int weekday) => switch (weekday) {
 };
 
 String _scheduleSummary(ProtocolPeptide p) {
+  final phaseSuffix = p.phases.isEmpty
+      ? ''
+      : ' · ${p.phases.length} ${p.phases.length == 1 ? 'phase' : 'phases'}';
   if (p.isBlend) {
     return '${_formatAmount(p.syringeUnits)} syringe units · '
-        '${_freqLabel(p.frequency)} · ${p.blendVial!.constituents.length} compounds';
+        '${_freqLabel(p.frequency)} · '
+        '${p.blendVial!.constituents.length} compounds$phaseSuffix';
   }
   if (!p.usesCustomWeekdays) {
     return '${_formatAmount(p.dosePerInjection)} ${p.doseUnit} · '
-        '${_freqLabel(p.frequency)}${_syringeSummary(p.syringeUnits)}';
+        '${_freqLabel(p.frequency)}${_syringeSummary(p.syringeUnits)}'
+        '$phaseSuffix';
   }
   final days = [...p.weekdayDoses]
     ..sort((a, b) => a.weekday.compareTo(b.weekday));
@@ -619,7 +625,7 @@ String _scheduleSummary(ProtocolPeptide p) {
             '${_weekdayLabel(d.weekday)} ${_formatAmount(d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(d.syringeUnits)}',
       )
       .join(', ');
-  return summary.isEmpty ? 'Custom days' : summary;
+  return summary.isEmpty ? 'Custom days$phaseSuffix' : '$summary$phaseSuffix';
 }
 
 String _syringeSummary(double value) {
@@ -1802,6 +1808,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
   late String _labelColorHex;
   late List<String> _times;
   late Set<int> _selectedWeekdays;
+  late List<ProtocolPhase> _phases;
   bool get _isCustomPeptide =>
       widget.initial.peptideSlug == _customPeptideSlug ||
       widget.initial.peptideSlug.startsWith(_savedCompoundSlugPrefix);
@@ -1848,6 +1855,11 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
     for (final weekday in _selectedWeekdays) {
       _ensureWeekdayController(weekday);
     }
+    _phases =
+        widget.initial.phases
+            .map((phase) => ProtocolPhase.fromMap(phase.toMap()))
+            .toList()
+          ..sort((a, b) => a.startWeek.compareTo(b.startWeek));
   }
 
   @override
@@ -1952,6 +1964,68 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
     setState(() => _times = _times.where((t) => t != time).toList());
   }
 
+  Future<void> _editPhase([int? index]) async {
+    final previous = index == null ? null : _phases[index];
+    final nextWeek = _phases.isEmpty ? 1 : _phases.last.endWeek + 1;
+    final draft =
+        previous ??
+        ProtocolPhase(
+          uuid: const Uuid().v4(),
+          name: 'Phase ${_phases.length + 1}',
+          startWeek: nextWeek,
+          endWeek: nextWeek,
+          dosePerInjection: _parsedBaseDose,
+          doseUnit: _unit,
+          syringeUnits: _parsedSyringeUnits,
+          frequency: _frequency,
+          scheduledTimes: _times,
+        );
+    final result = await showModalBottomSheet<ProtocolPhase>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _PhaseConfigSheet(
+        initial: ProtocolPhase.fromMap(draft.toMap()),
+        fallbackDose: _parsedBaseDose,
+        fallbackUnit: _unit,
+        fallbackFrequency: _frequency,
+        fallbackTimes: _times,
+      ),
+    );
+    if (result == null || !mounted) return;
+    if (_parsedCycleWeeks > 0 && result.endWeek > _parsedCycleWeeks) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'This protocol cycle ends after week $_parsedCycleWeeks. '
+            'Keep phase weeks inside that window.',
+          ),
+        ),
+      );
+      return;
+    }
+    final overlaps = _phases.asMap().entries.any(
+      (entry) =>
+          entry.key != index &&
+          result.startWeek <= entry.value.endWeek &&
+          result.endWeek >= entry.value.startWeek,
+    );
+    if (overlaps) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Phase week ranges cannot overlap.')),
+      );
+      return;
+    }
+    setState(() {
+      if (index == null) {
+        _phases.add(result);
+      } else {
+        _phases[index] = result;
+      }
+      _phases.sort((a, b) => a.startWeek.compareTo(b.startWeek));
+    });
+  }
+
   Future<String?> _pickTimeOfDay(String current) async {
     final parts = current.split(':');
     final initial = TimeOfDay(
@@ -1985,6 +2059,10 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
     if (_frequency == kCustomWeekdayFrequency && _selectedWeekdays.isEmpty) {
       return false;
     }
+    if (_parsedCycleWeeks > 0 &&
+        _phases.any((phase) => phase.endWeek > _parsedCycleWeeks)) {
+      return false;
+    }
     return _times.isNotEmpty;
   }
 
@@ -2006,7 +2084,8 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
       ..syringeUnits = _parsedSyringeUnits > 0 ? _parsedSyringeUnits : 0
       ..labelColorHex = _labelColorHex
       ..scheduledTimes = _times
-      ..weekdayDoses = weekdayDoses;
+      ..weekdayDoses = weekdayDoses
+      ..phases = _phases;
     Navigator.of(context).pop(updated);
   }
 
@@ -2375,6 +2454,64 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
 
+                  Text('WEEK-TO-WEEK PHASES', style: AppTypography.systemLabel),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    'Optional date windows can override this base amount and schedule. Outside them, the base schedule continues.',
+                    style: AppTypography.bodySmall,
+                  ),
+                  if (_phases.isNotEmpty) ...[
+                    const SizedBox(height: AppSpacing.base),
+                    for (var index = 0; index < _phases.length; index++) ...[
+                      _PhaseSummaryCard(
+                        phase: _phases[index],
+                        onEdit: () => _editPhase(index),
+                        onDelete: () => setState(() => _phases.removeAt(index)),
+                      ),
+                      if (index < _phases.length - 1)
+                        const SizedBox(height: AppSpacing.sm),
+                    ],
+                  ],
+                  if (_parsedCycleWeeks > 0 &&
+                      _phases.any(
+                        (phase) => phase.endWeek > _parsedCycleWeeks,
+                      )) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    Text(
+                      'A phase extends beyond the $_parsedCycleWeeks-week cycle. Adjust the phase or cycle window.',
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.warning,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: AppSpacing.sm),
+                  OutlinedButton.icon(
+                    onPressed: _editPhase,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      side: const BorderSide(color: AppColors.borderCyan),
+                      minimumSize: const Size.fromHeight(44),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.buttonRadius,
+                        ),
+                      ),
+                    ),
+                    icon: const Icon(Icons.add_rounded, size: 18),
+                    label: Text(
+                      'ADD PHASE',
+                      style: AppTypography.button.copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    'Weeks are counted from the protocol start date. Saved phase notes and change reminders are tracking aids only.',
+                    style: AppTypography.disclaimer,
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+
                   // Reminder times
                   Text('REMINDER TIMES', style: AppTypography.systemLabel),
                   const SizedBox(height: AppSpacing.sm),
@@ -2422,6 +2559,759 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _PhaseSummaryCard extends StatelessWidget {
+  const _PhaseSummaryCard({
+    required this.phase,
+    required this.onEdit,
+    required this.onDelete,
+  });
+
+  final ProtocolPhase phase;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    final weeks = phase.startWeek == phase.endWeek
+        ? 'WEEK ${phase.startWeek}'
+        : 'WEEKS ${phase.startWeek}–${phase.endWeek}';
+    final amount =
+        phase.frequency == kCustomWeekdayFrequency &&
+            phase.weekdayDoses.isNotEmpty
+        ? 'Per-day amounts'
+        : phase.dosePerInjection == null
+        ? 'Base amount'
+        : '${_formatAmount(phase.dosePerInjection!)} ${phase.doseUnit ?? ''}';
+    final frequency = phase.frequency == null
+        ? 'base schedule'
+        : _freqLabel(phase.frequency!);
+    return AppCard(
+      onTap: onEdit,
+      borderColor: AppColors.borderCyan,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 8,
+            height: 8,
+            margin: const EdgeInsets.only(top: 5),
+            decoration: const BoxDecoration(
+              color: AppColors.primary,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(weeks, style: AppTypography.systemLabel),
+                const SizedBox(height: 2),
+                Text(phase.name, style: AppTypography.labelLarge),
+                Text('$amount · $frequency', style: AppTypography.bodySmall),
+                if (phase.note.trim().isNotEmpty)
+                  Text(
+                    phase.note.trim(),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.disclaimer,
+                  ),
+              ],
+            ),
+          ),
+          IconButton(
+            tooltip: 'Remove phase',
+            onPressed: onDelete,
+            icon: const Icon(
+              Icons.close_rounded,
+              size: 18,
+              color: AppColors.textTertiary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PhaseConfigSheet extends StatefulWidget {
+  const _PhaseConfigSheet({
+    required this.initial,
+    required this.fallbackDose,
+    required this.fallbackUnit,
+    required this.fallbackFrequency,
+    required this.fallbackTimes,
+  });
+
+  final ProtocolPhase initial;
+  final double fallbackDose;
+  final String fallbackUnit;
+  final String fallbackFrequency;
+  final List<String> fallbackTimes;
+
+  @override
+  State<_PhaseConfigSheet> createState() => _PhaseConfigSheetState();
+}
+
+class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
+  late final TextEditingController _nameCtrl;
+  late final TextEditingController _startWeekCtrl;
+  late final TextEditingController _endWeekCtrl;
+  late final TextEditingController _doseCtrl;
+  late final TextEditingController _syringeCtrl;
+  late final TextEditingController _noteCtrl;
+  late String _unit;
+  late String _frequency;
+  late List<String> _times;
+  late Set<int> _selectedWeekdays;
+  final Map<int, TextEditingController> _weekdayDoseCtrls = {};
+  final Map<int, List<String>> _weekdayTimes = {};
+
+  @override
+  void initState() {
+    super.initState();
+    final phase = widget.initial;
+    _nameCtrl = TextEditingController(text: phase.name);
+    _startWeekCtrl = TextEditingController(text: '${phase.startWeek}');
+    _endWeekCtrl = TextEditingController(text: '${phase.endWeek}');
+    _doseCtrl = TextEditingController(
+      text: _formatAmount(phase.dosePerInjection ?? widget.fallbackDose),
+    );
+    _syringeCtrl = TextEditingController(
+      text: (phase.syringeUnits ?? 0) > 0
+          ? _formatAmount(phase.syringeUnits!)
+          : '',
+    );
+    _noteCtrl = TextEditingController(text: phase.note);
+    _unit = phase.doseUnit ?? widget.fallbackUnit;
+    _frequency = phase.frequency ?? widget.fallbackFrequency;
+    _times = _normalizePhaseTimes(
+      phase.scheduledTimes.isEmpty
+          ? widget.fallbackTimes
+          : phase.scheduledTimes,
+    );
+    _selectedWeekdays = phase.weekdayDoses.map((dose) => dose.weekday).toSet();
+    for (final dose in phase.weekdayDoses) {
+      _weekdayDoseCtrls[dose.weekday] = TextEditingController(
+        text: _formatAmount(dose.dosePerInjection),
+      );
+      _weekdayTimes[dose.weekday] = _normalizePhaseTimes(dose.scheduledTimes);
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameCtrl.dispose();
+    _startWeekCtrl.dispose();
+    _endWeekCtrl.dispose();
+    _doseCtrl.dispose();
+    _syringeCtrl.dispose();
+    _noteCtrl.dispose();
+    for (final controller in _weekdayDoseCtrls.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  List<String> _normalizePhaseTimes(List<String> times) {
+    final result = <String>{};
+    for (final time in times) {
+      final parts = time.split(':');
+      final hour = parts.isNotEmpty ? int.tryParse(parts[0]) : null;
+      final minute = parts.length > 1 ? int.tryParse(parts[1]) : null;
+      if (hour == null ||
+          minute == null ||
+          hour < 0 ||
+          hour > 23 ||
+          minute < 0 ||
+          minute > 59) {
+        continue;
+      }
+      result.add(
+        '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}',
+      );
+    }
+    return result.isEmpty ? <String>['08:00'] : result.toList()
+      ..sort();
+  }
+
+  Future<void> _addTime() async {
+    final current = _times.isEmpty ? '08:00' : _times.last;
+    final parts = current.split(':');
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+        hour: int.tryParse(parts.first) ?? 8,
+        minute: int.tryParse(parts.last) ?? 0,
+      ),
+    );
+    if (picked == null) return;
+    final value =
+        '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+    setState(() => _times = _normalizePhaseTimes([..._times, value]));
+  }
+
+  Future<void> _editTime(String current) async {
+    final parts = current.split(':');
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+        hour: int.tryParse(parts.first) ?? 8,
+        minute: int.tryParse(parts.last) ?? 0,
+      ),
+    );
+    if (picked == null) return;
+    final value =
+        '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+    setState(() {
+      _times = _normalizePhaseTimes([
+        for (final time in _times)
+          if (time == current) value else time,
+      ]);
+    });
+  }
+
+  void _toggleWeekday(int weekday) {
+    setState(() {
+      if (_selectedWeekdays.remove(weekday)) return;
+      _selectedWeekdays.add(weekday);
+      _weekdayDoseCtrls.putIfAbsent(
+        weekday,
+        () => TextEditingController(text: _doseCtrl.text),
+      );
+      _weekdayTimes.putIfAbsent(weekday, () => List<String>.from(_times));
+    });
+  }
+
+  Future<void> _addWeekdayTime(int weekday) async {
+    final times = _weekdayTimes[weekday] ?? <String>['08:00'];
+    final current = times.last;
+    final parts = current.split(':');
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+        hour: int.tryParse(parts.first) ?? 8,
+        minute: int.tryParse(parts.last) ?? 0,
+      ),
+    );
+    if (picked == null) return;
+    final value =
+        '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+    setState(() {
+      _weekdayTimes[weekday] = _normalizePhaseTimes([...times, value]);
+    });
+  }
+
+  Future<void> _editWeekdayTime(int weekday, String current) async {
+    final parts = current.split(':');
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+        hour: int.tryParse(parts.first) ?? 8,
+        minute: int.tryParse(parts.last) ?? 0,
+      ),
+    );
+    if (picked == null) return;
+    final value =
+        '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+    final times = _weekdayTimes[weekday] ?? <String>[current];
+    setState(() {
+      _weekdayTimes[weekday] = _normalizePhaseTimes([
+        for (final time in times)
+          if (time == current) value else time,
+      ]);
+    });
+  }
+
+  bool get _customWeekdaysAreValid {
+    if (_selectedWeekdays.isEmpty) return false;
+    for (final weekday in _selectedWeekdays) {
+      final amount = parseDecimalInput(_weekdayDoseCtrls[weekday]?.text ?? '');
+      if (amount == null || amount <= 0) return false;
+      if ((_weekdayTimes[weekday] ?? const <String>[]).isEmpty) return false;
+    }
+    return true;
+  }
+
+  List<ProtocolWeekdayDose> _buildWeekdayDoses() {
+    final weekdays = _selectedWeekdays.toList()..sort();
+    final syringeUnits = parseDecimalInput(_syringeCtrl.text) ?? 0;
+    return [
+      for (final weekday in weekdays)
+        ProtocolWeekdayDose(
+          weekday: weekday,
+          dosePerInjection: parseDecimalInput(
+            _weekdayDoseCtrls[weekday]?.text ?? '',
+          )!,
+          doseUnit: _unit,
+          syringeUnits: syringeUnits,
+          scheduledTimes: _weekdayTimes[weekday]!,
+        ),
+    ];
+  }
+
+  bool get _canSave {
+    final start = int.tryParse(_startWeekCtrl.text) ?? 0;
+    final end = int.tryParse(_endWeekCtrl.text) ?? 0;
+    final dose = parseDecimalInput(_doseCtrl.text) ?? 0;
+    return _nameCtrl.text.trim().isNotEmpty &&
+        start > 0 &&
+        end >= start &&
+        dose > 0 &&
+        (_frequency == kCustomWeekdayFrequency
+            ? _customWeekdaysAreValid
+            : _times.isNotEmpty);
+  }
+
+  void _save() {
+    final start = int.parse(_startWeekCtrl.text).clamp(1, 104).toInt();
+    final end = int.parse(_endWeekCtrl.text).clamp(start, 104).toInt();
+    Navigator.of(context).pop(
+      widget.initial
+        ..name = _nameCtrl.text.trim()
+        ..startWeek = start
+        ..endWeek = end
+        ..note = _noteCtrl.text.trim()
+        ..dosePerInjection = parseDecimalInput(_doseCtrl.text)
+        ..doseUnit = _unit
+        ..syringeUnits = parseDecimalInput(_syringeCtrl.text)
+        ..frequency = _frequency
+        ..scheduledTimes = _times
+        ..weekdayDoses = _frequency == kCustomWeekdayFrequency
+            ? _buildWeekdayDoses()
+            : <ProtocolWeekdayDose>[],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
+    return Padding(
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: Container(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.sizeOf(context).height * 0.9,
+        ),
+        decoration: const BoxDecoration(
+          color: AppColors.surfaceContainer,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(AppSpacing.sheetRadius),
+          ),
+        ),
+        child: SafeArea(
+          top: false,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: AppSpacing.sheetHandleWidth,
+                    height: AppSpacing.sheetHandleHeight,
+                    decoration: BoxDecoration(
+                      color: AppColors.border,
+                      borderRadius: BorderRadius.circular(
+                        AppSpacing.sheetHandleHeight,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                Text('CONFIG.PHASE', style: AppTypography.systemLabel),
+                const SizedBox(height: AppSpacing.sm),
+                Text('Week-to-week override', style: AppTypography.h2),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  'Enter only the tracking schedule you already intend to follow. PepMod does not recommend amounts.',
+                  style: AppTypography.bodySmall,
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                _FieldLabel(
+                  label: 'PHASE NAME',
+                  child: TextField(
+                    controller: _nameCtrl,
+                    onChanged: (_) => setState(() {}),
+                    style: AppTypography.bodyLarge,
+                    decoration: const InputDecoration(
+                      hintText: 'e.g. Week 1 tracking',
+                      border: InputBorder.none,
+                      filled: false,
+                      contentPadding: EdgeInsets.all(AppSpacing.md),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.base),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _FieldLabel(
+                        label: 'START WEEK',
+                        child: TextField(
+                          controller: _startWeekCtrl,
+                          onChanged: (_) => setState(() {}),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          style: AppTypography.tabular,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            filled: false,
+                            contentPadding: EdgeInsets.all(AppSpacing.md),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.cardGap),
+                    Expanded(
+                      child: _FieldLabel(
+                        label: 'END WEEK',
+                        child: TextField(
+                          controller: _endWeekCtrl,
+                          onChanged: (_) => setState(() {}),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          style: AppTypography.tabular,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            filled: false,
+                            contentPadding: EdgeInsets.all(AppSpacing.md),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.base),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: _FieldLabel(
+                        label: _frequency == kCustomWeekdayFrequency
+                            ? 'DEFAULT AMOUNT'
+                            : 'TRACKED AMOUNT',
+                        child: TextField(
+                          controller: _doseCtrl,
+                          onChanged: (_) => setState(() {}),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          inputFormatters: const [decimalInputFormatter],
+                          style: AppTypography.tabular,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            filled: false,
+                            contentPadding: EdgeInsets.all(AppSpacing.md),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.cardGap),
+                    Expanded(
+                      child: _FieldLabel(
+                        label: 'UNIT',
+                        child: _SegmentedToggle(
+                          options: const ['mcg', 'mg', 'IU'],
+                          selected: _unit,
+                          onSelect: (value) => setState(() => _unit = value),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.base),
+                _FieldLabel(
+                  label: 'SYRINGE UNITS OPTIONAL',
+                  child: TextField(
+                    controller: _syringeCtrl,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    inputFormatters: const [decimalInputFormatter],
+                    style: AppTypography.tabular,
+                    decoration: const InputDecoration(
+                      hintText: 'Optional',
+                      border: InputBorder.none,
+                      filled: false,
+                      contentPadding: EdgeInsets.all(AppSpacing.md),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                Text('PHASE SCHEDULE', style: AppTypography.systemLabel),
+                const SizedBox(height: AppSpacing.sm),
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
+                  children: [
+                    for (final frequency in kFrequencies)
+                      _Chip(
+                        label: frequency.label,
+                        selected: _frequency == frequency.key,
+                        onTap: () => setState(() => _frequency = frequency.key),
+                      ),
+                  ],
+                ),
+                if (_frequency == kCustomWeekdayFrequency) ...[
+                  const SizedBox(height: AppSpacing.base),
+                  Text('CUSTOM DAYS', style: AppTypography.systemLabel),
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      for (
+                        var weekday = DateTime.monday;
+                        weekday <= DateTime.sunday;
+                        weekday++
+                      )
+                        _Chip(
+                          label: _weekdayLabel(weekday),
+                          selected: _selectedWeekdays.contains(weekday),
+                          onTap: () => _toggleWeekday(weekday),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.base),
+                  if (_selectedWeekdays.isEmpty)
+                    Text(
+                      'Select at least one day. PepMod will not choose a schedule for you.',
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.warning,
+                      ),
+                    )
+                  else
+                    for (final weekday
+                        in (_selectedWeekdays.toList()..sort())) ...[
+                      _PhaseWeekdayEditor(
+                        weekday: weekday,
+                        amountController: _weekdayDoseCtrls[weekday]!,
+                        unit: _unit,
+                        times: _weekdayTimes[weekday]!,
+                        onAmountChanged: (_) => setState(() {}),
+                        onEditTime: (time) => _editWeekdayTime(weekday, time),
+                        onRemoveTime: (time) {
+                          final times = _weekdayTimes[weekday]!;
+                          if (times.length == 1) return;
+                          setState(() => times.remove(time));
+                        },
+                        onAddTime: () => _addWeekdayTime(weekday),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                    ],
+                  if (_selectedWeekdays.isNotEmpty) ...[
+                    const SizedBox(height: AppSpacing.xs),
+                    _PhaseSchedulePreview(
+                      unit: _unit,
+                      selectedWeekdays: _selectedWeekdays,
+                      amountControllers: _weekdayDoseCtrls,
+                      timesByWeekday: _weekdayTimes,
+                    ),
+                  ],
+                ] else ...[
+                  const SizedBox(height: AppSpacing.base),
+                  Text('REMINDER TIMES', style: AppTypography.systemLabel),
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      for (final time in _times)
+                        _TimeChip(
+                          label: time,
+                          canRemove: _times.length > 1,
+                          onTap: () => _editTime(time),
+                          onRemove: () => setState(() => _times.remove(time)),
+                        ),
+                      _Chip(
+                        label: 'Add time',
+                        selected: false,
+                        onTap: _addTime,
+                      ),
+                    ],
+                  ),
+                ],
+                const SizedBox(height: AppSpacing.base),
+                _FieldLabel(
+                  label: 'CHANGE NOTE OPTIONAL',
+                  child: TextField(
+                    controller: _noteCtrl,
+                    minLines: 2,
+                    maxLines: 3,
+                    style: AppTypography.bodyMedium,
+                    decoration: const InputDecoration(
+                      hintText: 'Your own context for this phase',
+                      border: InputBorder.none,
+                      filled: false,
+                      contentPadding: EdgeInsets.all(AppSpacing.md),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  'A neutral phase-change reminder is scheduled for 9:00 AM when protocol reminders are enabled.',
+                  style: AppTypography.disclaimer,
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                PrimaryButton(
+                  label: 'SAVE PHASE',
+                  onPressed: _canSave ? _save : null,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Center(
+                  child: TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(
+                      'Cancel',
+                      style: AppTypography.labelMedium.copyWith(
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PhaseWeekdayEditor extends StatelessWidget {
+  const _PhaseWeekdayEditor({
+    required this.weekday,
+    required this.amountController,
+    required this.unit,
+    required this.times,
+    required this.onAmountChanged,
+    required this.onEditTime,
+    required this.onRemoveTime,
+    required this.onAddTime,
+  });
+
+  final int weekday;
+  final TextEditingController amountController;
+  final String unit;
+  final List<String> times;
+  final ValueChanged<String> onAmountChanged;
+  final ValueChanged<String> onEditTime;
+  final ValueChanged<String> onRemoveTime;
+  final VoidCallback onAddTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${_weekdayLabel(weekday).toUpperCase()} SCHEDULE',
+            style: AppTypography.systemLabel,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          _FieldLabel(
+            label: 'TRACKED AMOUNT',
+            child: TextField(
+              controller: amountController,
+              onChanged: onAmountChanged,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              inputFormatters: const [decimalInputFormatter],
+              style: AppTypography.tabular,
+              decoration: InputDecoration(
+                suffixText: unit,
+                suffixStyle: AppTypography.bodySmall,
+                border: InputBorder.none,
+                filled: false,
+                contentPadding: const EdgeInsets.all(AppSpacing.md),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text('REMINDER TIMES', style: AppTypography.systemLabel),
+          const SizedBox(height: AppSpacing.xs),
+          Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
+            children: [
+              for (final time in times)
+                _TimeChip(
+                  label: time,
+                  canRemove: times.length > 1,
+                  onTap: () => onEditTime(time),
+                  onRemove: () => onRemoveTime(time),
+                ),
+              _Chip(label: 'Add time', selected: false, onTap: onAddTime),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PhaseSchedulePreview extends StatelessWidget {
+  const _PhaseSchedulePreview({
+    required this.unit,
+    required this.selectedWeekdays,
+    required this.amountControllers,
+    required this.timesByWeekday,
+  });
+
+  final String unit;
+  final Set<int> selectedWeekdays;
+  final Map<int, TextEditingController> amountControllers;
+  final Map<int, List<String>> timesByWeekday;
+
+  @override
+  Widget build(BuildContext context) {
+    final weekdays = selectedWeekdays.toList()..sort();
+    return AppCard(
+      borderColor: AppColors.borderCyan,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('PHASE PREVIEW', style: AppTypography.systemLabel),
+          const SizedBox(height: AppSpacing.sm),
+          for (final weekday in weekdays)
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 34,
+                    child: Text(
+                      _weekdayLabel(weekday).toUpperCase(),
+                      style: AppTypography.systemLabel.copyWith(fontSize: 9),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      '${amountControllers[weekday]?.text.trim().isEmpty ?? true ? 'Amount required' : '${amountControllers[weekday]!.text.trim()} $unit'}'
+                      ' · ${(timesByWeekday[weekday] ?? const <String>[]).join(', ')}',
+                      style: AppTypography.bodySmall,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Text(
+            'Preview of your entries only. No schedule is recommended by PepMod.',
+            style: AppTypography.disclaimer,
+          ),
+        ],
       ),
     );
   }
