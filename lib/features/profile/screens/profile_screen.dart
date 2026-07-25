@@ -16,6 +16,8 @@ import '../../auth/providers/auth_provider.dart';
 import '../../protocol/providers/dose_log_provider.dart';
 import '../../protocol/providers/protocol_provider.dart';
 import '../../progress/providers/body_metric_provider.dart';
+import '../../library/screens/custom_compound_library_screen.dart';
+import '../../library/providers/custom_compound_provider.dart';
 import '../providers/settings_provider.dart';
 
 /// Profile / You tab — user info, subscription, preferences, data, legal.
@@ -119,6 +121,16 @@ class ProfileScreen extends StatelessWidget {
 
         // ── Data ───────────────────────────────────────────────────────
         _SectionHeader(label: 'DATA'),
+        _Tile(
+          icon: Icons.inventory_2_outlined,
+          label: 'My compounds',
+          value: 'Saved vial presets',
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const CustomCompoundLibraryScreen(),
+            ),
+          ),
+        ),
         _Tile(
           icon: Icons.download_rounded,
           label: 'Export data',
@@ -253,6 +265,7 @@ class ProfileScreen extends StatelessWidget {
     final protocols = context.read<ProtocolProvider>().all;
     final logs = context.read<DoseLogProvider>().recent30;
     final metrics = context.read<BodyMetricProvider>().all;
+    final customCompounds = context.read<CustomCompoundProvider>().all;
 
     final payload = {
       'exportedAt': DateTime.now().toIso8601String(),
@@ -317,6 +330,9 @@ class ProfileScreen extends StatelessWidget {
               'notes': m.notes,
             },
           )
+          .toList(),
+      'customCompounds': customCompounds
+          .map((compound) => {'id': compound.id, ...compound.toMap()})
           .toList(),
     };
 

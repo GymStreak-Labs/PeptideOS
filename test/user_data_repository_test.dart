@@ -37,6 +37,9 @@ void main() {
         await user.collection('bodyMetrics').doc('metric-1').set({
           'weight': 80,
         });
+        await user.collection('customCompounds').doc('preset-1').set({
+          'name': 'My vial',
+        });
         await otherUser.set({'email': 'other@example.com'});
         await otherUser.collection('protocols').doc('keep-me').set({
           'ok': true,
@@ -55,6 +58,7 @@ void main() {
         expect((await user.collection('protocols').get()).docs, isEmpty);
         expect((await user.collection('doseLogs').get()).docs, isEmpty);
         expect((await user.collection('bodyMetrics').get()).docs, isEmpty);
+        expect((await user.collection('customCompounds').get()).docs, isEmpty);
         expect(
           (await otherUser.collection('protocols').doc('keep-me').get()).exists,
           isTrue,

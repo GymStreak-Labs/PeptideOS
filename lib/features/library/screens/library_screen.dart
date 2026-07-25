@@ -7,6 +7,7 @@ import '../../../core/widgets/widgets.dart';
 import '../../../models/peptide.dart';
 import '../../protocol/widgets/empty_state.dart';
 import '../providers/peptide_provider.dart';
+import 'custom_compound_library_screen.dart';
 import 'peptide_detail_screen.dart';
 import 'reconstitution_screen.dart';
 
@@ -55,6 +56,19 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       ],
                     ),
                   ),
+                  _HeaderIconButton(
+                    icon: Icons.inventory_2_outlined,
+                    tooltip: 'My compounds',
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const CustomCompoundLibraryScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
                   _HeaderIconButton(
                     icon: Icons.calculate_rounded,
                     tooltip: 'Unit converter',

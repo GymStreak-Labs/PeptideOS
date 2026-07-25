@@ -7,7 +7,9 @@ import '../../../core/utils/decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/peptide.dart';
 import '../../../models/protocol.dart';
+import '../../library/providers/custom_compound_provider.dart';
 import '../../library/providers/peptide_provider.dart';
+import '../../library/screens/custom_compound_library_screen.dart';
 import '../../subscription/providers/subscription_provider.dart';
 import '../../subscription/screens/soft_paywall_sheet.dart';
 import '../providers/dose_log_provider.dart';
@@ -15,6 +17,7 @@ import '../providers/protocol_provider.dart';
 import '../widgets/peptide_label_color.dart';
 
 const _customPeptideSlug = 'custom';
+const _savedCompoundSlugPrefix = 'custom:';
 
 /// 3-step protocol builder: name → add peptides → start date + review.
 class CreateProtocolScreen extends StatefulWidget {
@@ -638,7 +641,27 @@ Future<ProtocolPeptide?> _pickPeptide(
 
   final provider = context.read<ProtocolProvider>();
   final ProtocolPeptide draft;
-  if (slug == _customPeptideSlug) {
+  if (slug.startsWith(_savedCompoundSlugPrefix)) {
+    final id = slug.substring(_savedCompoundSlugPrefix.length);
+    final compounds = context.read<CustomCompoundProvider>().all;
+    final index = compounds.indexWhere((compound) => compound.id == id);
+    if (index == -1) return null;
+    final compound = compounds[index];
+    draft = provider.buildPeptide(
+      slug: slug,
+      name: compound.name,
+      dose: 0,
+      unit: compound.trackingUnit,
+      frequency: 'as_needed',
+      route: compound.route,
+      labelColorHex: defaultLabelColorHex,
+      sourceCompoundId: compound.id,
+      sourceCompoundUpdatedAt: compound.updatedAt,
+      vialAmountSnapshot: compound.vialAmount,
+      vialUnitSnapshot: compound.vialUnit,
+      compoundNotesSnapshot: compound.notes,
+    );
+  } else if (slug == _customPeptideSlug) {
     draft = provider.buildPeptide(
       slug: _customPeptideSlug,
       name: 'Custom peptide',
@@ -696,6 +719,16 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
   @override
   Widget build(BuildContext context) {
     final peptides = context.watch<PeptideProvider>().search(query: _query);
+    final normalizedQuery = _query.trim().toLowerCase();
+    final customCompounds = context
+        .watch<CustomCompoundProvider>()
+        .active
+        .where(
+          (compound) =>
+              normalizedQuery.isEmpty ||
+              compound.name.toLowerCase().contains(normalizedQuery),
+        )
+        .toList();
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
       decoration: BoxDecoration(
@@ -724,7 +757,7 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),
-              Text('PICK.PEPTIDE', style: AppTypography.systemLabel),
+              Text('PICK.COMPOUND', style: AppTypography.systemLabel),
               const SizedBox(height: AppSpacing.sm),
               Text('Library', style: AppTypography.h2),
               const SizedBox(height: AppSpacing.base),
@@ -751,7 +784,7 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                         onChanged: (v) => setState(() => _query = v),
                         style: AppTypography.bodyMedium,
                         decoration: InputDecoration(
-                          hintText: 'Search peptides...',
+                          hintText: 'Search compounds...',
                           hintStyle: AppTypography.bodyMedium.copyWith(
                             color: AppColors.textDisabled,
                           ),
@@ -767,7 +800,7 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
               const SizedBox(height: AppSpacing.base),
               Expanded(
                 child: ListView.separated(
-                  itemCount: peptides.length + 1,
+                  itemCount: peptides.length + customCompounds.length + 1,
                   separatorBuilder: (_, __) =>
                       const SizedBox(height: AppSpacing.sm),
                   itemBuilder: (_, i) {
@@ -800,11 +833,11 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Custom peptide',
+                                    'One-off compound',
                                     style: AppTypography.labelLarge,
                                   ),
                                   Text(
-                                    'Track your own entry',
+                                    'Use once without saving a preset',
                                     style: AppTypography.bodySmall,
                                   ),
                                 ],
@@ -819,7 +852,57 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                         ),
                       );
                     }
-                    final p = peptides[i - 1];
+                    final customIndex = i - 1;
+                    if (customIndex < customCompounds.length) {
+                      final compound = customCompounds[customIndex];
+                      return AppCard(
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          Navigator.of(
+                            context,
+                          ).pop('$_savedCompoundSlugPrefix${compound.id}');
+                        },
+                        borderColor: AppColors.borderCyan,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(
+                                Icons.inventory_2_outlined,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                            const SizedBox(width: AppSpacing.md),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    compound.name,
+                                    style: AppTypography.labelLarge,
+                                  ),
+                                  Text(
+                                    '${_formatAmount(compound.vialAmount)} ${compound.vialUnit} vial · Saved preset',
+                                    style: AppTypography.bodySmall,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Icon(
+                              Icons.chevron_right_rounded,
+                              color: AppColors.textTertiary,
+                              size: AppSpacing.iconMedium,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    final p = peptides[customIndex - customCompounds.length];
                     return AppCard(
                       onTap: () {
                         HapticFeedback.selectionClick();
@@ -849,6 +932,19 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                     );
                   },
                 ),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              TextButton.icon(
+                onPressed: () async {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const CustomCompoundLibraryScreen(),
+                    ),
+                  );
+                  if (mounted) setState(() {});
+                },
+                icon: const Icon(Icons.tune_rounded, size: 18),
+                label: const Text('Manage saved compounds'),
               ),
             ],
           ),
@@ -880,7 +976,9 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
   late String _labelColorHex;
   late List<String> _times;
   late Set<int> _selectedWeekdays;
-  bool get _isCustomPeptide => widget.initial.peptideSlug == _customPeptideSlug;
+  bool get _isCustomPeptide =>
+      widget.initial.peptideSlug == _customPeptideSlug ||
+      widget.initial.peptideSlug.startsWith(_savedCompoundSlugPrefix);
 
   @override
   void initState() {
@@ -1131,6 +1229,31 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                     style: AppTypography.h2,
                   ),
                   const SizedBox(height: AppSpacing.lg),
+
+                  if (widget.initial.sourceCompoundId.isNotEmpty) ...[
+                    AppCard(
+                      borderColor: AppColors.borderCyan,
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.inventory_2_outlined,
+                            color: AppColors.primary,
+                            size: 20,
+                          ),
+                          const SizedBox(width: AppSpacing.sm),
+                          Expanded(
+                            child: Text(
+                              '${_formatAmount(widget.initial.vialAmountSnapshot)} '
+                              '${widget.initial.vialUnitSnapshot} vial preset · '
+                              'copied into this protocol',
+                              style: AppTypography.bodySmall,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                  ],
 
                   if (_isCustomPeptide) ...[
                     _FieldLabel(
