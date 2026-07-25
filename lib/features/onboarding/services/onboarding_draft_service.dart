@@ -44,14 +44,20 @@ class OnboardingDraftService {
 
   static Future<void> clear() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_draftKey);
+    final removed = await prefs.remove(_draftKey);
+    if (!removed && prefs.containsKey(_draftKey)) {
+      throw StateError('Failed to clear the onboarding draft.');
+    }
   }
 
   static Future<bool> hasDraft() async => (await load()) != null;
 
   static Future<void> setPostAuthPaywallPending(bool pending) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_postAuthPaywallPendingKey, pending);
+    final saved = await prefs.setBool(_postAuthPaywallPendingKey, pending);
+    if (!saved) {
+      throw StateError('Failed to update the post-auth paywall state.');
+    }
   }
 
   static Future<bool> isPostAuthPaywallPending() async {

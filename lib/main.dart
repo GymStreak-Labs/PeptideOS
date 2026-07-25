@@ -22,7 +22,6 @@ import 'data/repositories/protocol_repository.dart';
 import 'data/repositories/user_settings_repository.dart';
 import 'data/services/auth_service.dart';
 import 'data/services/subscription_service.dart';
-import 'data/services/superwall_bridge_service.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/screens/account_deleted_screen.dart';
 import 'features/auth/screens/auth_screen.dart';
@@ -92,11 +91,9 @@ Future<void> main() async {
       };
 
       _validateReleaseAttributionConfig();
-      _validateReleaseSuperwallConfig();
 
       // RevenueCat — safe no-op if key still TODO.
       await SubscriptionService.instance.configure();
-      await SuperwallBridgeService.instance.configure();
 
       // Gleap support — safe no-op if GLEAP_SDK_TOKEN is not injected.
       await SupportService.instance.initialize();
@@ -161,18 +158,6 @@ Future<void> _configureAppRefer() async {
 void _validateReleaseAttributionConfig() {
   if (!kReleaseMode || _hasAppReferApiKey) return;
   throw StateError('Release builds require --dart-define=APPREFER_API_KEY.');
-}
-
-void _validateReleaseSuperwallConfig() {
-  if (!kReleaseMode || !SuperwallBridgeService.releaseRequiresPlatformApiKey) {
-    return;
-  }
-  if (SuperwallBridgeService.hasPlatformApiKey) return;
-  throw StateError(
-    'Release builds require --dart-define=SUPERWALL_IOS_API_KEY or '
-    '--dart-define=SUPERWALL_ANDROID_API_KEY unless Superwall is explicitly '
-    'disabled or native fallback is explicitly forced.',
-  );
 }
 
 Future<void> _initFacebookEvents(TrackingStatus trackingStatus) async {
@@ -349,9 +334,16 @@ class _AppRootState extends State<_AppRoot> {
   }
 
   void _markReadyForAuth() {
+    final isSignedIn = context.read<AuthProvider>().isSignedIn;
     setState(() {
       _preAuthOnboardingReady = true;
       _postAuthPaywallPending = true;
+      // A signed-in user can re-enter onboarding through Clear all data.
+      // In that flow the first replay attempt happens before the new draft
+      // exists, so release the latch now that onboarding has staged it.
+      if (isSignedIn && !_replayingOnboardingDraft) {
+        _onboardingReplayAttempted = false;
+      }
     });
   }
 
@@ -460,8 +452,6 @@ class _PostAuthPaywallGate extends StatefulWidget {
 class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
   bool _viewLogged = false;
   bool _offeringsLoadStarted = false;
-  bool _superwallAttempted = false;
-  bool _showNativeFallback = false;
 
   @override
   void didChangeDependencies() {
@@ -476,33 +466,6 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
         unawaited(sub.loadOfferings());
       }
     }
-    _presentSuperwallIfAvailable();
-  }
-
-  void _presentSuperwallIfAvailable() {
-    if (_superwallAttempted || _showNativeFallback) return;
-    final bridge = SuperwallBridgeService.instance;
-    if (!bridge.canPresentPaywalls) {
-      _showNativeFallback = true;
-      return;
-    }
-
-    _superwallAttempted = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final result = await bridge.presentPlacement(
-        SuperwallPlacements.postAuthOnboarding,
-        params: const {
-          'source': 'post_auth_onboarding',
-          'surface': 'hard_paywall',
-        },
-      );
-      if (!mounted) return;
-      if (result == SuperwallPlacementResult.completedPremium) {
-        await widget.onComplete();
-        return;
-      }
-      setState(() => _showNativeFallback = true);
-    });
   }
 
   Future<void> _handleSubscribe(int selectedPlan) async {
@@ -563,15 +526,19 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
     }
   }
 
+  Future<void> _handleReviewerBypass() async {
+    await widget.onComplete();
+  }
+
   @override
   Widget build(BuildContext context) {
     final sub = context.watch<SubscriptionProvider>();
-    if (!_showNativeFallback) return const _Splash();
     return Scaffold(
       backgroundColor: AppColors.background,
       body: PaywallPage(
         onSubscribe: _handleSubscribe,
         onRestore: _handleRestore,
+        onReviewerBypass: _handleReviewerBypass,
         showSpecialOffer: sub.showSpecialOffer,
       ),
     );

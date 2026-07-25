@@ -13,11 +13,13 @@ class PaywallPage extends StatefulWidget {
     super.key,
     required this.onSubscribe,
     required this.onRestore,
+    required this.onReviewerBypass,
     this.showSpecialOffer = true,
   });
 
   final Future<void> Function(int selectedPlan) onSubscribe;
   final VoidCallback onRestore;
+  final Future<void> Function() onReviewerBypass;
   final bool showSpecialOffer;
 
   @override
@@ -233,7 +235,7 @@ class _PaywallPageState extends State<PaywallPage>
                 if (_secretTapCount >= 7) {
                   _secretTapCount = 0;
                   HapticFeedback.heavyImpact();
-                  unawaited(_submitSelectedPlan());
+                  unawaited(widget.onReviewerBypass());
                 }
               },
               child: Text(
@@ -1011,11 +1013,17 @@ class _PaywallPageState extends State<PaywallPage>
                         color: AppColors.primary,
                       ),
                     const SizedBox(width: AppSpacing.sm),
-                    Text(
-                      _isSubmitting ? 'CONNECTING TO STORE...' : label,
-                      style: AppTypography.button.copyWith(
-                        color: AppColors.textPrimary,
-                        letterSpacing: 0.8,
+                    Flexible(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          _isSubmitting ? 'CONNECTING TO STORE...' : label,
+                          maxLines: 1,
+                          style: AppTypography.button.copyWith(
+                            color: AppColors.textPrimary,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -1049,7 +1057,7 @@ class _MiniPhonePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = featured ? 92.0 : 78.0;
-    final height = featured ? 132.0 : 118.0;
+    final height = featured ? 132.0 : 128.0;
 
     return Transform.rotate(
       angle: featured ? 0.02 : -0.035,

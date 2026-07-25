@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../data/services/subscription_service.dart';
-import '../../data/services/superwall_bridge_service.dart';
 import 'support_service.dart';
 
 /// Analytics singleton — wraps Firebase Analytics + stamps a stable install ID
@@ -60,11 +59,6 @@ class AnalyticsService {
       try {
         await SupportService.instance.attachInstallIdentity(_installId!);
       } catch (_) {}
-      try {
-        await SuperwallBridgeService.instance.setUserAttributes({
-          'install_id': _installId!,
-        });
-      } catch (_) {}
       await syncAppReferIdentity();
     } catch (e) {
       debugPrint('AnalyticsService.initializeIdentity failed: $e');
@@ -114,13 +108,6 @@ class AnalyticsService {
       final appReferId = await AppReferSDK.getDeviceId();
       if (appReferId != null) attributes['appreferId'] = appReferId;
       await SubscriptionService.instance.setAttributes(attributes);
-    } catch (_) {}
-    try {
-      await SuperwallBridgeService.instance.identifyUser(
-        userId: userId,
-        installId: _installId,
-        subscriptionTier: subscriptionTier,
-      );
     } catch (_) {}
 
     try {
@@ -184,9 +171,6 @@ class AnalyticsService {
       if (appReferId != null) {
         await SubscriptionService.instance.setAttributes({
           'appreferId': appReferId,
-        });
-        await SuperwallBridgeService.instance.setUserAttributes({
-          'apprefer_id': appReferId,
         });
       }
     } catch (_) {}

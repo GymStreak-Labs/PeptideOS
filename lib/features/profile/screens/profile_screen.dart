@@ -26,7 +26,8 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final settingsProvider = context.watch<SettingsProvider>();
     final settings = settingsProvider.settings;
-    final user = context.watch<AuthProvider>().currentUser;
+    final auth = context.watch<AuthProvider>();
+    final user = auth.currentUser;
     final accountValue = user?.email?.isNotEmpty == true
         ? user!.email!
         : 'Signed in';
@@ -127,9 +128,11 @@ class ProfileScreen extends StatelessWidget {
         _Tile(
           icon: Icons.delete_outline_rounded,
           label: 'Clear all data',
-          value: 'Reset app',
+          value: auth.isClearingAppData ? 'Clearing…' : 'Reset app',
           iconColor: AppColors.warning,
-          onTap: () => _confirmClearData(context),
+          onTap: auth.isClearingAppData
+              ? null
+              : () => _confirmClearData(context),
         ),
 
         // ── Support ────────────────────────────────────────────────────
@@ -274,6 +277,7 @@ class ProfileScreen extends StatelessWidget {
                       'cycleWeeks': pp.cycleWeeks,
                       'washoutWeeks': pp.washoutWeeks,
                       'syringeUnits': pp.syringeUnits,
+                      'labelColorHex': pp.labelColorHex,
                       'scheduledTimes': pp.scheduledTimes,
                       'weekdayDoses': pp.weekdayDoses
                           .map((d) => d.toMap())
@@ -336,7 +340,7 @@ class ProfileScreen extends StatelessWidget {
         ),
         title: Text('Clear all data?', style: AppTypography.h3),
         content: Text(
-          'This deletes all protocols, dose logs, and body metrics. The peptide library is preserved. This cannot be undone.',
+          'This deletes all protocols, dose logs, and body metrics, then restarts onboarding. Your account, subscription, and peptide library are preserved. This cannot be undone.',
           style: AppTypography.bodyMedium,
         ),
         actions: [
@@ -364,13 +368,65 @@ class ProfileScreen extends StatelessWidget {
     if (ok != true) return;
     if (!context.mounted) return;
 
-    await context.read<SettingsProvider>().resetAll();
-    if (!context.mounted) return;
-    await context.read<ProtocolProvider>().refresh();
-    if (!context.mounted) return;
-    await context.read<DoseLogProvider>().refresh();
-    if (!context.mounted) return;
-    await context.read<BodyMetricProvider>().refresh();
+    final navigator = Navigator.of(context, rootNavigator: true);
+    unawaited(
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        useRootNavigator: true,
+        builder: (_) => PopScope(
+          canPop: false,
+          child: AlertDialog(
+            backgroundColor: AppColors.surfaceContainer,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+              side: const BorderSide(color: AppColors.border),
+            ),
+            title: Text('Clearing data…', style: AppTypography.h3),
+            content: Row(
+              children: [
+                const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.primary,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Text(
+                    'Keep PepMod open while your tracking data is removed.',
+                    style: AppTypography.bodyMedium,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    void closeProgress() {
+      if (navigator.mounted && navigator.canPop()) navigator.pop();
+    }
+
+    try {
+      await context.read<AuthProvider>().clearAppData();
+    } catch (e) {
+      closeProgress();
+      debugPrint('Clear app data failed: $e');
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Could not clear data. Check your connection and retry.',
+          ),
+        ),
+      );
+      return;
+    }
+    closeProgress();
     if (!context.mounted) return;
     ScaffoldMessenger.of(
       context,
@@ -847,7 +903,7 @@ const _termsText =
     'Full Terms: https://appstorecopilot.com/legal/yzh32x5v/terms';
 
 const _privacyText =
-    'PepMod uses Firebase for authentication and cloud data storage, RevenueCat and Superwall for subscriptions and paywalls, AppRefer and Meta/Facebook App Events for attribution, and Firebase/Crashlytics for analytics and diagnostics. '
+    'PepMod uses Firebase for authentication and cloud data storage, RevenueCat for subscriptions, AppRefer and Meta/Facebook App Events for attribution, and Firebase/Crashlytics for analytics and diagnostics. '
     'We do not sell your personal information. You can delete your account and saved app data from within the app.\n\n'
     'Full Privacy Policy: https://appstorecopilot.com/legal/yzh32x5v/privacy';
 

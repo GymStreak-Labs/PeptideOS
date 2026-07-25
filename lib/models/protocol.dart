@@ -91,6 +91,7 @@ class ProtocolPeptide {
     this.cycleWeeks = 0,
     this.washoutWeeks = 0,
     this.syringeUnits = 0,
+    this.labelColorHex = '',
     List<String>? injectionSites,
     List<String>? scheduledTimes,
     List<ProtocolWeekdayDose>? weekdayDoses,
@@ -108,6 +109,7 @@ class ProtocolPeptide {
   int cycleWeeks;
   int washoutWeeks;
   double syringeUnits;
+  String labelColorHex;
   List<String> injectionSites;
   List<String> scheduledTimes;
   List<ProtocolWeekdayDose> weekdayDoses;
@@ -202,6 +204,7 @@ class ProtocolPeptide {
     'cycleWeeks': cycleWeeks,
     'washoutWeeks': washoutWeeks,
     'syringeUnits': syringeUnits,
+    'labelColorHex': labelColorHex,
     'injectionSites': injectionSites,
     'scheduledTimes': scheduledTimes,
     'weekdayDoses': weekdayDoses.map((d) => d.toMap()).toList(),
@@ -219,6 +222,10 @@ class ProtocolPeptide {
       cycleWeeks: (data['cycleWeeks'] as num?)?.toInt() ?? 0,
       washoutWeeks: (data['washoutWeeks'] as num?)?.toInt() ?? 0,
       syringeUnits: (data['syringeUnits'] as num?)?.toDouble() ?? 0,
+      labelColorHex:
+          (data['labelColorHex'] as String?) ??
+          (data['colorLabelHex'] as String?) ??
+          '',
       injectionSites: (data['injectionSites'] as List<dynamic>? ?? const [])
           .map((e) => e.toString())
           .toList(),
