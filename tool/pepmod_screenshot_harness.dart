@@ -1,8 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import 'package:peptide_os/core/theme/theme.dart';
 import 'package:peptide_os/core/widgets/widgets.dart';
+import 'package:peptide_os/data/repositories/custom_compound_repository.dart';
+import 'package:peptide_os/features/library/providers/custom_compound_provider.dart';
+import 'package:peptide_os/features/library/screens/custom_compound_library_screen.dart';
 import 'package:peptide_os/features/library/widgets/syringe_visual.dart';
 import 'package:peptide_os/features/onboarding/widgets/calculator_demo_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/confidence_page.dart';
@@ -13,6 +19,7 @@ import 'package:peptide_os/features/onboarding/widgets/processing_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/protocol_preview_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/protocol_roadmap_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/results_summary_page.dart';
+import 'package:peptide_os/models/custom_compound.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -147,6 +154,7 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
     const _ProgressMockScreen(),
     const _LibraryMockScreen(),
     const _ProfileMockScreen(),
+    const _CustomCompoundHarness(),
   ];
 
   static void _noop() {}
@@ -186,6 +194,65 @@ class _ScreenshotPagerState extends State<_ScreenshotPager> {
         ],
       ),
     );
+  }
+}
+
+class _CustomCompoundHarness extends StatelessWidget {
+  const _CustomCompoundHarness();
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => CustomCompoundProvider(_PreviewCompoundStore(), uid: 'ui'),
+      child: const CustomCompoundLibraryScreen(),
+    );
+  }
+}
+
+class _PreviewCompoundStore implements CustomCompoundStore {
+  final _controller = StreamController<List<CustomCompound>>.broadcast(
+    sync: true,
+  );
+  final _compounds = <CustomCompound>[
+    CustomCompound(
+      id: 'amber',
+      name: 'Recovery vial',
+      vialAmount: 10,
+      vialUnit: 'mg',
+      trackingUnit: 'mcg',
+      route: 'subcutaneous',
+      notes: 'Amber label',
+      createdAt: DateTime(2026, 7, 20),
+      updatedAt: DateTime(2026, 7, 24),
+    ),
+    CustomCompound(
+      id: 'blue',
+      name: 'Travel vial',
+      vialAmount: 5,
+      vialUnit: 'mg',
+      trackingUnit: 'mcg',
+      route: 'subcutaneous',
+      notes: 'Blue label',
+      createdAt: DateTime(2026, 7, 21),
+      updatedAt: DateTime(2026, 7, 25),
+    ),
+  ];
+
+  @override
+  Stream<List<CustomCompound>> watchAll(String uid) async* {
+    yield _compounds;
+    yield* _controller.stream;
+  }
+
+  @override
+  Future<void> upsert(String uid, CustomCompound compound) async {
+    final index = _compounds.indexWhere((item) => item.id == compound.id);
+    if (index == -1) {
+      _compounds.add(compound);
+    } else {
+      _compounds[index] = compound;
+    }
+    _controller.add(List.unmodifiable(_compounds));
   }
 }
 

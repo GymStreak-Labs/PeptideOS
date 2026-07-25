@@ -92,6 +92,11 @@ class ProtocolPeptide {
     this.washoutWeeks = 0,
     this.syringeUnits = 0,
     this.labelColorHex = '',
+    this.sourceCompoundId = '',
+    this.sourceCompoundUpdatedAt,
+    this.vialAmountSnapshot = 0,
+    this.vialUnitSnapshot = '',
+    this.compoundNotesSnapshot = '',
     List<String>? injectionSites,
     List<String>? scheduledTimes,
     List<ProtocolWeekdayDose>? weekdayDoses,
@@ -110,6 +115,14 @@ class ProtocolPeptide {
   int washoutWeeks;
   double syringeUnits;
   String labelColorHex;
+
+  /// Source metadata is an immutable snapshot. Preset edits never cascade into
+  /// existing protocol records or their historical dose logs.
+  String sourceCompoundId;
+  DateTime? sourceCompoundUpdatedAt;
+  double vialAmountSnapshot;
+  String vialUnitSnapshot;
+  String compoundNotesSnapshot;
   List<String> injectionSites;
   List<String> scheduledTimes;
   List<ProtocolWeekdayDose> weekdayDoses;
@@ -205,6 +218,11 @@ class ProtocolPeptide {
     'washoutWeeks': washoutWeeks,
     'syringeUnits': syringeUnits,
     'labelColorHex': labelColorHex,
+    'sourceCompoundId': sourceCompoundId,
+    'sourceCompoundUpdatedAt': sourceCompoundUpdatedAt?.toIso8601String(),
+    'vialAmountSnapshot': vialAmountSnapshot,
+    'vialUnitSnapshot': vialUnitSnapshot,
+    'compoundNotesSnapshot': compoundNotesSnapshot,
     'injectionSites': injectionSites,
     'scheduledTimes': scheduledTimes,
     'weekdayDoses': weekdayDoses.map((d) => d.toMap()).toList(),
@@ -226,6 +244,11 @@ class ProtocolPeptide {
           (data['labelColorHex'] as String?) ??
           (data['colorLabelHex'] as String?) ??
           '',
+      sourceCompoundId: (data['sourceCompoundId'] as String?) ?? '',
+      sourceCompoundUpdatedAt: _parseDate(data['sourceCompoundUpdatedAt']),
+      vialAmountSnapshot: (data['vialAmountSnapshot'] as num?)?.toDouble() ?? 0,
+      vialUnitSnapshot: (data['vialUnitSnapshot'] as String?) ?? '',
+      compoundNotesSnapshot: (data['compoundNotesSnapshot'] as String?) ?? '',
       injectionSites: (data['injectionSites'] as List<dynamic>? ?? const [])
           .map((e) => e.toString())
           .toList(),
