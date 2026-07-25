@@ -232,7 +232,9 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                       'recommend an amount or frequency. Recheck the source '
                       'labels and confirm your calculation with a qualified '
                       'healthcare professional before use.',
-                      style: AppTypography.disclaimer,
+                      style: AppTypography.disclaimer.copyWith(
+                        color: AppColors.textTertiary,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ],
