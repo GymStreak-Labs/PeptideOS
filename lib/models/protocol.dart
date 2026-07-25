@@ -1,3 +1,5 @@
+import 'blend_vial.dart';
+
 /// Lifecycle status of a protocol.
 enum ProtocolStatus { active, paused, ended }
 
@@ -100,6 +102,7 @@ class ProtocolPeptide {
     List<String>? injectionSites,
     List<String>? scheduledTimes,
     List<ProtocolWeekdayDose>? weekdayDoses,
+    this.blendVial,
   }) : injectionSites = injectionSites ?? <String>[],
        scheduledTimes = scheduledTimes ?? <String>['08:00'],
        weekdayDoses = weekdayDoses ?? <ProtocolWeekdayDose>[];
@@ -126,9 +129,11 @@ class ProtocolPeptide {
   List<String> injectionSites;
   List<String> scheduledTimes;
   List<ProtocolWeekdayDose> weekdayDoses;
+  BlendVial? blendVial;
 
   bool get usesCustomWeekdays =>
       frequency == kCustomWeekdayFrequency && weekdayDoses.isNotEmpty;
+  bool get isBlend => blendVial?.isValid ?? false;
 
   ProtocolDoseSchedule? scheduleForDate({
     required DateTime protocolStart,
@@ -167,6 +172,9 @@ class ProtocolPeptide {
       doseUnit: weekdayDose?.doseUnit ?? doseUnit,
       syringeUnits: weekdayDose?.syringeUnits ?? syringeUnits,
       scheduledTimes: times.isEmpty ? const <String>['08:00'] : times,
+      blendVial: blendVial?.copyWith(
+        drawSyringeUnits: weekdayDose?.syringeUnits ?? syringeUnits,
+      ),
     );
   }
 
@@ -226,6 +234,7 @@ class ProtocolPeptide {
     'injectionSites': injectionSites,
     'scheduledTimes': scheduledTimes,
     'weekdayDoses': weekdayDoses.map((d) => d.toMap()).toList(),
+    'blendVial': blendVial?.toMap(),
   };
 
   factory ProtocolPeptide.fromMap(Map<String, dynamic> data) {
@@ -264,6 +273,13 @@ class ProtocolPeptide {
           )
           .where((d) => d.isValid)
           .toList(),
+      blendVial: data['blendVial'] is Map
+          ? BlendVial.fromMap(
+              Map<String, dynamic>.from(
+                data['blendVial'] as Map<dynamic, dynamic>,
+              ),
+            )
+          : null,
     );
   }
 }
@@ -316,12 +332,14 @@ class ProtocolDoseSchedule {
     required this.doseUnit,
     required this.syringeUnits,
     required this.scheduledTimes,
+    this.blendVial,
   });
 
   final double dosePerInjection;
   final String doseUnit;
   final double syringeUnits;
   final List<String> scheduledTimes;
+  final BlendVial? blendVial;
 }
 
 extension ProtocolStatusLabel on ProtocolStatus {

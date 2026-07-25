@@ -1,3 +1,5 @@
+import 'blend_vial.dart';
+
 /// A scheduled or completed peptide dose. Stored in Firestore at
 /// `users/{uid}/doseLogs/{uuid}`.
 class DoseLog {
@@ -14,6 +16,7 @@ class DoseLog {
     this.injectionSite = '',
     this.notes = '',
     this.skipped = false,
+    this.blendSnapshot,
   });
 
   String uuid;
@@ -31,6 +34,7 @@ class DoseLog {
   String injectionSite;
   String notes;
   bool skipped;
+  BlendVial? blendSnapshot;
 
   bool get isTaken => takenAt != null && !skipped;
   bool get isPending => takenAt == null && !skipped;
@@ -55,6 +59,7 @@ class DoseLog {
     String? injectionSite,
     String? notes,
     bool? skipped,
+    BlendVial? blendSnapshot,
   }) {
     return DoseLog(
       uuid: uuid ?? this.uuid,
@@ -69,6 +74,7 @@ class DoseLog {
       injectionSite: injectionSite ?? this.injectionSite,
       notes: notes ?? this.notes,
       skipped: skipped ?? this.skipped,
+      blendSnapshot: blendSnapshot ?? this.blendSnapshot,
     );
   }
 
@@ -89,6 +95,7 @@ class DoseLog {
     'injectionSite': injectionSite,
     'notes': notes,
     'skipped': skipped,
+    'blendSnapshot': blendSnapshot?.toMap(),
   };
 
   factory DoseLog.fromMap(String id, Map<String, dynamic> data) {
@@ -105,6 +112,13 @@ class DoseLog {
       injectionSite: (data['injectionSite'] as String?) ?? '',
       notes: (data['notes'] as String?) ?? '',
       skipped: (data['skipped'] as bool?) ?? false,
+      blendSnapshot: data['blendSnapshot'] is Map
+          ? BlendVial.fromMap(
+              Map<String, dynamic>.from(
+                data['blendSnapshot'] as Map<dynamic, dynamic>,
+              ),
+            )
+          : null,
     );
   }
 }
