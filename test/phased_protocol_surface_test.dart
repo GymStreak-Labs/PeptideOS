@@ -19,6 +19,9 @@ void main() {
     await (FontLoader(
       'JetBrainsMono',
     )..addFont(rootBundle.load('assets/fonts/JetBrainsMono.ttf'))).load();
+    await (FontLoader(
+      'MaterialIcons',
+    )..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'))).load();
   });
 
   testWidgets('phase timeline is clear at a narrow phone size', (tester) async {
