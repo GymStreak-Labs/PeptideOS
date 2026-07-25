@@ -349,8 +349,8 @@ class ProtocolProvider extends ChangeNotifier {
 
   Future<void> _rescheduleProtocolReminders(Protocol p) async {
     if (p.status != ProtocolStatus.active) return;
-    await NotificationService.instance.cancelProtocolRemindersForProtocol(p);
     if (!_notificationsEnabled) return;
+    await NotificationService.instance.cancelProtocolRemindersForProtocol(p);
 
     for (final peptide in p.peptides) {
       for (final phase in peptide.phases) {

@@ -48,8 +48,21 @@ Future<void> main() async {
             endWeek: 4,
             dosePerInjection: 125,
             doseUnit: 'mcg',
-            frequency: 'eod',
-            scheduledTimes: const ['19:30'],
+            frequency: kCustomWeekdayFrequency,
+            weekdayDoses: [
+              ProtocolWeekdayDose(
+                weekday: DateTime.tuesday,
+                dosePerInjection: 125,
+                doseUnit: 'mcg',
+                scheduledTimes: const ['07:15'],
+              ),
+              ProtocolWeekdayDose(
+                weekday: DateTime.friday,
+                dosePerInjection: 150,
+                doseUnit: 'mcg',
+                scheduledTimes: const ['19:30'],
+              ),
+            ],
             note: 'User-entered plan; review before making changes.',
           ),
         ],

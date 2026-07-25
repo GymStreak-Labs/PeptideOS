@@ -69,8 +69,21 @@ void main() {
               endWeek: 4,
               dosePerInjection: 125,
               doseUnit: 'mcg',
-              frequency: 'eod',
-              scheduledTimes: const ['19:30'],
+              frequency: kCustomWeekdayFrequency,
+              weekdayDoses: [
+                ProtocolWeekdayDose(
+                  weekday: DateTime.tuesday,
+                  dosePerInjection: 125,
+                  doseUnit: 'mcg',
+                  scheduledTimes: const ['07:15'],
+                ),
+                ProtocolWeekdayDose(
+                  weekday: DateTime.friday,
+                  dosePerInjection: 150,
+                  doseUnit: 'mcg',
+                  scheduledTimes: const ['19:30'],
+                ),
+              ],
               note: 'User-entered plan; review before making changes.',
             ),
           ],
@@ -129,6 +142,10 @@ void main() {
 
     expect(find.text('Week-to-week override'), findsOneWidget);
     expect(find.text('SAVE PHASE'), findsOneWidget);
+    await tester.ensureVisible(find.text('PHASE PREVIEW'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('125 mcg · 07:15'), findsOneWidget);
+    expect(find.textContaining('150 mcg · 19:30'), findsOneWidget);
     expect(tester.takeException(), isNull);
     await expectLater(
       find.byType(MaterialApp),

@@ -1630,7 +1630,11 @@ class _PhaseSummaryCard extends StatelessWidget {
     final weeks = phase.startWeek == phase.endWeek
         ? 'WEEK ${phase.startWeek}'
         : 'WEEKS ${phase.startWeek}–${phase.endWeek}';
-    final amount = phase.dosePerInjection == null
+    final amount =
+        phase.frequency == kCustomWeekdayFrequency &&
+            phase.weekdayDoses.isNotEmpty
+        ? 'Per-day amounts'
+        : phase.dosePerInjection == null
         ? 'Base amount'
         : '${_formatAmount(phase.dosePerInjection!)} ${phase.doseUnit ?? ''}';
     final frequency = phase.frequency == null
@@ -1714,6 +1718,9 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
   late String _unit;
   late String _frequency;
   late List<String> _times;
+  late Set<int> _selectedWeekdays;
+  final Map<int, TextEditingController> _weekdayDoseCtrls = {};
+  final Map<int, List<String>> _weekdayTimes = {};
 
   @override
   void initState() {
@@ -1733,14 +1740,18 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
     _noteCtrl = TextEditingController(text: phase.note);
     _unit = phase.doseUnit ?? widget.fallbackUnit;
     _frequency = phase.frequency ?? widget.fallbackFrequency;
-    if (_frequency == kCustomWeekdayFrequency) {
-      _frequency = 'daily';
-    }
     _times = _normalizePhaseTimes(
       phase.scheduledTimes.isEmpty
           ? widget.fallbackTimes
           : phase.scheduledTimes,
     );
+    _selectedWeekdays = phase.weekdayDoses.map((dose) => dose.weekday).toSet();
+    for (final dose in phase.weekdayDoses) {
+      _weekdayDoseCtrls[dose.weekday] = TextEditingController(
+        text: _formatAmount(dose.dosePerInjection),
+      );
+      _weekdayTimes[dose.weekday] = _normalizePhaseTimes(dose.scheduledTimes);
+    }
   }
 
   @override
@@ -1751,6 +1762,9 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
     _doseCtrl.dispose();
     _syringeCtrl.dispose();
     _noteCtrl.dispose();
+    for (final controller in _weekdayDoseCtrls.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -1812,6 +1826,85 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
     });
   }
 
+  void _toggleWeekday(int weekday) {
+    setState(() {
+      if (_selectedWeekdays.remove(weekday)) return;
+      _selectedWeekdays.add(weekday);
+      _weekdayDoseCtrls.putIfAbsent(
+        weekday,
+        () => TextEditingController(text: _doseCtrl.text),
+      );
+      _weekdayTimes.putIfAbsent(weekday, () => List<String>.from(_times));
+    });
+  }
+
+  Future<void> _addWeekdayTime(int weekday) async {
+    final times = _weekdayTimes[weekday] ?? <String>['08:00'];
+    final current = times.last;
+    final parts = current.split(':');
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+        hour: int.tryParse(parts.first) ?? 8,
+        minute: int.tryParse(parts.last) ?? 0,
+      ),
+    );
+    if (picked == null) return;
+    final value =
+        '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+    setState(() {
+      _weekdayTimes[weekday] = _normalizePhaseTimes([...times, value]);
+    });
+  }
+
+  Future<void> _editWeekdayTime(int weekday, String current) async {
+    final parts = current.split(':');
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+        hour: int.tryParse(parts.first) ?? 8,
+        minute: int.tryParse(parts.last) ?? 0,
+      ),
+    );
+    if (picked == null) return;
+    final value =
+        '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+    final times = _weekdayTimes[weekday] ?? <String>[current];
+    setState(() {
+      _weekdayTimes[weekday] = _normalizePhaseTimes([
+        for (final time in times)
+          if (time == current) value else time,
+      ]);
+    });
+  }
+
+  bool get _customWeekdaysAreValid {
+    if (_selectedWeekdays.isEmpty) return false;
+    for (final weekday in _selectedWeekdays) {
+      final amount = parseDecimalInput(_weekdayDoseCtrls[weekday]?.text ?? '');
+      if (amount == null || amount <= 0) return false;
+      if ((_weekdayTimes[weekday] ?? const <String>[]).isEmpty) return false;
+    }
+    return true;
+  }
+
+  List<ProtocolWeekdayDose> _buildWeekdayDoses() {
+    final weekdays = _selectedWeekdays.toList()..sort();
+    final syringeUnits = parseDecimalInput(_syringeCtrl.text) ?? 0;
+    return [
+      for (final weekday in weekdays)
+        ProtocolWeekdayDose(
+          weekday: weekday,
+          dosePerInjection: parseDecimalInput(
+            _weekdayDoseCtrls[weekday]?.text ?? '',
+          )!,
+          doseUnit: _unit,
+          syringeUnits: syringeUnits,
+          scheduledTimes: _weekdayTimes[weekday]!,
+        ),
+    ];
+  }
+
   bool get _canSave {
     final start = int.tryParse(_startWeekCtrl.text) ?? 0;
     final end = int.tryParse(_endWeekCtrl.text) ?? 0;
@@ -1820,7 +1913,9 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
         start > 0 &&
         end >= start &&
         dose > 0 &&
-        _times.isNotEmpty;
+        (_frequency == kCustomWeekdayFrequency
+            ? _customWeekdaysAreValid
+            : _times.isNotEmpty);
   }
 
   void _save() {
@@ -1837,7 +1932,9 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
         ..syringeUnits = parseDecimalInput(_syringeCtrl.text)
         ..frequency = _frequency
         ..scheduledTimes = _times
-        ..weekdayDoses = <ProtocolWeekdayDose>[],
+        ..weekdayDoses = _frequency == kCustomWeekdayFrequency
+            ? _buildWeekdayDoses()
+            : <ProtocolWeekdayDose>[],
     );
   }
 
@@ -1949,7 +2046,9 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                     Expanded(
                       flex: 2,
                       child: _FieldLabel(
-                        label: 'TRACKED AMOUNT',
+                        label: _frequency == kCustomWeekdayFrequency
+                            ? 'DEFAULT AMOUNT'
+                            : 'TRACKED AMOUNT',
                         child: TextField(
                           controller: _doseCtrl,
                           onChanged: (_) => setState(() {}),
@@ -2004,9 +2103,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                   spacing: AppSpacing.sm,
                   runSpacing: AppSpacing.sm,
                   children: [
-                    for (final frequency in kFrequencies.where(
-                      (item) => item.key != kCustomWeekdayFrequency,
-                    ))
+                    for (final frequency in kFrequencies)
                       _Chip(
                         label: frequency.label,
                         selected: _frequency == frequency.key,
@@ -2014,23 +2111,85 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                       ),
                   ],
                 ),
-                const SizedBox(height: AppSpacing.base),
-                Text('REMINDER TIMES', style: AppTypography.systemLabel),
-                const SizedBox(height: AppSpacing.sm),
-                Wrap(
-                  spacing: AppSpacing.sm,
-                  runSpacing: AppSpacing.sm,
-                  children: [
-                    for (final time in _times)
-                      _TimeChip(
-                        label: time,
-                        canRemove: _times.length > 1,
-                        onTap: () => _editTime(time),
-                        onRemove: () => setState(() => _times.remove(time)),
+                if (_frequency == kCustomWeekdayFrequency) ...[
+                  const SizedBox(height: AppSpacing.base),
+                  Text('CUSTOM DAYS', style: AppTypography.systemLabel),
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      for (
+                        var weekday = DateTime.monday;
+                        weekday <= DateTime.sunday;
+                        weekday++
+                      )
+                        _Chip(
+                          label: _weekdayLabel(weekday),
+                          selected: _selectedWeekdays.contains(weekday),
+                          onTap: () => _toggleWeekday(weekday),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.base),
+                  if (_selectedWeekdays.isEmpty)
+                    Text(
+                      'Select at least one day. PepMod will not choose a schedule for you.',
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.warning,
                       ),
-                    _Chip(label: 'Add time', selected: false, onTap: _addTime),
+                    )
+                  else
+                    for (final weekday
+                        in (_selectedWeekdays.toList()..sort())) ...[
+                      _PhaseWeekdayEditor(
+                        weekday: weekday,
+                        amountController: _weekdayDoseCtrls[weekday]!,
+                        unit: _unit,
+                        times: _weekdayTimes[weekday]!,
+                        onAmountChanged: (_) => setState(() {}),
+                        onEditTime: (time) => _editWeekdayTime(weekday, time),
+                        onRemoveTime: (time) {
+                          final times = _weekdayTimes[weekday]!;
+                          if (times.length == 1) return;
+                          setState(() => times.remove(time));
+                        },
+                        onAddTime: () => _addWeekdayTime(weekday),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                    ],
+                  if (_selectedWeekdays.isNotEmpty) ...[
+                    const SizedBox(height: AppSpacing.xs),
+                    _PhaseSchedulePreview(
+                      unit: _unit,
+                      selectedWeekdays: _selectedWeekdays,
+                      amountControllers: _weekdayDoseCtrls,
+                      timesByWeekday: _weekdayTimes,
+                    ),
                   ],
-                ),
+                ] else ...[
+                  const SizedBox(height: AppSpacing.base),
+                  Text('REMINDER TIMES', style: AppTypography.systemLabel),
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      for (final time in _times)
+                        _TimeChip(
+                          label: time,
+                          canRemove: _times.length > 1,
+                          onTap: () => _editTime(time),
+                          onRemove: () => setState(() => _times.remove(time)),
+                        ),
+                      _Chip(
+                        label: 'Add time',
+                        selected: false,
+                        onTap: _addTime,
+                      ),
+                    ],
+                  ),
+                ],
                 const SizedBox(height: AppSpacing.base),
                 _FieldLabel(
                   label: 'CHANGE NOTE OPTIONAL',
@@ -2073,6 +2232,136 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _PhaseWeekdayEditor extends StatelessWidget {
+  const _PhaseWeekdayEditor({
+    required this.weekday,
+    required this.amountController,
+    required this.unit,
+    required this.times,
+    required this.onAmountChanged,
+    required this.onEditTime,
+    required this.onRemoveTime,
+    required this.onAddTime,
+  });
+
+  final int weekday;
+  final TextEditingController amountController;
+  final String unit;
+  final List<String> times;
+  final ValueChanged<String> onAmountChanged;
+  final ValueChanged<String> onEditTime;
+  final ValueChanged<String> onRemoveTime;
+  final VoidCallback onAddTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${_weekdayLabel(weekday).toUpperCase()} SCHEDULE',
+            style: AppTypography.systemLabel,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          _FieldLabel(
+            label: 'TRACKED AMOUNT',
+            child: TextField(
+              controller: amountController,
+              onChanged: onAmountChanged,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              inputFormatters: const [decimalInputFormatter],
+              style: AppTypography.tabular,
+              decoration: InputDecoration(
+                suffixText: unit,
+                suffixStyle: AppTypography.bodySmall,
+                border: InputBorder.none,
+                filled: false,
+                contentPadding: const EdgeInsets.all(AppSpacing.md),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text('REMINDER TIMES', style: AppTypography.systemLabel),
+          const SizedBox(height: AppSpacing.xs),
+          Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
+            children: [
+              for (final time in times)
+                _TimeChip(
+                  label: time,
+                  canRemove: times.length > 1,
+                  onTap: () => onEditTime(time),
+                  onRemove: () => onRemoveTime(time),
+                ),
+              _Chip(label: 'Add time', selected: false, onTap: onAddTime),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PhaseSchedulePreview extends StatelessWidget {
+  const _PhaseSchedulePreview({
+    required this.unit,
+    required this.selectedWeekdays,
+    required this.amountControllers,
+    required this.timesByWeekday,
+  });
+
+  final String unit;
+  final Set<int> selectedWeekdays;
+  final Map<int, TextEditingController> amountControllers;
+  final Map<int, List<String>> timesByWeekday;
+
+  @override
+  Widget build(BuildContext context) {
+    final weekdays = selectedWeekdays.toList()..sort();
+    return AppCard(
+      borderColor: AppColors.borderCyan,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('PHASE PREVIEW', style: AppTypography.systemLabel),
+          const SizedBox(height: AppSpacing.sm),
+          for (final weekday in weekdays)
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 34,
+                    child: Text(
+                      _weekdayLabel(weekday).toUpperCase(),
+                      style: AppTypography.systemLabel.copyWith(fontSize: 9),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      '${amountControllers[weekday]?.text.trim().isEmpty ?? true ? 'Amount required' : '${amountControllers[weekday]!.text.trim()} $unit'}'
+                      ' · ${(timesByWeekday[weekday] ?? const <String>[]).join(', ')}',
+                      style: AppTypography.bodySmall,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Text(
+            'Preview of your entries only. No schedule is recommended by PepMod.',
+            style: AppTypography.disclaimer,
+          ),
+        ],
       ),
     );
   }

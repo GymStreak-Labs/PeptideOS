@@ -587,7 +587,11 @@ class _PhaseTimelineRow extends StatelessWidget {
     final range = phase.startWeek == phase.endWeek
         ? 'WEEK ${phase.startWeek}'
         : 'WEEKS ${phase.startWeek}–${phase.endWeek}';
-    final amount = phase.dosePerInjection == null
+    final amount =
+        phase.frequency == kCustomWeekdayFrequency &&
+            phase.weekdayDoses.isNotEmpty
+        ? 'Per-day amounts'
+        : phase.dosePerInjection == null
         ? 'Base amount'
         : '${_amount(phase.dosePerInjection!)} ${phase.doseUnit ?? ''}';
     return Row(

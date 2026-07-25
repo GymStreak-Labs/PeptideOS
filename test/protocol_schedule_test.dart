@@ -291,6 +291,76 @@ void main() {
       );
     });
 
+    test(
+      'uses phase-specific custom weekdays, amounts, and reminder times',
+      () {
+        final peptide = ProtocolPeptide(
+          dosePerInjection: 100,
+          doseUnit: 'mcg',
+          frequency: 'daily',
+          scheduledTimes: const ['08:00'],
+          phases: [
+            ProtocolPhase(
+              uuid: 'phase-custom',
+              name: 'Custom tracking window',
+              startWeek: 2,
+              endWeek: 3,
+              dosePerInjection: 100,
+              doseUnit: 'mcg',
+              frequency: kCustomWeekdayFrequency,
+              weekdayDoses: [
+                ProtocolWeekdayDose(
+                  weekday: DateTime.tuesday,
+                  dosePerInjection: 125,
+                  doseUnit: 'mcg',
+                  syringeUnits: 10,
+                  scheduledTimes: const ['07:15'],
+                ),
+                ProtocolWeekdayDose(
+                  weekday: DateTime.friday,
+                  dosePerInjection: 175,
+                  doseUnit: 'mcg',
+                  syringeUnits: 14,
+                  scheduledTimes: const ['19:45', '21:15'],
+                ),
+              ],
+            ),
+          ],
+        );
+        final start = DateTime(2026, 6, 1);
+
+        final monday = peptide.scheduleForDate(
+          protocolStart: start,
+          date: DateTime(2026, 6, 8),
+        );
+        final tuesday = peptide.scheduleForDate(
+          protocolStart: start,
+          date: DateTime(2026, 6, 9),
+        );
+        final friday = peptide.scheduleForDate(
+          protocolStart: start,
+          date: DateTime(2026, 6, 12),
+        );
+
+        expect(monday, isNull);
+        expect(tuesday?.dosePerInjection, 125);
+        expect(tuesday?.syringeUnits, 10);
+        expect(tuesday?.scheduledTimes, ['07:15']);
+        expect(friday?.dosePerInjection, 175);
+        expect(friday?.syringeUnits, 14);
+        expect(friday?.scheduledTimes, ['19:45', '21:15']);
+
+        final restored = ProtocolPeptide.fromMap(peptide.toMap());
+        final restoredPhase = restored.phases.single;
+        expect(restoredPhase.frequency, kCustomWeekdayFrequency);
+        expect(restoredPhase.weekdayDoses, hasLength(2));
+        expect(restoredPhase.weekdayDoses.last.scheduledTimes, [
+          '19:45',
+          '21:15',
+        ]);
+      },
+    );
+
     test('round-trips phase configuration without migrating legacy fields', () {
       final peptide = ProtocolPeptide(
         uuid: 'pp-1',
