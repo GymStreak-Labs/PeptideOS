@@ -10,7 +10,6 @@ import 'package:peptide_os/data/repositories/custom_compound_repository.dart';
 import 'package:peptide_os/features/library/providers/custom_compound_provider.dart';
 import 'package:peptide_os/features/library/screens/custom_compound_library_screen.dart';
 import 'package:peptide_os/features/library/screens/reconstitution_screen.dart';
-import 'package:peptide_os/features/library/widgets/syringe_visual.dart';
 import 'package:peptide_os/features/onboarding/widgets/calculator_demo_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/confidence_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/first_name_page.dart';
