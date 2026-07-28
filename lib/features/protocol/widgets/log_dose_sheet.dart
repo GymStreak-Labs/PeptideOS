@@ -136,6 +136,12 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
     final labelColorHex = _labelColorForDose(
       context.watch<ProtocolProvider>().all,
     );
+    final lastInjection = context
+        .watch<DoseLogProvider>()
+        .lastInjectionForPeptide(
+          protocolPeptideUuid: widget.dose.protocolPeptideUuid,
+          excludingDoseUuid: widget.dose.uuid,
+        );
     final blendPreview = widget.dose.blendSnapshot?.copyWith(
       drawSyringeUnits:
           parseDecimalInput(_amountCtrl.text) ?? widget.dose.amountTaken,
@@ -343,6 +349,29 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
 
                   // Injection site rotator
                   Text('INJECTION.SITE', style: AppTypography.systemLabel),
+                  if (lastInjection != null) ...[
+                    const SizedBox(height: AppSpacing.xs),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.history_rounded,
+                          size: 14,
+                          color: AppColors.textTertiary,
+                        ),
+                        const SizedBox(width: AppSpacing.xs),
+                        Flexible(
+                          child: Text(
+                            'LAST SITE FOR THIS PEPTIDE · ${_siteLabel(lastInjection.injectionSite)}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.labelSmall.copyWith(
+                              color: AppColors.textTertiary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                   const SizedBox(height: AppSpacing.sm),
                   Wrap(
                     spacing: AppSpacing.sm,
@@ -418,6 +447,13 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
 
   String _formatAmount(double d) =>
       d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(2);
+
+  String _siteLabel(String key) {
+    for (final site in kInjectionSites) {
+      if (site.key == key) return site.label;
+    }
+    return key;
+  }
 }
 
 /// Recent completed/skipped dose records. Tapping a row reuses
