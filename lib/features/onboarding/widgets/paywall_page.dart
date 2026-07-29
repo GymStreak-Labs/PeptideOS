@@ -26,14 +26,12 @@ class PaywallPage extends StatefulWidget {
     super.key,
     required this.onSubscribe,
     required this.onRestore,
-    required this.onReviewerBypass,
     this.planPrices = const {},
     this.showSpecialOffer = true,
   });
 
   final Future<void> Function(int selectedPlan) onSubscribe;
   final VoidCallback onRestore;
-  final Future<void> Function() onReviewerBypass;
   final Map<int, PaywallPlanPrice> planPrices;
   final bool showSpecialOffer;
 
@@ -44,7 +42,6 @@ class PaywallPage extends StatefulWidget {
 class _PaywallPageState extends State<PaywallPage>
     with SingleTickerProviderStateMixin {
   late int _selectedPlan; // 0=special annual, 1=annual, 2=weekly
-  int _secretTapCount = 0;
   bool _isSubmitting = false;
 
   // Staggered entrance
@@ -263,27 +260,17 @@ class _PaywallPageState extends State<PaywallPage>
             Text('SYS.ACCESS // PROTOCOL', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.sm),
 
-            GestureDetector(
-              onTap: () {
-                _secretTapCount++;
-                if (_secretTapCount >= 7) {
-                  _secretTapCount = 0;
-                  HapticFeedback.heavyImpact();
-                  unawaited(widget.onReviewerBypass());
-                }
-              },
-              child: Text(
-                'Everything to run\nyour protocol right.',
-                style: AppTypography.h1.copyWith(
-                  fontSize: 30,
-                  height: 1.1,
-                  shadows: [
-                    Shadow(
-                      color: AppColors.primary.withValues(alpha: 0.4),
-                      blurRadius: 20,
-                    ),
-                  ],
-                ),
+            Text(
+              'Everything to run\nyour protocol right.',
+              style: AppTypography.h1.copyWith(
+                fontSize: 30,
+                height: 1.1,
+                shadows: [
+                  Shadow(
+                    color: AppColors.primary.withValues(alpha: 0.4),
+                    blurRadius: 20,
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: AppSpacing.sm),
