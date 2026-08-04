@@ -356,7 +356,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                         const Icon(
                           Icons.history_rounded,
                           size: 14,
-                          color: AppColors.textTertiary,
+                          color: AppColors.textSecondary,
                         ),
                         const SizedBox(width: AppSpacing.xs),
                         Flexible(
@@ -365,7 +365,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: AppTypography.labelSmall.copyWith(
-                              color: AppColors.textTertiary,
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ),
