@@ -15,6 +15,7 @@ import '../widgets/log_dose_sheet.dart';
 import '../widgets/peptide_label_color.dart';
 import 'active_protocol_detail_screen.dart';
 import 'create_protocol_screen.dart';
+import 'weekly_planner_screen.dart';
 
 /// Today-focused home screen. Surfaces today's schedule, adherence, and
 /// the next dose countdown for whichever active protocol is running.
@@ -78,6 +79,22 @@ class ProtocolHomeScreen extends StatelessWidget {
                     ),
                   ),
                   _HeaderIconButton(
+                    tooltip: 'Weekly planner',
+                    icon: Icons.calendar_view_week_rounded,
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => WeeklyPlannerScreen(
+                            protocols: protocolProvider.active,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  _HeaderIconButton(
+                    tooltip: 'Dose history',
                     icon: Icons.history_rounded,
                     onTap: () {
                       HapticFeedback.lightImpact();
@@ -86,6 +103,7 @@ class ProtocolHomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   _HeaderIconButton(
+                    tooltip: 'Create protocol',
                     icon: Icons.add_rounded,
                     onTap: () {
                       HapticFeedback.lightImpact();
@@ -267,29 +285,42 @@ class ProtocolHomeScreen extends StatelessWidget {
 
 // ── Header icon button ──────────────────────────────────────────────────────
 class _HeaderIconButton extends StatelessWidget {
-  const _HeaderIconButton({required this.icon, required this.onTap});
+  const _HeaderIconButton({
+    required this.tooltip,
+    required this.icon,
+    required this.onTap,
+  });
+  final String tooltip;
   final IconData icon;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 44,
-        height: 44,
-        decoration: BoxDecoration(
-          color: AppColors.primary.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
-          border: Border.all(color: AppColors.borderCyan),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.2),
-              blurRadius: 8,
-            ),
-          ],
+    return Semantics(
+      button: true,
+      label: tooltip,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: AppColors.primary.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
+            border: Border.all(color: AppColors.borderCyan),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primary.withValues(alpha: 0.2),
+                blurRadius: 8,
+              ),
+            ],
+          ),
+          child: Icon(
+            icon,
+            color: AppColors.primary,
+            size: AppSpacing.iconLarge,
+          ),
         ),
-        child: Icon(icon, color: AppColors.primary, size: AppSpacing.iconLarge),
       ),
     );
   }

@@ -157,7 +157,9 @@ class ProtocolProvider extends ChangeNotifier {
   }
 
   Future<void> resumeProtocol(Protocol p) async {
-    p.status = ProtocolStatus.active;
+    p
+      ..status = ProtocolStatus.active
+      ..endDate = null;
     await _persist(p);
     await _generateDoseLogs(p);
     await _rescheduleProtocolReminders(p);
