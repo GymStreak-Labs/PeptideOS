@@ -50,9 +50,20 @@ void main() {
       find.text('For reconstitution, tap any peptide below.'),
       findsOneWidget,
     );
+    final converterSemantics = tester.getSemantics(
+      find.bySemanticsLabel('Open unit converter'),
+    );
+    expect(
+      converterSemantics,
+      matchesSemantics(
+        label: 'Open unit converter',
+        isButton: true,
+        hasTapAction: true,
+      ),
+    );
     expect(tester.takeException(), isNull);
 
-    await tester.tap(find.text('UNIT CONVERTER'));
+    tester.semantics.tap(find.semantics.byLabel('Open unit converter'));
     await tester.pumpAndSettle();
     expect(find.text('Vial workspace'), findsOneWidget);
     expect(find.text('MEASUREMENT.MODE'), findsOneWidget);

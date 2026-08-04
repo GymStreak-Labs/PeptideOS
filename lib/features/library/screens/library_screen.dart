@@ -229,55 +229,64 @@ class _ConversionToolsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
+    return Semantics(
+      button: true,
+      label: 'Open unit converter',
       onTap: onTap,
-      borderColor: AppColors.borderCyan,
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
-              border: Border.all(color: AppColors.borderCyan),
+      excludeSemantics: true,
+      child: AppCard(
+        onTap: onTap,
+        borderColor: AppColors.borderCyan,
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
+                border: Border.all(color: AppColors.borderCyan),
+              ),
+              child: const Icon(
+                Icons.calculate_rounded,
+                color: AppColors.primary,
+              ),
             ),
-            child: const Icon(
-              Icons.calculate_rounded,
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'UNIT CONVERTER',
+                    style: AppTypography.systemLabel.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    'Convert vial math now',
+                    style: AppTypography.labelLarge,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'For reconstitution, tap any peptide below.',
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            const Icon(
+              Icons.arrow_forward_rounded,
               color: AppColors.primary,
+              size: AppSpacing.iconMedium,
             ),
-          ),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'UNIT CONVERTER',
-                  style: AppTypography.systemLabel.copyWith(
-                    color: AppColors.primary,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text('Convert vial math now', style: AppTypography.labelLarge),
-                const SizedBox(height: 2),
-                Text(
-                  'For reconstitution, tap any peptide below.',
-                  style: AppTypography.bodySmall.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          const Icon(
-            Icons.arrow_forward_rounded,
-            color: AppColors.primary,
-            size: AppSpacing.iconMedium,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
