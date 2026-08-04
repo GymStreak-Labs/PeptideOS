@@ -1,7 +1,85 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:peptide_os/features/protocol/providers/dose_log_provider.dart';
+import 'package:peptide_os/models/dose_log.dart';
 import 'package:peptide_os/models/protocol.dart';
 
 void main() {
+  group('last injection reminder', () {
+    DoseLog log({
+      required String uuid,
+      required DateTime? takenAt,
+      String protocolPeptideUuid = 'peptide-a',
+      String site = '',
+      bool skipped = false,
+    }) {
+      return DoseLog(
+        uuid: uuid,
+        protocolUuid: 'protocol',
+        protocolPeptideUuid: protocolPeptideUuid,
+        peptideName: protocolPeptideUuid == 'peptide-a' ? 'BPC-157' : 'TB-500',
+        scheduledAt: DateTime(2026, 7, 1),
+        takenAt: takenAt,
+        amountTaken: 250,
+        units: 'mcg',
+        injectionSite: site,
+        skipped: skipped,
+      );
+    }
+
+    test('returns the newest completed dose with a recorded site', () {
+      final result = DoseLogProvider.findLastInjectionForPeptide([
+        log(
+          uuid: 'newest-other-peptide',
+          takenAt: DateTime(2026, 7, 4),
+          protocolPeptideUuid: 'peptide-b',
+          site: 'right-glute',
+        ),
+        log(uuid: 'newest-without-site', takenAt: DateTime(2026, 7, 3)),
+        log(
+          uuid: 'older-with-site',
+          takenAt: DateTime(2026, 7, 1),
+          site: 'left-thigh',
+        ),
+        log(
+          uuid: 'newest-with-site',
+          takenAt: DateTime(2026, 7, 2),
+          site: 'right-abdomen',
+        ),
+      ], protocolPeptideUuid: 'peptide-a');
+
+      expect(result?.uuid, 'newest-with-site');
+      expect(result?.injectionSite, 'right-abdomen');
+    });
+
+    test('ignores pending, skipped, and currently edited doses', () {
+      final result = DoseLogProvider.findLastInjectionForPeptide(
+        [
+          log(
+            uuid: 'previous',
+            takenAt: DateTime(2026, 7, 1),
+            site: 'left-abdomen',
+          ),
+          log(
+            uuid: 'editing',
+            takenAt: DateTime(2026, 7, 4),
+            site: 'right-abdomen',
+          ),
+          log(uuid: 'pending', takenAt: null, site: 'left-thigh'),
+          log(
+            uuid: 'skipped',
+            takenAt: DateTime(2026, 7, 5),
+            site: 'right-thigh',
+            skipped: true,
+          ),
+        ],
+        protocolPeptideUuid: 'peptide-a',
+        excludingDoseUuid: 'editing',
+      );
+
+      expect(result?.uuid, 'previous');
+    });
+  });
+
   group('injection sites', () {
     test('includes bilateral glute and triceps options', () {
       expect(

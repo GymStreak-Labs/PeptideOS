@@ -29,6 +29,44 @@ class DoseLogProvider extends ChangeNotifier {
   List<DoseLog> get recent30 => _recent30;
   bool get isLoading => _loading;
 
+  /// Fetches the most recently completed injection for this protocol peptide
+  /// that recorded a site, including history older than the 30-day stats
+  /// window.
+  Future<DoseLog?> lastInjectionForPeptide({
+    required String protocolPeptideUuid,
+    String? excludingDoseUuid,
+  }) {
+    return _repo.fetchLatestInjectionForPeptide(
+      _uid,
+      protocolPeptideUuid: protocolPeptideUuid,
+      excludingDoseUuid: excludingDoseUuid,
+    );
+  }
+
+  @visibleForTesting
+  static DoseLog? findLastInjectionForPeptide(
+    Iterable<DoseLog> logs, {
+    required String protocolPeptideUuid,
+    String? excludingDoseUuid,
+  }) {
+    DoseLog? latest;
+    for (final dose in logs) {
+      final takenAt = dose.takenAt;
+      if (dose.uuid == excludingDoseUuid ||
+          dose.protocolPeptideUuid != protocolPeptideUuid ||
+          !dose.isTaken ||
+          dose.injectionSite.isEmpty ||
+          takenAt == null) {
+        continue;
+      }
+      final latestTakenAt = latest?.takenAt;
+      if (latestTakenAt == null || takenAt.isAfter(latestTakenAt)) {
+        latest = dose;
+      }
+    }
+    return latest;
+  }
+
   void setUid(String uid) {
     if (_uid == uid) return;
     _uid = uid;
