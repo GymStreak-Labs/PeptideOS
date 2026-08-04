@@ -10,6 +10,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../protocol/screens/create_protocol_screen.dart';
 import '../widgets/syringe_visual.dart';
 import '../providers/peptide_provider.dart';
+import '../utils/library_labels.dart';
 
 /// Peptide detail — factual description, typical dose, stack info, and an
 /// inline reconstitution calculator. CTA to add to a protocol.
@@ -81,7 +82,12 @@ class PeptideDetailScreen extends StatelessWidget {
                       spacing: AppSpacing.sm,
                       runSpacing: AppSpacing.sm,
                       children: [
-                        _InfoChip(label: peptide.category.label),
+                        _InfoChip(
+                          label: localizedPeptideCategoryLabel(
+                            l10n,
+                            peptide.category,
+                          ),
+                        ),
                         if (peptide.halfLife.isNotEmpty)
                           _InfoChip(
                             label: '${l10n.halfLife}: ${peptide.halfLife}',
@@ -439,19 +445,23 @@ class _InlineReconstitutionCalculatorState
                   children: [
                     Text(l10n.drawTo, style: AppTypography.systemLabel),
                     const SizedBox(height: AppSpacing.xs),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Text(
-                          _units.isFinite ? _units.toStringAsFixed(1) : '—',
-                          style: AppTypography.heroMedium.copyWith(
-                            color: AppColors.primary,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Text(
+                            _units.isFinite ? _units.toStringAsFixed(1) : '—',
+                            style: AppTypography.heroMedium.copyWith(
+                              color: AppColors.primary,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: AppSpacing.xs),
-                        Text(l10n.units, style: AppTypography.unit),
-                      ],
+                          const SizedBox(width: AppSpacing.xs),
+                          Text(l10n.units, style: AppTypography.unit),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 2),
                     Text(

@@ -213,7 +213,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get compoundSystemLabel => 'DB.WIRKSTOFF';
 
   @override
-  String get addToProtocol => 'ZUM PROTOKOLL HINZUFÜGEN';
+  String get addToProtocol => 'ZUM PROTOKOLL';
 
   @override
   String get vialShort => 'FLASCHE (mg)';

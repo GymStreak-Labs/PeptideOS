@@ -10,6 +10,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../protocol/widgets/empty_state.dart';
 import '../../profile/providers/settings_provider.dart';
 import '../providers/peptide_provider.dart';
+import '../utils/library_labels.dart';
 import 'custom_compound_library_screen.dart';
 import 'peptide_detail_screen.dart';
 import 'reconstitution_screen.dart';
@@ -139,7 +140,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: AppSpacing.sm),
                         child: _CategoryChip(
-                          label: _categoryLabel(l10n, cat),
+                          label: localizedPeptideCategoryLabel(l10n, cat),
                           selected: _category == cat,
                           onTap: () => setState(
                             () => _category = cat == _category ? null : cat,
@@ -198,7 +199,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   final p = results[i];
                   return _PeptideCard(
                     peptide: p,
-                    categoryLabel: _categoryLabel(l10n, p.category),
+                    categoryLabel: localizedPeptideCategoryLabel(
+                      l10n,
+                      p.category,
+                    ),
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -387,17 +391,6 @@ class _PeptideCard extends StatelessWidget {
     );
   }
 }
-
-String _categoryLabel(AppLocalizations l10n, PeptideCategory category) =>
-    switch (category) {
-      PeptideCategory.healing => l10n.categoryHealing,
-      PeptideCategory.growthHormone => l10n.categoryGrowthHormone,
-      PeptideCategory.cognitive => l10n.categoryCognitive,
-      PeptideCategory.metabolic => l10n.categoryMetabolic,
-      PeptideCategory.aesthetic => l10n.categoryAesthetic,
-      PeptideCategory.longevity => l10n.categoryLongevity,
-      PeptideCategory.other => l10n.categoryOther,
-    };
 
 // ── Header icon button ────────────────────────────────────────────────────
 class _HeaderIconButton extends StatelessWidget {

@@ -5,8 +5,10 @@ import 'package:peptide_os/core/theme/theme.dart';
 import 'package:peptide_os/data/repositories/peptide_library_repository.dart';
 import 'package:peptide_os/features/library/providers/peptide_provider.dart';
 import 'package:peptide_os/features/library/screens/library_screen.dart';
+import 'package:peptide_os/features/library/screens/peptide_detail_screen.dart';
 import 'package:peptide_os/features/library/screens/reconstitution_screen.dart';
 import 'package:peptide_os/l10n/app_localizations.dart';
+import 'package:peptide_os/models/peptide.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -87,6 +89,36 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets('German peptide detail uses the localized category label', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    final peptide = Peptide(
+      slug: 'bpc-157',
+      name: 'BPC-157',
+      category: PeptideCategory.healing,
+      description: 'Reference description',
+      typicalDose: 'Reference amount',
+      defaultDoseMcg: 0,
+      defaultFrequency: 'daily',
+      halfLife: '',
+      typicalCycleWeeks: 0,
+      defaultRoute: 'subcutaneous',
+      commonStack: const [],
+      notes: '',
+      disclaimer: 'Reference only',
+    );
+
+    await tester.pumpWidget(_germanApp(PeptideDetailScreen(peptide: peptide)));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Regeneration'), findsOneWidget);
+    expect(find.text('Healing'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
 }
 
 Widget _germanApp(Widget home) => MaterialApp(
