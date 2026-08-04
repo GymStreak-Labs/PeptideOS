@@ -99,6 +99,7 @@ class ProtocolProvider extends ChangeNotifier {
     required String name,
     required DateTime startDate,
     required List<ProtocolPeptide> peptides,
+    String notes = '',
   }) async {
     final now = DateTime.now();
     final p = Protocol(
@@ -108,6 +109,7 @@ class ProtocolProvider extends ChangeNotifier {
       status: ProtocolStatus.active,
       peptides: peptides,
       createdAt: now,
+      notes: notes.trim(),
     );
 
     if (_uid.isEmpty) return p;
@@ -127,6 +129,7 @@ class ProtocolProvider extends ChangeNotifier {
     required String name,
     required DateTime startDate,
     required List<ProtocolPeptide> peptides,
+    String? notes,
   }) async {
     if (_uid.isEmpty) return;
 
@@ -138,6 +141,7 @@ class ProtocolProvider extends ChangeNotifier {
       ..name = name.isEmpty ? 'My Protocol' : name
       ..startDate = startDate
       ..peptides = peptides;
+    if (notes != null) protocol.notes = notes.trim();
 
     try {
       await _protocolRepo.upsert(_uid, protocol);

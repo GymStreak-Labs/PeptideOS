@@ -176,6 +176,10 @@ class _ActiveProtocolDetailScreenState
                       ),
                     ),
                     const SizedBox(height: AppSpacing.cardGap),
+                    if (_protocol.notes.trim().isNotEmpty) ...[
+                      _ProtocolNotesCard(notes: _protocol.notes),
+                      const SizedBox(height: AppSpacing.cardGap),
+                    ],
                     _CycleStatusCard(protocol: _protocol),
                     if (_protocol.peptides.any((p) => p.phases.isNotEmpty)) ...[
                       const SizedBox(height: AppSpacing.cardGap),
@@ -183,6 +187,16 @@ class _ActiveProtocolDetailScreenState
                         protocol: _protocol,
                         today: widget.timelineDate,
                       ),
+                      if (_hasUpcomingPhaseChange(
+                        _protocol,
+                        widget.timelineDate ?? DateTime.now(),
+                      )) ...[
+                        const SizedBox(height: AppSpacing.cardGap),
+                        _UpcomingChangeRemindersCard(
+                          protocol: _protocol,
+                          today: widget.timelineDate,
+                        ),
+                      ],
                     ],
                     const SizedBox(height: AppSpacing.cardGap),
                     _ProtocolHistoryList(protocols: protocolHistory),
@@ -271,6 +285,15 @@ class _ActiveProtocolDetailScreenState
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  static bool _hasUpcomingPhaseChange(Protocol protocol, DateTime today) {
+    final day = DateTime(today.year, today.month, today.day);
+    return protocol.peptides.any(
+      (peptide) => peptide.phases.any(
+        (phase) => phase.startsOn(protocol.startDate).isAfter(day),
       ),
     );
   }
@@ -466,6 +489,159 @@ class _StatTile extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _ProtocolNotesCard extends StatelessWidget {
+  const _ProtocolNotesCard({required this.notes});
+
+  final String notes;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      borderColor: AppColors.borderCyan,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.notes_rounded,
+                size: AppSpacing.iconMedium,
+                color: AppColors.primary,
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Text('NOTES // PROTOCOL', style: AppTypography.systemLabel),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            notes.trim(),
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _UpcomingChangeRemindersCard extends StatelessWidget {
+  const _UpcomingChangeRemindersCard({required this.protocol, this.today});
+
+  final Protocol protocol;
+  final DateTime? today;
+
+  @override
+  Widget build(BuildContext context) {
+    final effectiveToday = today ?? DateTime.now();
+    final day = DateTime(
+      effectiveToday.year,
+      effectiveToday.month,
+      effectiveToday.day,
+    );
+    final changes = <({String peptide, ProtocolPhase phase, DateTime date})>[];
+    for (final peptide in protocol.peptides) {
+      for (final phase in peptide.phases) {
+        final date = phase.startsOn(protocol.startDate);
+        if (date.isAfter(day)) {
+          changes.add((peptide: peptide.peptideName, phase: phase, date: date));
+        }
+      }
+    }
+    changes.sort((a, b) => a.date.compareTo(b.date));
+
+    return AppCard(
+      borderColor: AppColors.aiInsightBright.withValues(alpha: 0.45),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.notifications_active_outlined,
+                size: AppSpacing.iconMedium,
+                color: AppColors.aiInsightBright,
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Text(
+                'CHANGE REMINDERS',
+                style: AppTypography.systemLabel.copyWith(
+                  color: AppColors.aiInsightBright,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            'When Notifications is on, PepMod schedules a 09:00 local checkpoint for each upcoming phase change.',
+            style: AppTypography.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.base),
+          for (var index = 0; index < changes.length; index++) ...[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 7,
+                  height: 7,
+                  margin: const EdgeInsets.only(top: 6),
+                  decoration: const BoxDecoration(
+                    color: AppColors.aiInsightBright,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${changes[index].peptide} · ${changes[index].phase.name}',
+                        style: AppTypography.labelMedium.copyWith(
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      Text(
+                        '${_date(changes[index].date)} · 09:00',
+                        style: AppTypography.tabular.copyWith(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            if (index != changes.length - 1)
+              const SizedBox(height: AppSpacing.md),
+          ],
+        ],
+      ),
+    );
+  }
+
+  static String _date(DateTime date) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${months[date.month - 1]} ${date.day}';
   }
 }
 

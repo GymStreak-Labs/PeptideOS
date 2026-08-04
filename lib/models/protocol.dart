@@ -14,6 +14,7 @@ class Protocol {
     required this.peptides,
     required this.createdAt,
     this.endDate,
+    this.notes = '',
   });
 
   /// Stable UUID string — used as the Firestore doc ID and referenced from
@@ -22,6 +23,7 @@ class Protocol {
   String name;
   DateTime startDate;
   DateTime? endDate;
+  String notes;
   ProtocolStatus status;
 
   /// Embedded peptide entries (one per peptide in this protocol). Stored as a
@@ -35,6 +37,7 @@ class Protocol {
     'name': name,
     'startDate': startDate.toIso8601String(),
     'endDate': endDate?.toIso8601String(),
+    'notes': notes,
     'status': status.name,
     'peptides': peptides.map((p) => p.toMap()).toList(),
     'createdAt': createdAt.toIso8601String(),
@@ -46,6 +49,7 @@ class Protocol {
       name: (data['name'] as String?) ?? 'My Protocol',
       startDate: _parseDate(data['startDate']) ?? DateTime.now(),
       endDate: _parseDate(data['endDate']),
+      notes: (data['notes'] as String?) ?? '',
       status: _parseStatus(data['status'] as String?),
       peptides: (data['peptides'] as List<dynamic>? ?? const [])
           .map(
