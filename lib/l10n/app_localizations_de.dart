@@ -21,6 +21,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get unitConverter => 'Einheitenrechner';
 
   @override
+  String get openUnitConverter => 'Einheitenrechner öffnen';
+
+  @override
+  String get converterCardTitle => 'EINHEITENRECHNER';
+
+  @override
+  String get converterCardSubtitle => 'Fläschchenwerte jetzt umrechnen';
+
+  @override
+  String get converterCardHint =>
+      'Für die Rekonstitution unten ein Peptid antippen.';
+
+  @override
   String get searchPeptides => 'Peptide suchen...';
 
   @override

@@ -122,6 +122,30 @@ abstract class AppLocalizations {
   /// **'Unit converter'**
   String get unitConverter;
 
+  /// No description provided for @openUnitConverter.
+  ///
+  /// In en, this message translates to:
+  /// **'Open unit converter'**
+  String get openUnitConverter;
+
+  /// No description provided for @converterCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'UNIT CONVERTER'**
+  String get converterCardTitle;
+
+  /// No description provided for @converterCardSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert vial math now'**
+  String get converterCardSubtitle;
+
+  /// No description provided for @converterCardHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For reconstitution, tap any peptide below.'**
+  String get converterCardHint;
+
   /// No description provided for @searchPeptides.
   ///
   /// In en, this message translates to:

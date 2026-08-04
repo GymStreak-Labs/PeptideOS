@@ -21,6 +21,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unitConverter => 'Unit converter';
 
   @override
+  String get openUnitConverter => 'Open unit converter';
+
+  @override
+  String get converterCardTitle => 'UNIT CONVERTER';
+
+  @override
+  String get converterCardSubtitle => 'Convert vial math now';
+
+  @override
+  String get converterCardHint => 'For reconstitution, tap any peptide below.';
+
+  @override
   String get searchPeptides => 'Search peptides...';
 
   @override

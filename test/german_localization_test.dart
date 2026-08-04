@@ -36,7 +36,9 @@ void main() {
     expect(find.text('Peptide suchen...'), findsOneWidget);
     expect(find.text('Alle'), findsOneWidget);
     expect(find.text('Regeneration'), findsWidgets);
-    expect(find.byTooltip('Einheitenrechner'), findsOneWidget);
+    expect(find.text('EINHEITENRECHNER'), findsOneWidget);
+    expect(find.text('Fläschchenwerte jetzt umrechnen'), findsOneWidget);
+    expect(find.bySemanticsLabel('Einheitenrechner öffnen'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
