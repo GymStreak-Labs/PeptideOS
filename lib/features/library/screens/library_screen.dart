@@ -25,6 +25,22 @@ class _LibraryScreenState extends State<LibraryScreen> {
   String _query = '';
   PeptideCategory? _category;
 
+  void _openUnitConverter() {
+    HapticFeedback.lightImpact();
+    final settingsProvider = context.read<SettingsProvider>();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ReconstitutionScreen(
+          savedCalculations: settingsProvider.settings.savedVialCalculations,
+          onSavedCalculationsChanged: (calculations) => settingsProvider.update(
+            (settings) => settings.savedVialCalculations =
+                List<SavedVialCalculation>.from(calculations),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<PeptideProvider>();
@@ -72,30 +88,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       );
                     },
                   ),
-                  const SizedBox(width: AppSpacing.sm),
-                  _HeaderIconButton(
-                    icon: Icons.calculate_rounded,
-                    tooltip: 'Unit converter',
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      final settingsProvider = context.read<SettingsProvider>();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => ReconstitutionScreen(
-                            savedCalculations:
-                                settingsProvider.settings.savedVialCalculations,
-                            onSavedCalculationsChanged: (calculations) =>
-                                settingsProvider.update(
-                                  (settings) => settings.savedVialCalculations =
-                                      List<SavedVialCalculation>.from(
-                                        calculations,
-                                      ),
-                                ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
                 ],
               ),
             ),
@@ -114,7 +106,19 @@ class _LibraryScreenState extends State<LibraryScreen> {
             ),
           ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.md)),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.screenHorizontal,
+                AppSpacing.md,
+                AppSpacing.screenHorizontal,
+                0,
+              ),
+              child: _ConversionToolsCard(onTap: _openUnitConverter),
+            ),
+          ),
+
+          const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.lg)),
 
           // Category chips
           SliverToBoxAdapter(
@@ -218,6 +222,76 @@ class _LibraryScreenState extends State<LibraryScreen> {
 }
 
 // ── Search bar ────────────────────────────────────────────────────────────
+class _ConversionToolsCard extends StatelessWidget {
+  const _ConversionToolsCard({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: 'Open unit converter',
+      onTap: onTap,
+      excludeSemantics: true,
+      child: AppCard(
+        onTap: onTap,
+        borderColor: AppColors.borderCyan,
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
+                border: Border.all(color: AppColors.borderCyan),
+              ),
+              child: const Icon(
+                Icons.calculate_rounded,
+                color: AppColors.primary,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'UNIT CONVERTER',
+                    style: AppTypography.systemLabel.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    'Convert vial math now',
+                    style: AppTypography.labelLarge,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'For reconstitution, tap any peptide below.',
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            const Icon(
+              Icons.arrow_forward_rounded,
+              color: AppColors.primary,
+              size: AppSpacing.iconMedium,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _SearchBar extends StatelessWidget {
   const _SearchBar({required this.value, required this.onChanged});
   final String value;
