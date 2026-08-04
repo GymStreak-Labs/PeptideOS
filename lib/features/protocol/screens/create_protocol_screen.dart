@@ -37,6 +37,7 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
   int _step = 0;
 
   late final TextEditingController _nameController;
+  late final TextEditingController _notesController;
   final List<ProtocolPeptide> _peptides = [];
   DateTime _startDate = DateTime.now();
   bool _saving = false;
@@ -50,6 +51,7 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
     _nameController = TextEditingController(
       text: initial?.name ?? 'My Protocol',
     );
+    _notesController = TextEditingController(text: initial?.notes ?? '');
     if (initial != null) {
       _startDate = initial.startDate;
       _peptides.addAll(initial.peptides.map(_cloneProtocolPeptide));
@@ -60,6 +62,7 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
   void dispose() {
     _pageController.dispose();
     _nameController.dispose();
+    _notesController.dispose();
     super.dispose();
   }
 
@@ -121,12 +124,14 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
           name: _nameController.text.trim(),
           startDate: _startDate,
           peptides: _peptides,
+          notes: _notesController.text,
         );
       } else {
         await provider.createProtocol(
           name: _nameController.text.trim(),
           startDate: _startDate,
           peptides: _peptides,
+          notes: _notesController.text,
         );
       }
       if (!mounted) return;
@@ -240,6 +245,7 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
                 children: [
                   _Step1Name(
                     controller: _nameController,
+                    notesController: _notesController,
                     onChanged: (_) => setState(() {}),
                   ),
                   _Step2Peptides(
@@ -289,8 +295,13 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
 
 // ── Step 1 — Name ──────────────────────────────────────────────────────────
 class _Step1Name extends StatelessWidget {
-  const _Step1Name({required this.controller, required this.onChanged});
+  const _Step1Name({
+    required this.controller,
+    required this.notesController,
+    required this.onChanged,
+  });
   final TextEditingController controller;
+  final TextEditingController notesController;
   final ValueChanged<String> onChanged;
 
   @override
@@ -320,6 +331,39 @@ class _Step1Name extends StatelessWidget {
               onChanged: onChanged,
               style: AppTypography.h3,
               decoration: const InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.all(AppSpacing.md),
+                filled: false,
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xl),
+          Text('Protocol notes', style: AppTypography.h3),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            'Save context you want visible when reviewing this protocol.',
+            style: AppTypography.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.inputFill,
+              borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: TextField(
+              controller: notesController,
+              minLines: 3,
+              maxLines: 5,
+              maxLength: 500,
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.textPrimary,
+              ),
+              decoration: const InputDecoration(
+                hintText:
+                    'e.g. questions, tracking context, or clinician notes',
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.all(AppSpacing.md),
                 filled: false,
