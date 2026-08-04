@@ -2,6 +2,24 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:peptide_os/models/protocol.dart';
 
 void main() {
+  group('injection sites', () {
+    test('includes bilateral glute and triceps options', () {
+      expect(
+        kInjectionSites,
+        containsAll(const [
+          (key: 'left-glute', label: 'Left Glute'),
+          (key: 'right-glute', label: 'Right Glute'),
+          (key: 'left-triceps', label: 'Left Triceps'),
+          (key: 'right-triceps', label: 'Right Triceps'),
+        ]),
+      );
+      expect(
+        kInjectionSites.map((site) => site.key).toSet(),
+        hasLength(kInjectionSites.length),
+      );
+    });
+  });
+
   group('ProtocolPeptide scheduleForDate', () {
     test('keeps legacy daily protocols backward compatible', () {
       final peptide = ProtocolPeptide.fromMap({
