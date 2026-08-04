@@ -26,8 +26,8 @@ class ProtocolProvider extends ChangeNotifier {
     _subscribe();
   }
 
-  final ProtocolRepository _protocolRepo;
-  final DoseLogRepository _doseLogRepo;
+  final ProtocolDataSource _protocolRepo;
+  final DoseLogDataSource _doseLogRepo;
   final _uuid = const Uuid();
   String _uid;
   bool _notificationsEnabled;
@@ -202,6 +202,10 @@ class ProtocolProvider extends ChangeNotifier {
   }
 
   Future<void> _persist(Protocol p) async {
+    // Status mutations happen on the provider-owned object before persistence.
+    // Notify immediately so history/status consumers do not have to wait for a
+    // later Firestore snapshot to reflect the local action.
+    notifyListeners();
     if (_uid.isEmpty) return;
     try {
       await _protocolRepo.upsert(_uid, p);
