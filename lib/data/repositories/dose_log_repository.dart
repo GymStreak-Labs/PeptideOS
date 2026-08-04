@@ -76,10 +76,10 @@ class DoseLogRepository implements DoseLogDataSource {
   /// Fetches the most recently *taken* dose with a recorded injection site for
   /// one protocol peptide.
   ///
-  /// Results are read newest-first in small pages. This keeps the UI from
-  /// loading or scanning the user's complete dose history, while still being
-  /// exact when the latest usable site is older than the 30-day stats window
-  /// or is preceded by skipped/site-less records.
+  /// Firestore filters to the requested protocol peptide, then results are
+  /// read newest-first in small pages. Pagination keeps the lookup exact when
+  /// the latest usable site is older than the 30-day stats window or is
+  /// preceded by skipped/site-less records without loading full user history.
   Future<DoseLog?> fetchLatestInjectionForPeptide(
     String uid, {
     required String protocolPeptideUuid,
@@ -88,14 +88,19 @@ class DoseLogRepository implements DoseLogDataSource {
     if (uid.isEmpty || protocolPeptideUuid.isEmpty) return null;
 
     const pageSize = 25;
-    QueryDocumentSnapshot<Map<String, dynamic>>? cursor;
+    String? cursorTakenAt;
+    String? cursorUuid;
 
     while (true) {
       Query<Map<String, dynamic>> query = _col(uid)
+          .where('protocolPeptideUuid', isEqualTo: protocolPeptideUuid)
           .where('takenAt', isGreaterThan: '')
           .orderBy('takenAt', descending: true)
-          .limit(pageSize);
-      if (cursor != null) query = query.startAfterDocument(cursor);
+          .orderBy('uuid', descending: true);
+      if (cursorTakenAt != null && cursorUuid != null) {
+        query = query.startAfter([cursorTakenAt, cursorUuid]);
+      }
+      query = query.limit(pageSize);
 
       final page = await query.get();
       if (page.docs.isEmpty) return null;
@@ -104,7 +109,6 @@ class DoseLogRepository implements DoseLogDataSource {
         final dose = DoseLog.fromMap(document.id, document.data());
         if (dose.takenAt == null) continue;
         if (dose.uuid == excludingDoseUuid ||
-            dose.protocolPeptideUuid != protocolPeptideUuid ||
             !dose.isTaken ||
             dose.injectionSite.trim().isEmpty) {
           continue;
@@ -113,7 +117,10 @@ class DoseLogRepository implements DoseLogDataSource {
       }
 
       if (page.docs.length < pageSize) return null;
-      cursor = page.docs.last;
+      final lastDocument = page.docs.last;
+      cursorTakenAt = lastDocument.data()['takenAt'] as String?;
+      cursorUuid = lastDocument.data()['uuid'] as String?;
+      if (cursorTakenAt == null || cursorUuid == null) return null;
     }
   }
 

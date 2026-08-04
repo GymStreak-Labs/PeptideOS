@@ -6,7 +6,7 @@ import 'package:peptide_os/models/dose_log.dart';
 void main() {
   group('fetchLatestInjectionForPeptide', () {
     test(
-      'finds an injection older than 30 days at the query page boundary',
+      'finds an injection older than 30 days on the second query page',
       () async {
         final now = DateTime(2026, 8, 4, 12);
         final repository = DoseLogRepository(
@@ -33,18 +33,24 @@ void main() {
           skipped: skipped,
         );
 
-        final newerOtherPeptides = List.generate(
-          24,
+        final newerUnusableSites = List.generate(
+          25,
           (index) => dose(
-            uuid: 'other-$index',
-            peptideUuid: 'peptide-b',
+            uuid: 'empty-site-$index',
+            peptideUuid: 'peptide-a',
             scheduledAt: now.subtract(Duration(days: index + 1)),
             takenAt: now.subtract(Duration(days: index + 1)),
-            site: 'right-thigh',
           ),
         );
         await repository.upsertMany('user', [
-          ...newerOtherPeptides,
+          ...newerUnusableSites,
+          dose(
+            uuid: 'newer-other-peptide',
+            peptideUuid: 'peptide-b',
+            scheduledAt: now.subtract(const Duration(hours: 1)),
+            takenAt: now.subtract(const Duration(hours: 1)),
+            site: 'right-thigh',
+          ),
           dose(
             uuid: 'target-over-30-days',
             peptideUuid: 'peptide-a',
@@ -63,6 +69,32 @@ void main() {
         expect(result?.injectionSite, 'left-thigh');
       },
     );
+
+    test('returns null after multiple pages contain no usable site', () async {
+      final now = DateTime(2026, 8, 4, 12);
+      final repository = DoseLogRepository(firestore: FakeFirebaseFirestore());
+      final unusable = List.generate(
+        51,
+        (index) => DoseLog(
+          uuid: 'empty-site-$index',
+          protocolUuid: 'protocol',
+          protocolPeptideUuid: 'peptide-a',
+          peptideName: 'BPC-157',
+          scheduledAt: now.subtract(Duration(hours: index)),
+          takenAt: now.subtract(Duration(hours: index)),
+          amountTaken: 250,
+          units: 'mcg',
+        ),
+      );
+      await repository.upsertMany('user', unusable);
+
+      final result = await repository.fetchLatestInjectionForPeptide(
+        'user',
+        protocolPeptideUuid: 'peptide-a',
+      );
+
+      expect(result, isNull);
+    });
 
     test('orders by takenAt and excludes unusable records', () async {
       final repository = DoseLogRepository(firestore: FakeFirebaseFirestore());
