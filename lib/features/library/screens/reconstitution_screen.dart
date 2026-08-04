@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/utils/decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/conversion_workspace.dart';
 import '../widgets/syringe_visual.dart';
 
@@ -95,7 +96,7 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
     await widget.onSavedCalculationsChanged?.call(updated);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Calculation saved to this account.')),
+      SnackBar(content: Text(AppLocalizations.of(context).calculationSaved)),
     );
   }
 
@@ -131,6 +132,7 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final result = _result;
 
     return Scaffold(
@@ -150,11 +152,7 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Enter values from your own vial, diluent, and plan. '
-                      'PepMod converts those values into volume and U-100 syringe units.',
-                      style: AppTypography.bodyMedium,
-                    ),
+                    Text(l10n.converterIntro, style: AppTypography.bodyMedium),
                     const SizedBox(height: AppSpacing.sm),
                     const _SafetyBanner(),
                     const SizedBox(height: AppSpacing.xl),
@@ -173,12 +171,12 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                     const SizedBox(height: AppSpacing.xl),
                     _SectionTitle(
                       step: '01',
-                      title: 'Vial + diluent',
+                      title: l10n.vialAndDiluent,
                       caption:
                           _quantityMode ==
                               ConversionQuantityMode.internationalUnits
-                          ? 'Source: IU on your vial and mL of diluent added.'
-                          : 'Source: labels on your vial and diluent.',
+                          ? l10n.iuSourceCaption
+                          : l10n.massSourceCaption,
                     ),
                     const SizedBox(height: AppSpacing.md),
                     Row(
@@ -187,8 +185,8 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                         Expanded(
                           child: _InputField(
                             key: const Key('vial-amount-field'),
-                            label: 'VIAL AMOUNT',
-                            helper: 'Amount printed on vial',
+                            label: l10n.vialAmount,
+                            helper: l10n.amountPrintedOnVial,
                             suffix:
                                 _quantityMode ==
                                     ConversionQuantityMode.internationalUnits
@@ -202,8 +200,8 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                         Expanded(
                           child: _InputField(
                             key: const Key('diluent-volume-field'),
-                            label: 'DILUENT',
-                            helper: 'Volume you added',
+                            label: l10n.diluent,
+                            helper: l10n.volumeAdded,
                             suffix: 'mL',
                             controller: _diluentController,
                             onChanged: (_) => setState(() {}),
@@ -214,12 +212,12 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                     const SizedBox(height: AppSpacing.xl),
                     _SectionTitle(
                       step: '02',
-                      title: 'Amount to convert',
+                      title: l10n.amountToConvert,
                       caption:
                           _quantityMode ==
                               ConversionQuantityMode.internationalUnits
-                          ? 'Enter an IU amount you were already given.'
-                          : 'Source: an amount you were already given.',
+                          ? l10n.iuAmountCaption
+                          : l10n.massAmountCaption,
                     ),
                     const SizedBox(height: AppSpacing.md),
                     _DesiredAmountField(
@@ -233,8 +231,8 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                     const SizedBox(height: AppSpacing.xl),
                     _SectionTitle(
                       step: '03',
-                      title: 'Your syringe',
-                      caption: 'Select the capacity printed on the barrel.',
+                      title: l10n.yourSyringe,
+                      caption: l10n.syringeCaption,
                     ),
                     const SizedBox(height: AppSpacing.md),
                     _SyringeSelector(
@@ -242,7 +240,10 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                       onChanged: (value) => setState(() => _syringe = value),
                     ),
                     const SizedBox(height: AppSpacing.xxl),
-                    Text('CONVERSION.RESULT', style: AppTypography.systemLabel),
+                    Text(
+                      l10n.conversionResultSystemLabel,
+                      style: AppTypography.systemLabel,
+                    ),
                     const SizedBox(height: AppSpacing.md),
                     _ResultCard(
                       result: result,
@@ -260,10 +261,7 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                     ],
                     const SizedBox(height: AppSpacing.xl),
                     Text(
-                      'Educational unit-conversion tool only. PepMod does not '
-                      'recommend an amount or frequency. Recheck the source '
-                      'labels and confirm your calculation with a qualified '
-                      'healthcare professional before use.',
+                      l10n.educationalConverterDisclaimer,
                       style: AppTypography.disclaimer.copyWith(
                         color: AppColors.textTertiary,
                       ),
@@ -287,6 +285,7 @@ class _TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.sm,
@@ -297,7 +296,7 @@ class _TopBar extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            tooltip: 'Back',
+            tooltip: l10n.back,
             onPressed: () => Navigator.of(context).maybePop(),
             icon: const Icon(
               Icons.arrow_back_rounded,
@@ -309,15 +308,18 @@ class _TopBar extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('UTIL.CONVERSION', style: AppTypography.systemLabel),
-                Text('Vial workspace', style: AppTypography.h3),
+                Text(
+                  l10n.conversionSystemLabel,
+                  style: AppTypography.systemLabel,
+                ),
+                Text(l10n.vialWorkspace, style: AppTypography.h3),
               ],
             ),
           ),
           TextButton(
             onPressed: onClear,
             child: Text(
-              'CLEAR',
+              l10n.clear,
               style: AppTypography.systemLabel.copyWith(
                 color: AppColors.textTertiary,
               ),
@@ -334,6 +336,7 @@ class _SafetyBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
@@ -352,7 +355,7 @@ class _SafetyBanner extends StatelessWidget {
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
-              'Conversion only — this workspace never chooses an amount or schedule.',
+              l10n.conversionOnly,
               style: AppTypography.bodySmall.copyWith(
                 color: AppColors.textSecondary,
               ),
@@ -372,15 +375,13 @@ class _QuantityModeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('MEASUREMENT.MODE', style: AppTypography.systemLabel),
+        Text(l10n.measurementModeSystemLabel, style: AppTypography.systemLabel),
         const SizedBox(height: AppSpacing.xs),
-        Text(
-          'Use the same unit family printed on the vial.',
-          style: AppTypography.bodySmall,
-        ),
+        Text(l10n.sameUnitFamily, style: AppTypography.bodySmall),
         const SizedBox(height: AppSpacing.md),
         Row(
           children: [
@@ -411,7 +412,9 @@ class _QuantityModeSelector extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          mode.label,
+                          mode == ConversionQuantityMode.mass
+                              ? l10n.mass
+                              : 'IU',
                           style: AppTypography.labelLarge.copyWith(
                             color: mode == value
                                 ? AppColors.primary
@@ -419,7 +422,12 @@ class _QuantityModeSelector extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 2),
-                        Text(mode.caption, style: AppTypography.bodySmall),
+                        Text(
+                          mode == ConversionQuantityMode.mass
+                              ? mode.caption
+                              : l10n.iuOnly,
+                          style: AppTypography.bodySmall,
+                        ),
                       ],
                     ),
                   ),
@@ -431,7 +439,7 @@ class _QuantityModeSelector extends StatelessWidget {
         if (value == ConversionQuantityMode.internationalUnits) ...[
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'IU stays IU. PepMod does not convert IU to or from mg/mcg.',
+            l10n.iuSafety,
             key: const Key('iu-mode-safety-copy'),
             style: AppTypography.bodySmall.copyWith(color: AppColors.primary),
           ),
@@ -575,6 +583,7 @@ class _DesiredAmountField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.all(AppSpacing.sm),
       decoration: BoxDecoration(
@@ -594,8 +603,8 @@ class _DesiredAmountField extends StatelessWidget {
               ),
               inputFormatters: const [decimalInputFormatter],
               style: AppTypography.heroSmall.copyWith(fontSize: 20),
-              decoration: const InputDecoration(
-                hintText: 'Enter amount',
+              decoration: InputDecoration(
+                hintText: l10n.enterAmount,
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(horizontal: AppSpacing.sm),
                 filled: false,
@@ -746,6 +755,7 @@ class _ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     if (!result.isValid) {
       return AppCard(
         child: Row(
@@ -756,7 +766,10 @@ class _ResultCard extends StatelessWidget {
             ),
             const SizedBox(width: AppSpacing.md),
             Expanded(
-              child: Text(result.error!, style: AppTypography.bodyMedium),
+              child: Text(
+                _localizedError(l10n, result.error!),
+                style: AppTypography.bodyMedium,
+              ),
             ),
           ],
         ),
@@ -778,7 +791,7 @@ class _ResultCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('DRAW TO', style: AppTypography.systemLabel),
+                    Text(l10n.drawTo, style: AppTypography.systemLabel),
                     const SizedBox(height: AppSpacing.sm),
                     FittedBox(
                       fit: BoxFit.scaleDown,
@@ -796,7 +809,7 @@ class _ResultCard extends StatelessWidget {
                           const SizedBox(width: AppSpacing.xs),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 4),
-                            child: Text('units', style: AppTypography.unit),
+                            child: Text(l10n.units, style: AppTypography.unit),
                           ),
                         ],
                       ),
@@ -808,14 +821,14 @@ class _ResultCard extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     _DataRow(
-                      label: 'CONCENTRATION',
+                      label: l10n.concentration,
                       value:
                           '${result.formattedConcentration} ${quantityMode == ConversionQuantityMode.internationalUnits ? 'IU/mL' : 'mcg/mL'}',
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     _DataRow(
-                      label: 'SYRINGE CAPACITY',
-                      value: '${syringe.capacityUnits} units',
+                      label: l10n.syringeCapacity,
+                      value: '${syringe.capacityUnits} ${l10n.units}',
                     ),
                   ],
                 ),
@@ -847,8 +860,7 @@ class _ResultCard extends StatelessWidget {
                 ),
               ),
               child: Text(
-                'The converted volume is larger than this syringe capacity. '
-                'Choose the correct syringe or recheck your entries.',
+                l10n.capacityWarning,
                 style: AppTypography.bodySmall.copyWith(
                   color: AppColors.warning,
                 ),
@@ -856,7 +868,7 @@ class _ResultCard extends StatelessWidget {
             ),
           ],
           const SizedBox(height: AppSpacing.base),
-          PrimaryButton(label: 'SAVE PRESET', onPressed: onSave),
+          PrimaryButton(label: l10n.savePreset, onPressed: onSave),
         ],
       ),
     );
@@ -876,15 +888,13 @@ class _SavedSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('SAVED.VIALS', style: AppTypography.systemLabel),
+        Text(l10n.savedVialsSystemLabel, style: AppTypography.systemLabel),
         const SizedBox(height: AppSpacing.xs),
-        Text(
-          'Tap a saved calculation to reuse its inputs.',
-          style: AppTypography.bodySmall,
-        ),
+        Text(l10n.savedVialsHint, style: AppTypography.bodySmall),
         const SizedBox(height: AppSpacing.md),
         for (final item in items) ...[
           AppCard(
@@ -917,7 +927,7 @@ class _SavedSection extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  tooltip: 'Remove saved calculation',
+                  tooltip: l10n.removeSavedCalculation,
                   onPressed: () => onRemove(item),
                   icon: const Icon(
                     Icons.close_rounded,
@@ -948,6 +958,8 @@ class _DataRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
+            maxLines: 2,
+            overflow: TextOverflow.fade,
             style: AppTypography.systemLabel.copyWith(
               color: AppColors.textTertiary,
               fontSize: 8,
@@ -955,7 +967,17 @@ class _DataRow extends StatelessWidget {
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
-        Text(value, style: AppTypography.tabular.copyWith(fontSize: 12)),
+        Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerRight,
+            child: Text(
+              value,
+              maxLines: 1,
+              style: AppTypography.tabular.copyWith(fontSize: 12),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -968,6 +990,14 @@ bool _sameInput(ConversionInput a, ConversionInput b) =>
     a.desiredAmountUnit == b.desiredAmountUnit &&
     a.quantityMode == b.quantityMode &&
     a.syringe == b.syringe;
+
+String _localizedError(AppLocalizations l10n, String error) => switch (error) {
+  'Enter a number greater than zero in every field.' =>
+    l10n.errorPositiveNumbers,
+  'Desired amount is greater than the amount entered for this vial.' =>
+    l10n.errorAmountAboveVial,
+  _ => l10n.errorConversion,
+};
 
 String _editableNumber(double value) {
   if (value == value.roundToDouble()) return value.toStringAsFixed(0);

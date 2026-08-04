@@ -6,9 +6,11 @@ import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/peptide.dart';
 import '../../../models/conversion_workspace.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../protocol/widgets/empty_state.dart';
 import '../../profile/providers/settings_provider.dart';
 import '../providers/peptide_provider.dart';
+import '../utils/library_labels.dart';
 import 'custom_compound_library_screen.dart';
 import 'peptide_detail_screen.dart';
 import 'reconstitution_screen.dart';
@@ -43,6 +45,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final provider = context.watch<PeptideProvider>();
     final results = provider.search(query: _query, category: _category);
 
@@ -68,17 +71,17 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'SYS.DATABASE // COMPOUNDS',
+                          l10n.librarySystemLabel,
                           style: AppTypography.systemLabel,
                         ),
                         const SizedBox(height: AppSpacing.sm),
-                        Text('Library', style: AppTypography.h1),
+                        Text(l10n.libraryTitle, style: AppTypography.h1),
                       ],
                     ),
                   ),
                   _HeaderIconButton(
                     icon: Icons.inventory_2_outlined,
-                    tooltip: 'My compounds',
+                    tooltip: l10n.myCompounds,
                     onTap: () {
                       HapticFeedback.lightImpact();
                       Navigator.of(context).push(
@@ -101,6 +104,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               ),
               child: _SearchBar(
                 value: _query,
+                hint: l10n.searchPeptides,
                 onChanged: (v) => setState(() => _query = v),
               ),
             ),
@@ -131,7 +135,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 ),
                 children: [
                   _CategoryChip(
-                    label: 'All',
+                    label: l10n.categoryAll,
                     selected: _category == null,
                     onTap: () => setState(() => _category = null),
                   ),
@@ -140,7 +144,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: AppSpacing.sm),
                         child: _CategoryChip(
-                          label: cat.label,
+                          label: localizedPeptideCategoryLabel(l10n, cat),
                           selected: _category == cat,
                           onTap: () => setState(
                             () => _category = cat == _category ? null : cat,
@@ -168,9 +172,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
               child: Center(
                 child: EmptyState(
                   icon: Icons.error_outline_rounded,
-                  title: 'Library unavailable',
+                  title: l10n.libraryUnavailable,
                   description: provider.error!,
-                  actionLabel: 'RETRY',
+                  actionLabel: l10n.retry,
                   onAction: provider.refresh,
                 ),
               ),
@@ -181,9 +185,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 padding: const EdgeInsets.all(AppSpacing.xxl),
                 child: EmptyState(
                   icon: Icons.search_off_rounded,
-                  title: 'No peptides found',
-                  description:
-                      'Try a different search term or clear the filter.',
+                  title: l10n.noPeptidesFound,
+                  description: l10n.tryDifferentSearch,
                 ),
               ),
             )
@@ -200,6 +203,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   final p = results[i];
                   return _PeptideCard(
                     peptide: p,
+                    categoryLabel: localizedPeptideCategoryLabel(
+                      l10n,
+                      p.category,
+                    ),
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -229,9 +236,10 @@ class _ConversionToolsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Semantics(
       button: true,
-      label: 'Open unit converter',
+      label: l10n.openUnitConverter,
       onTap: onTap,
       excludeSemantics: true,
       child: AppCard(
@@ -259,19 +267,19 @@ class _ConversionToolsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'UNIT CONVERTER',
+                    l10n.converterCardTitle,
                     style: AppTypography.systemLabel.copyWith(
                       color: AppColors.primary,
                     ),
                   ),
                   const SizedBox(height: 3),
                   Text(
-                    'Convert vial math now',
+                    l10n.converterCardSubtitle,
                     style: AppTypography.labelLarge,
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'For reconstitution, tap any peptide below.',
+                    l10n.converterCardHint,
                     style: AppTypography.bodySmall.copyWith(
                       color: AppColors.textSecondary,
                     ),
@@ -293,8 +301,13 @@ class _ConversionToolsCard extends StatelessWidget {
 }
 
 class _SearchBar extends StatelessWidget {
-  const _SearchBar({required this.value, required this.onChanged});
+  const _SearchBar({
+    required this.value,
+    required this.hint,
+    required this.onChanged,
+  });
   final String value;
+  final String hint;
   final ValueChanged<String> onChanged;
 
   @override
@@ -320,7 +333,7 @@ class _SearchBar extends StatelessWidget {
               onChanged: onChanged,
               style: AppTypography.bodyMedium,
               decoration: InputDecoration(
-                hintText: 'Search peptides...',
+                hintText: hint,
                 hintStyle: AppTypography.bodyMedium.copyWith(
                   color: AppColors.textDisabled,
                 ),
@@ -393,8 +406,13 @@ class _CategoryChip extends StatelessWidget {
 
 // ── Peptide card ──────────────────────────────────────────────────────────
 class _PeptideCard extends StatelessWidget {
-  const _PeptideCard({required this.peptide, required this.onTap});
+  const _PeptideCard({
+    required this.peptide,
+    required this.categoryLabel,
+    required this.onTap,
+  });
   final Peptide peptide;
+  final String categoryLabel;
   final VoidCallback onTap;
 
   @override
@@ -425,7 +443,7 @@ class _PeptideCard extends StatelessWidget {
                 Text(peptide.name, style: AppTypography.labelLarge),
                 const SizedBox(height: 2),
                 Text(
-                  peptide.category.label,
+                  categoryLabel,
                   style: AppTypography.systemLabel.copyWith(fontSize: 10),
                 ),
                 const SizedBox(height: 4),

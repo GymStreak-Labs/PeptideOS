@@ -7,6 +7,7 @@ import 'package:peptide_os/data/repositories/user_settings_repository.dart';
 import 'package:peptide_os/features/library/providers/peptide_provider.dart';
 import 'package:peptide_os/features/library/screens/library_screen.dart';
 import 'package:peptide_os/features/profile/providers/settings_provider.dart';
+import 'package:peptide_os/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -38,6 +39,8 @@ void main() {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.dark,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: const Scaffold(body: LibraryScreen()),
         ),
       ),

@@ -6,6 +6,7 @@ import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,7 @@ import 'features/progress/providers/body_metric_provider.dart';
 import 'features/protocol/providers/dose_log_provider.dart';
 import 'features/protocol/providers/protocol_provider.dart';
 import 'features/subscription/providers/subscription_provider.dart';
+import 'l10n/app_localizations.dart';
 import 'services/notification_service.dart';
 
 /// AppRefer is injected via --dart-define so test/live keys can stay out of
@@ -304,6 +306,13 @@ class PepModApp extends StatelessWidget {
         title: 'PepMod',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.dark,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         home: const _AppRoot(),
       ),
     );

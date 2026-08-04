@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:peptide_os/core/theme/theme.dart';
 import 'package:peptide_os/features/library/screens/reconstitution_screen.dart';
 import 'package:peptide_os/models/conversion_workspace.dart';
+import 'package:peptide_os/l10n/app_localizations.dart';
 
 void main() {
   testWidgets('phone layout visual proof', (tester) async {
@@ -15,6 +16,8 @@ void main() {
       MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.dark,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: RepaintBoundary(
           key: const Key('workspace-golden'),
           child: ReconstitutionScreen(
