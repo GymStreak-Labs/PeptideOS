@@ -29,20 +29,19 @@ class DoseLogProvider extends ChangeNotifier {
   List<DoseLog> get recent30 => _recent30;
   bool get isLoading => _loading;
 
-  /// Most recently completed injection for this protocol peptide that
-  /// recorded a site.
-  ///
-  /// The currently edited dose can be excluded so reopening a completed dose
-  /// reminds the user of the site used immediately before it, rather than
-  /// echoing the value already selected on the form.
-  DoseLog? lastInjectionForPeptide({
+  /// Fetches the most recently completed injection for this protocol peptide
+  /// that recorded a site, including history older than the 30-day stats
+  /// window.
+  Future<DoseLog?> lastInjectionForPeptide({
     required String protocolPeptideUuid,
     String? excludingDoseUuid,
-  }) => findLastInjectionForPeptide(
-    _recent30,
-    protocolPeptideUuid: protocolPeptideUuid,
-    excludingDoseUuid: excludingDoseUuid,
-  );
+  }) {
+    return _repo.fetchLatestInjectionForPeptide(
+      _uid,
+      protocolPeptideUuid: protocolPeptideUuid,
+      excludingDoseUuid: excludingDoseUuid,
+    );
+  }
 
   @visibleForTesting
   static DoseLog? findLastInjectionForPeptide(

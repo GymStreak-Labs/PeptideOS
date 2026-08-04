@@ -82,8 +82,8 @@ void main() {
         uuid: 'previous-a',
         peptideUuid: 'peptide-a',
         peptideName: 'BPC-157',
-        scheduledAt: now.subtract(const Duration(days: 2)),
-        takenAt: now.subtract(const Duration(days: 2)),
+        scheduledAt: now.subtract(const Duration(days: 45)),
+        takenAt: now.subtract(const Duration(days: 45)),
         site: 'left-thigh',
       ),
       dose(
@@ -124,10 +124,7 @@ void main() {
       find.text('LAST SITE FOR THIS PEPTIDE · Left Thigh'),
       findsOneWidget,
     );
-    expect(
-      find.text('LAST SITE FOR THIS PEPTIDE · Right Glute'),
-      findsNothing,
-    );
+    expect(find.text('LAST SITE FOR THIS PEPTIDE · Right Glute'), findsNothing);
     expect(tester.takeException(), isNull);
   });
 }

@@ -26,6 +26,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   late final TextEditingController _notesCtrl;
   late TimeOfDay _time;
   late String _site;
+  Future<DoseLog?>? _lastInjectionFuture;
 
   @override
   void initState() {
@@ -41,6 +42,17 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
     final d = widget.dose.takenAt ?? widget.dose.scheduledAt;
     _time = TimeOfDay(hour: d.hour, minute: d.minute);
     _site = widget.dose.injectionSite;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _lastInjectionFuture ??= context
+        .read<DoseLogProvider>()
+        .lastInjectionForPeptide(
+          protocolPeptideUuid: widget.dose.protocolPeptideUuid,
+          excludingDoseUuid: widget.dose.uuid,
+        );
   }
 
   @override
@@ -136,12 +148,6 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
     final labelColorHex = _labelColorForDose(
       context.watch<ProtocolProvider>().all,
     );
-    final lastInjection = context
-        .watch<DoseLogProvider>()
-        .lastInjectionForPeptide(
-          protocolPeptideUuid: widget.dose.protocolPeptideUuid,
-          excludingDoseUuid: widget.dose.uuid,
-        );
     final blendPreview = widget.dose.blendSnapshot?.copyWith(
       drawSyringeUnits:
           parseDecimalInput(_amountCtrl.text) ?? widget.dose.amountTaken,
@@ -349,29 +355,38 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
 
                   // Injection site rotator
                   Text('INJECTION.SITE', style: AppTypography.systemLabel),
-                  if (lastInjection != null) ...[
-                    const SizedBox(height: AppSpacing.xs),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.history_rounded,
-                          size: 14,
-                          color: AppColors.textSecondary,
-                        ),
-                        const SizedBox(width: AppSpacing.xs),
-                        Flexible(
-                          child: Text(
-                            'LAST SITE FOR THIS PEPTIDE · ${_siteLabel(lastInjection.injectionSite)}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTypography.labelSmall.copyWith(
+                  FutureBuilder<DoseLog?>(
+                    future: _lastInjectionFuture,
+                    builder: (context, snapshot) {
+                      final lastInjection = snapshot.data;
+                      if (lastInjection == null) {
+                        return const SizedBox.shrink();
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.only(top: AppSpacing.xs),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.history_rounded,
+                              size: 14,
                               color: AppColors.textSecondary,
                             ),
-                          ),
+                            const SizedBox(width: AppSpacing.xs),
+                            Flexible(
+                              child: Text(
+                                'LAST SITE FOR THIS PEPTIDE · ${_siteLabel(lastInjection.injectionSite)}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTypography.labelSmall.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ],
+                      );
+                    },
+                  ),
                   const SizedBox(height: AppSpacing.sm),
                   Wrap(
                     spacing: AppSpacing.sm,

@@ -25,7 +25,7 @@ abstract interface class DoseLogDataSource {
 /// view can render without needing to resolve the owning protocol document.
 class DoseLogRepository implements DoseLogDataSource {
   DoseLogRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+    : _firestore = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore _firestore;
 
@@ -36,22 +36,25 @@ class DoseLogRepository implements DoseLogDataSource {
   @override
   Stream<List<DoseLog>> watchRange(String uid, DateTime start, DateTime end) {
     return _col(uid)
-        .where('scheduledAt',
-            isGreaterThanOrEqualTo: start.toIso8601String())
+        .where('scheduledAt', isGreaterThanOrEqualTo: start.toIso8601String())
         .where('scheduledAt', isLessThan: end.toIso8601String())
         .orderBy('scheduledAt')
         .snapshots()
-        .map((snap) => snap.docs
-            .map((d) => DoseLog.fromMap(d.id, d.data()))
-            .toList(growable: false));
+        .map(
+          (snap) => snap.docs
+              .map((d) => DoseLog.fromMap(d.id, d.data()))
+              .toList(growable: false),
+        );
   }
 
   @override
   Future<List<DoseLog>> fetchRange(
-      String uid, DateTime start, DateTime end) async {
+    String uid,
+    DateTime start,
+    DateTime end,
+  ) async {
     final snap = await _col(uid)
-        .where('scheduledAt',
-            isGreaterThanOrEqualTo: start.toIso8601String())
+        .where('scheduledAt', isGreaterThanOrEqualTo: start.toIso8601String())
         .where('scheduledAt', isLessThan: end.toIso8601String())
         .orderBy('scheduledAt')
         .get();
@@ -62,12 +65,56 @@ class DoseLogRepository implements DoseLogDataSource {
 
   @override
   Future<List<DoseLog>> fetchByProtocol(String uid, String protocolUuid) async {
-    final snap = await _col(uid)
-        .where('protocolUuid', isEqualTo: protocolUuid)
-        .get();
+    final snap = await _col(
+      uid,
+    ).where('protocolUuid', isEqualTo: protocolUuid).get();
     return snap.docs
         .map((d) => DoseLog.fromMap(d.id, d.data()))
         .toList(growable: false);
+  }
+
+  /// Fetches the most recently *taken* dose with a recorded injection site for
+  /// one protocol peptide.
+  ///
+  /// Results are read newest-first in small pages. This keeps the UI from
+  /// loading or scanning the user's complete dose history, while still being
+  /// exact when the latest usable site is older than the 30-day stats window
+  /// or is preceded by skipped/site-less records.
+  Future<DoseLog?> fetchLatestInjectionForPeptide(
+    String uid, {
+    required String protocolPeptideUuid,
+    String? excludingDoseUuid,
+  }) async {
+    if (uid.isEmpty || protocolPeptideUuid.isEmpty) return null;
+
+    const pageSize = 25;
+    QueryDocumentSnapshot<Map<String, dynamic>>? cursor;
+
+    while (true) {
+      Query<Map<String, dynamic>> query = _col(uid)
+          .where('takenAt', isGreaterThan: '')
+          .orderBy('takenAt', descending: true)
+          .limit(pageSize);
+      if (cursor != null) query = query.startAfterDocument(cursor);
+
+      final page = await query.get();
+      if (page.docs.isEmpty) return null;
+
+      for (final document in page.docs) {
+        final dose = DoseLog.fromMap(document.id, document.data());
+        if (dose.takenAt == null) continue;
+        if (dose.uuid == excludingDoseUuid ||
+            dose.protocolPeptideUuid != protocolPeptideUuid ||
+            !dose.isTaken ||
+            dose.injectionSite.trim().isEmpty) {
+          continue;
+        }
+        return dose;
+      }
+
+      if (page.docs.length < pageSize) return null;
+      cursor = page.docs.last;
+    }
   }
 
   @override
