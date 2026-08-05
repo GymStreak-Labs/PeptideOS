@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Personalised Results Summary - "Your protocol is ready."
 /// Echoes the user's inputs back at them. The sunk-cost payoff.
@@ -22,29 +23,29 @@ class ResultsSummaryPage extends StatelessWidget {
   final Set<String> selectedPeptides;
   final VoidCallback onNext;
 
-  String get _goalsDisplay {
-    if (selectedGoals.isEmpty) return 'Recovery · Longevity';
+  String _goalsDisplay(AppLocalizations l10n) {
+    if (selectedGoals.isEmpty) return l10n.defaultGoals;
     return selectedGoals.join(' · ');
   }
 
-  String get _experienceDisplay =>
-      experienceLevel.isEmpty ? 'Intermediate' : experienceLevel;
+  String _experienceDisplay(AppLocalizations l10n) =>
+      experienceLevel.isEmpty ? l10n.experienceIntermediate : experienceLevel;
 
-  String get _frustrationDisplay =>
-      frustration.isEmpty ? 'Missing doses' : frustration;
+  String _frustrationDisplay(AppLocalizations l10n) =>
+      frustration.isEmpty ? l10n.defaultFrustration : frustration;
 
-  String get _confidenceDisplay {
-    if (confidenceNeeds.isEmpty) return 'Dose math · Site rotation';
+  String _confidenceDisplay(AppLocalizations l10n) {
+    if (confidenceNeeds.isEmpty) return l10n.defaultConfidence;
     return confidenceNeeds.join(' · ');
   }
 
-  String get _peptidesDisplay {
+  String _peptidesDisplay(AppLocalizations l10n) {
     if (selectedPeptides.isEmpty) return 'BPC-157, TB-500';
     final list = selectedPeptides.toList();
     if (list.length <= 3) return list.join(', ');
     final shown = list.take(3).join(', ');
     final more = list.length - 3;
-    return '$shown +$more more';
+    return l10n.moreCount(shown, more);
   }
 
   int get _peptideCount =>
@@ -57,6 +58,7 @@ class ResultsSummaryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -70,12 +72,12 @@ class ResultsSummaryPage extends StatelessWidget {
             Text('SYS.PROFILE // COMPILED', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Your protocol\nis ready',
+              l10n.protocolPreviewTitle,
               style: AppTypography.h1.copyWith(fontSize: 28),
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Based on your inputs //',
+              l10n.basedOnInputs,
               style: AppTypography.systemLabel.copyWith(
                 color: AppColors.primary,
                 fontSize: 11,
@@ -94,26 +96,29 @@ class ResultsSummaryPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _SummaryRow(label: 'GOALS', value: _goalsDisplay),
-                          const SizedBox(height: AppSpacing.md),
                           _SummaryRow(
-                            label: 'EXPERIENCE',
-                            value: _experienceDisplay,
+                            label: l10n.goalsLabel,
+                            value: _goalsDisplay(l10n),
                           ),
                           const SizedBox(height: AppSpacing.md),
                           _SummaryRow(
-                            label: 'FRUSTRATION',
-                            value: _frustrationDisplay,
+                            label: l10n.experienceLabel,
+                            value: _experienceDisplay(l10n),
                           ),
                           const SizedBox(height: AppSpacing.md),
                           _SummaryRow(
-                            label: 'CONFIDENCE',
-                            value: _confidenceDisplay,
+                            label: l10n.frustrationLabel,
+                            value: _frustrationDisplay(l10n),
                           ),
                           const SizedBox(height: AppSpacing.md),
                           _SummaryRow(
-                            label: 'PEPTIDES',
-                            value: _peptidesDisplay,
+                            label: l10n.confidenceLabel,
+                            value: _confidenceDisplay(l10n),
+                          ),
+                          const SizedBox(height: AppSpacing.md),
+                          _SummaryRow(
+                            label: l10n.peptidesLabel,
+                            value: _peptidesDisplay(l10n),
                           ),
                         ],
                       ),
@@ -129,7 +134,7 @@ class ResultsSummaryPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'YOUR PROTOCOL INCLUDES //',
+                            l10n.protocolIncludes,
                             style: AppTypography.systemLabel.copyWith(
                               fontSize: 10,
                               letterSpacing: 2,
@@ -140,15 +145,15 @@ class ResultsSummaryPage extends StatelessWidget {
                             children: [
                               _DataTile(
                                 value: '$_dosesPerDay',
-                                label: 'DOSES/DAY',
+                                label: l10n.dosesPerDay,
                               ),
                               const SizedBox(width: AppSpacing.sm),
                               _DataTile(
                                 value: '$_peptideCount',
-                                label: 'PEPTIDES\nTRACKED',
+                                label: l10n.peptidesTracked,
                               ),
                               const SizedBox(width: AppSpacing.sm),
-                              _DataTile(value: '12', label: 'WEEK\nDURATION'),
+                              _DataTile(value: '12', label: l10n.weekDuration),
                             ],
                           ),
                         ],
@@ -158,7 +163,7 @@ class ResultsSummaryPage extends StatelessWidget {
                     const SizedBox(height: AppSpacing.lg),
 
                     Text(
-                      'We\'ll keep dose logs, reconstitution math, and trend records together as your data builds.',
+                      l10n.resultsSummaryBody,
                       style: AppTypography.bodyMedium.copyWith(height: 1.6),
                     ),
 
@@ -170,7 +175,7 @@ class ResultsSummaryPage extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.base),
 
-            PrimaryButton(label: 'SEE WHAT\'S INSIDE', onPressed: onNext),
+            PrimaryButton(label: l10n.seeWhatsInside, onPressed: onNext),
             const SizedBox(height: AppSpacing.xxl),
           ],
         ),

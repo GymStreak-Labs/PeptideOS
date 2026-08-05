@@ -311,5 +311,922 @@
   },
   "@plannerNothingPlanned": {
     "description": "Detail when a planner day has no doses."
+  },
+  "activatePro": "ACTIVATE PRO",
+  "@activatePro": {
+    "description": "English onboarding copy for activate pro."
+  },
+  "activateProPrice": "ACTIVATE PRO — {price}/year",
+  "@activateProPrice": {
+    "description": "English onboarding copy for activate pro price.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "annualAccess": "Annual access",
+  "@annualAccess": {
+    "description": "English onboarding copy for annual access."
+  },
+  "annualLabel": "Annual",
+  "@annualLabel": {
+    "description": "English onboarding copy for annual label."
+  },
+  "averageRating": "AVG RATING",
+  "@averageRating": {
+    "description": "English onboarding copy for average rating."
+  },
+  "bacWaterLabel": "BAC WATER",
+  "@bacWaterLabel": {
+    "description": "English onboarding copy for bac water label."
+  },
+  "basedOnInputs": "Based on your inputs //",
+  "@basedOnInputs": {
+    "description": "English onboarding copy for based on inputs."
+  },
+  "bestValue": "Best Value",
+  "@bestValue": {
+    "description": "English onboarding copy for best value."
+  },
+  "birthDateInvalid": "Enter a valid date for someone aged 18 or older.",
+  "@birthDateInvalid": {
+    "description": "English onboarding copy for birth date invalid."
+  },
+  "birthDateValid": "Age verified",
+  "@birthDateValid": {
+    "description": "English onboarding copy for birth date valid."
+  },
+  "calculatorDemoBody": "Here’s how it works with {peptideName}",
+  "@calculatorDemoBody": {
+    "description": "English onboarding copy for calculator demo body.",
+    "placeholders": {
+      "peptideName": {
+        "type": "String"
+      }
+    }
+  },
+  "calculatorDemoResult": "That’s it. Enter your values,\nget exact syringe units.",
+  "@calculatorDemoResult": {
+    "description": "English onboarding copy for calculator demo result."
+  },
+  "calculatorDemoTitle": "No more\nscary math.",
+  "@calculatorDemoTitle": {
+    "description": "English onboarding copy for calculator demo title."
+  },
+  "confidenceCycleTiming": "Cycle timing",
+  "@confidenceCycleTiming": {
+    "description": "English onboarding copy for confidence cycle timing."
+  },
+  "confidenceCycleTimingDetail": "See protocol dates and schedule windows clearly",
+  "@confidenceCycleTimingDetail": {
+    "description": "English onboarding copy for confidence cycle timing detail."
+  },
+  "confidenceDoseMath": "Dose math",
+  "@confidenceDoseMath": {
+    "description": "English onboarding copy for confidence dose math."
+  },
+  "confidenceDoseMathDetail": "Keep vial, water, dose, and draw units together",
+  "@confidenceDoseMathDetail": {
+    "description": "English onboarding copy for confidence dose math detail."
+  },
+  "confidenceLabel": "CONFIDENCE",
+  "@confidenceLabel": {
+    "description": "English onboarding copy for confidence label."
+  },
+  "confidencePlainInfo": "Plain-language information",
+  "@confidencePlainInfo": {
+    "description": "English onboarding copy for confidence plain info."
+  },
+  "confidencePlainInfoDetail": "Read research notes without the clutter",
+  "@confidencePlainInfoDetail": {
+    "description": "English onboarding copy for confidence plain info detail."
+  },
+  "confidenceProgressSignals": "Progress signals",
+  "@confidenceProgressSignals": {
+    "description": "English onboarding copy for confidence progress signals."
+  },
+  "confidenceProgressSignalsDetail": "See adherence and body metrics over time",
+  "@confidenceProgressSignalsDetail": {
+    "description": "English onboarding copy for confidence progress signals detail."
+  },
+  "confidenceSafetyFraming": "Safety framing",
+  "@confidenceSafetyFraming": {
+    "description": "English onboarding copy for confidence safety framing."
+  },
+  "confidenceSafetyFramingDetail": "Keep educational guidance and disclaimers visible",
+  "@confidenceSafetyFramingDetail": {
+    "description": "English onboarding copy for confidence safety framing detail."
+  },
+  "confidenceSiteRotation": "Site rotation",
+  "@confidenceSiteRotation": {
+    "description": "English onboarding copy for confidence site rotation."
+  },
+  "confidenceSiteRotationDetail": "Remember where each dose was logged",
+  "@confidenceSiteRotationDetail": {
+    "description": "English onboarding copy for confidence site rotation detail."
+  },
+  "connectingToStore": "CONNECTING TO STORE...",
+  "@connectingToStore": {
+    "description": "English onboarding copy for connecting to store."
+  },
+  "@continueLabel": {
+    "description": "English onboarding copy for continue label."
+  },
+  "continueSelected": "CONTINUE ({count})",
+  "@continueSelected": {
+    "description": "English onboarding copy for continue selected.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customProtocol": "Custom Protocol",
+  "@customProtocol": {
+    "description": "English onboarding copy for custom protocol."
+  },
+  "dateOfBirthLabel": "DATE OF BIRTH",
+  "@dateOfBirthLabel": {
+    "description": "English onboarding copy for date of birth label."
+  },
+  "dayOne": "DAY 1",
+  "@dayOne": {
+    "description": "English onboarding copy for day one."
+  },
+  "dayShortLabel": "DD",
+  "@dayShortLabel": {
+    "description": "English onboarding copy for day short label."
+  },
+  "defaultConfidence": "Dose math · Site rotation",
+  "@defaultConfidence": {
+    "description": "English onboarding copy for default confidence."
+  },
+  "defaultFrustration": "Missing doses",
+  "@defaultFrustration": {
+    "description": "English onboarding copy for default frustration."
+  },
+  "defaultGoals": "Recovery · Longevity",
+  "@defaultGoals": {
+    "description": "English onboarding copy for default goals."
+  },
+  "doseLabel": "DOSE",
+  "@doseLabel": {
+    "description": "English onboarding copy for dose label."
+  },
+  "dosesLogged": "DOSES LOGGED",
+  "@dosesLogged": {
+    "description": "English onboarding copy for doses logged."
+  },
+  "dosesPerDay": "DOSES/DAY",
+  "@dosesPerDay": {
+    "description": "English onboarding copy for doses per day."
+  },
+  "drawVolumeLabel": "DRAW VOLUME",
+  "@drawVolumeLabel": {
+    "description": "English onboarding copy for draw volume label."
+  },
+  "durationLabel": "DURATION",
+  "@durationLabel": {
+    "description": "English onboarding copy for duration label."
+  },
+  "experienceAdvanced": "Advanced",
+  "@experienceAdvanced": {
+    "description": "English onboarding copy for experience advanced."
+  },
+  "experienceAdvancedDetail": "I’m comfortable managing detailed protocols",
+  "@experienceAdvancedDetail": {
+    "description": "English onboarding copy for experience advanced detail."
+  },
+  "experienceFirstTime": "First time",
+  "@experienceFirstTime": {
+    "description": "English onboarding copy for experience first time."
+  },
+  "experienceFirstTimeDetail": "I’m new to peptide tracking",
+  "@experienceFirstTimeDetail": {
+    "description": "English onboarding copy for experience first time detail."
+  },
+  "experienceIntermediate": "INTERMEDIATE",
+  "@experienceIntermediate": {
+    "description": "English onboarding copy for experience intermediate."
+  },
+  "experienceLabel": "EXPERIENCE",
+  "@experienceLabel": {
+    "description": "English onboarding copy for experience label."
+  },
+  "experienceNovice": "NOVICE",
+  "@experienceNovice": {
+    "description": "English onboarding copy for experience novice."
+  },
+  "experienceSome": "Some experience",
+  "@experienceSome": {
+    "description": "English onboarding copy for experience some."
+  },
+  "experienceSomeDetail": "I’ve tracked one or two protocols",
+  "@experienceSomeDetail": {
+    "description": "English onboarding copy for experience some detail."
+  },
+  "experienceVeteran": "VETERAN",
+  "@experienceVeteran": {
+    "description": "English onboarding copy for experience veteran."
+  },
+  "featureDoseMathBody": "Keep vial size, water volume, dose, and units-to-draw beside the protocol you are actually tracking.",
+  "@featureDoseMathBody": {
+    "description": "English onboarding copy for feature dose math body."
+  },
+  "featureDoseMathTitle": "Dose Math\nIn Context",
+  "@featureDoseMathTitle": {
+    "description": "English onboarding copy for feature dose math title."
+  },
+  "featureProtocolArcBody": "See planned doses, logged doses, adherence, and body metrics build into one timeline.",
+  "@featureProtocolArcBody": {
+    "description": "English onboarding copy for feature protocol arc body."
+  },
+  "featureProtocolArcTitle": "Protocol Arc\nOver Time",
+  "@featureProtocolArcTitle": {
+    "description": "English onboarding copy for feature protocol arc title."
+  },
+  "featureShowcaseTitle": "Everything you need.\nOne app.",
+  "@featureShowcaseTitle": {
+    "description": "English onboarding copy for feature showcase title."
+  },
+  "featureSiteRotationBody": "Remember every site you log and keep rotation history attached to the dose record.",
+  "@featureSiteRotationBody": {
+    "description": "English onboarding copy for feature site rotation body."
+  },
+  "featureSiteRotationTitle": "Injection Site\nRotation",
+  "@featureSiteRotationTitle": {
+    "description": "English onboarding copy for feature site rotation title."
+  },
+  "firstNameExample": "e.g. Alex",
+  "@firstNameExample": {
+    "description": "English onboarding copy for first name example."
+  },
+  "firstNameLabel": "FIRST NAME",
+  "@firstNameLabel": {
+    "description": "English onboarding copy for first name label."
+  },
+  "frustrationForgetting": "Forgetting doses",
+  "@frustrationForgetting": {
+    "description": "English onboarding copy for frustration forgetting."
+  },
+  "frustrationLabel": "FRUSTRATION",
+  "@frustrationLabel": {
+    "description": "English onboarding copy for frustration label."
+  },
+  "frustrationMath": "Vial and syringe math",
+  "@frustrationMath": {
+    "description": "English onboarding copy for frustration math."
+  },
+  "frustrationProgress": "Seeing whether I’m consistent",
+  "@frustrationProgress": {
+    "description": "English onboarding copy for frustration progress."
+  },
+  "frustrationSchedule": "Keeping the schedule straight",
+  "@frustrationSchedule": {
+    "description": "English onboarding copy for frustration schedule."
+  },
+  "frustrationStacking": "Managing multiple peptides",
+  "@frustrationStacking": {
+    "description": "English onboarding copy for frustration stacking."
+  },
+  "frustrationTrust": "Finding trustworthy information",
+  "@frustrationTrust": {
+    "description": "English onboarding copy for frustration trust."
+  },
+  "goalAntiAging": "Healthy ageing",
+  "@goalAntiAging": {
+    "description": "English onboarding copy for goal anti aging."
+  },
+  "goalAntiAgingDetail": "Organise longevity-focused records",
+  "@goalAntiAgingDetail": {
+    "description": "English onboarding copy for goal anti aging detail."
+  },
+  "goalCognitive": "Cognitive support",
+  "@goalCognitive": {
+    "description": "English onboarding copy for goal cognitive."
+  },
+  "goalCognitiveDetail": "Monitor focus and mental performance",
+  "@goalCognitiveDetail": {
+    "description": "English onboarding copy for goal cognitive detail."
+  },
+  "goalImmune": "Immune support",
+  "@goalImmune": {
+    "description": "English onboarding copy for goal immune."
+  },
+  "goalImmuneDetail": "Keep immune-focused protocols organised",
+  "@goalImmuneDetail": {
+    "description": "English onboarding copy for goal immune detail."
+  },
+  "goalMuscleGrowth": "Muscle growth",
+  "@goalMuscleGrowth": {
+    "description": "English onboarding copy for goal muscle growth."
+  },
+  "goalMuscleGrowthDetail": "Track training and growth goals",
+  "@goalMuscleGrowthDetail": {
+    "description": "English onboarding copy for goal muscle growth detail."
+  },
+  "goalOther": "Other",
+  "@goalOther": {
+    "description": "English onboarding copy for goal other."
+  },
+  "goalOtherDetail": "Set up a different tracking goal",
+  "@goalOtherDetail": {
+    "description": "English onboarding copy for goal other detail."
+  },
+  "goalRecovery": "Recovery",
+  "@goalRecovery": {
+    "description": "English onboarding copy for goal recovery."
+  },
+  "goalRecoveryDetail": "Support recovery records and routines",
+  "@goalRecoveryDetail": {
+    "description": "English onboarding copy for goal recovery detail."
+  },
+  "goalSleep": "Sleep",
+  "@goalSleep": {
+    "description": "English onboarding copy for goal sleep."
+  },
+  "goalSleepDetail": "Track sleep-related goals and patterns",
+  "@goalSleepDetail": {
+    "description": "English onboarding copy for goal sleep detail."
+  },
+  "goalWeightLoss": "Weight loss",
+  "@goalWeightLoss": {
+    "description": "English onboarding copy for goal weight loss."
+  },
+  "goalWeightLossDetail": "Track metabolic goals and progress",
+  "@goalWeightLossDetail": {
+    "description": "English onboarding copy for goal weight loss detail."
+  },
+  "goalsLabel": "GOALS",
+  "@goalsLabel": {
+    "description": "English onboarding copy for goals label."
+  },
+  "iUnderstand": "I UNDERSTAND",
+  "@iUnderstand": {
+    "description": "English onboarding copy for i understand."
+  },
+  "lastThreeDaysAgo": "Last: 3 days ago",
+  "@lastThreeDaysAgo": {
+    "description": "English onboarding copy for last three days ago."
+  },
+  "leftAbdomen": "Left abdomen",
+  "@leftAbdomen": {
+    "description": "English onboarding copy for left abdomen."
+  },
+  "loveIt": "LOVE IT",
+  "@loveIt": {
+    "description": "English onboarding copy for love it."
+  },
+  "maybeLater": "Maybe later",
+  "@maybeLater": {
+    "description": "English onboarding copy for maybe later."
+  },
+  "monthOne": "MONTH 1",
+  "@monthOne": {
+    "description": "English onboarding copy for month one."
+  },
+  "monthShortLabel": "MM",
+  "@monthShortLabel": {
+    "description": "English onboarding copy for month short label."
+  },
+  "monthTwo": "MONTH 2",
+  "@monthTwo": {
+    "description": "English onboarding copy for month two."
+  },
+  "moreCount": "{shown} +{count} more",
+  "@moreCount": {
+    "description": "English onboarding copy for more count.",
+    "placeholders": {
+      "shown": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "needsWork": "NEEDS WORK",
+  "@needsWork": {
+    "description": "English onboarding copy for needs work."
+  },
+  "notificationBody": "Get discreet reminders when a scheduled protocol window is due. No peptide names in notifications — just a gentle nudge.",
+  "@notificationBody": {
+    "description": "English onboarding copy for notification body."
+  },
+  "notificationTitle": "Keep dose times\nvisible.",
+  "@notificationTitle": {
+    "description": "English onboarding copy for notification title."
+  },
+  "nowLabel": "now",
+  "@nowLabel": {
+    "description": "English onboarding copy for now label."
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "English onboarding copy for ok."
+  },
+  "onboardingAgeConfirmed": "I’M 18 OR OLDER",
+  "@onboardingAgeConfirmed": {
+    "description": "English onboarding copy for onboarding age confirmed."
+  },
+  "onboardingAgeRequirementBody": "You must be 18 or older to use PepMod.",
+  "@onboardingAgeRequirementBody": {
+    "description": "English onboarding copy for onboarding age requirement body."
+  },
+  "onboardingAgeRequirementTitle": "Age requirement",
+  "@onboardingAgeRequirementTitle": {
+    "description": "English onboarding copy for onboarding age requirement title."
+  },
+  "onboardingAgeVerificationBody": "PepMod is intended for adults aged 18 and over.",
+  "@onboardingAgeVerificationBody": {
+    "description": "English onboarding copy for onboarding age verification body."
+  },
+  "onboardingAgeVerificationTitle": "First, confirm\nyour age.",
+  "@onboardingAgeVerificationTitle": {
+    "description": "English onboarding copy for onboarding age verification title."
+  },
+  "onboardingAheadBody": "Answer a few questions and PepMod will organise a personalised tracking preview.",
+  "@onboardingAheadBody": {
+    "description": "English onboarding copy for onboarding ahead body."
+  },
+  "onboardingAheadTitle": "See your protocol\nbefore you start.",
+  "@onboardingAheadTitle": {
+    "description": "English onboarding copy for onboarding ahead title."
+  },
+  "onboardingBirthDateBody": "This confirms you meet the age requirement.",
+  "@onboardingBirthDateBody": {
+    "description": "English onboarding copy for onboarding birth date body."
+  },
+  "onboardingBirthDateTitle": "When were\nyou born?",
+  "@onboardingBirthDateTitle": {
+    "description": "English onboarding copy for onboarding birth date title."
+  },
+  "onboardingConfidenceBody": "Choose everything PepMod should make clearer.",
+  "@onboardingConfidenceBody": {
+    "description": "English onboarding copy for onboarding confidence body."
+  },
+  "onboardingConfidenceTitle": "Where do you want\nmore confidence?",
+  "@onboardingConfidenceTitle": {
+    "description": "English onboarding copy for onboarding confidence title."
+  },
+  "onboardingConversionValueBody": "Convert the values from your vial and plan into volume and syringe units.",
+  "@onboardingConversionValueBody": {
+    "description": "English onboarding copy for onboarding conversion value body."
+  },
+  "onboardingConversionValueTitle": "Make vial math\neasier to check.",
+  "@onboardingConversionValueTitle": {
+    "description": "English onboarding copy for onboarding conversion value title."
+  },
+  "onboardingDisclaimerBody": "PepMod helps organise records, reminders, and unit conversions. It does not diagnose, prescribe, or replace qualified healthcare advice.",
+  "@onboardingDisclaimerBody": {
+    "description": "English onboarding copy for onboarding disclaimer body."
+  },
+  "onboardingDisclaimerTitle": "Built for clarity.\nNot prescriptions.",
+  "@onboardingDisclaimerTitle": {
+    "description": "English onboarding copy for onboarding disclaimer title."
+  },
+  "onboardingExperienceTitle": "How experienced\nare you?",
+  "@onboardingExperienceTitle": {
+    "description": "English onboarding copy for onboarding experience title."
+  },
+  "onboardingFrustrationBody": "Pick the biggest friction point.",
+  "@onboardingFrustrationBody": {
+    "description": "English onboarding copy for onboarding frustration body."
+  },
+  "onboardingFrustrationTitle": "What feels\nhardest today?",
+  "@onboardingFrustrationTitle": {
+    "description": "English onboarding copy for onboarding frustration title."
+  },
+  "onboardingGoalsTitle": "What are your\nmain goals?",
+  "@onboardingGoalsTitle": {
+    "description": "English onboarding copy for onboarding goals title."
+  },
+  "onboardingGuidedStartBody": "We’ll tailor the setup to your goals, experience, and the records you want to keep.",
+  "@onboardingGuidedStartBody": {
+    "description": "English onboarding copy for onboarding guided start body."
+  },
+  "onboardingGuidedStartTitle": "A guided start,\nbuilt around you.",
+  "@onboardingGuidedStartTitle": {
+    "description": "English onboarding copy for onboarding guided start title."
+  },
+  "onboardingHookAnswer": "PepMod keeps the answer beside your protocol.",
+  "@onboardingHookAnswer": {
+    "description": "English onboarding copy for onboarding hook answer."
+  },
+  "onboardingHookQuestion": "How many units\ndo you draw?",
+  "@onboardingHookQuestion": {
+    "description": "English onboarding copy for onboarding hook question."
+  },
+  "onboardingHookResearch": "RESEARCH LIBRARY",
+  "@onboardingHookResearch": {
+    "description": "English onboarding copy for onboarding hook research."
+  },
+  "onboardingHookSources": "Evidence-linked sources",
+  "@onboardingHookSources": {
+    "description": "English onboarding copy for onboarding hook sources."
+  },
+  "onboardingHookVial": "VIAL + DILUENT",
+  "@onboardingHookVial": {
+    "description": "English onboarding copy for onboarding hook vial."
+  },
+  "onboardingNameBody": "We’ll use this to personalise your PepMod experience.",
+  "@onboardingNameBody": {
+    "description": "English onboarding copy for onboarding name body."
+  },
+  "onboardingNameTitle": "What should we\ncall you?",
+  "@onboardingNameTitle": {
+    "description": "English onboarding copy for onboarding name title."
+  },
+  "onboardingPeptideSelectBody": "Choose any peptides you use or want to keep on your radar.",
+  "@onboardingPeptideSelectBody": {
+    "description": "English onboarding copy for onboarding peptide select body."
+  },
+  "onboardingPeptideSelectTitle": "What are you\ntracking?",
+  "@onboardingPeptideSelectTitle": {
+    "description": "English onboarding copy for onboarding peptide select title."
+  },
+  "onboardingProgressValueBody": "Bring adherence, dose history, and body metrics into one clear record.",
+  "@onboardingProgressValueBody": {
+    "description": "English onboarding copy for onboarding progress value body."
+  },
+  "onboardingProgressValueTitle": "See the full arc\nover time.",
+  "@onboardingProgressValueTitle": {
+    "description": "English onboarding copy for onboarding progress value title."
+  },
+  "onboardingProtocolValueBody": "Plan schedules, log doses, and keep the details attached to each protocol.",
+  "@onboardingProtocolValueBody": {
+    "description": "English onboarding copy for onboarding protocol value body."
+  },
+  "onboardingProtocolValueTitle": "Keep every protocol\nin one place.",
+  "@onboardingProtocolValueTitle": {
+    "description": "English onboarding copy for onboarding protocol value title."
+  },
+  "onboardingUnder18": "I’M UNDER 18",
+  "@onboardingUnder18": {
+    "description": "English onboarding copy for onboarding under18."
+  },
+  "openingPermission": "OPENING PERMISSION...",
+  "@openingPermission": {
+    "description": "English onboarding copy for opening permission."
+  },
+  "paywallArcBody": "See what was planned, what was logged, and what needs a cleaner record next.",
+  "@paywallArcBody": {
+    "description": "English onboarding copy for paywall arc body."
+  },
+  "paywallArcTitle": "WATCH THE ARC OVER TIME",
+  "@paywallArcTitle": {
+    "description": "English onboarding copy for paywall arc title."
+  },
+  "paywallBody": "Dose math, site rotation, reminders, and protocol history — all in one record.",
+  "@paywallBody": {
+    "description": "English onboarding copy for paywall body."
+  },
+  "paywallDoseMathBody": "Keep vial, water, dose, and units-to-draw together so each log is easier to check.",
+  "@paywallDoseMathBody": {
+    "description": "English onboarding copy for paywall dose math body."
+  },
+  "paywallDoseMathTitle": "GET THE DOSE MATH RIGHT",
+  "@paywallDoseMathTitle": {
+    "description": "English onboarding copy for paywall dose math title."
+  },
+  "paywallPreviewDisclaimer": "Built for records, reminders, and unit clarity — not medical advice.",
+  "@paywallPreviewDisclaimer": {
+    "description": "English onboarding copy for paywall preview disclaimer."
+  },
+  "paywallRotationBody": "Every site, cycle, and reminder stays attached to the protocol record.",
+  "@paywallRotationBody": {
+    "description": "English onboarding copy for paywall rotation body."
+  },
+  "paywallRotationTitle": "NEVER LOSE YOUR ROTATION",
+  "@paywallRotationTitle": {
+    "description": "English onboarding copy for paywall rotation title."
+  },
+  "paywallTitle": "Everything to run\nyour protocol right.",
+  "@paywallTitle": {
+    "description": "English onboarding copy for paywall title."
+  },
+  "paywallValueNote": "A confusing vial calculation can waste time and product. PepMod keeps the math beside the log so you can re-check your records before you act on old notes.",
+  "@paywallValueNote": {
+    "description": "English onboarding copy for paywall value note."
+  },
+  "peptideLabel": "PEPTIDE",
+  "@peptideLabel": {
+    "description": "English onboarding copy for peptide label."
+  },
+  "peptidesLabel": "PEPTIDES",
+  "@peptidesLabel": {
+    "description": "English onboarding copy for peptides label."
+  },
+  "peptidesTracked": "PEPTIDES\nTRACKED",
+  "@peptidesTracked": {
+    "description": "English onboarding copy for peptides tracked."
+  },
+  "perWeek": "/week",
+  "@perWeek": {
+    "description": "English onboarding copy for per week."
+  },
+  "perYear": "/year",
+  "@perYear": {
+    "description": "English onboarding copy for per year."
+  },
+  "privacyLabel": "Privacy",
+  "@privacyLabel": {
+    "description": "English onboarding copy for privacy label."
+  },
+  "processingGoals": "ANALYSING {count} GOALS...",
+  "@processingGoals": {
+    "description": "English onboarding copy for processing goals.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "processingPeptides": "LINKING {count} PEPTIDE RECORDS...",
+  "@processingPeptides": {
+    "description": "English onboarding copy for processing peptides.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "processingProtocol": "BUILDING YOUR PROTOCOL...",
+  "@processingProtocol": {
+    "description": "English onboarding copy for processing protocol."
+  },
+  "processingSchedule": "ORGANISING YOUR SCHEDULE...",
+  "@processingSchedule": {
+    "description": "English onboarding copy for processing schedule."
+  },
+  "processingTitle": "Building your\nprotocol",
+  "@processingTitle": {
+    "description": "English onboarding copy for processing title."
+  },
+  "progressLabel": "Progress",
+  "@progressLabel": {
+    "description": "English onboarding copy for progress label."
+  },
+  "protocolClarity": "protocol clarity",
+  "@protocolClarity": {
+    "description": "English onboarding copy for protocol clarity."
+  },
+  "protocolIncludes": "YOUR PROTOCOL INCLUDES //",
+  "@protocolIncludes": {
+    "description": "English onboarding copy for protocol includes."
+  },
+  "protocolPreviewTitle": "Your protocol\nis ready.",
+  "@protocolPreviewTitle": {
+    "description": "English onboarding copy for protocol preview title."
+  },
+  "protocolReady": "PROTOCOL READY //",
+  "@protocolReady": {
+    "description": "English onboarding copy for protocol ready."
+  },
+  "protocolReminderReady": "Protocol reminder is ready",
+  "@protocolReminderReady": {
+    "description": "English onboarding copy for protocol reminder ready."
+  },
+  "protocolReservedFor": "YOUR PERSONALISED PROTOCOL IS RESERVED FOR",
+  "@protocolReservedFor": {
+    "description": "English onboarding copy for protocol reserved for."
+  },
+  "restorePurchase": "Restore Purchase",
+  "@restorePurchase": {
+    "description": "English onboarding copy for restore purchase."
+  },
+  "resultsSummaryBody": "We’ll keep dose logs, reconstitution math, and trend records together as your data builds.",
+  "@resultsSummaryBody": {
+    "description": "English onboarding copy for results summary body."
+  },
+  "reviewGateBody": "Your feedback helps us improve the platform for every biohacker.",
+  "@reviewGateBody": {
+    "description": "English onboarding copy for review gate body."
+  },
+  "reviewGateTitle": "Enjoying PepMod\nso far?",
+  "@reviewGateTitle": {
+    "description": "English onboarding copy for review gate title."
+  },
+  "roadmapBody": "Built around {count} tracked peptides and your need for {need}.",
+  "@roadmapBody": {
+    "description": "English onboarding copy for roadmap body.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "need": {
+        "type": "String"
+      }
+    }
+  },
+  "roadmapDayOneBody": "Peptides, dose logs, site rotation, and reminders are ready.",
+  "@roadmapDayOneBody": {
+    "description": "English onboarding copy for roadmap day one body."
+  },
+  "roadmapDayOneTitle": "Your first protocol is organised",
+  "@roadmapDayOneTitle": {
+    "description": "English onboarding copy for roadmap day one title."
+  },
+  "roadmapDisclaimer": "PepMod keeps records and reminders organised. It does not prescribe, diagnose, or replace clinician guidance.",
+  "@roadmapDisclaimer": {
+    "description": "English onboarding copy for roadmap disclaimer."
+  },
+  "roadmapMonthOneBody": "Adherence, missed doses, and body metrics start forming a cleaner record.",
+  "@roadmapMonthOneBody": {
+    "description": "English onboarding copy for roadmap month one body."
+  },
+  "roadmapMonthOneTitle": "Your consistency history takes shape",
+  "@roadmapMonthOneTitle": {
+    "description": "English onboarding copy for roadmap month one title."
+  },
+  "roadmapMonthTwoBody": "See what you planned, what happened, and where your records need attention.",
+  "@roadmapMonthTwoBody": {
+    "description": "English onboarding copy for roadmap month two body."
+  },
+  "roadmapMonthTwoTitle": "Your full protocol arc is visible",
+  "@roadmapMonthTwoTitle": {
+    "description": "English onboarding copy for roadmap month two title."
+  },
+  "roadmapTitle": "Here is what\nis ahead.",
+  "@roadmapTitle": {
+    "description": "English onboarding copy for roadmap title."
+  },
+  "roadmapWeekOneBody": "Plain-English research and tracking notes stay attached to your plan.",
+  "@roadmapWeekOneBody": {
+    "description": "English onboarding copy for roadmap week one body."
+  },
+  "roadmapWeekOneTitle": "Your library fills around {goal}",
+  "@roadmapWeekOneTitle": {
+    "description": "English onboarding copy for roadmap week one title.",
+    "placeholders": {
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "savePercent": "SAVE {percent}%",
+  "@savePercent": {
+    "description": "English onboarding copy for save percent.",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "saveRoadmap": "SAVE THIS ROADMAP",
+  "@saveRoadmap": {
+    "description": "English onboarding copy for save roadmap."
+  },
+  "schedulePreview": "SCHEDULE PREVIEW",
+  "@schedulePreview": {
+    "description": "English onboarding copy for schedule preview."
+  },
+  "seeWhatsInside": "SEE WHAT’S INSIDE",
+  "@seeWhatsInside": {
+    "description": "English onboarding copy for see whats inside."
+  },
+  "selectAllThatApply": "Select all that apply.",
+  "@selectAllThatApply": {
+    "description": "English onboarding copy for select all that apply."
+  },
+  "siteMap": "Site map",
+  "@siteMap": {
+    "description": "English onboarding copy for site map."
+  },
+  "skipForNow": "SKIP FOR NOW",
+  "@skipForNow": {
+    "description": "English onboarding copy for skip for now."
+  },
+  "socialProofBody": "Join thousands tracking real progress.",
+  "@socialProofBody": {
+    "description": "English onboarding copy for social proof body."
+  },
+  "socialProofTitle": "Trusted by\nbiohackers worldwide",
+  "@socialProofTitle": {
+    "description": "English onboarding copy for social proof title."
+  },
+  "specialOffer": "SPECIAL OFFER",
+  "@specialOffer": {
+    "description": "English onboarding copy for special offer."
+  },
+  "startFreeTrial": "START FREE TRIAL",
+  "@startFreeTrial": {
+    "description": "English onboarding copy for start free trial."
+  },
+  "subscribeLabel": "SUBSCRIBE",
+  "@subscribeLabel": {
+    "description": "English onboarding copy for subscribe label."
+  },
+  "subscribePrice": "SUBSCRIBE — {price}/week",
+  "@subscribePrice": {
+    "description": "English onboarding copy for subscribe price.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "subscribeToActivate": "Subscribe to activate your protocol",
+  "@subscribeToActivate": {
+    "description": "English onboarding copy for subscribe to activate."
+  },
+  "subscriptionRenewalDisclaimer": "Subscription auto-renews unless cancelled at least 24 hours before the end of the current period. Manage in Settings > Apple ID > Subscriptions.",
+  "@subscriptionRenewalDisclaimer": {
+    "description": "English onboarding copy for subscription renewal disclaimer."
+  },
+  "syringeVolume": "{volume}ml on a 1ml syringe",
+  "@syringeVolume": {
+    "description": "English onboarding copy for syringe volume.",
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      }
+    }
+  },
+  "termsLabel": "Terms",
+  "@termsLabel": {
+    "description": "English onboarding copy for terms label."
+  },
+  "testimonialOne": "Finally stopped missing doses. The reconstitution calculator alone saved me hours of spreadsheet maths.",
+  "@testimonialOne": {
+    "description": "English onboarding copy for testimonial one."
+  },
+  "testimonialThree": "Cleanest peptide tracker I’ve used. Looks like it was built for serious users, because it was.",
+  "@testimonialThree": {
+    "description": "English onboarding copy for testimonial three."
+  },
+  "testimonialTwo": "The weekly insights caught a timing issue I didn’t notice for months. Game-changer.",
+  "@testimonialTwo": {
+    "description": "English onboarding copy for testimonial two."
+  },
+  "thirtyDayAdherence": "30-day adherence",
+  "@thirtyDayAdherence": {
+    "description": "English onboarding copy for thirty day adherence."
+  },
+  "threeDayFreeTrial": "3-DAY FREE TRIAL",
+  "@threeDayFreeTrial": {
+    "description": "English onboarding copy for three day free trial."
+  },
+  "timelineLabel": "Timeline",
+  "@timelineLabel": {
+    "description": "English onboarding copy for timeline label."
+  },
+  "trackedLabel": "tracked",
+  "@trackedLabel": {
+    "description": "English onboarding copy for tracked label."
+  },
+  "turnOnReminders": "TURN ON REMINDERS",
+  "@turnOnReminders": {
+    "description": "English onboarding copy for turn on reminders."
+  },
+  "unitConversionDisclaimer": "Unit conversion tool for reference only. Always verify with your healthcare provider.",
+  "@unitConversionDisclaimer": {
+    "description": "English onboarding copy for unit conversion disclaimer."
+  },
+  "unitsLabel": "units",
+  "@unitsLabel": {
+    "description": "English onboarding copy for units label."
+  },
+  "unitsToDraw": "Units to draw",
+  "@unitsToDraw": {
+    "description": "English onboarding copy for units to draw."
+  },
+  "unlockPepMod": "UNLOCK PEPMOD",
+  "@unlockPepMod": {
+    "description": "English onboarding copy for unlock pep mod."
+  },
+  "usersLabel": "USERS",
+  "@usersLabel": {
+    "description": "English onboarding copy for users label."
+  },
+  "viewLabel": "VIEW",
+  "@viewLabel": {
+    "description": "English onboarding copy for view label."
+  },
+  "weekDuration": "WEEK\nDURATION",
+  "@weekDuration": {
+    "description": "English onboarding copy for week duration."
+  },
+  "weekOne": "WEEK 1",
+  "@weekOne": {
+    "description": "English onboarding copy for week one."
+  },
+  "weeklyLabel": "Weekly",
+  "@weeklyLabel": {
+    "description": "English onboarding copy for weekly label."
+  },
+  "weeksCount": "{count} weeks",
+  "@weeksCount": {
+    "description": "English onboarding copy for weeks count.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yearLabel": "YEAR",
+  "@yearLabel": {
+    "description": "English onboarding copy for year label."
   }
 }

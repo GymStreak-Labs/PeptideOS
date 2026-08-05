@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Captures what the user needs to feel safe and ready before starting.
 class ConfidencePage extends StatelessWidget {
@@ -17,41 +18,41 @@ class ConfidencePage extends StatelessWidget {
   final ValueChanged<String> onToggle;
   final VoidCallback onNext;
 
-  static const _needs = [
-    _ConfidenceNeed(
-      label: 'Dose math',
-      description: 'Vial, water, and syringe units in one place',
-      icon: Icons.calculate_rounded,
-    ),
-    _ConfidenceNeed(
-      label: 'Cycle timing',
-      description: 'Know what is planned and what is coming next',
-      icon: Icons.timeline_rounded,
-    ),
-    _ConfidenceNeed(
-      label: 'Site rotation',
-      description: 'Keep every site and dose remembered',
-      icon: Icons.location_on_outlined,
-    ),
-    _ConfidenceNeed(
-      label: 'Plain-English info',
-      description: 'Research notes without forum chaos',
-      icon: Icons.menu_book_rounded,
-    ),
-    _ConfidenceNeed(
-      label: 'Progress signals',
-      description: 'See adherence and body metrics over time',
-      icon: Icons.query_stats_rounded,
-    ),
-    _ConfidenceNeed(
-      label: 'Safety framing',
-      description: 'Clear boundaries and medical disclaimers',
-      icon: Icons.verified_user_outlined,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final needs = [
+      _ConfidenceNeed(
+        label: l10n.confidenceDoseMath,
+        description: l10n.confidenceDoseMathDetail,
+        icon: Icons.calculate_rounded,
+      ),
+      _ConfidenceNeed(
+        label: l10n.confidenceCycleTiming,
+        description: l10n.confidenceCycleTimingDetail,
+        icon: Icons.timeline_rounded,
+      ),
+      _ConfidenceNeed(
+        label: l10n.confidenceSiteRotation,
+        description: l10n.confidenceSiteRotationDetail,
+        icon: Icons.location_on_outlined,
+      ),
+      _ConfidenceNeed(
+        label: l10n.confidencePlainInfo,
+        description: l10n.confidencePlainInfoDetail,
+        icon: Icons.menu_book_rounded,
+      ),
+      _ConfidenceNeed(
+        label: l10n.confidenceProgressSignals,
+        description: l10n.confidenceProgressSignalsDetail,
+        icon: Icons.query_stats_rounded,
+      ),
+      _ConfidenceNeed(
+        label: l10n.confidenceSafetyFraming,
+        description: l10n.confidenceSafetyFramingDetail,
+        icon: Icons.verified_user_outlined,
+      ),
+    ];
     final canContinue = selectedNeeds.isNotEmpty;
 
     return SafeArea(
@@ -66,12 +67,12 @@ class ConfidencePage extends StatelessWidget {
             Text('SYS.READINESS // SIGNALS', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'What would make\nyou feel confident?',
+              l10n.onboardingConfidenceTitle,
               style: AppTypography.h1.copyWith(fontSize: 28),
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Select all that matter. PepMod will shape your setup around the tracking gaps you want to close.',
+              l10n.onboardingConfidenceBody,
               style: AppTypography.bodySmall.copyWith(
                 color: AppColors.textSecondary,
                 height: 1.45,
@@ -81,11 +82,11 @@ class ConfidencePage extends StatelessWidget {
             Expanded(
               child: ListView.separated(
                 physics: const BouncingScrollPhysics(),
-                itemCount: _needs.length,
+                itemCount: needs.length,
                 separatorBuilder: (_, __) =>
                     const SizedBox(height: AppSpacing.sm),
                 itemBuilder: (context, index) {
-                  final need = _needs[index];
+                  final need = needs[index];
                   final selected = selectedNeeds.contains(need.label);
                   return _NeedTile(
                     need: need,
@@ -100,7 +101,7 @@ class ConfidencePage extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.base),
             PrimaryButton(
-              label: 'CONTINUE',
+              label: l10n.continueLabel,
               onPressed: canContinue ? onNext : null,
             ),
             const SizedBox(height: AppSpacing.xxl),

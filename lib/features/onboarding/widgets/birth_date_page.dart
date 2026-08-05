@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Collects date of birth for age confirmation and profile continuity.
 class BirthDatePage extends StatefulWidget {
@@ -85,6 +86,7 @@ class _BirthDatePageState extends State<BirthDatePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SafeArea(
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -109,17 +111,17 @@ class _BirthDatePageState extends State<BirthDatePage> {
                     ),
                     const SizedBox(height: AppSpacing.md),
                     Text(
-                      'When were\nyou born?',
+                      l10n.onboardingBirthDateTitle,
                       style: AppTypography.h1.copyWith(fontSize: 28),
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      'PepMod is built for adults only. Your birth date also keeps your profile consistent after sign-in.',
+                      l10n.onboardingBirthDateBody,
                       style: AppTypography.bodySmall,
                     ),
                     const SizedBox(height: AppSpacing.xl),
                     Text(
-                      'DATE OF BIRTH',
+                      l10n.dateOfBirthLabel,
                       style: AppTypography.systemLabel.copyWith(
                         color: AppColors.textTertiary,
                         fontSize: 10,
@@ -132,7 +134,7 @@ class _BirthDatePageState extends State<BirthDatePage> {
                           flex: 2,
                           child: _CyberInput(
                             controller: _yearController,
-                            label: 'YEAR',
+                            label: l10n.yearLabel,
                             hint: '1990',
                             maxLength: 4,
                             onChanged: (_) => _syncBirthDate(),
@@ -142,7 +144,7 @@ class _BirthDatePageState extends State<BirthDatePage> {
                         Expanded(
                           child: _CyberInput(
                             controller: _monthController,
-                            label: 'MM',
+                            label: l10n.monthShortLabel,
                             hint: '04',
                             maxLength: 2,
                             onChanged: (_) => _syncBirthDate(),
@@ -152,7 +154,7 @@ class _BirthDatePageState extends State<BirthDatePage> {
                         Expanded(
                           child: _CyberInput(
                             controller: _dayController,
-                            label: 'DD',
+                            label: l10n.dayShortLabel,
                             hint: '23',
                             maxLength: 2,
                             onChanged: (_) => _syncBirthDate(),
@@ -163,8 +165,8 @@ class _BirthDatePageState extends State<BirthDatePage> {
                     const SizedBox(height: AppSpacing.md),
                     Text(
                       _canContinue
-                          ? 'Thanks. Your profile is ready to personalise.'
-                          : 'Enter a valid 18+ birth date to continue.',
+                          ? l10n.birthDateValid
+                          : l10n.birthDateInvalid,
                       style: AppTypography.disclaimer.copyWith(
                         color: _canContinue
                             ? AppColors.primary
@@ -173,7 +175,7 @@ class _BirthDatePageState extends State<BirthDatePage> {
                     ),
                     const Spacer(),
                     PrimaryButton(
-                      label: 'CONTINUE',
+                      label: l10n.continueLabel,
                       onPressed: _canContinue ? widget.onNext : null,
                     ),
                   ],

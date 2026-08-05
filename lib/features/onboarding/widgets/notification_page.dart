@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Notification permission warm-up.
 /// Explains the value before the system prompt fires.
@@ -16,6 +17,7 @@ class NotificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -55,7 +57,7 @@ class NotificationPage extends StatelessWidget {
             const SizedBox(height: AppSpacing.md),
 
             Text(
-              'Keep dose times\nvisible.',
+              l10n.notificationTitle,
               style: AppTypography.h1.copyWith(fontSize: 32),
               textAlign: TextAlign.center,
             ),
@@ -63,7 +65,7 @@ class NotificationPage extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
 
             Text(
-              'Get discreet reminders when a scheduled protocol window is due. No peptide names in notifications - just a gentle nudge.',
+              l10n.notificationBody,
               style: AppTypography.bodyMedium,
               textAlign: TextAlign.center,
             ),
@@ -103,12 +105,15 @@ class NotificationPage extends StatelessWidget {
                               ),
                             ),
                             const Spacer(),
-                            Text('now', style: AppTypography.disclaimer),
+                            Text(
+                              l10n.nowLabel,
+                              style: AppTypography.disclaimer,
+                            ),
                           ],
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'Protocol reminder is ready',
+                          l10n.protocolReminderReady,
                           style: AppTypography.bodySmall.copyWith(
                             color: AppColors.textPrimary,
                           ),
@@ -131,7 +136,7 @@ class NotificationPage extends StatelessWidget {
             TextButton(
               onPressed: onNext,
               child: Text(
-                'Maybe later',
+                l10n.maybeLater,
                 style: AppTypography.bodySmall.copyWith(
                   color: AppColors.textDisabled,
                 ),
@@ -170,8 +175,9 @@ class _EnableButtonState extends State<_EnableButton> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return PrimaryButton(
-      label: _loading ? 'OPENING PERMISSION...' : 'TURN ON REMINDERS',
+      label: _loading ? l10n.openingPermission : l10n.turnOnReminders,
       onPressed: _loading ? null : _handleTap,
     );
   }

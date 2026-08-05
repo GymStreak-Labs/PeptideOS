@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Age gate — mandatory first screen. 18+ required.
 /// Apple compliance: must be the very first interaction.
@@ -11,6 +12,7 @@ class AgeGatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -46,11 +48,14 @@ class AgeGatePage extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.xxl),
 
-            Text('SYS.AUTH // AGE VERIFICATION', style: AppTypography.systemLabel),
+            Text(
+              'SYS.AUTH // AGE VERIFICATION',
+              style: AppTypography.systemLabel,
+            ),
             const SizedBox(height: AppSpacing.md),
 
             Text(
-              'Age\nVerification',
+              l10n.onboardingAgeVerificationTitle,
               style: AppTypography.h1.copyWith(fontSize: 32),
               textAlign: TextAlign.center,
             ),
@@ -58,7 +63,7 @@ class AgeGatePage extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
 
             Text(
-              'PepMod is designed for adults aged 18 and over. By continuing, you confirm that you are at least 18 years old.',
+              l10n.onboardingAgeVerificationBody,
               style: AppTypography.bodyMedium,
               textAlign: TextAlign.center,
             ),
@@ -66,7 +71,7 @@ class AgeGatePage extends StatelessWidget {
             const Spacer(flex: 3),
 
             PrimaryButton(
-              label: 'I AM 18 OR OLDER',
+              label: l10n.onboardingAgeConfirmed,
               onPressed: onConfirmed,
             ),
 
@@ -78,22 +83,19 @@ class AgeGatePage extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (ctx) => AlertDialog(
-                    title: const Text('Age Requirement'),
-                    content: const Text(
-                      'PepMod requires users to be 18 years or older. '
-                      'Please consult a healthcare provider for peptide guidance.',
-                    ),
+                    title: Text(l10n.onboardingAgeRequirementTitle),
+                    content: Text(l10n.onboardingAgeRequirementBody),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.of(ctx).pop(),
-                        child: const Text('OK'),
+                        child: Text(l10n.ok),
                       ),
                     ],
                   ),
                 );
               },
               child: Text(
-                'I am under 18',
+                l10n.onboardingUnder18,
                 style: AppTypography.bodySmall.copyWith(
                   color: AppColors.textDisabled,
                 ),

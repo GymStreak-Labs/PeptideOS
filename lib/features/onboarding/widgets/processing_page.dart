@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../core/theme/theme.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Screen 11: Building Your Protocol — processing / compile animation.
 /// Auto-advances when progress reaches 100%.
@@ -75,7 +76,7 @@ class _ProcessingPageState extends State<ProcessingPage>
     super.dispose();
   }
 
-  String _statusLabel(double progress) {
+  String _statusLabel(AppLocalizations l10n, double progress) {
     final peptideCount = widget.selectedPeptides.isEmpty
         ? 2
         : widget.selectedPeptides.length;
@@ -84,18 +85,19 @@ class _ProcessingPageState extends State<ProcessingPage>
         : widget.selectedGoals.length;
 
     if (progress < 0.25) {
-      return 'ANALYSING $goalCount GOALS...';
+      return l10n.processingGoals(goalCount);
     } else if (progress < 0.55) {
-      return 'ORGANISING YOUR SCHEDULE...';
+      return l10n.processingSchedule;
     } else if (progress < 0.80) {
-      return 'LINKING $peptideCount PEPTIDE RECORDS...';
+      return l10n.processingPeptides(peptideCount);
     } else {
-      return 'BUILDING YOUR PROTOCOL...';
+      return l10n.processingProtocol;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SafeArea(
       child: Stack(
         children: [
@@ -129,14 +131,14 @@ class _ProcessingPageState extends State<ProcessingPage>
                 ),
                 const SizedBox(height: AppSpacing.md),
                 Text(
-                  'Building your\nprotocol',
+                  l10n.processingTitle,
                   style: AppTypography.h1.copyWith(fontSize: 30),
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 AnimatedBuilder(
                   animation: _progressController,
                   builder: (context, _) => Text(
-                    _statusLabel(_progressController.value),
+                    _statusLabel(l10n, _progressController.value),
                     style: AppTypography.bodyMedium.copyWith(
                       color: AppColors.textSecondary,
                     ),
@@ -282,7 +284,7 @@ class _ProcessingPageState extends State<ProcessingPage>
                       const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: Text(
-                          _statusLabel(_progressController.value),
+                          _statusLabel(l10n, _progressController.value),
                           style: AppTypography.systemLabel.copyWith(
                             color: AppColors.primary,
                             fontSize: 11,
@@ -301,7 +303,7 @@ class _ProcessingPageState extends State<ProcessingPage>
                   duration: const Duration(milliseconds: 200),
                   child: Center(
                     child: Text(
-                      'PROTOCOL READY //',
+                      l10n.protocolReady,
                       style: AppTypography.systemLabel.copyWith(
                         color: AppColors.primary,
                         fontSize: 13,

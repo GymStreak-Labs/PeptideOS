@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Sells the user's future protocol arc before auth and paywall.
 class ProtocolRoadmapPage extends StatelessWidget {
@@ -18,13 +19,13 @@ class ProtocolRoadmapPage extends StatelessWidget {
   final Set<String> selectedPeptides;
   final VoidCallback onNext;
 
-  String get _primaryGoal {
-    if (selectedGoals.isEmpty) return 'protocol clarity';
+  String _primaryGoal(AppLocalizations l10n) {
+    if (selectedGoals.isEmpty) return l10n.protocolClarity;
     return selectedGoals.first.toLowerCase();
   }
 
-  String get _primaryNeed {
-    if (confidenceNeeds.isEmpty) return 'dose math';
+  String _primaryNeed(AppLocalizations l10n) {
+    if (confidenceNeeds.isEmpty) return l10n.confidenceDoseMath.toLowerCase();
     return confidenceNeeds.first.toLowerCase();
   }
 
@@ -33,35 +34,33 @@ class ProtocolRoadmapPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final steps = [
       _RoadmapStep(
-        label: 'DAY 1',
-        title: 'Your first protocol is organised',
-        body: 'Peptides, dose logs, site rotation, and reminders are ready.',
+        label: l10n.dayOne,
+        title: l10n.roadmapDayOneTitle,
+        body: l10n.roadmapDayOneBody,
         icon: Icons.flash_on_rounded,
         color: AppColors.primary,
       ),
       _RoadmapStep(
-        label: 'WEEK 1',
-        title: 'Your library fills around $_primaryGoal',
-        body:
-            'Plain-English research and tracking notes stay attached to your plan.',
+        label: l10n.weekOne,
+        title: l10n.roadmapWeekOneTitle(_primaryGoal(l10n)),
+        body: l10n.roadmapWeekOneBody,
         icon: Icons.menu_book_rounded,
         color: AppColors.secondary,
       ),
       _RoadmapStep(
-        label: 'MONTH 1',
-        title: 'Your consistency history takes shape',
-        body:
-            'Adherence, missed doses, and body metrics start forming a cleaner record.',
+        label: l10n.monthOne,
+        title: l10n.roadmapMonthOneTitle,
+        body: l10n.roadmapMonthOneBody,
         icon: Icons.query_stats_rounded,
         color: AppColors.aiInsightBright,
       ),
       _RoadmapStep(
-        label: 'MONTH 2',
-        title: 'Your full protocol arc is visible',
-        body:
-            'See what you planned, what happened, and where your records need attention.',
+        label: l10n.monthTwo,
+        title: l10n.roadmapMonthTwoTitle,
+        body: l10n.roadmapMonthTwoBody,
         icon: Icons.timeline_rounded,
         color: AppColors.primary,
       ),
@@ -82,12 +81,12 @@ class ProtocolRoadmapPage extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Here is what\nis ahead.',
+              l10n.roadmapTitle,
               style: AppTypography.h1.copyWith(fontSize: 30),
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Built around $_peptideCount tracked peptides and your need for $_primaryNeed.',
+              l10n.roadmapBody(_peptideCount, _primaryNeed(l10n)),
               style: AppTypography.bodySmall.copyWith(
                 color: AppColors.textSecondary,
               ),
@@ -101,13 +100,15 @@ class ProtocolRoadmapPage extends StatelessWidget {
                     ? const SizedBox(height: AppSpacing.md)
                     : const _TimelineConnector(),
                 itemBuilder: (context, index) {
-                  if (index == steps.length) return const _DisclaimerCard();
+                  if (index == steps.length) {
+                    return _DisclaimerCard(text: l10n.roadmapDisclaimer);
+                  }
                   return _RoadmapCard(step: steps[index]);
                 },
               ),
             ),
             const SizedBox(height: AppSpacing.base),
-            PrimaryButton(label: 'SAVE THIS ROADMAP', onPressed: onNext),
+            PrimaryButton(label: l10n.saveRoadmap, onPressed: onNext),
             const SizedBox(height: AppSpacing.xxl),
           ],
         ),
@@ -194,7 +195,8 @@ class _TimelineConnector extends StatelessWidget {
 }
 
 class _DisclaimerCard extends StatelessWidget {
-  const _DisclaimerCard();
+  const _DisclaimerCard({required this.text});
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +218,7 @@ class _DisclaimerCard extends StatelessWidget {
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
-              'PepMod keeps records and reminders organised. It does not prescribe, diagnose, or replace clinician guidance.',
+              text,
               style: AppTypography.disclaimer.copyWith(
                 color: AppColors.textSecondary,
                 height: 1.45,

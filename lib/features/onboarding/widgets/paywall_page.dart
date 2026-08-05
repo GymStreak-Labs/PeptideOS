@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/constants/legal_links.dart';
+import '../../../l10n/app_localizations.dart';
 
 @immutable
 class PaywallPlanPrice {
@@ -53,6 +54,7 @@ class _PaywallPageState extends State<PaywallPage>
   // Countdown timer (15 min = 900s)
   int _countdownSeconds = 900;
   Timer? _countdownTimer;
+  AppLocalizations get _l10n => AppLocalizations.of(context);
 
   // Shimmer
   late AnimationController _shimmerController;
@@ -261,7 +263,7 @@ class _PaywallPageState extends State<PaywallPage>
             const SizedBox(height: AppSpacing.sm),
 
             Text(
-              'Everything to run\nyour protocol right.',
+              _l10n.paywallTitle,
               style: AppTypography.h1.copyWith(
                 fontSize: 30,
                 height: 1.1,
@@ -275,7 +277,7 @@ class _PaywallPageState extends State<PaywallPage>
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Dose math, site rotation, reminders, and protocol history - all in one record.',
+              _l10n.paywallBody,
               style: AppTypography.bodyMedium.copyWith(
                 color: AppColors.textSecondary.withValues(alpha: 0.65),
                 height: 1.45,
@@ -322,34 +324,34 @@ class _PaywallPageState extends State<PaywallPage>
                 ),
               ),
             ),
-            const Positioned(
+            Positioned(
               left: 18,
               top: 18,
               child: _MiniPhonePreview(
-                title: 'Dose math',
+                title: _l10n.confidenceDoseMath,
                 primary: '300 mcg',
-                secondary: 'Units to draw',
+                secondary: _l10n.unitsToDraw,
                 icon: Icons.calculate_rounded,
               ),
             ),
-            const Positioned(
+            Positioned(
               left: 122,
               top: 4,
               child: _MiniPhonePreview(
-                title: 'Site map',
-                primary: 'Left abdomen',
-                secondary: 'Last: 3 days ago',
+                title: _l10n.siteMap,
+                primary: _l10n.leftAbdomen,
+                secondary: _l10n.lastThreeDaysAgo,
                 icon: Icons.location_on_outlined,
                 featured: true,
               ),
             ),
-            const Positioned(
+            Positioned(
               right: 18,
               top: 22,
               child: _MiniPhonePreview(
-                title: 'Progress',
+                title: _l10n.progressLabel,
                 primary: '87%',
-                secondary: '30-day adherence',
+                secondary: _l10n.thirtyDayAdherence,
                 icon: Icons.query_stats_rounded,
               ),
             ),
@@ -367,7 +369,7 @@ class _PaywallPageState extends State<PaywallPage>
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: Text(
-                      'Built for records, reminders, and unit clarity - not medical advice.',
+                      _l10n.paywallPreviewDisclaimer,
                       style: AppTypography.disclaimer.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -402,17 +404,17 @@ class _PaywallPageState extends State<PaywallPage>
             ],
             _buildPlanCard(
               index: 1,
-              label: 'Annual',
-              tag: '3-DAY FREE TRIAL',
+              label: _l10n.annualLabel,
+              tag: _l10n.threeDayFreeTrial,
               price: _localizedPriceForPlan(1),
-              period: '/year',
+              period: _l10n.perYear,
             ),
             const SizedBox(height: 10),
             _buildPlanCard(
               index: 2,
-              label: 'Weekly',
+              label: _l10n.weeklyLabel,
               price: _localizedPriceForPlan(2),
-              period: '/week',
+              period: _l10n.perWeek,
             ),
           ],
         ),
@@ -513,7 +515,7 @@ class _PaywallPageState extends State<PaywallPage>
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'SPECIAL OFFER',
+                        _l10n.specialOffer,
                         style: AppTypography.systemLabel.copyWith(
                           fontSize: 10,
                           letterSpacing: 2,
@@ -532,7 +534,7 @@ class _PaywallPageState extends State<PaywallPage>
                             borderRadius: BorderRadius.circular(3),
                           ),
                           child: Text(
-                            'SAVE $savings%',
+                            _l10n.savePercent(savings),
                             style: AppTypography.systemLabel.copyWith(
                               fontSize: 8,
                               color: AppColors.background,
@@ -557,7 +559,7 @@ class _PaywallPageState extends State<PaywallPage>
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      'YOUR PERSONALISED PROTOCOL IS RESERVED FOR',
+                      _l10n.protocolReservedFor,
                       style: AppTypography.systemLabel.copyWith(
                         fontSize: 9,
                         letterSpacing: 1.4,
@@ -612,7 +614,7 @@ class _PaywallPageState extends State<PaywallPage>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Best Value',
+                          _l10n.bestValue,
                           style: AppTypography.labelLarge.copyWith(
                             color: AppColors.primary,
                             letterSpacing: 1,
@@ -620,7 +622,7 @@ class _PaywallPageState extends State<PaywallPage>
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'Annual access',
+                          _l10n.annualAccess,
                           style: AppTypography.bodySmall.copyWith(fontSize: 11),
                         ),
                       ],
@@ -653,7 +655,7 @@ class _PaywallPageState extends State<PaywallPage>
                             ),
                           ),
                           Text(
-                            '/year',
+                            _l10n.perYear,
                             style: AppTypography.disclaimer.copyWith(
                               color: AppColors.textTertiary,
                             ),
@@ -837,23 +839,20 @@ class _PaywallPageState extends State<PaywallPage>
         children: [
           _FeatureRow(
             icon: Icons.calculate_rounded,
-            title: 'GET THE DOSE MATH RIGHT',
-            description:
-                'Keep vial, water, dose, and units-to-draw together so each log is easier to check.',
+            title: _l10n.paywallDoseMathTitle,
+            description: _l10n.paywallDoseMathBody,
           ),
           const SizedBox(height: AppSpacing.md),
           _FeatureRow(
             icon: Icons.location_on_outlined,
-            title: 'NEVER LOSE YOUR ROTATION',
-            description:
-                'Every site, cycle, and reminder stays attached to the protocol record.',
+            title: _l10n.paywallRotationTitle,
+            description: _l10n.paywallRotationBody,
           ),
           const SizedBox(height: AppSpacing.md),
           _FeatureRow(
             icon: Icons.timeline_rounded,
-            title: 'WATCH THE ARC OVER TIME',
-            description:
-                'See what was planned, what was logged, and what needs a cleaner record next.',
+            title: _l10n.paywallArcTitle,
+            description: _l10n.paywallArcBody,
           ),
         ],
       ),
@@ -879,7 +878,7 @@ class _PaywallPageState extends State<PaywallPage>
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
-              'A confusing vial calculation can waste time and product. PepMod keeps the math beside the log so you can re-check your records before you act on old notes.',
+              _l10n.paywallValueNote,
               style: AppTypography.bodySmall.copyWith(
                 color: AppColors.textSecondary,
                 height: 1.45,
@@ -908,7 +907,7 @@ class _PaywallPageState extends State<PaywallPage>
         TextButton(
           onPressed: widget.onRestore,
           child: Text(
-            'Restore Purchase',
+            _l10n.restorePurchase,
             style: AppTypography.bodySmall.copyWith(color: AppColors.primary),
           ),
         ),
@@ -918,8 +917,7 @@ class _PaywallPageState extends State<PaywallPage>
             horizontal: AppSpacing.screenHorizontal,
           ),
           child: Text(
-            'Subscription auto-renews unless cancelled at least 24 hours before the end of the current period. '
-            'Manage in Settings > Apple ID > Subscriptions.',
+            _l10n.subscriptionRenewalDisclaimer,
             style: AppTypography.disclaimer,
             textAlign: TextAlign.center,
           ),
@@ -931,7 +929,7 @@ class _PaywallPageState extends State<PaywallPage>
             TextButton(
               onPressed: () => _openLegalUrl(LegalLinks.termsOfService),
               child: Text(
-                'Terms',
+                _l10n.termsLabel,
                 style: AppTypography.disclaimer.copyWith(
                   color: AppColors.textTertiary,
                 ),
@@ -941,7 +939,7 @@ class _PaywallPageState extends State<PaywallPage>
             TextButton(
               onPressed: () => _openLegalUrl(LegalLinks.privacyPolicy),
               child: Text(
-                'Privacy',
+                _l10n.privacyLabel,
                 style: AppTypography.disclaimer.copyWith(
                   color: AppColors.textTertiary,
                 ),
@@ -960,12 +958,12 @@ class _PaywallPageState extends State<PaywallPage>
   Widget _buildFixedCta(double bottomPadding) {
     final selectedPrice = _priceForPlan(_selectedPlan)?.localizedPrice;
     final label = switch (_selectedPlan) {
-      0 when selectedPrice != null => 'ACTIVATE PRO - $selectedPrice/year',
-      0 => 'ACTIVATE PRO',
-      1 => 'START FREE TRIAL',
-      2 when selectedPrice != null => 'SUBSCRIBE - $selectedPrice/week',
-      2 => 'SUBSCRIBE',
-      _ => 'START FREE TRIAL',
+      0 when selectedPrice != null => _l10n.activateProPrice(selectedPrice),
+      0 => _l10n.activatePro,
+      1 => _l10n.startFreeTrial,
+      2 when selectedPrice != null => _l10n.subscribePrice(selectedPrice),
+      2 => _l10n.subscribeLabel,
+      _ => _l10n.startFreeTrial,
     };
 
     return AnimatedOpacity(
@@ -1041,7 +1039,7 @@ class _PaywallPageState extends State<PaywallPage>
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
-                          _isSubmitting ? 'CONNECTING TO STORE...' : label,
+                          _isSubmitting ? _l10n.connectingToStore : label,
                           maxLines: 1,
                           style: AppTypography.button.copyWith(
                             color: AppColors.textPrimary,

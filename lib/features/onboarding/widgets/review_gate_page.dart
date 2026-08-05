@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:in_app_review/in_app_review.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Screen 10: Review Request Gate — "Enjoying PepMod so far?"
 /// Triggers native review on "LOVE IT", falls through to onNext either way.
@@ -33,6 +34,7 @@ class ReviewGatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -94,19 +96,18 @@ class ReviewGatePage extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.xxl),
 
-            Text('SYS.FEEDBACK // CHECK-IN',
-                style: AppTypography.systemLabel),
+            Text('SYS.FEEDBACK // CHECK-IN', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.md),
 
             Text(
-              'Enjoying PepMod\nso far?',
+              l10n.reviewGateTitle,
               style: AppTypography.h1.copyWith(fontSize: 30),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSpacing.lg),
 
             Text(
-              'Your feedback helps us improve the platform for every biohacker.',
+              l10n.reviewGateBody,
               style: AppTypography.bodyMedium,
               textAlign: TextAlign.center,
             ),
@@ -114,15 +115,12 @@ class ReviewGatePage extends StatelessWidget {
             const Spacer(flex: 3),
 
             PrimaryButton(
-              label: 'LOVE IT',
+              label: l10n.loveIt,
               icon: Icons.favorite_rounded,
               onPressed: _handleLoveIt,
             ),
             const SizedBox(height: AppSpacing.md),
-            _GhostButton(
-              label: 'NEEDS WORK',
-              onPressed: _handleNeedsWork,
-            ),
+            _GhostButton(label: l10n.needsWork, onPressed: _handleNeedsWork),
 
             const SizedBox(height: AppSpacing.xxl),
           ],
@@ -148,10 +146,7 @@ class _GhostButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
-          border: Border.all(
-            color: AppColors.border,
-            width: 1,
-          ),
+          border: Border.all(color: AppColors.border, width: 1),
         ),
         child: Center(
           child: Text(

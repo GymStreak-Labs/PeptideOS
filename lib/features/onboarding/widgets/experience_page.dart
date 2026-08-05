@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Experience level selection.
 /// "How experienced are you with peptides?"
@@ -17,29 +18,29 @@ class ExperiencePage extends StatelessWidget {
   final ValueChanged<String> onSelect;
   final VoidCallback onNext;
 
-  static const _levels = [
-    _Level(
-      'First Time',
-      'NOVICE',
-      'Never used peptides before. I need guidance on everything.',
-      Icons.school_rounded,
-    ),
-    _Level(
-      'Some Experience',
-      'INTERMEDIATE',
-      'Used 1-3 peptides. Comfortable with basics, want to optimise.',
-      Icons.trending_up_rounded,
-    ),
-    _Level(
-      'Advanced',
-      'VETERAN',
-      'Experienced with multiple protocols and stacking. Looking for tracking + insights.',
-      Icons.military_tech_rounded,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final levels = [
+      _Level(
+        l10n.experienceFirstTime,
+        l10n.experienceNovice,
+        l10n.experienceFirstTimeDetail,
+        Icons.school_rounded,
+      ),
+      _Level(
+        l10n.experienceSome,
+        l10n.experienceIntermediate,
+        l10n.experienceSomeDetail,
+        Icons.trending_up_rounded,
+      ),
+      _Level(
+        l10n.experienceAdvanced,
+        l10n.experienceVeteran,
+        l10n.experienceAdvancedDetail,
+        Icons.military_tech_rounded,
+      ),
+    ];
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -53,14 +54,14 @@ class ExperiencePage extends StatelessWidget {
             Text('SYS.PROFILE // EXPERIENCE', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'How experienced\nare you?',
+              l10n.onboardingExperienceTitle,
               style: AppTypography.h1.copyWith(fontSize: 28),
             ),
 
             const SizedBox(height: AppSpacing.xl),
 
             // Experience options
-            ..._levels.map((level) {
+            ...levels.map((level) {
               final isSelected = selected == level.label;
               return Padding(
                 padding: const EdgeInsets.only(bottom: AppSpacing.cardGap),
@@ -76,15 +77,21 @@ class ExperiencePage extends StatelessWidget {
                       color: isSelected
                           ? AppColors.primary.withValues(alpha: 0.1)
                           : AppColors.surfaceContainer,
-                      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                      borderRadius: BorderRadius.circular(
+                        AppSpacing.cardRadius,
+                      ),
                       border: Border.all(
-                        color: isSelected ? AppColors.primary : AppColors.border,
+                        color: isSelected
+                            ? AppColors.primary
+                            : AppColors.border,
                         width: isSelected ? 1.5 : 1,
                       ),
                       boxShadow: isSelected
                           ? [
                               BoxShadow(
-                                color: AppColors.primary.withValues(alpha: 0.15),
+                                color: AppColors.primary.withValues(
+                                  alpha: 0.15,
+                                ),
                                 blurRadius: 12,
                               ),
                             ]
@@ -96,13 +103,18 @@ class ExperiencePage extends StatelessWidget {
                           width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            color: (isSelected ? AppColors.primary : AppColors.textTertiary)
-                                .withValues(alpha: 0.12),
+                            color:
+                                (isSelected
+                                        ? AppColors.primary
+                                        : AppColors.textTertiary)
+                                    .withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
                             level.icon,
-                            color: isSelected ? AppColors.primary : AppColors.textTertiary,
+                            color: isSelected
+                                ? AppColors.primary
+                                : AppColors.textTertiary,
                             size: AppSpacing.iconDefault,
                           ),
                         ),
@@ -161,7 +173,9 @@ class ExperiencePage extends StatelessWidget {
                             boxShadow: isSelected
                                 ? [
                                     BoxShadow(
-                                      color: AppColors.primary.withValues(alpha: 0.4),
+                                      color: AppColors.primary.withValues(
+                                        alpha: 0.4,
+                                      ),
                                       blurRadius: 6,
                                     ),
                                   ]
@@ -187,7 +201,7 @@ class ExperiencePage extends StatelessWidget {
             const Spacer(),
 
             PrimaryButton(
-              label: 'CONTINUE',
+              label: l10n.continueLabel,
               onPressed: selected.isNotEmpty ? onNext : null,
             ),
 
