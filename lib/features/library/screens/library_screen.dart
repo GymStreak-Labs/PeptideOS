@@ -173,7 +173,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 child: EmptyState(
                   icon: Icons.error_outline_rounded,
                   title: l10n.libraryUnavailable,
-                  description: provider.error!,
+                  description: l10n.libraryLoadFailed,
                   actionLabel: l10n.retry,
                   onAction: provider.refresh,
                 ),

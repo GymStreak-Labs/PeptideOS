@@ -1184,9 +1184,9 @@
   "@unitConversionDisclaimer": {
     "description": "English onboarding copy for unit conversion disclaimer."
   },
-  "unitsLabel": "units",
+  "unitsLabel": "Units",
   "@unitsLabel": {
-    "description": "English onboarding copy for units label."
+    "description": "Label for measurement unit preferences."
   },
   "unitsToDraw": "Units to draw",
   "@unitsToDraw": {
@@ -1261,9 +1261,9 @@
   "@sectionAbout": {
     "description": "Profile section heading for app information."
   },
-  "nameLabel": "NAME",
+  "nameLabel": "Name",
   "@nameLabel": {
-    "description": "Copy for the create protocol nameLabel UI."
+    "description": "Label for the user's display name."
   },
   "accountLabel": "Account",
   "@accountLabel": {
@@ -1357,9 +1357,9 @@
   "@signOutAction": {
     "description": "Primary sign-out action."
   },
-  "educationalTrackingDisclaimer": "Educational tracking only. Always consult a qualified healthcare provider.",
+  "educationalTrackingDisclaimer": "Educational tracking only. Not medical advice.",
   "@educationalTrackingDisclaimer": {
-    "description": "Copy for the create protocol educationalTrackingDisclaimer UI."
+    "description": "Short safety disclaimer on the profile screen."
   },
   "yourName": "Your name",
   "@yourName": {
@@ -1367,11 +1367,11 @@
   },
   "cancelLabel": "Cancel",
   "@cancelLabel": {
-    "description": "Copy for the create protocol cancelLabel UI."
+    "description": "Generic cancel action."
   },
-  "saveLabel": "SAVE",
+  "saveLabel": "Save",
   "@saveLabel": {
-    "description": "Copy for the create protocol saveLabel UI."
+    "description": "Generic save action."
   },
   "dataCopied": "Data copied to clipboard.",
   "@dataCopied": {
@@ -1907,9 +1907,9 @@
       }
     }
   },
-  "addCompound": "+ ADD COMPOUND",
+  "addCompound": "ADD COMPOUND",
   "@addCompound": {
-    "description": "Copy for the create protocol addCompound UI."
+    "description": "Action to create a personal compound preset."
   },
   "addPhase": "ADD PHASE",
   "@addPhase": {
@@ -2344,7 +2344,7 @@
   },
   "routeLabel": "ROUTE",
   "@routeLabel": {
-    "description": "Copy for the create protocol routeLabel UI."
+    "description": "Label for a route selector."
   },
   "saveBlend": "SAVE BLEND",
   "@saveBlend": {
@@ -2352,7 +2352,7 @@
   },
   "saveChanges": "SAVE CHANGES",
   "@saveChanges": {
-    "description": "Copy for the create protocol saveChanges UI."
+    "description": "Action to save edits to an existing item."
   },
   "savePhase": "SAVE PHASE",
   "@savePhase": {
@@ -2709,5 +2709,178 @@
   "notificationPhaseBody": "A new tracking phase starts today. Review your saved schedule.",
   "@notificationPhaseBody": {
     "description": "Body of a protocol phase checkpoint notification."
+  },
+  "personalLibrarySystemLabel": "SYS.LIBRARY // PERSONAL",
+  "@personalLibrarySystemLabel": {
+    "description": "System-style heading for the personal compound library."
+  },
+  "customCompoundIntro": "Save labels and vial sizes you enter yourself. Presets are tracking shortcuts—not dose guidance.",
+  "@customCompoundIntro": {
+    "description": "Safety-focused introduction to personal compound presets."
+  },
+  "archivedHeading": "ARCHIVED",
+  "@archivedHeading": {
+    "description": "Heading above archived personal compound presets."
+  },
+  "activePresetsHeading": "ACTIVE PRESETS",
+  "@activePresetsHeading": {
+    "description": "Heading above active personal compound presets."
+  },
+  "showActive": "Show active",
+  "@showActive": {
+    "description": "Action to show active personal compound presets."
+  },
+  "archivedAction": "Archived",
+  "@archivedAction": {
+    "description": "Action to show archived personal compound presets."
+  },
+  "customCompoundsLoadFailed": "Could not load your compounds. Try again.",
+  "@customCompoundsLoadFailed": {
+    "description": "Generic personal compound loading error."
+  },
+  "libraryLoadFailed": "Could not load the peptide library. Try again.",
+  "@libraryLoadFailed": {
+    "description": "Generic peptide library loading error."
+  },
+  "compoundVialSummary": "{amount} {unit} vial · {route}",
+  "@compoundVialSummary": {
+    "description": "Summary of a personal compound vial and route.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      },
+      "route": {
+        "type": "String"
+      }
+    }
+  },
+  "editPreset": "Edit preset",
+  "@editPreset": {
+    "description": "Action to edit a personal compound preset."
+  },
+  "restorePreset": "Restore",
+  "@restorePreset": {
+    "description": "Action to restore an archived personal compound preset."
+  },
+  "archivePreset": "Archive",
+  "@archivePreset": {
+    "description": "Action to archive a personal compound preset."
+  },
+  "noArchivedPresets": "No archived presets",
+  "@noArchivedPresets": {
+    "description": "Empty-state title when no archived personal presets exist."
+  },
+  "noSavedCompounds": "No saved compounds",
+  "@noSavedCompounds": {
+    "description": "Empty-state title when no personal compounds exist."
+  },
+  "archivedPresetsHint": "Archived presets stay here until you restore them.",
+  "@archivedPresetsHint": {
+    "description": "Empty-state explanation for archived personal presets."
+  },
+  "createPresetHint": "Create a reusable label and vial-size preset.",
+  "@createPresetHint": {
+    "description": "Empty-state explanation for personal compound presets."
+  },
+  "presetCompoundSystemLabel": "PRESET.COMPOUND",
+  "@presetCompoundSystemLabel": {
+    "description": "System-style heading in the personal compound editor."
+  },
+  "newCompound": "New compound",
+  "@newCompound": {
+    "description": "Title when creating a personal compound preset."
+  },
+  "editCompound": "Edit compound",
+  "@editCompound": {
+    "description": "Title when editing a personal compound preset."
+  },
+  "ownVialDetailsHint": "Enter only the details printed on your own vial.",
+  "@ownVialDetailsHint": {
+    "description": "Instruction in the personal compound editor."
+  },
+  "compoundLabel": "COMPOUND LABEL",
+  "@compoundLabel": {
+    "description": "Label for a personal compound name field."
+  },
+  "compoundNameExample": "e.g. My compound",
+  "@compoundNameExample": {
+    "description": "Example personal compound name."
+  },
+  "vialUnitLabel": "VIAL UNIT",
+  "@vialUnitLabel": {
+    "description": "Label for a personal compound vial unit selector."
+  },
+  "trackingUnitLabel": "TRACKING UNIT",
+  "@trackingUnitLabel": {
+    "description": "Label for a personal compound tracking unit selector."
+  },
+  "notesOptional": "NOTES OPTIONAL",
+  "@notesOptional": {
+    "description": "Label for an optional personal compound note."
+  },
+  "compoundNoteExample": "Label or storage note",
+  "@compoundNoteExample": {
+    "description": "Example note for a personal compound preset."
+  },
+  "noDoseRecommendation": "No dosing recommendation is created. Protocol amounts are always entered separately by you.",
+  "@noDoseRecommendation": {
+    "description": "Safety disclaimer in the personal compound editor."
+  },
+  "saveCompoundFailed": "Could not save preset. Try again.",
+  "@saveCompoundFailed": {
+    "description": "Generic personal compound save error."
+  },
+  "routeTopical": "Topical",
+  "@routeTopical": {
+    "description": "Topical administration route."
+  },
+  "frequencyCustomDays": "Custom days",
+  "@frequencyCustomDays": {
+    "description": "Frequency using user-selected weekdays."
+  },
+  "savedCalculationLabel": "{vialAmount} {vialUnit} + {diluentVolume} mL",
+  "@savedCalculationLabel": {
+    "description": "Title of a saved vial conversion.",
+    "placeholders": {
+      "vialAmount": {
+        "type": "String"
+      },
+      "vialUnit": {
+        "type": "String"
+      },
+      "diluentVolume": {
+        "type": "String"
+      }
+    }
+  },
+  "savedCalculationDetail": "{desiredAmount} {desiredUnit} · {capacity}u",
+  "@savedCalculationDetail": {
+    "description": "Detail of a saved vial conversion.",
+    "placeholders": {
+      "desiredAmount": {
+        "type": "String"
+      },
+      "desiredUnit": {
+        "type": "String"
+      },
+      "capacity": {
+        "type": "String"
+      }
+    }
+  },
+  "syringeOption": "U-100 · {volume} mL / {capacity} unit",
+  "@syringeOption": {
+    "description": "U-100 syringe capacity option.",
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      },
+      "capacity": {
+        "type": "String"
+      }
+    }
   }
 }

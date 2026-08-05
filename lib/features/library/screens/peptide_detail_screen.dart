@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
@@ -38,6 +39,7 @@ class PeptideDetailScreen extends StatelessWidget {
               child: Row(
                 children: [
                   IconButton(
+                    tooltip: l10n.back,
                     onPressed: () => Navigator.of(context).pop(),
                     icon: const Icon(
                       Icons.arrow_back_rounded,
@@ -123,7 +125,7 @@ class PeptideDetailScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: AppSpacing.xs),
                           Text(
-                            '${_routeLabel(l10n, peptide.defaultRoute)} · ${_frequencyLabel(l10n, peptide.defaultFrequency)}',
+                            '${localizedProtocolRouteLabel(l10n, peptide.defaultRoute)} · ${localizedProtocolFrequencyLabel(l10n, peptide.defaultFrequency)}',
                             style: AppTypography.bodySmall,
                           ),
                         ],
@@ -253,36 +255,6 @@ class PeptideDetailScreen extends StatelessWidget {
       context,
     ).push(MaterialPageRoute(builder: (_) => const CreateProtocolScreen()));
   }
-
-  String _routeLabel(AppLocalizations l10n, String key) {
-    switch (key) {
-      case 'subcutaneous':
-        return l10n.routeSubcutaneous;
-      case 'intramuscular':
-        return l10n.routeIntramuscular;
-      case 'oral':
-        return l10n.routeOral;
-      case 'nasal':
-        return l10n.routeNasal;
-    }
-    return key;
-  }
-
-  String _frequencyLabel(AppLocalizations l10n, String key) {
-    switch (key) {
-      case 'daily':
-        return l10n.frequencyDaily;
-      case 'eod':
-        return l10n.frequencyEveryOtherDay;
-      case 'twice_weekly':
-        return l10n.frequencyTwiceWeekly;
-      case 'weekly':
-        return l10n.frequencyWeekly;
-      case 'as_needed':
-        return l10n.frequencyAsNeeded;
-    }
-    return key;
-  }
 }
 
 // ── Info chip ─────────────────────────────────────────────────────────────
@@ -405,6 +377,8 @@ class _InlineReconstitutionCalculatorState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final unitFormat = NumberFormat('#,##0.0', l10n.localeName);
+    final volumeFormat = NumberFormat('#,##0.00', l10n.localeName);
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -453,7 +427,7 @@ class _InlineReconstitutionCalculatorState
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Text(
-                            _units.isFinite ? _units.toStringAsFixed(1) : '—',
+                            _units.isFinite ? unitFormat.format(_units) : '—',
                             style: AppTypography.heroMedium.copyWith(
                               color: AppColors.primary,
                             ),
@@ -466,8 +440,8 @@ class _InlineReconstitutionCalculatorState
                     const SizedBox(height: 2),
                     Text(
                       _drawMl.isFinite
-                          ? '${_drawMl.toStringAsFixed(2)} ml'
-                          : '— ml',
+                          ? '${volumeFormat.format(_drawMl)} mL'
+                          : '— mL',
                       style: AppTypography.bodySmall.copyWith(
                         fontFamily: 'JetBrainsMono',
                       ),

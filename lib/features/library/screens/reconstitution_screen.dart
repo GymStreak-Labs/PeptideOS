@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/utils/decimal_input.dart';
@@ -78,6 +79,9 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
   }
 
   Future<void> _saveCalculation() async {
+    final calculationSavedMessage = AppLocalizations.of(
+      context,
+    ).calculationSaved;
     if (!_result.isValid) return;
     final now = DateTime.now().toUtc();
     final current = _input;
@@ -95,9 +99,9 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
     HapticFeedback.lightImpact();
     await widget.onSavedCalculationsChanged?.call(updated);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocalizations.of(context).calculationSaved)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(calculationSavedMessage)));
   }
 
   Future<void> _removeSaved(SavedVialCalculation item) async {
@@ -424,7 +428,7 @@ class _QuantityModeSelector extends StatelessWidget {
                         const SizedBox(height: 2),
                         Text(
                           mode == ConversionQuantityMode.mass
-                              ? mode.caption
+                              ? 'mg / mcg'
                               : l10n.iuOnly,
                           style: AppTypography.bodySmall,
                         ),
@@ -708,6 +712,7 @@ class _SyringeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       height: AppSpacing.inputHeight,
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
@@ -728,7 +733,20 @@ class _SyringeSelector extends StatelessWidget {
             for (final syringe in ConversionSyringe.values)
               DropdownMenuItem(
                 value: syringe,
-                child: Text('U-100 · ${syringe.label}'),
+                child: Text(
+                  l10n.syringeOption(
+                    _localizedNumber(
+                      syringe.volumeMl,
+                      l10n.localeName,
+                      maxDecimals: 1,
+                    ),
+                    _localizedNumber(
+                      syringe.capacityUnits.toDouble(),
+                      l10n.localeName,
+                      maxDecimals: 0,
+                    ),
+                  ),
+                ),
               ),
           ],
           onChanged: (next) {
@@ -767,7 +785,7 @@ class _ResultCard extends StatelessWidget {
             const SizedBox(width: AppSpacing.md),
             Expanded(
               child: Text(
-                _localizedError(l10n, result.error!),
+                _localizedError(l10n, result.errorCode!),
                 style: AppTypography.bodyMedium,
               ),
             ),
@@ -800,7 +818,11 @@ class _ResultCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            result.formattedDrawUnits,
+                            _localizedNumber(
+                              result.drawUnits,
+                              l10n.localeName,
+                              maxDecimals: 2,
+                            ),
                             key: const Key('draw-units-result'),
                             style: AppTypography.heroLarge.copyWith(
                               color: accent,
@@ -816,14 +838,14 @@ class _ResultCard extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      '${result.formattedDrawVolumeMl} mL',
+                      '${_localizedNumber(result.drawVolumeMl, l10n.localeName, maxDecimals: 3)} mL',
                       style: AppTypography.tabular.copyWith(fontSize: 14),
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     _DataRow(
                       label: l10n.concentration,
                       value:
-                          '${result.formattedConcentration} ${quantityMode == ConversionQuantityMode.internationalUnits ? 'IU/mL' : 'mcg/mL'}',
+                          '${_localizedNumber(result.concentrationPerMl, l10n.localeName, maxDecimals: 1)} ${quantityMode == ConversionQuantityMode.internationalUnits ? 'IU/mL' : 'mcg/mL'}',
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     _DataRow(
@@ -920,9 +942,15 @@ class _SavedSection extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(item.label, style: AppTypography.labelLarge),
+                      Text(
+                        _savedCalculationLabel(l10n, item),
+                        style: AppTypography.labelLarge,
+                      ),
                       const SizedBox(height: 2),
-                      Text(item.detail, style: AppTypography.bodySmall),
+                      Text(
+                        _savedCalculationDetail(l10n, item),
+                        style: AppTypography.bodySmall,
+                      ),
                     ],
                   ),
                 ),
@@ -991,13 +1019,54 @@ bool _sameInput(ConversionInput a, ConversionInput b) =>
     a.quantityMode == b.quantityMode &&
     a.syringe == b.syringe;
 
-String _localizedError(AppLocalizations l10n, String error) => switch (error) {
-  'Enter a number greater than zero in every field.' =>
-    l10n.errorPositiveNumbers,
-  'Desired amount is greater than the amount entered for this vial.' =>
-    l10n.errorAmountAboveVial,
-  _ => l10n.errorConversion,
-};
+String _localizedError(AppLocalizations l10n, ConversionError error) =>
+    switch (error) {
+      ConversionError.positiveNumbersRequired => l10n.errorPositiveNumbers,
+      ConversionError.amountAboveVial => l10n.errorAmountAboveVial,
+      ConversionError.conversionFailed => l10n.errorConversion,
+    };
+
+String _savedCalculationLabel(
+  AppLocalizations l10n,
+  SavedVialCalculation item,
+) => l10n.savedCalculationLabel(
+  _localizedNumber(item.input.vialAmount, l10n.localeName, maxDecimals: 2),
+  item.input.quantityMode == ConversionQuantityMode.internationalUnits
+      ? 'IU'
+      : 'mg',
+  _localizedNumber(item.input.diluentVolumeMl, l10n.localeName, maxDecimals: 2),
+);
+
+String _savedCalculationDetail(
+  AppLocalizations l10n,
+  SavedVialCalculation item,
+) => l10n.savedCalculationDetail(
+  _localizedNumber(item.input.desiredAmount, l10n.localeName, maxDecimals: 2),
+  item.input.quantityMode == ConversionQuantityMode.internationalUnits
+      ? 'IU'
+      : item.input.desiredAmountUnit.label,
+  _localizedNumber(
+    item.input.syringe.capacityUnits.toDouble(),
+    l10n.localeName,
+    maxDecimals: 0,
+  ),
+);
+
+String _localizedNumber(
+  double value,
+  String locale, {
+  required int maxDecimals,
+}) {
+  if (!value.isFinite) return '—';
+  final pattern = switch (maxDecimals) {
+    0 => '0',
+    1 => '0.#',
+    2 => '0.##',
+    _ => '0.###',
+  };
+  final format = NumberFormat(pattern, locale)..turnOffGrouping();
+  return format.format(value);
+}
 
 String _editableNumber(double value) {
   if (value == value.roundToDouble()) return value.toStringAsFixed(0);
