@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Screen 10: Feature Showcase — 3 horizontal swipeable cards.
 class FeatureShowcasePage extends StatefulWidget {
@@ -16,25 +17,25 @@ class _FeatureShowcasePageState extends State<FeatureShowcasePage> {
   final _controller = PageController(viewportFraction: 0.85);
   int _currentCard = 0;
 
-  static const _features = [
+  List<_Feature> _features(AppLocalizations l10n) => [
     _Feature(
       'SYS.CALC',
-      'Dose Math\nIn Context',
-      'Keep vial size, water volume, dose, and units-to-draw beside the protocol you are actually tracking.',
+      l10n.featureDoseMathTitle,
+      l10n.featureDoseMathBody,
       Icons.calculate_rounded,
       AppColors.primary,
     ),
     _Feature(
       'SYS.BODYMAP',
-      'Injection Site\nRotation',
-      'Remember every site you log and keep rotation history attached to the dose record.',
+      l10n.featureSiteRotationTitle,
+      l10n.featureSiteRotationBody,
       Icons.accessibility_new_rounded,
       AppColors.secondary,
     ),
     _Feature(
       'SYS.ARC',
-      'Protocol Arc\nOver Time',
-      'See planned doses, logged doses, adherence, and body metrics build into one timeline.',
+      l10n.featureProtocolArcTitle,
+      l10n.featureProtocolArcBody,
       Icons.timeline_rounded,
       AppColors.aiInsightBright,
     ),
@@ -48,6 +49,8 @@ class _FeatureShowcasePageState extends State<FeatureShowcasePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final features = _features(l10n);
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +70,7 @@ class _FeatureShowcasePageState extends State<FeatureShowcasePage> {
                 ),
                 const SizedBox(height: AppSpacing.md),
                 Text(
-                  'Everything you need.\nOne app.',
+                  l10n.featureShowcaseTitle,
                   style: AppTypography.h1.copyWith(fontSize: 28),
                 ),
               ],
@@ -80,10 +83,10 @@ class _FeatureShowcasePageState extends State<FeatureShowcasePage> {
           Expanded(
             child: PageView.builder(
               controller: _controller,
-              itemCount: _features.length,
+              itemCount: features.length,
               onPageChanged: (i) => setState(() => _currentCard = i),
               itemBuilder: (context, index) {
-                final feature = _features[index];
+                final feature = features[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.sm,
@@ -148,7 +151,7 @@ class _FeatureShowcasePageState extends State<FeatureShowcasePage> {
           const SizedBox(height: AppSpacing.base),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(_features.length, (i) {
+            children: List.generate(features.length, (i) {
               final isActive = i == _currentCard;
               return AnimatedContainer(
                 duration: AppDurations.fast,
@@ -177,7 +180,10 @@ class _FeatureShowcasePageState extends State<FeatureShowcasePage> {
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.screenHorizontal,
             ),
-            child: PrimaryButton(label: 'CONTINUE', onPressed: widget.onNext),
+            child: PrimaryButton(
+              label: l10n.continueLabel,
+              onPressed: widget.onNext,
+            ),
           ),
 
           const SizedBox(height: AppSpacing.xxl),

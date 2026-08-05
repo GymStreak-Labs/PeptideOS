@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Screen 9: Protocol Preview — "Your protocol is ready."
 /// Shows a personalised mock protocol based on their selections.
@@ -20,6 +21,7 @@ class ProtocolPreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -33,7 +35,7 @@ class ProtocolPreviewPage extends StatelessWidget {
             Text('SYS.PROTOCOL // GENERATED', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Your protocol\nis ready.',
+              l10n.protocolPreviewTitle,
               style: AppTypography.h1.copyWith(fontSize: 28),
             ),
 
@@ -77,7 +79,7 @@ class ProtocolPreviewPage extends StatelessWidget {
                           ),
                           const SizedBox(height: AppSpacing.base),
 
-                          Text('Custom Protocol', style: AppTypography.h3),
+                          Text(l10n.customProtocol, style: AppTypography.h3),
                           const SizedBox(height: AppSpacing.sm),
 
                           // Peptide list
@@ -101,7 +103,7 @@ class ProtocolPreviewPage extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    'tracked',
+                                    l10n.trackedLabel,
                                     style: AppTypography.tabular.copyWith(
                                       fontSize: 12,
                                       color: AppColors.textTertiary,
@@ -116,7 +118,7 @@ class ProtocolPreviewPage extends StatelessWidget {
 
                           // Schedule preview
                           Text(
-                            'SCHEDULE PREVIEW',
+                            l10n.schedulePreview,
                             style: AppTypography.systemLabel.copyWith(
                               color: AppColors.textTertiary,
                             ),
@@ -139,11 +141,17 @@ class ProtocolPreviewPage extends StatelessWidget {
                           Row(
                             children: [
                               _StatBlock(
-                                label: 'DOSES/DAY',
+                                label: l10n.dosesPerDay,
                                 value: '${_displayPeptides.length + 1}',
                               ),
-                              _StatBlock(label: 'DURATION', value: '8 weeks'),
-                              _StatBlock(label: 'VIEW', value: 'Timeline'),
+                              _StatBlock(
+                                label: l10n.durationLabel,
+                                value: l10n.weeksCount(8),
+                              ),
+                              _StatBlock(
+                                label: l10n.viewLabel,
+                                value: l10n.timelineLabel,
+                              ),
                             ],
                           ),
                         ],
@@ -173,7 +181,7 @@ class ProtocolPreviewPage extends StatelessWidget {
                             ),
                             const SizedBox(height: AppSpacing.xs),
                             Text(
-                              'Subscribe to activate your protocol',
+                              l10n.subscribeToActivate,
                               style: AppTypography.bodySmall.copyWith(
                                 color: AppColors.textDisabled,
                               ),
@@ -189,7 +197,7 @@ class ProtocolPreviewPage extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.base),
 
-            PrimaryButton(label: 'UNLOCK PEPMOD', onPressed: onNext),
+            PrimaryButton(label: l10n.unlockPepMod, onPressed: onNext),
 
             const SizedBox(height: AppSpacing.xxl),
           ],

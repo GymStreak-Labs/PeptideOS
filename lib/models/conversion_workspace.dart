@@ -11,33 +11,24 @@ enum ConversionAmountUnit {
 ///
 /// International units are intentionally isolated from mass. PepMod can
 /// convert IU-per-mL to a draw volume, but never IU to or from mg/mcg.
-enum ConversionQuantityMode {
-  mass('Mass', 'mg / mcg'),
-  internationalUnits('IU', 'IU only');
-
-  const ConversionQuantityMode(this.label, this.caption);
-  final String label;
-  final String caption;
-}
+enum ConversionQuantityMode { mass, internationalUnits }
 
 /// Common U-100 insulin syringe capacities.
 ///
 /// U-100 means 100 syringe units per millilitre. Capacity changes what can fit
 /// in one syringe; it does not change the unit conversion.
 enum ConversionSyringe {
-  units30(capacityUnits: 30, volumeMl: 0.3, label: '0.3 mL / 30 unit'),
-  units50(capacityUnits: 50, volumeMl: 0.5, label: '0.5 mL / 50 unit'),
-  units100(capacityUnits: 100, volumeMl: 1, label: '1 mL / 100 unit');
+  units30(capacityUnits: 30, volumeMl: 0.3),
+  units50(capacityUnits: 50, volumeMl: 0.5),
+  units100(capacityUnits: 100, volumeMl: 1);
 
   const ConversionSyringe({
     required this.capacityUnits,
     required this.volumeMl,
-    required this.label,
   });
 
   final int capacityUnits;
   final double volumeMl;
-  final String label;
 }
 
 /// User-provided values for a reconstitution unit conversion.
@@ -85,14 +76,12 @@ class ConversionInput {
         !_isPositiveFinite(diluentVolumeMl) ||
         !_isPositiveFinite(desiredAmount)) {
       return const ConversionResult.invalid(
-        'Enter a number greater than zero in every field.',
+        ConversionError.positiveNumbersRequired,
       );
     }
 
     if (comparableDesiredAmount > comparableVialAmount) {
-      return const ConversionResult.invalid(
-        'Desired amount is greater than the amount entered for this vial.',
-      );
+      return const ConversionResult.invalid(ConversionError.amountAboveVial);
     }
 
     final concentrationPerMl = comparableVialAmount / diluentVolumeMl;
@@ -102,9 +91,7 @@ class ConversionInput {
     if (!concentrationPerMl.isFinite ||
         !drawVolumeMl.isFinite ||
         !drawUnits.isFinite) {
-      return const ConversionResult.invalid(
-        'These values could not be converted. Recheck each entry.',
-      );
+      return const ConversionResult.invalid(ConversionError.conversionFailed);
     }
 
     return ConversionResult(
@@ -156,9 +143,9 @@ class ConversionResult {
     required this.drawVolumeMl,
     required this.drawUnits,
     required this.exceedsSyringeCapacity,
-  }) : error = null;
+  }) : errorCode = null;
 
-  const ConversionResult.invalid(this.error)
+  const ConversionResult.invalid(this.errorCode)
     : concentrationPerMl = 0,
       drawVolumeMl = 0,
       drawUnits = 0,
@@ -168,9 +155,9 @@ class ConversionResult {
   final double drawVolumeMl;
   final double drawUnits;
   final bool exceedsSyringeCapacity;
-  final String? error;
+  final ConversionError? errorCode;
 
-  bool get isValid => error == null;
+  bool get isValid => errorCode == null;
 
   double get concentrationMcgPerMl => concentrationPerMl;
 
@@ -180,6 +167,12 @@ class ConversionResult {
       _formatNumber(drawVolumeMl, maxDecimals: 3);
   String get formattedConcentration =>
       _formatNumber(concentrationPerMl, maxDecimals: 1);
+}
+
+enum ConversionError {
+  positiveNumbersRequired,
+  amountAboveVial,
+  conversionFailed,
 }
 
 /// A reusable, user-scoped calculation snapshot.
@@ -193,16 +186,6 @@ class SavedVialCalculation {
   final String id;
   final DateTime createdAt;
   final ConversionInput input;
-
-  String get label =>
-      '${_formatNumber(input.vialAmount, maxDecimals: 2)} '
-      '${input.quantityMode == ConversionQuantityMode.internationalUnits ? 'IU' : 'mg'} + '
-      '${_formatNumber(input.diluentVolumeMl, maxDecimals: 2)} mL';
-
-  String get detail =>
-      '${_formatNumber(input.desiredAmount, maxDecimals: 2)} '
-      '${input.quantityMode == ConversionQuantityMode.internationalUnits ? 'IU' : input.desiredAmountUnit.label} '
-      '· ${input.syringe.capacityUnits}u';
 
   Map<String, dynamic> toMap() => <String, dynamic>{
     'id': id,

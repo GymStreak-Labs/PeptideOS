@@ -105,7 +105,7 @@ void main() {
       );
 
       expect(aboveVial.calculate().isValid, isFalse);
-      expect(aboveVial.calculate().error, contains('greater than'));
+      expect(aboveVial.calculate().errorCode, ConversionError.amountAboveVial);
       expect(aboveCapacity.calculate().drawUnits, 40);
       expect(aboveCapacity.calculate().exceedsSyringeCapacity, isTrue);
     });
@@ -128,7 +128,7 @@ void main() {
 
       expect(zero.calculate().isValid, isFalse);
       expect(aboveVial.calculate().isValid, isFalse);
-      expect(aboveVial.calculate().error, contains('greater than'));
+      expect(aboveVial.calculate().errorCode, ConversionError.amountAboveVial);
     });
   });
 
@@ -183,8 +183,8 @@ void main() {
       decoded.input.quantityMode,
       ConversionQuantityMode.internationalUnits,
     );
-    expect(decoded.label, '10000 IU + 2 mL');
-    expect(decoded.detail, '250 IU · 30u');
+    expect(decoded.input.vialAmount, 10000);
+    expect(decoded.input.desiredAmount, 250);
   });
 
   test(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Friendly profile step used to personalise onboarding copy.
 class FirstNamePage extends StatefulWidget {
@@ -39,6 +40,7 @@ class _FirstNamePageState extends State<FirstNamePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SafeArea(
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -63,19 +65,19 @@ class _FirstNamePageState extends State<FirstNamePage> {
                     ),
                     const SizedBox(height: AppSpacing.md),
                     Text(
-                      'What should\nwe call you?',
+                      l10n.onboardingNameTitle,
                       style: AppTypography.h1.copyWith(fontSize: 28),
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      'We’ll use this to make your protocol feel less like a spreadsheet and more like your own system.',
+                      l10n.onboardingNameBody,
                       style: AppTypography.bodySmall,
                     ),
                     const SizedBox(height: AppSpacing.xl),
                     _CyberInput(
                       controller: _controller,
-                      label: 'FIRST NAME',
-                      hint: 'Joe',
+                      label: l10n.firstNameLabel,
+                      hint: l10n.firstNameExample,
                       keyboardType: TextInputType.name,
                       textCapitalization: TextCapitalization.words,
                       onChanged: (value) {
@@ -85,7 +87,7 @@ class _FirstNamePageState extends State<FirstNamePage> {
                     ),
                     const Spacer(),
                     PrimaryButton(
-                      label: 'CONTINUE',
+                      label: l10n.continueLabel,
                       onPressed: _canContinue ? widget.onNext : null,
                     ),
                   ],

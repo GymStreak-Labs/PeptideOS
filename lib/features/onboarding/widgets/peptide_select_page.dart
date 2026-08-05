@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Screen 7: Current/Planned Peptides — search and select from database.
 class PeptideSelectPage extends StatefulWidget {
@@ -59,6 +60,7 @@ class _PeptideSelectPageState extends State<PeptideSelectPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -69,18 +71,15 @@ class _PeptideSelectPageState extends State<PeptideSelectPage> {
           children: [
             const SizedBox(height: AppSpacing.huge),
 
-            Text(
-              'SYS.PROFILE // COMPOUNDS',
-              style: AppTypography.systemLabel,
-            ),
+            Text('SYS.PROFILE // COMPOUNDS', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'What peptides are\nyou using?',
+              l10n.onboardingPeptideSelectTitle,
               style: AppTypography.h1.copyWith(fontSize: 28),
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(
-              'Select current or planned — you can change later',
+              l10n.onboardingPeptideSelectBody,
               style: AppTypography.bodySmall,
             ),
 
@@ -110,9 +109,10 @@ class _PeptideSelectPageState extends State<PeptideSelectPage> {
                       onChanged: (v) => setState(() => _searchQuery = v),
                       style: AppTypography.bodyMedium,
                       decoration: InputDecoration(
-                        hintText: 'Search peptides...',
-                        hintStyle: AppTypography.bodyMedium
-                            .copyWith(color: AppColors.textDisabled),
+                        hintText: l10n.searchPeptides,
+                        hintStyle: AppTypography.bodyMedium.copyWith(
+                          color: AppColors.textDisabled,
+                        ),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.zero,
                         isDense: true,
@@ -179,8 +179,7 @@ class _PeptideSelectPageState extends State<PeptideSelectPage> {
                 separatorBuilder: (_, _) => const Divider(height: 1),
                 itemBuilder: (context, index) {
                   final peptide = _filteredPeptides[index];
-                  final isSelected =
-                      widget.selectedPeptides.contains(peptide);
+                  final isSelected = widget.selectedPeptides.contains(peptide);
 
                   return GestureDetector(
                     behavior: HitTestBehavior.opaque,
@@ -212,16 +211,20 @@ class _PeptideSelectPageState extends State<PeptideSelectPage> {
                               boxShadow: isSelected
                                   ? [
                                       BoxShadow(
-                                        color: AppColors.primary
-                                            .withValues(alpha: 0.3),
+                                        color: AppColors.primary.withValues(
+                                          alpha: 0.3,
+                                        ),
                                         blurRadius: 6,
                                       ),
                                     ]
                                   : null,
                             ),
                             child: isSelected
-                                ? const Icon(Icons.check_rounded,
-                                    size: 14, color: AppColors.primary)
+                                ? const Icon(
+                                    Icons.check_rounded,
+                                    size: 14,
+                                    color: AppColors.primary,
+                                  )
                                 : null,
                           ),
                           const SizedBox(width: AppSpacing.md),
@@ -243,8 +246,8 @@ class _PeptideSelectPageState extends State<PeptideSelectPage> {
 
             PrimaryButton(
               label: widget.selectedPeptides.isEmpty
-                  ? 'SKIP FOR NOW'
-                  : 'CONTINUE (${widget.selectedPeptides.length} selected)',
+                  ? l10n.skipForNow
+                  : l10n.continueSelected(widget.selectedPeptides.length),
               onPressed: onNext,
             ),
 

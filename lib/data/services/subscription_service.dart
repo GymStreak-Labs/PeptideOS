@@ -234,24 +234,29 @@ class SubscriptionService {
     if (!_configured) {
       return PurchaseResult(
         success: false,
-        error: 'Subscription service is not configured yet.',
+        errorCode: SubscriptionErrorCode.serviceUnavailable,
       );
     }
     try {
       final info = await Purchases.purchasePackage(package);
       _handleCustomerInfoUpdate(info);
       final premium = info.entitlements.active.containsKey(entitlementId);
-      return PurchaseResult(success: premium, customerInfo: info);
+      return PurchaseResult(
+        success: premium,
+        customerInfo: info,
+        errorCode: premium ? null : SubscriptionErrorCode.purchaseFailed,
+      );
     } on PurchasesErrorCode catch (e) {
       return PurchaseResult(
         success: false,
-        error: _handlePurchaseError(e),
+        errorCode: purchaseErrorCode(e),
         cancelled: e == PurchasesErrorCode.purchaseCancelledError,
       );
-    } catch (_) {
+    } catch (error) {
+      debugPrint('[SubscriptionService] purchase failed: $error');
       return PurchaseResult(
         success: false,
-        error: 'An unexpected error occurred.',
+        errorCode: SubscriptionErrorCode.purchaseFailed,
       );
     }
   }
@@ -261,7 +266,7 @@ class SubscriptionService {
       return RestoreResult(
         success: false,
         isPremium: false,
-        error: 'Subscription service is not configured yet.',
+        errorCode: SubscriptionErrorCode.serviceUnavailable,
       );
     }
     try {
@@ -269,11 +274,12 @@ class SubscriptionService {
       _handleCustomerInfoUpdate(info);
       final premium = info.entitlements.active.containsKey(entitlementId);
       return RestoreResult(success: true, isPremium: premium);
-    } catch (_) {
+    } catch (error) {
+      debugPrint('[SubscriptionService] restore failed: $error');
       return RestoreResult(
         success: false,
         isPremium: false,
-        error: 'Failed to restore purchases.',
+        errorCode: SubscriptionErrorCode.restoreFailed,
       );
     }
   }
@@ -284,20 +290,21 @@ class SubscriptionService {
     _premiumController.add(premium);
   }
 
-  String _handlePurchaseError(PurchasesErrorCode error) {
+  @visibleForTesting
+  static SubscriptionErrorCode purchaseErrorCode(PurchasesErrorCode error) {
     switch (error) {
       case PurchasesErrorCode.purchaseCancelledError:
-        return 'Purchase was cancelled.';
+        return SubscriptionErrorCode.purchaseCancelled;
       case PurchasesErrorCode.purchaseNotAllowedError:
-        return 'Purchases are not allowed on this device.';
+        return SubscriptionErrorCode.purchaseNotAllowed;
       case PurchasesErrorCode.purchaseInvalidError:
-        return 'The purchase was invalid.';
+        return SubscriptionErrorCode.purchaseInvalid;
       case PurchasesErrorCode.productNotAvailableForPurchaseError:
-        return 'This product is not available for purchase.';
+        return SubscriptionErrorCode.productUnavailable;
       case PurchasesErrorCode.networkError:
-        return 'Network error. Please check your connection.';
+        return SubscriptionErrorCode.network;
       default:
-        return 'An error occurred. Please try again.';
+        return SubscriptionErrorCode.purchaseFailed;
     }
   }
 
@@ -310,20 +317,37 @@ class PurchaseResult {
   PurchaseResult({
     required this.success,
     this.customerInfo,
-    this.error,
+    this.errorCode,
     this.cancelled = false,
   });
 
   final bool success;
   final CustomerInfo? customerInfo;
-  final String? error;
+  final SubscriptionErrorCode? errorCode;
   final bool cancelled;
 }
 
 class RestoreResult {
-  RestoreResult({required this.success, required this.isPremium, this.error});
+  RestoreResult({
+    required this.success,
+    required this.isPremium,
+    this.errorCode,
+  });
 
   final bool success;
   final bool isPremium;
-  final String? error;
+  final SubscriptionErrorCode? errorCode;
+}
+
+/// Stable, provider-independent failures that can be localized at the UI.
+enum SubscriptionErrorCode {
+  serviceUnavailable,
+  plansUnavailable,
+  purchaseCancelled,
+  purchaseNotAllowed,
+  purchaseInvalid,
+  productUnavailable,
+  network,
+  purchaseFailed,
+  restoreFailed,
 }

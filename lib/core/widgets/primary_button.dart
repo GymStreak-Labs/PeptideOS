@@ -37,9 +37,10 @@ class _PrimaryButtonState extends State<PrimaryButton>
       vsync: this,
       duration: AppDurations.instant,
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.97).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.97,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -108,8 +109,9 @@ class _PrimaryButtonState extends State<PrimaryButton>
                     ),
                   )
                 : Row(
-                    mainAxisSize:
-                        widget.expanded ? MainAxisSize.max : MainAxisSize.min,
+                    mainAxisSize: widget.expanded
+                        ? MainAxisSize.max
+                        : MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (widget.icon != null) ...[
@@ -120,12 +122,25 @@ class _PrimaryButtonState extends State<PrimaryButton>
                         ),
                         const SizedBox(width: AppSpacing.sm),
                       ],
-                      Text(
-                        widget.label,
-                        style: AppTypography.button.copyWith(
-                          color: AppColors.textPrimary,
+                      if (widget.icon != null)
+                        Flexible(
+                          child: Text(
+                            widget.label,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.button.copyWith(
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        )
+                      else
+                        Text(
+                          widget.label,
+                          style: AppTypography.button.copyWith(
+                            color: AppColors.textPrimary,
+                          ),
                         ),
-                      ),
                     ],
                   ),
           ),

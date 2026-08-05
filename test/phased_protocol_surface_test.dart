@@ -8,6 +8,7 @@ import 'package:peptide_os/data/repositories/protocol_repository.dart';
 import 'package:peptide_os/features/protocol/providers/dose_log_provider.dart';
 import 'package:peptide_os/features/protocol/providers/protocol_provider.dart';
 import 'package:peptide_os/features/protocol/screens/active_protocol_detail_screen.dart';
+import 'package:peptide_os/l10n/app_localizations.dart';
 import 'package:peptide_os/models/protocol.dart';
 import 'package:provider/provider.dart';
 
@@ -107,6 +108,9 @@ void main() {
           ChangeNotifierProvider.value(value: doseProvider),
         ],
         child: MaterialApp(
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.dark,
           home: ActiveProtocolDetailScreen(
@@ -144,8 +148,8 @@ void main() {
     expect(find.text('SAVE PHASE'), findsOneWidget);
     await tester.ensureVisible(find.text('PHASE PREVIEW'));
     await tester.pumpAndSettle();
-    expect(find.textContaining('125 mcg · 07:15'), findsOneWidget);
-    expect(find.textContaining('150 mcg · 19:30'), findsOneWidget);
+    expect(find.textContaining('125 mcg · 7:15 AM'), findsOneWidget);
+    expect(find.textContaining('150 mcg · 7:30 PM'), findsOneWidget);
     expect(tester.takeException(), isNull);
     await expectLater(
       find.byType(MaterialApp),

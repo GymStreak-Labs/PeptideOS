@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/utils/decimal_input.dart';
+import '../../../core/utils/localized_decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/custom_compound.dart';
 import '../../../models/protocol.dart';
 import '../providers/custom_compound_provider.dart';
+import '../utils/library_labels.dart';
 
 class CustomCompoundLibraryScreen extends StatefulWidget {
   const CustomCompoundLibraryScreen({super.key});
@@ -23,6 +27,8 @@ class _CustomCompoundLibraryScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final amountFormat = NumberFormat('#,##0.##', l10n.localeName);
     final provider = context.watch<CustomCompoundProvider>();
     final compounds = _showArchived ? provider.archived : provider.active;
 
@@ -34,7 +40,7 @@ class _CustomCompoundLibraryScreenState
         onPressed: () => _openEditor(context),
         icon: const Icon(Icons.add_rounded),
         label: Text(
-          'ADD COMPOUND',
+          l10n.addCompound,
           style: AppTypography.button.copyWith(color: AppColors.background),
         ),
       ),
@@ -52,6 +58,7 @@ class _CustomCompoundLibraryScreenState
                 child: Row(
                   children: [
                     IconButton(
+                      tooltip: l10n.back,
                       onPressed: () => Navigator.of(context).pop(),
                       icon: const Icon(
                         Icons.arrow_back_rounded,
@@ -63,10 +70,10 @@ class _CustomCompoundLibraryScreenState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'SYS.LIBRARY // PERSONAL',
+                            l10n.personalLibrarySystemLabel,
                             style: AppTypography.systemLabel,
                           ),
-                          Text('My compounds', style: AppTypography.h2),
+                          Text(l10n.myCompounds, style: AppTypography.h2),
                         ],
                       ),
                     ),
@@ -91,8 +98,7 @@ class _CustomCompoundLibraryScreenState
                       const SizedBox(width: AppSpacing.md),
                       Expanded(
                         child: Text(
-                          'Save labels and vial sizes you enter yourself. '
-                          'Presets are tracking shortcuts—not dose guidance.',
+                          l10n.customCompoundIntro,
                           style: AppTypography.bodySmall,
                         ),
                       ),
@@ -113,7 +119,9 @@ class _CustomCompoundLibraryScreenState
                   children: [
                     Expanded(
                       child: Text(
-                        _showArchived ? 'ARCHIVED' : 'ACTIVE PRESETS',
+                        _showArchived
+                            ? l10n.archivedHeading
+                            : l10n.activePresetsHeading,
                         style: AppTypography.systemLabel,
                       ),
                     ),
@@ -127,7 +135,7 @@ class _CustomCompoundLibraryScreenState
                         size: 17,
                       ),
                       label: Text(
-                        _showArchived ? 'Show active' : 'Archived',
+                        _showArchived ? l10n.showActive : l10n.archivedAction,
                         style: AppTypography.labelMedium,
                       ),
                     ),
@@ -149,7 +157,7 @@ class _CustomCompoundLibraryScreenState
                   child: Padding(
                     padding: const EdgeInsets.all(AppSpacing.xl),
                     child: Text(
-                      provider.error!,
+                      l10n.customCompoundsLoadFailed,
                       style: AppTypography.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -202,8 +210,14 @@ class _CustomCompoundLibraryScreenState
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  '${_amount(compound.vialAmount)} ${compound.vialUnit} vial'
-                                  ' · ${_routeLabel(compound.route)}',
+                                  l10n.compoundVialSummary(
+                                    amountFormat.format(compound.vialAmount),
+                                    compound.vialUnit,
+                                    localizedProtocolRouteLabel(
+                                      l10n,
+                                      compound.route,
+                                    ),
+                                  ),
                                   style: AppTypography.bodySmall.copyWith(
                                     fontFamily: 'JetBrainsMono',
                                   ),
@@ -224,20 +238,25 @@ class _CustomCompoundLibraryScreenState
                                 );
                               }
                             },
-                            itemBuilder: (_) => [
-                              const PopupMenuItem(
-                                value: 'edit',
-                                child: Text('Edit preset'),
-                              ),
-                              PopupMenuItem(
-                                value: compound.archived
-                                    ? 'restore'
-                                    : 'archive',
-                                child: Text(
-                                  compound.archived ? 'Restore' : 'Archive',
+                            itemBuilder: (menuContext) {
+                              final menuL10n = AppLocalizations.of(menuContext);
+                              return [
+                                PopupMenuItem(
+                                  value: 'edit',
+                                  child: Text(menuL10n.editPreset),
                                 ),
-                              ),
-                            ],
+                                PopupMenuItem(
+                                  value: compound.archived
+                                      ? 'restore'
+                                      : 'archive',
+                                  child: Text(
+                                    compound.archived
+                                        ? menuL10n.restorePreset
+                                        : menuL10n.archivePreset,
+                                  ),
+                                ),
+                              ];
+                            },
                           ),
                         ],
                       ),
@@ -263,7 +282,7 @@ class _CustomCompoundLibraryScreenState
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => _CustomCompoundEditor(initial: compound),
+      builder: (sheetContext) => _CustomCompoundEditor(initial: compound),
     );
   }
 }
@@ -274,6 +293,7 @@ class _EmptyCompounds extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.xl),
@@ -287,14 +307,12 @@ class _EmptyCompounds extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              archived ? 'No archived presets' : 'No saved compounds',
+              archived ? l10n.noArchivedPresets : l10n.noSavedCompounds,
               style: AppTypography.h3,
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(
-              archived
-                  ? 'Archived presets stay here until you restore them.'
-                  : 'Create a reusable label and vial-size preset.',
+              archived ? l10n.archivedPresetsHint : l10n.createPresetHint,
               style: AppTypography.bodySmall,
               textAlign: TextAlign.center,
             ),
@@ -321,19 +339,32 @@ class _CustomCompoundEditorState extends State<_CustomCompoundEditor> {
   late String _trackingUnit;
   late String _route;
   bool _saving = false;
+  bool _initialAmountLocalized = false;
 
   @override
   void initState() {
     super.initState();
     final initial = widget.initial;
     _name = TextEditingController(text: initial?.name ?? '');
-    _vialAmount = TextEditingController(
-      text: initial == null ? '' : _amount(initial.vialAmount),
-    );
+    _vialAmount = TextEditingController();
     _notes = TextEditingController(text: initial?.notes ?? '');
     _vialUnit = initial?.vialUnit ?? 'mg';
     _trackingUnit = initial?.trackingUnit ?? 'mcg';
     _route = initial?.route ?? 'subcutaneous';
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_initialAmountLocalized) return;
+    final initial = widget.initial;
+    if (initial != null) {
+      _vialAmount.text = formatLocalizedDecimalInput(
+        initial.vialAmount,
+        localeName: AppLocalizations.of(context).localeName,
+      );
+    }
+    _initialAmountLocalized = true;
   }
 
   @override
@@ -349,6 +380,7 @@ class _CustomCompoundEditorState extends State<_CustomCompoundEditor> {
       (parseDecimalInput(_vialAmount.text) ?? 0) > 0;
 
   Future<void> _save() async {
+    final l10n = AppLocalizations.of(context);
     if (!_valid || _saving) return;
     setState(() => _saving = true);
     try {
@@ -362,11 +394,12 @@ class _CustomCompoundEditorState extends State<_CustomCompoundEditor> {
         notes: _notes.text,
       );
       if (mounted) Navigator.of(context).pop();
-    } catch (_) {
+    } catch (error) {
+      debugPrint('Could not save custom compound preset: $error');
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not save preset. Try again.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.saveCompoundFailed)));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -374,6 +407,7 @@ class _CustomCompoundEditorState extends State<_CustomCompoundEditor> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       child: Container(
@@ -404,27 +438,27 @@ class _CustomCompoundEditorState extends State<_CustomCompoundEditor> {
                   ),
                 ),
                 const SizedBox(height: AppSpacing.lg),
-                Text('PRESET.COMPOUND', style: AppTypography.systemLabel),
+                Text(
+                  l10n.presetCompoundSystemLabel,
+                  style: AppTypography.systemLabel,
+                ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
-                  widget.initial == null ? 'New compound' : 'Edit compound',
+                  widget.initial == null ? l10n.newCompound : l10n.editCompound,
                   style: AppTypography.h2,
                 ),
                 const SizedBox(height: AppSpacing.xs),
-                Text(
-                  'Enter only the details printed on your own vial.',
-                  style: AppTypography.bodySmall,
-                ),
+                Text(l10n.ownVialDetailsHint, style: AppTypography.bodySmall),
                 const SizedBox(height: AppSpacing.lg),
                 _InputFrame(
-                  label: 'COMPOUND LABEL',
+                  label: l10n.compoundLabel,
                   child: TextField(
                     controller: _name,
                     onChanged: (_) => setState(() {}),
                     textCapitalization: TextCapitalization.words,
                     style: AppTypography.bodyLarge,
-                    decoration: const InputDecoration(
-                      hintText: 'e.g. My compound',
+                    decoration: InputDecoration(
+                      hintText: l10n.compoundNameExample,
                       border: InputBorder.none,
                       filled: false,
                       contentPadding: EdgeInsets.symmetric(
@@ -441,7 +475,7 @@ class _CustomCompoundEditorState extends State<_CustomCompoundEditor> {
                     Expanded(
                       flex: 2,
                       child: _InputFrame(
-                        label: 'VIAL AMOUNT',
+                        label: l10n.vialAmount,
                         child: TextField(
                           controller: _vialAmount,
                           onChanged: (_) => setState(() {}),
@@ -466,7 +500,7 @@ class _CustomCompoundEditorState extends State<_CustomCompoundEditor> {
                     Expanded(
                       flex: 3,
                       child: _ChoiceRow(
-                        label: 'VIAL UNIT',
+                        label: l10n.vialUnitLabel,
                         options: const ['mcg', 'mg', 'IU'],
                         selected: _vialUnit,
                         onSelected: (value) =>
@@ -477,13 +511,13 @@ class _CustomCompoundEditorState extends State<_CustomCompoundEditor> {
                 ),
                 const SizedBox(height: AppSpacing.base),
                 _ChoiceRow(
-                  label: 'TRACKING UNIT',
+                  label: l10n.trackingUnitLabel,
                   options: const ['mcg', 'mg', 'IU'],
                   selected: _trackingUnit,
                   onSelected: (value) => setState(() => _trackingUnit = value),
                 ),
                 const SizedBox(height: AppSpacing.base),
-                Text('ROUTE', style: AppTypography.systemLabel),
+                Text(l10n.routeLabel, style: AppTypography.systemLabel),
                 const SizedBox(height: AppSpacing.sm),
                 Wrap(
                   spacing: AppSpacing.sm,
@@ -491,7 +525,7 @@ class _CustomCompoundEditorState extends State<_CustomCompoundEditor> {
                   children: [
                     for (final route in kRoutes)
                       _ChoiceChip(
-                        label: route.label,
+                        label: localizedProtocolRouteLabel(l10n, route.key),
                         selected: _route == route.key,
                         onTap: () => setState(() => _route = route.key),
                       ),
@@ -499,14 +533,14 @@ class _CustomCompoundEditorState extends State<_CustomCompoundEditor> {
                 ),
                 const SizedBox(height: AppSpacing.base),
                 _InputFrame(
-                  label: 'NOTES OPTIONAL',
+                  label: l10n.notesOptional,
                   child: TextField(
                     controller: _notes,
                     maxLines: 3,
                     textCapitalization: TextCapitalization.sentences,
                     style: AppTypography.bodyMedium,
-                    decoration: const InputDecoration(
-                      hintText: 'Label or storage note',
+                    decoration: InputDecoration(
+                      hintText: l10n.compoundNoteExample,
                       border: InputBorder.none,
                       filled: false,
                       contentPadding: EdgeInsets.all(AppSpacing.md),
@@ -515,15 +549,14 @@ class _CustomCompoundEditorState extends State<_CustomCompoundEditor> {
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
-                  'No dosing recommendation is created. Protocol amounts are '
-                  'always entered separately by you.',
+                  l10n.noDoseRecommendation,
                   style: AppTypography.disclaimer,
                 ),
                 const SizedBox(height: AppSpacing.xl),
                 PrimaryButton(
                   label: widget.initial == null
-                      ? 'SAVE PRESET'
-                      : 'SAVE CHANGES',
+                      ? l10n.savePreset
+                      : l10n.saveChanges,
                   icon: Icons.check_rounded,
                   isLoading: _saving,
                   onPressed: _valid ? _save : null,
@@ -649,14 +682,3 @@ class _ChoiceChip extends StatelessWidget {
     );
   }
 }
-
-String _amount(double value) => value == value.roundToDouble()
-    ? value.toStringAsFixed(0)
-    : value.toStringAsFixed(2).replaceFirst(RegExp(r'0+$'), '');
-
-String _routeLabel(String route) => kRoutes
-    .firstWhere(
-      (candidate) => candidate.key == route,
-      orElse: () => kRoutes.first,
-    )
-    .label;

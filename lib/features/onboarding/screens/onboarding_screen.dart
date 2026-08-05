@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import '../../../core/services/analytics_service.dart';
 import '../../../core/theme/theme.dart';
 import '../../../services/notification_service.dart';
+import '../../../l10n/app_localizations.dart';
 import '../services/onboarding_draft_service.dart';
 import '../widgets/age_gate_page.dart';
 import '../widgets/hook_page.dart';
@@ -187,6 +188,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Stack(
@@ -208,12 +210,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               // 2: Medical Disclaimer (early — before personalisation)
               OnboardingPage(
                 systemLabel: 'SYS.LEGAL // DISCLAIMER',
-                title: 'Important\nDisclaimer',
-                body:
-                    'PepMod is a tracking and educational tool only. It does not provide medical advice, diagnosis, or treatment.\n\nAlways consult a qualified healthcare provider before starting any peptide regimen.\n\nBy continuing, you acknowledge this is not a medical device.',
+                title: l10n.onboardingDisclaimerTitle,
+                body: l10n.onboardingDisclaimerBody,
                 icon: Icons.shield_rounded,
                 iconColor: AppColors.warning,
-                buttonLabel: 'I UNDERSTAND',
+                buttonLabel: l10n.iUnderstand,
                 onNext: _nextPage,
               ),
 
@@ -255,12 +256,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               // 6: Reassurance after goals
               OnboardingPage(
                 systemLabel: 'SYS.GUIDE // CALIBRATED',
-                title: 'You are already\nahead.',
-                body:
-                    'Most peptide tracking gets scattered across notes, screenshots, and guesses. We will turn your choices into one organised record.',
+                title: l10n.onboardingAheadTitle,
+                body: l10n.onboardingAheadBody,
                 icon: Icons.route_rounded,
                 iconColor: AppColors.primary,
-                buttonLabel: 'CONTINUE',
+                buttonLabel: l10n.continueLabel,
                 onNext: _nextPage,
               ),
 
@@ -298,12 +298,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               // 10: Reassurance after confidence signals
               OnboardingPage(
                 systemLabel: 'SYS.CLARITY // READY',
-                title: 'We will give you\na guided place to start.',
-                body:
-                    'PepMod stays in tracking territory: clean records, dose math, reminders, and plain-English reference notes. No diagnosis. No prescribing.',
+                title: l10n.onboardingGuidedStartTitle,
+                body: l10n.onboardingGuidedStartBody,
                 icon: Icons.verified_user_outlined,
                 iconColor: AppColors.secondary,
-                buttonLabel: 'CONTINUE',
+                buttonLabel: l10n.continueLabel,
                 onNext: _nextPage,
               ),
 
@@ -374,36 +373,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               // 19: Value screen — protocol organization
               OnboardingPage(
                 systemLabel: 'SYS.VALUE // PROTOCOL',
-                title: 'Everything stays\nin one protocol.',
-                body:
-                    'Track what you planned, what you actually logged, and what is coming next — without digging through notes, screenshots, or group chats.',
+                title: l10n.onboardingProtocolValueTitle,
+                body: l10n.onboardingProtocolValueBody,
                 icon: Icons.view_timeline_rounded,
                 iconColor: AppColors.primary,
-                buttonLabel: 'CONTINUE',
+                buttonLabel: l10n.continueLabel,
                 onNext: _nextPage,
               ),
 
               // 20: Value screen — unit conversion
               OnboardingPage(
                 systemLabel: 'SYS.VALUE // CONVERT',
-                title: 'Unit conversion\nwithout second guessing.',
-                body:
-                    'Keep vial size, water volume, dose, and syringe units together so you are not redoing the same math from scattered notes.',
+                title: l10n.onboardingConversionValueTitle,
+                body: l10n.onboardingConversionValueBody,
                 icon: Icons.straighten_rounded,
                 iconColor: AppColors.secondary,
-                buttonLabel: 'CONTINUE',
+                buttonLabel: l10n.continueLabel,
                 onNext: _nextPage,
               ),
 
               // 21: Value screen — trend tracking
               OnboardingPage(
                 systemLabel: 'SYS.VALUE // SIGNAL',
-                title: 'See your tracking\ndata over time.',
-                body:
-                    'Adherence, logs, metrics, and vial history build a cleaner picture of your routine — no promises, just better records.',
+                title: l10n.onboardingProgressValueTitle,
+                body: l10n.onboardingProgressValueBody,
                 icon: Icons.query_stats_rounded,
                 iconColor: AppColors.aiInsightBright,
-                buttonLabel: 'CONTINUE',
+                buttonLabel: l10n.continueLabel,
                 onNext: _nextPage,
               ),
 
@@ -430,7 +426,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Positioned(
               top: MediaQuery.of(context).padding.top + AppSpacing.sm - 19,
               left: AppSpacing.screenHorizontal,
-              child: _BackButton(onPressed: _previousPage),
+              child: _BackButton(label: l10n.back, onPressed: _previousPage),
             ),
         ],
       ),
@@ -439,33 +435,41 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 }
 
 class _BackButton extends StatelessWidget {
-  const _BackButton({required this.onPressed});
+  const _BackButton({required this.label, required this.onPressed});
 
+  final String label;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onPressed,
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainer.withValues(alpha: 0.88),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.primary.withValues(alpha: 0.24)),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.12),
-              blurRadius: 14,
+    return Semantics(
+      button: true,
+      label: label,
+      excludeSemantics: true,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onPressed,
+        child: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainer.withValues(alpha: 0.88),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: AppColors.primary.withValues(alpha: 0.24),
             ),
-          ],
-        ),
-        child: const Icon(
-          Icons.arrow_back_rounded,
-          color: AppColors.textPrimary,
-          size: AppSpacing.iconMedium,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primary.withValues(alpha: 0.12),
+                blurRadius: 14,
+              ),
+            ],
+          ),
+          child: const Icon(
+            Icons.arrow_back_rounded,
+            color: AppColors.textPrimary,
+            size: AppSpacing.iconMedium,
+          ),
         ),
       ),
     );

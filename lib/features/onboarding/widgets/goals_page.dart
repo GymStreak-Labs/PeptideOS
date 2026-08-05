@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Goals selection — multi-select grid.
 /// "What are you using peptides for?"
@@ -17,19 +18,35 @@ class GoalsPage extends StatelessWidget {
   final ValueChanged<String> onToggle;
   final VoidCallback onNext;
 
-  static const _goals = [
-    _Goal('Recovery', Icons.healing_rounded, 'Injury healing, tissue repair'),
-    _Goal('Weight Loss', Icons.trending_down_rounded, 'GLP-1, metabolic'),
-    _Goal('Anti-Aging', Icons.auto_awesome_rounded, 'Longevity, skin, hair'),
-    _Goal('Muscle Growth', Icons.fitness_center_rounded, 'GH, IGF-1, anabolic'),
-    _Goal('Cognitive', Icons.psychology_rounded, 'Focus, memory, neuroprotection'),
-    _Goal('Immune', Icons.shield_rounded, 'Thymosin, immune modulation'),
-    _Goal('Sleep', Icons.bedtime_rounded, 'DSIP, sleep optimisation'),
-    _Goal('Other', Icons.more_horiz_rounded, 'Something else'),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final goals = [
+      _Goal(l10n.goalRecovery, Icons.healing_rounded, l10n.goalRecoveryDetail),
+      _Goal(
+        l10n.goalWeightLoss,
+        Icons.trending_down_rounded,
+        l10n.goalWeightLossDetail,
+      ),
+      _Goal(
+        l10n.goalAntiAging,
+        Icons.auto_awesome_rounded,
+        l10n.goalAntiAgingDetail,
+      ),
+      _Goal(
+        l10n.goalMuscleGrowth,
+        Icons.fitness_center_rounded,
+        l10n.goalMuscleGrowthDetail,
+      ),
+      _Goal(
+        l10n.goalCognitive,
+        Icons.psychology_rounded,
+        l10n.goalCognitiveDetail,
+      ),
+      _Goal(l10n.goalImmune, Icons.shield_rounded, l10n.goalImmuneDetail),
+      _Goal(l10n.goalSleep, Icons.bedtime_rounded, l10n.goalSleepDetail),
+      _Goal(l10n.goalOther, Icons.more_horiz_rounded, l10n.goalOtherDetail),
+    ];
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -43,14 +60,11 @@ class GoalsPage extends StatelessWidget {
             Text('SYS.PROFILE // GOALS', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'What are you\nusing peptides for?',
+              l10n.onboardingGoalsTitle,
               style: AppTypography.h1.copyWith(fontSize: 28),
             ),
             const SizedBox(height: AppSpacing.xs),
-            Text(
-              'Select all that apply',
-              style: AppTypography.bodySmall,
-            ),
+            Text(l10n.selectAllThatApply, style: AppTypography.bodySmall),
 
             const SizedBox(height: AppSpacing.xl),
 
@@ -62,7 +76,7 @@ class GoalsPage extends StatelessWidget {
                 mainAxisSpacing: AppSpacing.cardGap,
                 childAspectRatio: 1.6,
                 padding: EdgeInsets.zero,
-                children: _goals.map((goal) {
+                children: goals.map((goal) {
                   final isSelected = selectedGoals.contains(goal.label);
                   return _GoalChip(
                     goal: goal,
@@ -77,7 +91,7 @@ class GoalsPage extends StatelessWidget {
             ),
 
             PrimaryButton(
-              label: 'CONTINUE',
+              label: l10n.continueLabel,
               onPressed: selectedGoals.isNotEmpty ? onNext : null,
             ),
 

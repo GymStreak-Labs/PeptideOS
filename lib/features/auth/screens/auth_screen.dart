@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../core/services/analytics_service.dart';
 import '../../../core/theme/theme.dart';
 import '../../../data/services/auth_service.dart';
+import '../../../l10n/app_localizations.dart';
 import '../providers/auth_provider.dart';
 import 'email_auth_screen.dart';
 
@@ -44,11 +45,16 @@ class _AuthScreenState extends State<AuthScreen> {
     } on AuthException catch (e) {
       if (!mounted) return;
       if (e.code != 'apple_sign_in_cancelled') {
-        setState(() => _error = e.message);
+        final l10n = AppLocalizations.of(context);
+        setState(
+          () => _error = e.code == 'apple_sign_in_not_available'
+              ? l10n.authAppleUnavailable
+              : l10n.authAppleFailed,
+        );
       }
     } catch (e) {
       if (!mounted) return;
-      setState(() => _error = 'Apple sign-in failed. Please try again.');
+      setState(() => _error = AppLocalizations.of(context).authAppleFailed);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -70,11 +76,11 @@ class _AuthScreenState extends State<AuthScreen> {
     } on AuthException catch (e) {
       if (!mounted) return;
       if (e.code != 'google_sign_in_cancelled') {
-        setState(() => _error = e.message);
+        setState(() => _error = AppLocalizations.of(context).authGoogleFailed);
       }
     } catch (_) {
       if (!mounted) return;
-      setState(() => _error = 'Google sign-in failed. Please try again.');
+      setState(() => _error = AppLocalizations.of(context).authGoogleFailed);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -88,82 +94,88 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.screenHorizontal,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Spacer(),
-              _HeaderIcon(),
-              const SizedBox(height: AppSpacing.xl),
-              Text(
-                'SYS.AUTH // REQUIRED',
-                style: AppTypography.systemLabel,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                'Save your personalised\nprotocol',
-                style: AppTypography.h1,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                'Keep your roadmap, schedule, dose logs, and reminders attached '
-                'to your account before the protocol unlocks.',
-                style: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.textSecondary,
+        child: LayoutBuilder(
+          builder: (context, constraints) => SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenHorizontal,
+            ),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Spacer(),
+                    _HeaderIcon(),
+                    const SizedBox(height: AppSpacing.xl),
+                    Text(
+                      'SYS.AUTH // REQUIRED',
+                      style: AppTypography.systemLabel,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    Text(
+                      l10n.authRequiredTitle,
+                      style: AppTypography.h1,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    Text(
+                      l10n.authRequiredBody,
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const Spacer(),
+                    if (_error != null) ...[
+                      Text(
+                        _error!,
+                        style: AppTypography.bodySmall.copyWith(
+                          color: AppColors.warning,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                    ],
+                    _GhostButton(
+                      label: l10n.continueWithEmail,
+                      icon: Icons.mail_outline_rounded,
+                      filled: true,
+                      onPressed: _busy ? null : _openEmailFlow,
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    if (Platform.isIOS) ...[
+                      _GhostButton(
+                        label: l10n.signInWithApple,
+                        icon: Icons.apple_rounded,
+                        onPressed: _busy ? null : _signInWithApple,
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                    ],
+                    if (_googleSignInEnabled) ...[
+                      _GhostButton(
+                        label: l10n.continueWithGoogle,
+                        icon: Icons.g_mobiledata_rounded,
+                        onPressed: _busy ? null : _signInWithGoogle,
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                    ],
+                    const SizedBox(height: AppSpacing.lg),
+                    Text(
+                      l10n.authTermsDisclaimer,
+                      style: AppTypography.disclaimer,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                  ],
                 ),
-                textAlign: TextAlign.center,
               ),
-              const Spacer(),
-              if (_error != null) ...[
-                Text(
-                  _error!,
-                  style: AppTypography.bodySmall.copyWith(
-                    color: AppColors.warning,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: AppSpacing.md),
-              ],
-              _GhostButton(
-                label: 'CONTINUE WITH EMAIL',
-                icon: Icons.mail_outline_rounded,
-                filled: true,
-                onPressed: _busy ? null : _openEmailFlow,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              if (Platform.isIOS) ...[
-                _GhostButton(
-                  label: 'SIGN IN WITH APPLE',
-                  icon: Icons.apple_rounded,
-                  onPressed: _busy ? null : _signInWithApple,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-              ],
-              if (_googleSignInEnabled) ...[
-                _GhostButton(
-                  label: 'CONTINUE WITH GOOGLE',
-                  icon: Icons.g_mobiledata_rounded,
-                  onPressed: _busy ? null : _signInWithGoogle,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-              ],
-              const SizedBox(height: AppSpacing.lg),
-              Text(
-                'By continuing you accept our Terms and Privacy Policy. '
-                'PepMod is an educational tool — not medical advice.',
-                style: AppTypography.disclaimer,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppSpacing.md),
-            ],
+            ),
           ),
         ),
       ),
@@ -214,61 +226,72 @@ class _GhostButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabled = onPressed != null;
-    return GestureDetector(
-      onTap: enabled
-          ? () {
-              HapticFeedback.lightImpact();
-              onPressed!();
-            }
-          : null,
-      child: Container(
-        height: AppSpacing.buttonHeight,
-        decoration: BoxDecoration(
-          color: filled ? AppColors.primary : AppColors.surfaceContainer,
-          borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
-          border: Border.all(
-            color: filled
-                ? AppColors.primary
-                : enabled
-                ? AppColors.border
-                : AppColors.border.withValues(alpha: 0.4),
+    return Semantics(
+      button: true,
+      enabled: enabled,
+      label: label,
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: enabled
+            ? () {
+                HapticFeedback.lightImpact();
+                onPressed!();
+              }
+            : null,
+        child: Container(
+          height: AppSpacing.buttonHeight,
+          decoration: BoxDecoration(
+            color: filled ? AppColors.primary : AppColors.surfaceContainer,
+            borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
+            border: Border.all(
+              color: filled
+                  ? AppColors.primary
+                  : enabled
+                  ? AppColors.border
+                  : AppColors.border.withValues(alpha: 0.4),
+            ),
+            boxShadow: filled && enabled
+                ? [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.28),
+                      blurRadius: 22,
+                      spreadRadius: -4,
+                    ),
+                  ]
+                : null,
           ),
-          boxShadow: filled && enabled
-              ? [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.28),
-                    blurRadius: 22,
-                    spreadRadius: -4,
-                  ),
-                ]
-              : null,
-        ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                size: AppSpacing.iconMedium,
-                color: filled && enabled
-                    ? AppColors.background
-                    : enabled
-                    ? AppColors.textPrimary
-                    : AppColors.textDisabled,
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Text(
-                label,
-                style: AppTypography.button.copyWith(
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  size: AppSpacing.iconMedium,
                   color: filled && enabled
                       ? AppColors.background
                       : enabled
                       ? AppColors.textPrimary
                       : AppColors.textDisabled,
-                  letterSpacing: 0.8,
                 ),
-              ),
-            ],
+                const SizedBox(width: AppSpacing.sm),
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      label,
+                      style: AppTypography.button.copyWith(
+                        color: filled && enabled
+                            ? AppColors.background
+                            : enabled
+                            ? AppColors.textPrimary
+                            : AppColors.textDisabled,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

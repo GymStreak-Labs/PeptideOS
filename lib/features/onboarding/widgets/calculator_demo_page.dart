@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../library/widgets/syringe_visual.dart';
 
 /// Screen 8: Unit Converter Demo — the "aha moment".
@@ -19,6 +22,7 @@ class CalculatorDemoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     // Pre-filled demo values
     const peptideMg = 5.0;
     const waterMl = 2.0;
@@ -27,6 +31,8 @@ class CalculatorDemoPage extends StatelessWidget {
     const drawMl = doseMcg / concentration; // 0.1
     const syringeUnits = drawMl * 100; // 10
     const fillFraction = syringeUnits / 100; // 0.1
+    String number(double value, String pattern) =>
+        NumberFormat(pattern, l10n.localeName).format(value);
 
     return SafeArea(
       child: Padding(
@@ -38,15 +44,18 @@ class CalculatorDemoPage extends StatelessWidget {
           children: [
             const SizedBox(height: AppSpacing.huge),
 
-            Text('SYS.DEMO // UNIT CONVERTER', style: AppTypography.systemLabel),
+            Text(
+              'SYS.DEMO // UNIT CONVERTER',
+              style: AppTypography.systemLabel,
+            ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'No more\nscary math.',
+              l10n.calculatorDemoTitle,
               style: AppTypography.h1.copyWith(fontSize: 28),
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(
-              'Here\'s how it works with $peptideName',
+              l10n.calculatorDemoBody(peptideName),
               style: AppTypography.bodySmall,
             ),
 
@@ -75,40 +84,52 @@ class CalculatorDemoPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Input summary
-                          _DemoInput(label: 'PEPTIDE', value: '${peptideMg.toInt()}mg $peptideName'),
+                          _DemoInput(
+                            label: l10n.peptideLabel,
+                            value: '${number(peptideMg, '0')}mg $peptideName',
+                          ),
                           const SizedBox(height: AppSpacing.sm),
-                          _DemoInput(label: 'BAC WATER', value: '${waterMl.toInt()}ml'),
+                          _DemoInput(
+                            label: l10n.bacWaterLabel,
+                            value: '${number(waterMl, '0')}ml',
+                          ),
                           const SizedBox(height: AppSpacing.sm),
-                          _DemoInput(label: 'DOSE', value: '${doseMcg.toInt()}mcg'),
+                          _DemoInput(
+                            label: l10n.doseLabel,
+                            value: '${number(doseMcg, '0')}mcg',
+                          ),
 
                           const SizedBox(height: AppSpacing.lg),
 
                           // Result
-                          Text('DRAW VOLUME', style: AppTypography.systemLabel),
+                          Text(
+                            l10n.drawVolumeLabel,
+                            style: AppTypography.systemLabel,
+                          ),
                           const SizedBox(height: AppSpacing.xs),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.baseline,
                             textBaseline: TextBaseline.alphabetic,
                             children: [
                               Text(
-                                syringeUnits.toStringAsFixed(1),
+                                number(syringeUnits, '0.0'),
                                 style: AppTypography.heroMedium.copyWith(
                                   color: AppColors.primary,
                                 ),
                               ),
                               const SizedBox(width: AppSpacing.xs),
-                              Text('units', style: AppTypography.unit),
+                              Text(l10n.unitsLabel, style: AppTypography.unit),
                             ],
                           ),
                           const SizedBox(height: AppSpacing.xs),
                           Text(
-                            '${drawMl.toStringAsFixed(3)}ml on a 1ml syringe',
+                            l10n.syringeVolume(number(drawMl, '0.000')),
                             style: AppTypography.bodySmall,
                           ),
 
                           const SizedBox(height: AppSpacing.base),
                           Text(
-                            'That\'s it. Enter your values,\nget exact syringe units.',
+                            l10n.calculatorDemoResult,
                             style: AppTypography.bodyMedium.copyWith(
                               color: AppColors.textPrimary,
                             ),
@@ -123,17 +144,14 @@ class CalculatorDemoPage extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Unit conversion tool for reference only. Always verify with your healthcare provider.',
+              l10n.unitConversionDisclaimer,
               style: AppTypography.disclaimer,
               textAlign: TextAlign.center,
             ),
 
             const SizedBox(height: AppSpacing.base),
 
-            PrimaryButton(
-              label: 'CONTINUE',
-              onPressed: onNext,
-            ),
+            PrimaryButton(label: l10n.continueLabel, onPressed: onNext),
 
             const SizedBox(height: AppSpacing.xxl),
           ],
@@ -162,10 +180,7 @@ class _DemoInput extends StatelessWidget {
             ),
           ),
         ),
-        Text(
-          value,
-          style: AppTypography.tabular.copyWith(fontSize: 13),
-        ),
+        Text(value, style: AppTypography.tabular.copyWith(fontSize: 13)),
       ],
     );
   }

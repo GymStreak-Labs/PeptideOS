@@ -11,6 +11,7 @@ import '../../protocol/widgets/empty_state.dart';
 import '../../profile/providers/settings_provider.dart';
 import '../providers/peptide_provider.dart';
 import '../utils/library_labels.dart';
+import '../utils/localized_peptide_content.dart';
 import 'custom_compound_library_screen.dart';
 import 'peptide_detail_screen.dart';
 import 'reconstitution_screen.dart';
@@ -47,7 +48,12 @@ class _LibraryScreenState extends State<LibraryScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final provider = context.watch<PeptideProvider>();
-    final results = provider.search(query: _query, category: _category);
+    final results = provider.search(
+      query: _query,
+      category: _category,
+      localizedTerms: (peptide) =>
+          localizedPeptideContent(l10n, peptide).searchTerms(l10n, peptide),
+    );
 
     return RefreshIndicator(
       color: AppColors.primary,
@@ -173,7 +179,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 child: EmptyState(
                   icon: Icons.error_outline_rounded,
                   title: l10n.libraryUnavailable,
-                  description: provider.error!,
+                  description: l10n.libraryLoadFailed,
                   actionLabel: l10n.retry,
                   onAction: provider.refresh,
                 ),
@@ -207,6 +213,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       l10n,
                       p.category,
                     ),
+                    typicalDoseLabel: localizedPeptideContent(
+                      l10n,
+                      p,
+                    ).typicalDose,
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -409,10 +419,12 @@ class _PeptideCard extends StatelessWidget {
   const _PeptideCard({
     required this.peptide,
     required this.categoryLabel,
+    required this.typicalDoseLabel,
     required this.onTap,
   });
   final Peptide peptide;
   final String categoryLabel;
+  final String typicalDoseLabel;
   final VoidCallback onTap;
 
   @override
@@ -448,7 +460,7 @@ class _PeptideCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  peptide.typicalDose,
+                  typicalDoseLabel,
                   style: AppTypography.bodySmall.copyWith(
                     fontFamily: 'JetBrainsMono',
                   ),

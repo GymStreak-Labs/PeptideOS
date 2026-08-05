@@ -6,6 +6,7 @@ import 'package:peptide_os/features/onboarding/widgets/notification_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/paywall_page.dart';
 import 'package:peptide_os/features/onboarding/widgets/protocol_roadmap_page.dart';
 import 'package:peptide_os/features/protocol/screens/create_protocol_screen.dart';
+import 'package:peptide_os/l10n/app_localizations.dart';
 import 'package:peptide_os/models/blend_vial.dart';
 import 'package:peptide_os/models/protocol.dart';
 
@@ -26,6 +27,8 @@ void main() {
       MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.dark,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(backgroundColor: AppColors.background, body: child),
       ),
     );
@@ -104,7 +107,7 @@ void main() {
     expect(find.text('CA\$39.99'), findsOneWidget);
     expect(find.text('CA\$79.99'), findsNWidgets(2));
     expect(find.text('CA\$12.99'), findsOneWidget);
-    expect(find.text('ACTIVATE PRO - CA\$39.99/year'), findsOneWidget);
+    expect(find.text('ACTIVATE PRO — CA\$39.99/year'), findsOneWidget);
     expect(find.text('\$29.99'), findsNothing);
     expect(find.text('\$59.99'), findsNothing);
     expect(find.text('\$9.99'), findsNothing);
@@ -139,8 +142,8 @@ void main() {
     );
 
     expect(find.text('Pre-blended vial'), findsOneWidget);
-    expect(find.text('10.0 units = 0.10 mL'), findsOneWidget);
-    expect(find.text('0.50 mg'), findsOneWidget);
+    expect(find.text('10 units = 0.1 mL'), findsOneWidget);
+    expect(find.text('0.5 mg'), findsOneWidget);
     expect(find.text('0.25 mg'), findsOneWidget);
     expect(find.text('SAVE BLEND'), findsOneWidget);
     expect(tester.takeException(), isNull);

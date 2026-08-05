@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import '../../../core/services/analytics_service.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 import '../providers/subscription_provider.dart';
+import '../subscription_error_localization.dart';
 
 /// Simple bottom-sheet paywall shown when a free-tier user hits the peptide
 /// or protocol cap. The heavy onboarding paywall is reserved for first open —
@@ -54,10 +56,8 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
     if (pkg == null) {
       setState(() => _busy = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Upgrade is not available right now. Please try again later.',
-          ),
+        SnackBar(
+          content: Text(AppLocalizations.of(context).upgradeUnavailable),
         ),
       );
       return;
@@ -72,14 +72,22 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
       Navigator.of(context).pop(true);
     } else if (result.cancelled) {
       // user backed out — leave the sheet open
-    } else if (result.error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(result.error!)));
+    } else if (result.errorCode != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            localizedSubscriptionError(
+              AppLocalizations.of(context),
+              result.errorCode!,
+            ),
+          ),
+        ),
+      );
     }
   }
 
   Future<void> _restore() async {
+    final l10n = AppLocalizations.of(context);
     if (_busy) return;
     setState(() => _busy = true);
     final sub = context.read<SubscriptionProvider>();
@@ -91,7 +99,11 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(result.error ?? 'No purchases found to restore.'),
+          content: Text(
+            result.errorCode == null
+                ? l10n.noPurchasesToRestore
+                : localizedSubscriptionError(l10n, result.errorCode!),
+          ),
         ),
       );
     }
@@ -99,6 +111,7 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final bottomInset = MediaQuery.of(context).padding.bottom;
     return Container(
       padding: EdgeInsets.fromLTRB(
@@ -137,7 +150,7 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Unlock the full protocol',
+            l10n.unlockFullProtocol,
             style: AppTypography.h2,
             textAlign: TextAlign.center,
           ),
@@ -150,13 +163,13 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppSpacing.xl),
-          const _Feature(label: 'Unlimited peptides per protocol'),
-          const _Feature(label: 'Multiple active protocols'),
-          const _Feature(label: 'Reconstitution calculator (all peptides)'),
-          const _Feature(label: 'Body metric tracking + charts'),
+          _Feature(label: l10n.premiumUnlimitedPeptides),
+          _Feature(label: l10n.premiumMultipleProtocols),
+          _Feature(label: l10n.premiumCalculator),
+          _Feature(label: l10n.premiumMetrics),
           const SizedBox(height: AppSpacing.xl),
           PrimaryButton(
-            label: _busy ? 'PROCESSING…' : 'UPGRADE NOW',
+            label: _busy ? l10n.processingLabel : l10n.upgradeNow,
             isLoading: _busy,
             onPressed: _busy ? null : _subscribe,
           ),
@@ -164,7 +177,7 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
           TextButton(
             onPressed: _busy ? null : _restore,
             child: Text(
-              'Restore purchases',
+              l10n.restorePurchases,
               style: AppTypography.bodySmall.copyWith(
                 color: AppColors.textSecondary,
               ),
@@ -178,7 +191,7 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
                     Navigator.of(context).pop(false);
                   },
             child: Text(
-              'Not right now',
+              l10n.notRightNow,
               style: AppTypography.bodySmall.copyWith(
                 color: AppColors.textTertiary,
               ),

@@ -37,6 +37,7 @@ import 'features/progress/providers/body_metric_provider.dart';
 import 'features/protocol/providers/dose_log_provider.dart';
 import 'features/protocol/providers/protocol_provider.dart';
 import 'features/subscription/providers/subscription_provider.dart';
+import 'features/subscription/subscription_error_localization.dart';
 import 'l10n/app_localizations.dart';
 import 'services/notification_service.dart';
 
@@ -427,6 +428,9 @@ class _AppRootState extends State<_AppRoot> {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           await OnboardingDraftService.replayAfterAuth(
             email: auth.currentUser?.email ?? '',
+            defaultProtocolName: AppLocalizations.of(
+              context,
+            ).createProtocolDefaultName,
             settings: context.read<SettingsProvider>(),
             protocols: context.read<ProtocolProvider>(),
             doseLogs: context.read<DoseLogProvider>(),
@@ -496,6 +500,7 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
   }
 
   Future<void> _handleSubscribe(int selectedPlan) async {
+    final l10n = AppLocalizations.of(context);
     final sub = context.read<SubscriptionProvider>();
     final planId = 'onboarding_plan_$selectedPlan';
 
@@ -516,8 +521,10 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            sub.offeringsError ??
-                'Subscription plans are not available right now. Please try again.',
+            localizedSubscriptionError(
+              l10n,
+              sub.offeringsErrorCode ?? SubscriptionErrorCode.plansUnavailable,
+            ),
           ),
         ),
       );
@@ -531,14 +538,17 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
       await widget.onComplete();
     } else if (result.cancelled) {
       return;
-    } else if (result.error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(result.error!)));
+    } else if (result.errorCode != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(localizedSubscriptionError(l10n, result.errorCode!)),
+        ),
+      );
     }
   }
 
   Future<void> _handleRestore() async {
+    final l10n = AppLocalizations.of(context);
     final sub = context.read<SubscriptionProvider>();
     final result = await sub.restore();
     if (!mounted) return;
@@ -547,7 +557,11 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(result.error ?? 'No purchases found to restore.'),
+          content: Text(
+            result.errorCode == null
+                ? l10n.noPurchasesToRestore
+                : localizedSubscriptionError(l10n, result.errorCode!),
+          ),
         ),
       );
     }

@@ -67,6 +67,7 @@ class OnboardingDraftService {
 
   static Future<void> replayAfterAuth({
     required String email,
+    required String defaultProtocolName,
     required SettingsProvider settings,
     required ProtocolProvider protocols,
     required DoseLogProvider doseLogs,
@@ -117,7 +118,7 @@ class OnboardingDraftService {
 
         if (peptideEntries.isNotEmpty) {
           await protocols.createProtocol(
-            name: 'My Protocol',
+            name: defaultProtocolName,
             startDate: DateTime.now(),
             peptides: peptideEntries,
           );

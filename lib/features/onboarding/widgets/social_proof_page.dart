@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Screen 3: Social Proof — testimonials + stats.
 /// Sophisticated, not cheesy. Biohackers, not bros.
@@ -9,22 +10,19 @@ class SocialProofPage extends StatelessWidget {
 
   final VoidCallback onNext;
 
-  static const _testimonials = [
+  List<_Testimonial> _testimonials(AppLocalizations l10n) => [
     _Testimonial(
-      quote:
-          'Finally stopped missing doses. The reconstitution calculator alone saved me hours of spreadsheet maths.',
+      quote: l10n.testimonialOne,
       name: 'Marcus R.',
       protocol: 'BPC-157 protocol',
     ),
     _Testimonial(
-      quote:
-          'The weekly insights caught a timing issue I didn\'t notice for months. Game-changer.',
+      quote: l10n.testimonialTwo,
       name: 'Sarah K.',
       protocol: 'GHK-Cu + TB-500',
     ),
     _Testimonial(
-      quote:
-          'Cleanest peptide tracker I\'ve used. Looks like it was built for serious users, because it was.',
+      quote: l10n.testimonialThree,
       name: 'James L.',
       protocol: 'stack of 4',
     ),
@@ -32,6 +30,8 @@ class SocialProofPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final testimonials = _testimonials(l10n);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -42,18 +42,14 @@ class SocialProofPage extends StatelessWidget {
           children: [
             const SizedBox(height: AppSpacing.huge),
 
-            Text('SYS.COMMUNITY // TRUSTED',
-                style: AppTypography.systemLabel),
+            Text('SYS.COMMUNITY // TRUSTED', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Trusted by\nbiohackers worldwide',
+              l10n.socialProofTitle,
               style: AppTypography.h1.copyWith(fontSize: 28),
             ),
             const SizedBox(height: AppSpacing.sm),
-            Text(
-              'Join thousands tracking real progress.',
-              style: AppTypography.bodyMedium,
-            ),
+            Text(l10n.socialProofBody, style: AppTypography.bodyMedium),
 
             const SizedBox(height: AppSpacing.xl),
 
@@ -61,7 +57,7 @@ class SocialProofPage extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    for (final t in _testimonials) ...[
+                    for (final t in testimonials) ...[
                       _TestimonialCard(testimonial: t),
                       const SizedBox(height: AppSpacing.md),
                     ],
@@ -70,12 +66,12 @@ class SocialProofPage extends StatelessWidget {
 
                     // Stats row
                     Row(
-                      children: const [
-                        _StatTile(value: '10K+', label: 'USERS'),
-                        SizedBox(width: AppSpacing.md),
-                        _StatTile(value: '47K+', label: 'DOSES LOGGED'),
-                        SizedBox(width: AppSpacing.md),
-                        _StatTile(value: '4.8', label: 'AVG RATING'),
+                      children: [
+                        _StatTile(value: '10K+', label: l10n.usersLabel),
+                        const SizedBox(width: AppSpacing.md),
+                        _StatTile(value: '47K+', label: l10n.dosesLogged),
+                        const SizedBox(width: AppSpacing.md),
+                        _StatTile(value: '4.8', label: l10n.averageRating),
                       ],
                     ),
                   ],
@@ -85,10 +81,7 @@ class SocialProofPage extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.base),
 
-            PrimaryButton(
-              label: 'CONTINUE',
-              onPressed: onNext,
-            ),
+            PrimaryButton(label: l10n.continueLabel, onPressed: onNext),
             const SizedBox(height: AppSpacing.xxl),
           ],
         ),
@@ -182,9 +175,7 @@ class _StatTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surfaceContainer,
           borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-          border: Border.all(
-            color: AppColors.primary.withValues(alpha: 0.25),
-          ),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
           boxShadow: [
             BoxShadow(
               color: AppColors.primary.withValues(alpha: 0.08),

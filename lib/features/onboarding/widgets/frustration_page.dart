@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Screen 6: Biggest Frustration — from real community research.
 /// Names their exact pain point. Single select.
@@ -17,17 +18,17 @@ class FrustrationPage extends StatelessWidget {
   final ValueChanged<String> onSelect;
   final VoidCallback onNext;
 
-  static const _frustrations = [
-    'The reconstitution math stresses me out',
-    "I can't keep track of my doses and schedule",
-    "I don't know if my protocol is actually working",
-    "I'm stacking multiple peptides and it's complicated",
-    'I keep forgetting doses or losing track of vials',
-    "I don't trust the information I find online",
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final frustrations = [
+      l10n.frustrationMath,
+      l10n.frustrationSchedule,
+      l10n.frustrationProgress,
+      l10n.frustrationStacking,
+      l10n.frustrationForgetting,
+      l10n.frustrationTrust,
+    ];
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -41,12 +42,12 @@ class FrustrationPage extends StatelessWidget {
             Text('SYS.PROFILE // PAIN POINT', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.md),
             Text(
-              "What's your biggest\nfrustration?",
+              l10n.onboardingFrustrationTitle,
               style: AppTypography.h1.copyWith(fontSize: 28),
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(
-              'This helps us personalise your experience',
+              l10n.onboardingFrustrationBody,
               style: AppTypography.bodySmall,
             ),
 
@@ -54,12 +55,12 @@ class FrustrationPage extends StatelessWidget {
 
             Expanded(
               child: ListView.separated(
-                itemCount: _frustrations.length,
+                itemCount: frustrations.length,
                 padding: EdgeInsets.zero,
                 separatorBuilder: (_, _) =>
                     const SizedBox(height: AppSpacing.sm),
                 itemBuilder: (context, index) {
-                  final frustration = _frustrations[index];
+                  final frustration = frustrations[index];
                   final isSelected = selected == frustration;
 
                   return GestureDetector(
@@ -77,8 +78,9 @@ class FrustrationPage extends StatelessWidget {
                         color: isSelected
                             ? AppColors.primary.withValues(alpha: 0.1)
                             : AppColors.surfaceContainer,
-                        borderRadius:
-                            BorderRadius.circular(AppSpacing.cardRadius),
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.cardRadius,
+                        ),
                         border: Border.all(
                           color: isSelected
                               ? AppColors.primary
@@ -88,8 +90,9 @@ class FrustrationPage extends StatelessWidget {
                         boxShadow: isSelected
                             ? [
                                 BoxShadow(
-                                  color: AppColors.primary
-                                      .withValues(alpha: 0.15),
+                                  color: AppColors.primary.withValues(
+                                    alpha: 0.15,
+                                  ),
                                   blurRadius: 12,
                                 ),
                               ]
@@ -126,8 +129,9 @@ class FrustrationPage extends StatelessWidget {
                               boxShadow: isSelected
                                   ? [
                                       BoxShadow(
-                                        color: AppColors.primary
-                                            .withValues(alpha: 0.4),
+                                        color: AppColors.primary.withValues(
+                                          alpha: 0.4,
+                                        ),
                                         blurRadius: 6,
                                       ),
                                     ]
@@ -135,8 +139,11 @@ class FrustrationPage extends StatelessWidget {
                             ),
                             child: isSelected
                                 ? const Center(
-                                    child: Icon(Icons.circle,
-                                        size: 8, color: AppColors.primary),
+                                    child: Icon(
+                                      Icons.circle,
+                                      size: 8,
+                                      color: AppColors.primary,
+                                    ),
                                   )
                                 : null,
                           ),
@@ -149,7 +156,7 @@ class FrustrationPage extends StatelessWidget {
             ),
 
             PrimaryButton(
-              label: 'CONTINUE',
+              label: l10n.continueLabel,
               onPressed: selected.isNotEmpty ? onNext : null,
             ),
 
