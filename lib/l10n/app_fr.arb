@@ -79,5 +79,2808 @@
   "frequencyEveryOtherDay": "Un jour sur deux",
   "frequencyTwiceWeekly": "2 fois par semaine",
   "frequencyWeekly": "Chaque semaine",
-  "frequencyAsNeeded": "Au besoin"
+  "frequencyAsNeeded": "Au besoin",
+  "tabProtocol": "Protocole",
+  "tabProgress": "Progrès",
+  "tabLibrary": "Bibliothèque",
+  "tabYou": "Vous",
+  "continueLabel": "CONTINUER",
+  "processingLabel": "TRAITEMENT…",
+  "authAppleFailed": "La connexion Apple a échoué. Veuillez réessayer.",
+  "authGoogleFailed": "La connexion à Google a échoué. Veuillez réessayer.",
+  "authGenericError": "Quelque chose s'est mal passé. Veuillez réessayer.",
+  "authUserNotFound": "Aucun utilisateur trouvé avec cette adresse email.",
+  "authIncorrectCredentials": "Email ou mot de passe incorrect.",
+  "authAccountExists": "Un compte existe déjà avec cet email.",
+  "authWeakPassword": "Le mot de passe est trop faible. Utilisez au moins 6 caractères.",
+  "authInvalidEmail": "Adresse e-mail invalide.",
+  "authAppleUnavailable": "La connexion avec Apple n'est pas activée pour cette application.",
+  "authRequiredTitle": "Enregistrez votre\nprotocole personnalisé",
+  "authRequiredBody": "Conservez votre feuille de route, votre calendrier, vos journaux de doses et vos rappels attachés à votre compte avant le déverrouillage du protocole.",
+  "continueWithEmail": "CONTINUER AVEC L’E-MAIL",
+  "signInWithApple": "SE CONNECTER AVEC APPLE",
+  "continueWithGoogle": "CONTINUER AVEC GOOGLE",
+  "authTermsDisclaimer": "En continuant, vous acceptez nos Conditions d’utilisation et notre Politique de confidentialité. PepMod est un outil éducatif, pas un avis médical.",
+  "signIn": "Se connecter",
+  "createAccount": "Créer un compte",
+  "resetPassword": "Réinitialiser le mot de passe",
+  "signInAction": "SE CONNECTER",
+  "createAccountAction": "CRÉER UN COMPTE",
+  "sendResetLink": "ENVOYER LE LIEN DE RÉINITIALISATION",
+  "passwordResetSent": "E-mail de réinitialisation du mot de passe envoyé. Vérifiez votre boîte de réception.",
+  "enterEmail": "Saisissez votre e-mail",
+  "enterValidEmail": "Saisissez une adresse e-mail valide",
+  "enterPassword": "Entrez un mot de passe",
+  "passwordMinLength": "Au moins 6 caractères",
+  "forgotPassword": "Mot de passe oublié ?",
+  "alreadyHaveAccount": "Vous avez déjà un compte ? Se connecter",
+  "backToSignIn": "Retour à la connexion",
+  "emailLabel": "E-mail",
+  "passwordLabel": "Mot de passe",
+  "showPassword": "Afficher le mot de passe",
+  "hidePassword": "Masquer le mot de passe",
+  "accountDeletedTitle": "Compte supprimé",
+  "accountDeletedBody": "Votre compte PepMod et les données d'application enregistrées ont été supprimées.",
+  "subscriptionUnavailable": "Les plans d'abonnement ne sont pas disponibles pour le moment. Veuillez réessayer.",
+  "upgradeUnavailable": "La mise à niveau n'est pas disponible pour le moment. Veuillez réessayer plus tard.",
+  "noPurchasesToRestore": "Aucun achat trouvé à restaurer.",
+  "unlockFullProtocol": "Débloquez le protocole complet",
+  "premiumUnlimitedPeptides": "Peptides illimités par protocole",
+  "premiumMultipleProtocols": "Plusieurs protocoles actifs",
+  "premiumCalculator": "Calculateur de reconstitution (tous les peptides)",
+  "premiumMetrics": "Suivi des métriques corporelles + graphiques",
+  "upgradeNow": "METTRE À NIVEAU MAINTENANT",
+  "restorePurchases": "Restaurer les achats",
+  "notRightNow": "Pas maintenant",
+  "protocolWeeklyPlanner": "Planificateur hebdomadaire",
+  "protocolDoseHistory": "Historique des doses",
+  "protocolCreate": "Créer un protocole",
+  "protocolManage": "GÉRER",
+  "protocolYourProtocol": "Votre protocole",
+  "protocolNoActive": "Aucun protocole actif",
+  "protocolNoActiveBody": "Créez votre premier protocole pour commencer à suivre les doses et à renforcer l’observance.",
+  "protocolStartFirst": "DÉMARRER LE PREMIER PROTOCOLE",
+  "protocolNoDosesScheduledToday": "Aucune dose prévue aujourd'hui",
+  "protocolDosesTaken": "{taken} sur {total} doses prises",
+  "@protocolDosesTaken": {
+    "description": "Summary of completed doses today.",
+    "placeholders": {
+      "taken": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "protocolNextDose": "PROCHAINE DOSE",
+  "protocolInTime": "Dans {duration}",
+  "@protocolInTime": {
+    "description": "Countdown until the next dose.",
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "protocolLogDose": "ENREGISTRER LA DOSE",
+  "protocolNow": "maintenant",
+  "protocolMissed": "MANQUÉ",
+  "protocolSkipped": "SAUTÉ",
+  "protocolNoDosesToday": "Pas de doses aujourd'hui",
+  "protocolNoDosesTodayBody": "Votre protocole ne prévoit aucune dose pour aujourd’hui.",
+  "protocolFreeLimit": "L’offre gratuite est limitée à un protocole. Passez à Premium pour suivre plusieurs associations à la fois.",
+  "protocolSyringeUnitsSuffix": " · {amount} unités de seringue",
+  "@protocolSyringeUnitsSuffix": {
+    "description": "Syringe-unit detail appended to a dose amount.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "injectionSiteLeftAbdomen": "Abdomen gauche",
+  "@injectionSiteLeftAbdomen": {
+    "description": "Display name for the left abdomen injection site."
+  },
+  "injectionSiteRightAbdomen": "Abdomen droit",
+  "@injectionSiteRightAbdomen": {
+    "description": "Display name for the right abdomen injection site."
+  },
+  "injectionSiteLeftThigh": "Cuisse gauche",
+  "@injectionSiteLeftThigh": {
+    "description": "Display name for the left thigh injection site."
+  },
+  "injectionSiteRightThigh": "Cuisse droite",
+  "@injectionSiteRightThigh": {
+    "description": "Display name for the right thigh injection site."
+  },
+  "injectionSiteLeftGlute": "Fessier gauche",
+  "@injectionSiteLeftGlute": {
+    "description": "Display name for the left glute injection site."
+  },
+  "injectionSiteRightGlute": "Fessier droit",
+  "@injectionSiteRightGlute": {
+    "description": "Display name for the right glute injection site."
+  },
+  "injectionSiteLeftTriceps": "Triceps gauche",
+  "@injectionSiteLeftTriceps": {
+    "description": "Display name for the left triceps injection site."
+  },
+  "injectionSiteRightTriceps": "Triceps droit",
+  "@injectionSiteRightTriceps": {
+    "description": "Display name for the right triceps injection site."
+  },
+  "plannerToday": "AUJOURD'HUI",
+  "plannerBack": "Retour",
+  "plannerPreviousWeek": "La semaine précédente",
+  "plannerNextWeek": "La semaine prochaine",
+  "plannerScheduledCount": "{count, plural, =1{{count} dose programmée} other{{count} doses programmées}}",
+  "@plannerScheduledCount": {
+    "description": "Accessible count of doses scheduled for a calendar day.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "plannerTrackingDisclaimer": "Suivi uniquement. Ce calendrier reflète votre protocole enregistré et ne fournit pas de conseils de dosage.",
+  "plannerWashoutPeriod": "Période de pause",
+  "plannerWashoutUntil": "Pause jusqu’au {date}",
+  "@plannerWashoutUntil": {
+    "description": "End date shown for a saved washout window.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "plannerNoScheduledDoses": "Aucune dose programmée",
+  "plannerNothingPlanned": "Rien n'est prévu à partir de vos protocoles enregistrés.",
+  "@protocolWeeklyPlanner": {
+    "description": "Tooltip for opening the weekly planner."
+  },
+  "@protocolDoseHistory": {
+    "description": "Tooltip for opening dose history."
+  },
+  "@protocolCreate": {
+    "description": "Tooltip for creating a protocol."
+  },
+  "@protocolManage": {
+    "description": "Action that opens protocol management."
+  },
+  "@protocolYourProtocol": {
+    "description": "Heading above the empty protocol state."
+  },
+  "@protocolNoActive": {
+    "description": "Title when no protocol is active."
+  },
+  "@protocolNoActiveBody": {
+    "description": "Guidance when no protocol is active."
+  },
+  "@protocolStartFirst": {
+    "description": "Action to create the first protocol."
+  },
+  "@protocolNoDosesScheduledToday": {
+    "description": "Message when today has no scheduled doses."
+  },
+  "@protocolNextDose": {
+    "description": "Heading for the next scheduled dose."
+  },
+  "@protocolLogDose": {
+    "description": "Action to record a dose."
+  },
+  "@protocolNow": {
+    "description": "Countdown label when a dose is due now."
+  },
+  "@protocolMissed": {
+    "description": "Status for a missed dose."
+  },
+  "@protocolSkipped": {
+    "description": "Status for a skipped dose."
+  },
+  "@protocolNoDosesToday": {
+    "description": "Empty-card title for no doses today."
+  },
+  "@protocolNoDosesTodayBody": {
+    "description": "Empty-card detail for no doses today."
+  },
+  "@protocolFreeLimit": {
+    "description": "Upgrade explanation when the free protocol limit is reached."
+  },
+  "@plannerToday": {
+    "description": "Action that returns the planner to today."
+  },
+  "@plannerBack": {
+    "description": "Tooltip for leaving the weekly planner."
+  },
+  "@plannerPreviousWeek": {
+    "description": "Tooltip for moving to the previous week."
+  },
+  "@plannerNextWeek": {
+    "description": "Tooltip for moving to the next week."
+  },
+  "@plannerTrackingDisclaimer": {
+    "description": "Safety note below the weekly planner."
+  },
+  "@plannerWashoutPeriod": {
+    "description": "Label for a washout period without an end date."
+  },
+  "@plannerNoScheduledDoses": {
+    "description": "Title when a planner day has no doses."
+  },
+  "@plannerNothingPlanned": {
+    "description": "Detail when a planner day has no doses."
+  },
+  "activatePro": "ACTIVER PRO",
+  "@activatePro": {
+    "description": "English onboarding copy for activate pro."
+  },
+  "activateProPrice": "ACTIVER PRO — {price}/an",
+  "@activateProPrice": {
+    "description": "English onboarding copy for activate pro price.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "annualAccess": "Accès annuel",
+  "@annualAccess": {
+    "description": "English onboarding copy for annual access."
+  },
+  "annualLabel": "Annuel",
+  "@annualLabel": {
+    "description": "English onboarding copy for annual label."
+  },
+  "averageRating": "NOTE MOYENNE",
+  "@averageRating": {
+    "description": "English onboarding copy for average rating."
+  },
+  "bacWaterLabel": "EAU BAC",
+  "@bacWaterLabel": {
+    "description": "English onboarding copy for bac water label."
+  },
+  "basedOnInputs": "Basé sur vos entrées //",
+  "@basedOnInputs": {
+    "description": "English onboarding copy for based on inputs."
+  },
+  "bestValue": "Meilleur rapport qualité-prix",
+  "@bestValue": {
+    "description": "English onboarding copy for best value."
+  },
+  "birthDateInvalid": "Entrez une date valide pour une personne âgée de 18 ans ou plus.",
+  "@birthDateInvalid": {
+    "description": "English onboarding copy for birth date invalid."
+  },
+  "birthDateValid": "Âge vérifié",
+  "@birthDateValid": {
+    "description": "English onboarding copy for birth date valid."
+  },
+  "calculatorDemoBody": "Voici comment cela fonctionne avec {peptideName}",
+  "@calculatorDemoBody": {
+    "description": "English onboarding copy for calculator demo body.",
+    "placeholders": {
+      "peptideName": {
+        "type": "String"
+      }
+    }
+  },
+  "calculatorDemoResult": "C’est tout. Saisissez vos valeurs,\nobtenez les unités exactes de la seringue.",
+  "@calculatorDemoResult": {
+    "description": "English onboarding copy for calculator demo result."
+  },
+  "calculatorDemoTitle": "Fini les\ncalculs complexes.",
+  "@calculatorDemoTitle": {
+    "description": "English onboarding copy for calculator demo title."
+  },
+  "confidenceCycleTiming": "Calendrier des cycles",
+  "@confidenceCycleTiming": {
+    "description": "English onboarding copy for confidence cycle timing."
+  },
+  "confidenceCycleTimingDetail": "Voir clairement les dates du protocole et les fenêtres de planification",
+  "@confidenceCycleTimingDetail": {
+    "description": "English onboarding copy for confidence cycle timing detail."
+  },
+  "confidenceDoseMath": "Calcul de dose",
+  "@confidenceDoseMath": {
+    "description": "English onboarding copy for confidence dose math."
+  },
+  "confidenceDoseMathDetail": "Regroupez le flacon, l’eau, la dose et les unités de prélèvement",
+  "@confidenceDoseMathDetail": {
+    "description": "English onboarding copy for confidence dose math detail."
+  },
+  "confidenceLabel": "CONFIANCE",
+  "@confidenceLabel": {
+    "description": "English onboarding copy for confidence label."
+  },
+  "confidencePlainInfo": "Informations en langage simple",
+  "@confidencePlainInfo": {
+    "description": "English onboarding copy for confidence plain info."
+  },
+  "confidencePlainInfoDetail": "Lisez des notes de recherche sans encombrement",
+  "@confidencePlainInfoDetail": {
+    "description": "English onboarding copy for confidence plain info detail."
+  },
+  "confidenceProgressSignals": "Signaux de progrès",
+  "@confidenceProgressSignals": {
+    "description": "English onboarding copy for confidence progress signals."
+  },
+  "confidenceProgressSignalsDetail": "Voir l'observance et les mesures corporelles au fil du temps",
+  "@confidenceProgressSignalsDetail": {
+    "description": "English onboarding copy for confidence progress signals detail."
+  },
+  "confidenceSafetyFraming": "Encadrement de sécurité",
+  "@confidenceSafetyFraming": {
+    "description": "English onboarding copy for confidence safety framing."
+  },
+  "confidenceSafetyFramingDetail": "Gardez les informations éducatives et les avertissements bien visibles",
+  "@confidenceSafetyFramingDetail": {
+    "description": "English onboarding copy for confidence safety framing detail."
+  },
+  "confidenceSiteRotation": "Rotation des sites",
+  "@confidenceSiteRotation": {
+    "description": "English onboarding copy for confidence site rotation."
+  },
+  "confidenceSiteRotationDetail": "Rappelez-vous où chaque dose a été enregistrée",
+  "@confidenceSiteRotationDetail": {
+    "description": "English onboarding copy for confidence site rotation detail."
+  },
+  "connectingToStore": "CONNEXION À LA BOUTIQUE…",
+  "@connectingToStore": {
+    "description": "English onboarding copy for connecting to store."
+  },
+  "@continueLabel": {
+    "description": "English onboarding copy for continue label."
+  },
+  "continueSelected": "CONTINUER ({count})",
+  "@continueSelected": {
+    "description": "English onboarding copy for continue selected.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customProtocol": "Protocole personnalisé",
+  "@customProtocol": {
+    "description": "English onboarding copy for custom protocol."
+  },
+  "dateOfBirthLabel": "DATE DE NAISSANCE",
+  "@dateOfBirthLabel": {
+    "description": "English onboarding copy for date of birth label."
+  },
+  "dayOne": "JOUR 1",
+  "@dayOne": {
+    "description": "English onboarding copy for day one."
+  },
+  "dayShortLabel": "DD",
+  "@dayShortLabel": {
+    "description": "English onboarding copy for day short label."
+  },
+  "defaultConfidence": "Calcul des doses · Rotation des sites",
+  "@defaultConfidence": {
+    "description": "English onboarding copy for default confidence."
+  },
+  "defaultFrustration": "Doses manquantes",
+  "@defaultFrustration": {
+    "description": "English onboarding copy for default frustration."
+  },
+  "defaultGoals": "Récupération · Longévité",
+  "@defaultGoals": {
+    "description": "English onboarding copy for default goals."
+  },
+  "doseLabel": "DOSE",
+  "@doseLabel": {
+    "description": "English onboarding copy for dose label."
+  },
+  "dosesLogged": "DOSES ENREGISTRÉES",
+  "@dosesLogged": {
+    "description": "English onboarding copy for doses logged."
+  },
+  "dosesPerDay": "DOSES/JOUR",
+  "@dosesPerDay": {
+    "description": "English onboarding copy for doses per day."
+  },
+  "drawVolumeLabel": "VOLUME À PRÉLEVER",
+  "@drawVolumeLabel": {
+    "description": "English onboarding copy for draw volume label."
+  },
+  "durationLabel": "DURÉE",
+  "@durationLabel": {
+    "description": "English onboarding copy for duration label."
+  },
+  "experienceAdvanced": "Avancé",
+  "@experienceAdvanced": {
+    "description": "English onboarding copy for experience advanced."
+  },
+  "experienceAdvancedDetail": "Je suis à l'aise dans la gestion de protocoles détaillés",
+  "@experienceAdvancedDetail": {
+    "description": "English onboarding copy for experience advanced detail."
+  },
+  "experienceFirstTime": "Première fois",
+  "@experienceFirstTime": {
+    "description": "English onboarding copy for experience first time."
+  },
+  "experienceFirstTimeDetail": "Je suis nouveau dans le suivi des peptides",
+  "@experienceFirstTimeDetail": {
+    "description": "English onboarding copy for experience first time detail."
+  },
+  "experienceIntermediate": "INTERMÉDIAIRE",
+  "@experienceIntermediate": {
+    "description": "English onboarding copy for experience intermediate."
+  },
+  "experienceLabel": "EXPÉRIENCE",
+  "@experienceLabel": {
+    "description": "English onboarding copy for experience label."
+  },
+  "experienceNovice": "NOVICE",
+  "@experienceNovice": {
+    "description": "English onboarding copy for experience novice."
+  },
+  "experienceSome": "Une certaine expérience",
+  "@experienceSome": {
+    "description": "English onboarding copy for experience some."
+  },
+  "experienceSomeDetail": "J'ai suivi un ou deux protocoles",
+  "@experienceSomeDetail": {
+    "description": "English onboarding copy for experience some detail."
+  },
+  "experienceVeteran": "VÉTÉRAN",
+  "@experienceVeteran": {
+    "description": "English onboarding copy for experience veteran."
+  },
+  "featureDoseMathBody": "Conservez la taille du flacon, le volume d’eau, la dose et les unités à prélever à côté du protocole que vous suivez réellement.",
+  "@featureDoseMathBody": {
+    "description": "English onboarding copy for feature dose math body."
+  },
+  "featureDoseMathTitle": "Calcul des doses\nEn contexte",
+  "@featureDoseMathTitle": {
+    "description": "English onboarding copy for feature dose math title."
+  },
+  "featureProtocolArcBody": "Consultez les doses planifiées, les doses enregistrées, l’observance et les mesures corporelles dans un seul calendrier.",
+  "@featureProtocolArcBody": {
+    "description": "English onboarding copy for feature protocol arc body."
+  },
+  "featureProtocolArcTitle": "Arc protocolaire\nAu fil du temps",
+  "@featureProtocolArcTitle": {
+    "description": "English onboarding copy for feature protocol arc title."
+  },
+  "featureShowcaseTitle": "Tout ce dont vous avez besoin.\nUne application.",
+  "@featureShowcaseTitle": {
+    "description": "English onboarding copy for feature showcase title."
+  },
+  "featureSiteRotationBody": "Mémorisez chaque site que vous enregistrez et conservez l’historique de rotation attaché à l’enregistrement de dose.",
+  "@featureSiteRotationBody": {
+    "description": "English onboarding copy for feature site rotation body."
+  },
+  "featureSiteRotationTitle": "Site d'injection\nRotation",
+  "@featureSiteRotationTitle": {
+    "description": "English onboarding copy for feature site rotation title."
+  },
+  "firstNameExample": "par ex. Alex",
+  "@firstNameExample": {
+    "description": "English onboarding copy for first name example."
+  },
+  "firstNameLabel": "PRÉNOM",
+  "@firstNameLabel": {
+    "description": "English onboarding copy for first name label."
+  },
+  "frustrationForgetting": "Oublier des doses",
+  "@frustrationForgetting": {
+    "description": "English onboarding copy for frustration forgetting."
+  },
+  "frustrationLabel": "FRUSTRATION",
+  "@frustrationLabel": {
+    "description": "English onboarding copy for frustration label."
+  },
+  "frustrationMath": "Calculs de flacon et de seringue",
+  "@frustrationMath": {
+    "description": "English onboarding copy for frustration math."
+  },
+  "frustrationProgress": "Voir si je reste régulier",
+  "@frustrationProgress": {
+    "description": "English onboarding copy for frustration progress."
+  },
+  "frustrationSchedule": "Respecter précisément le calendrier",
+  "@frustrationSchedule": {
+    "description": "English onboarding copy for frustration schedule."
+  },
+  "frustrationStacking": "Gestion de plusieurs peptides",
+  "@frustrationStacking": {
+    "description": "English onboarding copy for frustration stacking."
+  },
+  "frustrationTrust": "Trouver des informations fiables",
+  "@frustrationTrust": {
+    "description": "English onboarding copy for frustration trust."
+  },
+  "goalAntiAging": "Vieillir en bonne santé",
+  "@goalAntiAging": {
+    "description": "English onboarding copy for goal anti aging."
+  },
+  "goalAntiAgingDetail": "Organisez les dossiers axés sur la longévité",
+  "@goalAntiAgingDetail": {
+    "description": "English onboarding copy for goal anti aging detail."
+  },
+  "goalCognitive": "Soutien cognitif",
+  "@goalCognitive": {
+    "description": "English onboarding copy for goal cognitive."
+  },
+  "goalCognitiveDetail": "Suivez la concentration et les performances mentales",
+  "@goalCognitiveDetail": {
+    "description": "English onboarding copy for goal cognitive detail."
+  },
+  "goalImmune": "Soutien immunitaire",
+  "@goalImmune": {
+    "description": "English onboarding copy for goal immune."
+  },
+  "goalImmuneDetail": "Gardez les protocoles axés sur le système immunitaire organisés",
+  "@goalImmuneDetail": {
+    "description": "English onboarding copy for goal immune detail."
+  },
+  "goalMuscleGrowth": "Croissance musculaire",
+  "@goalMuscleGrowth": {
+    "description": "English onboarding copy for goal muscle growth."
+  },
+  "goalMuscleGrowthDetail": "Suivez les objectifs d’entraînement et de croissance",
+  "@goalMuscleGrowthDetail": {
+    "description": "English onboarding copy for goal muscle growth detail."
+  },
+  "goalOther": "Autre",
+  "@goalOther": {
+    "description": "English onboarding copy for goal other."
+  },
+  "goalOtherDetail": "Définir un objectif de suivi différent",
+  "@goalOtherDetail": {
+    "description": "English onboarding copy for goal other detail."
+  },
+  "goalRecovery": "Récupération",
+  "@goalRecovery": {
+    "description": "English onboarding copy for goal recovery."
+  },
+  "goalRecoveryDetail": "Suivez les données et routines de récupération",
+  "@goalRecoveryDetail": {
+    "description": "English onboarding copy for goal recovery detail."
+  },
+  "goalSleep": "Sommeil",
+  "@goalSleep": {
+    "description": "English onboarding copy for goal sleep."
+  },
+  "goalSleepDetail": "Suivez les objectifs et les habitudes liés au sommeil",
+  "@goalSleepDetail": {
+    "description": "English onboarding copy for goal sleep detail."
+  },
+  "goalWeightLoss": "Perte de poids",
+  "@goalWeightLoss": {
+    "description": "English onboarding copy for goal weight loss."
+  },
+  "goalWeightLossDetail": "Suivez les objectifs métaboliques et les progrès",
+  "@goalWeightLossDetail": {
+    "description": "English onboarding copy for goal weight loss detail."
+  },
+  "goalsLabel": "OBJECTIFS",
+  "@goalsLabel": {
+    "description": "English onboarding copy for goals label."
+  },
+  "iUnderstand": "JE COMPRENDS",
+  "@iUnderstand": {
+    "description": "English onboarding copy for i understand."
+  },
+  "lastThreeDaysAgo": "Dernier : il y a 3 jours",
+  "@lastThreeDaysAgo": {
+    "description": "English onboarding copy for last three days ago."
+  },
+  "leftAbdomen": "Abdomen gauche",
+  "@leftAbdomen": {
+    "description": "English onboarding copy for left abdomen."
+  },
+  "loveIt": "J’ADORE",
+  "@loveIt": {
+    "description": "English onboarding copy for love it."
+  },
+  "maybeLater": "Peut-être plus tard",
+  "@maybeLater": {
+    "description": "English onboarding copy for maybe later."
+  },
+  "monthOne": "MOIS 1",
+  "@monthOne": {
+    "description": "English onboarding copy for month one."
+  },
+  "monthShortLabel": "MM",
+  "@monthShortLabel": {
+    "description": "English onboarding copy for month short label."
+  },
+  "monthTwo": "MOIS 2",
+  "@monthTwo": {
+    "description": "English onboarding copy for month two."
+  },
+  "moreCount": "{shown} + {count} autres",
+  "@moreCount": {
+    "description": "English onboarding copy for more count.",
+    "placeholders": {
+      "shown": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "needsWork": "À AMÉLIORER",
+  "@needsWork": {
+    "description": "English onboarding copy for needs work."
+  },
+  "notificationBody": "Recevez des rappels discrets lorsqu’une fenêtre planifiée de votre protocole arrive à échéance. Aucun nom de peptide dans les notifications, juste un rappel discret.",
+  "@notificationBody": {
+    "description": "English onboarding copy for notification body."
+  },
+  "notificationTitle": "Gardez vos horaires de dose\nbien visibles.",
+  "@notificationTitle": {
+    "description": "English onboarding copy for notification title."
+  },
+  "nowLabel": "maintenant",
+  "@nowLabel": {
+    "description": "English onboarding copy for now label."
+  },
+  "ok": "D'ACCORD",
+  "@ok": {
+    "description": "English onboarding copy for ok."
+  },
+  "onboardingAgeConfirmed": "J'AI 18 ANS OU PLUS",
+  "@onboardingAgeConfirmed": {
+    "description": "English onboarding copy for onboarding age confirmed."
+  },
+  "onboardingAgeRequirementBody": "Vous devez avoir 18 ans ou plus pour utiliser PepMod.",
+  "@onboardingAgeRequirementBody": {
+    "description": "English onboarding copy for onboarding age requirement body."
+  },
+  "onboardingAgeRequirementTitle": "Condition d'âge",
+  "@onboardingAgeRequirementTitle": {
+    "description": "English onboarding copy for onboarding age requirement title."
+  },
+  "onboardingAgeVerificationBody": "PepMod est destiné aux adultes âgés de 18 ans et plus.",
+  "@onboardingAgeVerificationBody": {
+    "description": "English onboarding copy for onboarding age verification body."
+  },
+  "onboardingAgeVerificationTitle": "Tout d'abord, confirmez\nvotre âge.",
+  "@onboardingAgeVerificationTitle": {
+    "description": "English onboarding copy for onboarding age verification title."
+  },
+  "onboardingAheadBody": "Répondez à quelques questions et PepMod organisera un aperçu de suivi personnalisé.",
+  "@onboardingAheadBody": {
+    "description": "English onboarding copy for onboarding ahead body."
+  },
+  "onboardingAheadTitle": "Voir votre protocole\navant de commencer.",
+  "@onboardingAheadTitle": {
+    "description": "English onboarding copy for onboarding ahead title."
+  },
+  "onboardingBirthDateBody": "Cela confirme que vous remplissez la condition d’âge.",
+  "@onboardingBirthDateBody": {
+    "description": "English onboarding copy for onboarding birth date body."
+  },
+  "onboardingBirthDateTitle": "Quand êtes-vous né?",
+  "@onboardingBirthDateTitle": {
+    "description": "English onboarding copy for onboarding birth date title."
+  },
+  "onboardingConfidenceBody": "Choisissez tout ce que PepMod devrait rendre plus clair.",
+  "@onboardingConfidenceBody": {
+    "description": "English onboarding copy for onboarding confidence body."
+  },
+  "onboardingConfidenceTitle": "Sur quoi voulez-vous\nplus de confiance ?",
+  "@onboardingConfidenceTitle": {
+    "description": "English onboarding copy for onboarding confidence title."
+  },
+  "onboardingConversionValueBody": "Convertissez les valeurs de votre flacon et de votre plan en volume et en unités de seringue.",
+  "@onboardingConversionValueBody": {
+    "description": "English onboarding copy for onboarding conversion value body."
+  },
+  "onboardingConversionValueTitle": "Des calculs de flacon\nplus faciles à vérifier.",
+  "@onboardingConversionValueTitle": {
+    "description": "English onboarding copy for onboarding conversion value title."
+  },
+  "onboardingDisclaimerBody": "PepMod aide à organiser les données, les rappels et les conversions d’unités. Il ne pose aucun diagnostic, ne prescrit rien et ne remplace pas les conseils d’un professionnel de santé qualifié.",
+  "@onboardingDisclaimerBody": {
+    "description": "English onboarding copy for onboarding disclaimer body."
+  },
+  "onboardingDisclaimerTitle": "Conçu pour la clarté.\nPas d'ordonnances.",
+  "@onboardingDisclaimerTitle": {
+    "description": "English onboarding copy for onboarding disclaimer title."
+  },
+  "onboardingExperienceTitle": "Quelle est votre\nexpérience ?",
+  "@onboardingExperienceTitle": {
+    "description": "English onboarding copy for onboarding experience title."
+  },
+  "onboardingFrustrationBody": "Choisissez le plus gros point de friction.",
+  "@onboardingFrustrationBody": {
+    "description": "English onboarding copy for onboarding frustration body."
+  },
+  "onboardingFrustrationTitle": "Qu’est-ce qui vous semble\nle plus difficile aujourd’hui ?",
+  "@onboardingFrustrationTitle": {
+    "description": "English onboarding copy for onboarding frustration title."
+  },
+  "onboardingGoalsTitle": "Quels sont vos\nobjectifs principaux ?",
+  "@onboardingGoalsTitle": {
+    "description": "English onboarding copy for onboarding goals title."
+  },
+  "onboardingGuidedStartBody": "Nous adapterons la configuration à vos objectifs, à votre expérience et aux enregistrements que vous souhaitez conserver.",
+  "@onboardingGuidedStartBody": {
+    "description": "English onboarding copy for onboarding guided start body."
+  },
+  "onboardingGuidedStartTitle": "Un démarrage guidé,\nconçu autour de vous.",
+  "@onboardingGuidedStartTitle": {
+    "description": "English onboarding copy for onboarding guided start title."
+  },
+  "onboardingHookAnswer": "PepMod garde la réponse à côté de votre protocole.",
+  "@onboardingHookAnswer": {
+    "description": "English onboarding copy for onboarding hook answer."
+  },
+  "onboardingHookQuestion": "Combien d’unités\nprélever ?",
+  "@onboardingHookQuestion": {
+    "description": "English onboarding copy for onboarding hook question."
+  },
+  "onboardingHookResearch": "BIBLIOTHÈQUE DE RECHERCHE",
+  "@onboardingHookResearch": {
+    "description": "English onboarding copy for onboarding hook research."
+  },
+  "onboardingHookSources": "Sources liées aux preuves",
+  "@onboardingHookSources": {
+    "description": "English onboarding copy for onboarding hook sources."
+  },
+  "onboardingHookVial": "FLACON + DILUANT",
+  "@onboardingHookVial": {
+    "description": "English onboarding copy for onboarding hook vial."
+  },
+  "onboardingNameBody": "Nous l'utiliserons pour personnaliser votre expérience PepMod.",
+  "@onboardingNameBody": {
+    "description": "English onboarding copy for onboarding name body."
+  },
+  "onboardingNameTitle": "Que devrions-nous\nt'appeler ?",
+  "@onboardingNameTitle": {
+    "description": "English onboarding copy for onboarding name title."
+  },
+  "onboardingPeptideSelectBody": "Choisissez les peptides que vous utilisez ou que vous souhaitez garder sur votre radar.",
+  "@onboardingPeptideSelectBody": {
+    "description": "English onboarding copy for onboarding peptide select body."
+  },
+  "onboardingPeptideSelectTitle": "Que suivez-vous ?",
+  "@onboardingPeptideSelectTitle": {
+    "description": "English onboarding copy for onboarding peptide select title."
+  },
+  "onboardingProgressValueBody": "Regroupez l’observance, l’historique des doses et les mesures corporelles dans un seul enregistrement clair.",
+  "@onboardingProgressValueBody": {
+    "description": "English onboarding copy for onboarding progress value body."
+  },
+  "onboardingProgressValueTitle": "Voir l'arc complet\nau fil du temps.",
+  "@onboardingProgressValueTitle": {
+    "description": "English onboarding copy for onboarding progress value title."
+  },
+  "onboardingProtocolValueBody": "Planifiez les horaires, enregistrez les doses et conservez les détails joints à chaque protocole.",
+  "@onboardingProtocolValueBody": {
+    "description": "English onboarding copy for onboarding protocol value body."
+  },
+  "onboardingProtocolValueTitle": "Gardez chaque protocole\nau même endroit.",
+  "@onboardingProtocolValueTitle": {
+    "description": "English onboarding copy for onboarding protocol value title."
+  },
+  "onboardingUnder18": "J'AI MOINS DE 18 ANS",
+  "@onboardingUnder18": {
+    "description": "English onboarding copy for onboarding under18."
+  },
+  "openingPermission": "OUVERTURE DE L’AUTORISATION…",
+  "@openingPermission": {
+    "description": "English onboarding copy for opening permission."
+  },
+  "paywallArcBody": "Voyez ce qui était planifié, ce qui a été enregistré et ce qui mérite un suivi plus rigoureux.",
+  "@paywallArcBody": {
+    "description": "English onboarding copy for paywall arc body."
+  },
+  "paywallArcTitle": "REGARDER L'ARC AU FIL DU TEMPS",
+  "@paywallArcTitle": {
+    "description": "English onboarding copy for paywall arc title."
+  },
+  "paywallBody": "Calcul de dose, rotation des sites, rappels et historique du protocole, réunis dans un seul dossier.",
+  "@paywallBody": {
+    "description": "English onboarding copy for paywall body."
+  },
+  "paywallDoseMathBody": "Regroupez le flacon, l’eau, la dose et les unités à prélever pour vérifier plus facilement chaque saisie.",
+  "@paywallDoseMathBody": {
+    "description": "English onboarding copy for paywall dose math body."
+  },
+  "paywallDoseMathTitle": "MAÎTRISEZ VOS CALCULS DE DOSE",
+  "@paywallDoseMathTitle": {
+    "description": "English onboarding copy for paywall dose math title."
+  },
+  "paywallPreviewDisclaimer": "Conçu pour les enregistrements, les rappels et la clarté de l'unité, et non pour les conseils médicaux.",
+  "@paywallPreviewDisclaimer": {
+    "description": "English onboarding copy for paywall preview disclaimer."
+  },
+  "paywallRotationBody": "Chaque site, cycle et rappel reste attaché à l'enregistrement du protocole.",
+  "@paywallRotationBody": {
+    "description": "English onboarding copy for paywall rotation body."
+  },
+  "paywallRotationTitle": "NE PERDEZ JAMAIS VOTRE ROTATION",
+  "@paywallRotationTitle": {
+    "description": "English onboarding copy for paywall rotation title."
+  },
+  "paywallTitle": "Tout pour suivre\ncorrectement votre protocole.",
+  "@paywallTitle": {
+    "description": "English onboarding copy for paywall title."
+  },
+  "paywallValueNote": "Un calcul de flacon confus peut faire perdre du temps et du produit. PepMod conserve les calculs près du journal pour vous permettre de revérifier vos données avant de vous fier à d’anciennes notes.",
+  "@paywallValueNote": {
+    "description": "English onboarding copy for paywall value note."
+  },
+  "peptideLabel": "PEPTIDE",
+  "@peptideLabel": {
+    "description": "English onboarding copy for peptide label."
+  },
+  "peptidesLabel": "PEPTIDES",
+  "@peptidesLabel": {
+    "description": "English onboarding copy for peptides label."
+  },
+  "peptidesTracked": "PEPTIDES\nSUIVI",
+  "@peptidesTracked": {
+    "description": "English onboarding copy for peptides tracked."
+  },
+  "perWeek": "/semaine",
+  "@perWeek": {
+    "description": "English onboarding copy for per week."
+  },
+  "perYear": "/année",
+  "@perYear": {
+    "description": "English onboarding copy for per year."
+  },
+  "privacyLabel": "Confidentialité",
+  "@privacyLabel": {
+    "description": "English onboarding copy for privacy label."
+  },
+  "processingGoals": "ANALYSE DE {count} OBJECTIFS…",
+  "@processingGoals": {
+    "description": "English onboarding copy for processing goals.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "processingPeptides": "LIAISON DE {count} DOSSIERS DE PEPTIDES…",
+  "@processingPeptides": {
+    "description": "English onboarding copy for processing peptides.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "processingProtocol": "CRÉATION DE VOTRE PROTOCOLE…",
+  "@processingProtocol": {
+    "description": "English onboarding copy for processing protocol."
+  },
+  "processingSchedule": "ORGANISATION DE VOTRE CALENDRIER…",
+  "@processingSchedule": {
+    "description": "English onboarding copy for processing schedule."
+  },
+  "processingTitle": "Construire votre\nprotocole",
+  "@processingTitle": {
+    "description": "English onboarding copy for processing title."
+  },
+  "progressLabel": "Progrès",
+  "@progressLabel": {
+    "description": "English onboarding copy for progress label."
+  },
+  "protocolClarity": "clarté du protocole",
+  "@protocolClarity": {
+    "description": "English onboarding copy for protocol clarity."
+  },
+  "protocolIncludes": "VOTRE PROTOCOLE COMPREND //",
+  "@protocolIncludes": {
+    "description": "English onboarding copy for protocol includes."
+  },
+  "protocolPreviewTitle": "Votre protocole\nest prêt.",
+  "@protocolPreviewTitle": {
+    "description": "English onboarding copy for protocol preview title."
+  },
+  "protocolReady": "PRÊT POUR LE PROTOCOLE //",
+  "@protocolReady": {
+    "description": "English onboarding copy for protocol ready."
+  },
+  "protocolReminderReady": "Le rappel du protocole est prêt",
+  "@protocolReminderReady": {
+    "description": "English onboarding copy for protocol reminder ready."
+  },
+  "protocolReservedFor": "VOTRE PROTOCOLE PERSONNALISÉ EST RÉSERVÉ PENDANT",
+  "@protocolReservedFor": {
+    "description": "English onboarding copy for protocol reserved for."
+  },
+  "restorePurchase": "Restaurer l'achat",
+  "@restorePurchase": {
+    "description": "English onboarding copy for restore purchase."
+  },
+  "resultsSummaryBody": "Nous conserverons ensemble les journaux de dose, les calculs de reconstitution et les enregistrements de tendances au fur et à mesure que vos données s'accumulent.",
+  "@resultsSummaryBody": {
+    "description": "English onboarding copy for results summary body."
+  },
+  "reviewGateBody": "Vos commentaires nous aident à améliorer la plateforme pour chaque biohacker.",
+  "@reviewGateBody": {
+    "description": "English onboarding copy for review gate body."
+  },
+  "reviewGateTitle": "Vous appréciez PepMod\njusqu’ici ?",
+  "@reviewGateTitle": {
+    "description": "English onboarding copy for review gate title."
+  },
+  "roadmapBody": "Construit autour des peptides suivis {count} et de votre besoin en {need}.",
+  "@roadmapBody": {
+    "description": "English onboarding copy for roadmap body.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "need": {
+        "type": "String"
+      }
+    }
+  },
+  "roadmapDayOneBody": "Les peptides, les journaux de doses, la rotation des sites et les rappels sont prêts.",
+  "@roadmapDayOneBody": {
+    "description": "English onboarding copy for roadmap day one body."
+  },
+  "roadmapDayOneTitle": "Votre premier protocole est organisé",
+  "@roadmapDayOneTitle": {
+    "description": "English onboarding copy for roadmap day one title."
+  },
+  "roadmapDisclaimer": "PepMod organise vos données et rappels. Il ne prescrit pas, ne diagnostique pas et ne remplace pas les conseils d’un professionnel de santé qualifié.",
+  "@roadmapDisclaimer": {
+    "description": "English onboarding copy for roadmap disclaimer."
+  },
+  "roadmapMonthOneBody": "L'observance, les doses oubliées et les paramètres corporels commencent à former un dossier plus propre.",
+  "@roadmapMonthOneBody": {
+    "description": "English onboarding copy for roadmap month one body."
+  },
+  "roadmapMonthOneTitle": "Votre historique de cohérence prend forme",
+  "@roadmapMonthOneTitle": {
+    "description": "English onboarding copy for roadmap month one title."
+  },
+  "roadmapMonthTwoBody": "Découvrez ce que vous aviez prévu, ce qui s'est passé et où vos dossiers nécessitent une attention particulière.",
+  "@roadmapMonthTwoBody": {
+    "description": "English onboarding copy for roadmap month two body."
+  },
+  "roadmapMonthTwoTitle": "Votre arc protocolaire complet est visible",
+  "@roadmapMonthTwoTitle": {
+    "description": "English onboarding copy for roadmap month two title."
+  },
+  "roadmapTitle": "Voici ce qui\nvous attend.",
+  "@roadmapTitle": {
+    "description": "English onboarding copy for roadmap title."
+  },
+  "roadmapWeekOneBody": "Les notes de recherche et de suivi en langage clair restent jointes à votre plan.",
+  "@roadmapWeekOneBody": {
+    "description": "English onboarding copy for roadmap week one body."
+  },
+  "roadmapWeekOneTitle": "Votre bibliothèque s’enrichit autour de {goal}",
+  "@roadmapWeekOneTitle": {
+    "description": "English onboarding copy for roadmap week one title.",
+    "placeholders": {
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "savePercent": "ÉCONOMISEZ {percent} %",
+  "@savePercent": {
+    "description": "English onboarding copy for save percent.",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "saveRoadmap": "SAUVEGARDER CETTE FEUILLE DE ROUTE",
+  "@saveRoadmap": {
+    "description": "English onboarding copy for save roadmap."
+  },
+  "schedulePreview": "APERÇU DU HORAIRE",
+  "@schedulePreview": {
+    "description": "English onboarding copy for schedule preview."
+  },
+  "seeWhatsInside": "VOIR CE QU'IL Y A À L'INTÉRIEUR",
+  "@seeWhatsInside": {
+    "description": "English onboarding copy for see whats inside."
+  },
+  "selectAllThatApply": "Sélectionnez tout ce qui s'applique.",
+  "@selectAllThatApply": {
+    "description": "English onboarding copy for select all that apply."
+  },
+  "siteMap": "Plan du site",
+  "@siteMap": {
+    "description": "English onboarding copy for site map."
+  },
+  "skipForNow": "PASSER POUR L’INSTANT",
+  "@skipForNow": {
+    "description": "English onboarding copy for skip for now."
+  },
+  "socialProofBody": "Rejoignez des milliers de personnes qui suivent de réels progrès.",
+  "@socialProofBody": {
+    "description": "English onboarding copy for social proof body."
+  },
+  "socialProofTitle": "Approuvé par\nbiohackers dans le monde entier",
+  "@socialProofTitle": {
+    "description": "English onboarding copy for social proof title."
+  },
+  "specialOffer": "OFFRE SPÉCIALE",
+  "@specialOffer": {
+    "description": "English onboarding copy for special offer."
+  },
+  "startFreeTrial": "COMMENCER UN ESSAI GRATUIT",
+  "@startFreeTrial": {
+    "description": "English onboarding copy for start free trial."
+  },
+  "subscribeLabel": "S'ABONNER",
+  "@subscribeLabel": {
+    "description": "English onboarding copy for subscribe label."
+  },
+  "subscribePrice": "ABONNEZ-VOUS — {price}/semaine",
+  "@subscribePrice": {
+    "description": "English onboarding copy for subscribe price.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "subscribeToActivate": "Abonnez-vous pour activer votre protocole",
+  "@subscribeToActivate": {
+    "description": "English onboarding copy for subscribe to activate."
+  },
+  "subscriptionRenewalDisclaimer": "L'abonnement se renouvelle automatiquement sauf annulation au moins 24 heures avant la fin de la période en cours. Gérer dans Paramètres > Identifiant Apple > Abonnements.",
+  "@subscriptionRenewalDisclaimer": {
+    "description": "English onboarding copy for subscription renewal disclaimer."
+  },
+  "syringeVolume": "{volume} mL sur une seringue de 1 mL",
+  "@syringeVolume": {
+    "description": "English onboarding copy for syringe volume.",
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      }
+    }
+  },
+  "termsLabel": "Conditions",
+  "@termsLabel": {
+    "description": "English onboarding copy for terms label."
+  },
+  "testimonialOne": "J’ai enfin arrêté d’oublier des doses. Le convertisseur de reconstitution m’a évité à lui seul des heures de calculs dans des feuilles de calcul.",
+  "@testimonialOne": {
+    "description": "English onboarding copy for testimonial one."
+  },
+  "testimonialThree": "Le tracker de peptides le plus clair que j’aie utilisé. On sent qu’il a été conçu pour les utilisateurs exigeants.",
+  "@testimonialThree": {
+    "description": "English onboarding copy for testimonial three."
+  },
+  "testimonialTwo": "Les informations hebdomadaires ont révélé un problème de calendrier que je n’avais pas remarqué depuis des mois. Ça a tout changé.",
+  "@testimonialTwo": {
+    "description": "English onboarding copy for testimonial two."
+  },
+  "thirtyDayAdherence": "Observance sur 30 jours",
+  "@thirtyDayAdherence": {
+    "description": "English onboarding copy for thirty day adherence."
+  },
+  "threeDayFreeTrial": "ESSAI GRATUIT DE 3 JOURS",
+  "@threeDayFreeTrial": {
+    "description": "English onboarding copy for three day free trial."
+  },
+  "timelineLabel": "Chronologie",
+  "@timelineLabel": {
+    "description": "English onboarding copy for timeline label."
+  },
+  "trackedLabel": "suivi",
+  "@trackedLabel": {
+    "description": "English onboarding copy for tracked label."
+  },
+  "turnOnReminders": "ACTIVER LES RAPPELS",
+  "@turnOnReminders": {
+    "description": "English onboarding copy for turn on reminders."
+  },
+  "unitConversionDisclaimer": "Outil de conversion d’unités fourni à titre indicatif uniquement. Vérifiez toujours auprès d’un professionnel de santé qualifié.",
+  "@unitConversionDisclaimer": {
+    "description": "English onboarding copy for unit conversion disclaimer."
+  },
+  "unitsLabel": "Unités",
+  "@unitsLabel": {
+    "description": "Label for measurement unit preferences."
+  },
+  "unitsToDraw": "Unités à prélever",
+  "@unitsToDraw": {
+    "description": "English onboarding copy for units to draw."
+  },
+  "unlockPepMod": "DÉBLOQUER PEPMOD",
+  "@unlockPepMod": {
+    "description": "English onboarding copy for unlock pep mod."
+  },
+  "usersLabel": "UTILISATEURS",
+  "@usersLabel": {
+    "description": "English onboarding copy for users label."
+  },
+  "viewLabel": "VOIR",
+  "@viewLabel": {
+    "description": "English onboarding copy for view label."
+  },
+  "weekDuration": "SEMAINE\nDURÉE",
+  "@weekDuration": {
+    "description": "English onboarding copy for week duration."
+  },
+  "weekOne": "SEMAINE 1",
+  "@weekOne": {
+    "description": "English onboarding copy for week one."
+  },
+  "weeklyLabel": "Hebdomadaire",
+  "@weeklyLabel": {
+    "description": "English onboarding copy for weekly label."
+  },
+  "weeksCount": "{count} semaines",
+  "@weeksCount": {
+    "description": "English onboarding copy for weeks count.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yearLabel": "ANNÉE",
+  "@yearLabel": {
+    "description": "English onboarding copy for year label."
+  },
+  "profileTitle": "Vous",
+  "@profileTitle": {
+    "description": "Title of the user profile tab."
+  },
+  "signedIn": "Connecté",
+  "@signedIn": {
+    "description": "Fallback account status when no email is available."
+  },
+  "sectionAccount": "COMPTE",
+  "@sectionAccount": {
+    "description": "Profile section heading for account settings."
+  },
+  "sectionPreferences": "PRÉFÉRENCES",
+  "@sectionPreferences": {
+    "description": "Profile section heading for preferences."
+  },
+  "sectionData": "DONNÉES",
+  "@sectionData": {
+    "description": "Profile section heading for user data tools."
+  },
+  "sectionSupport": "ASSISTANCE",
+  "@sectionSupport": {
+    "description": "Profile section heading for support."
+  },
+  "sectionLegal": "LÉGAL",
+  "@sectionLegal": {
+    "description": "Profile section heading for legal documents."
+  },
+  "sectionAbout": "À PROPOS",
+  "@sectionAbout": {
+    "description": "Profile section heading for app information."
+  },
+  "nameLabel": "Nom",
+  "@nameLabel": {
+    "description": "Label for the user's display name."
+  },
+  "accountLabel": "Compte",
+  "@accountLabel": {
+    "description": "Label for account information."
+  },
+  "deleteAccount": "Supprimer le compte",
+  "@deleteAccount": {
+    "description": "Action to permanently delete an account."
+  },
+  "removeAccountData": "Supprimer le compte et les données",
+  "@removeAccountData": {
+    "description": "Description of the delete-account action."
+  },
+  "metricLabel": "Métrique",
+  "@metricLabel": {
+    "description": "Metric measurement system label."
+  },
+  "imperialLabel": "Impérial",
+  "@imperialLabel": {
+    "description": "Imperial measurement system label."
+  },
+  "notificationsLabel": "Notifications",
+  "@notificationsLabel": {
+    "description": "Label for notification preferences."
+  },
+  "onLabel": "Activé",
+  "@onLabel": {
+    "description": "Enabled state label."
+  },
+  "offLabel": "Désactivé",
+  "@offLabel": {
+    "description": "Disabled state label."
+  },
+  "myCompoundsProfile": "Mes composés",
+  "@myCompoundsProfile": {
+    "description": "Profile action that opens saved custom compounds."
+  },
+  "savedVialPresets": "Préréglages de flacons enregistrés",
+  "@savedVialPresets": {
+    "description": "Description for saved custom compounds."
+  },
+  "exportData": "Exporter des données",
+  "@exportData": {
+    "description": "Action to export user data."
+  },
+  "copyAsJson": "Copier en JSON",
+  "@copyAsJson": {
+    "description": "Description of the JSON export action."
+  },
+  "clearAllData": "Effacer toutes les données",
+  "@clearAllData": {
+    "description": "Action to reset all app tracking data."
+  },
+  "clearingLabel": "EFFACEMENT…",
+  "@clearingLabel": {
+    "description": "Status shown while app data is being cleared."
+  },
+  "resetApp": "Réinitialiser l'application",
+  "@resetApp": {
+    "description": "Description of the clear-data action."
+  },
+  "contactSupport": "Contacter l'assistance",
+  "@contactSupport": {
+    "description": "Action to contact app support."
+  },
+  "chatWithUs": "Discutez avec nous",
+  "@chatWithUs": {
+    "description": "Description of the support action."
+  },
+  "termsOfService": "Conditions d'utilisation",
+  "@termsOfService": {
+    "description": "Title of the terms document."
+  },
+  "privacyPolicy": "Politique de confidentialité",
+  "@privacyPolicy": {
+    "description": "Title of the privacy document."
+  },
+  "medicalDisclaimer": "Avis de non-responsabilité médicale",
+  "@medicalDisclaimer": {
+    "description": "Title of the medical disclaimer."
+  },
+  "disclaimerTitle": "Clause de non-responsabilité",
+  "@disclaimerTitle": {
+    "description": "Short title for the disclaimer sheet."
+  },
+  "versionLabel": "Version",
+  "@versionLabel": {
+    "description": "Label for the app version."
+  },
+  "signOutAction": "SE DÉCONNECTER",
+  "@signOutAction": {
+    "description": "Primary sign-out action."
+  },
+  "educationalTrackingDisclaimer": "Suivi pédagogique uniquement. Pas un avis médical.",
+  "@educationalTrackingDisclaimer": {
+    "description": "Short safety disclaimer on the profile screen."
+  },
+  "yourName": "Votre nom",
+  "@yourName": {
+    "description": "Title of the display-name editor."
+  },
+  "cancelLabel": "Annuler",
+  "@cancelLabel": {
+    "description": "Generic cancel action."
+  },
+  "saveLabel": "Sauvegarder",
+  "@saveLabel": {
+    "description": "Generic save action."
+  },
+  "dataCopied": "Données copiées dans le presse-papiers.",
+  "@dataCopied": {
+    "description": "Confirmation after copying an account export."
+  },
+  "clearDataTitle": "Effacer toutes les données ?",
+  "@clearDataTitle": {
+    "description": "Title of the clear-data confirmation dialog."
+  },
+  "clearDataBody": "Cela supprime tous les protocoles, journaux de dose et mesures corporelles, puis redémarre l'intégration. Votre compte, votre abonnement et votre bibliothèque de peptides sont conservés. Cela ne peut pas être annulé.",
+  "@clearDataBody": {
+    "description": "Explanation in the clear-data confirmation dialog."
+  },
+  "clearLabel": "Effacer",
+  "@clearLabel": {
+    "description": "Destructive action that clears app data."
+  },
+  "clearingDataTitle": "Effacement des données…",
+  "@clearingDataTitle": {
+    "description": "Title of the blocking clear-data progress dialog."
+  },
+  "clearingDataBody": "Gardez PepMod ouvert pendant que vos données de suivi sont supprimées.",
+  "@clearingDataBody": {
+    "description": "Instruction in the clear-data progress dialog."
+  },
+  "clearDataFailed": "Impossible d'effacer les données. Vérifiez votre connexion et réessayez.",
+  "@clearDataFailed": {
+    "description": "Error shown when clearing app data fails."
+  },
+  "allDataCleared": "Toutes les données effacées.",
+  "@allDataCleared": {
+    "description": "Confirmation after all app data is cleared."
+  },
+  "deleteAccountTitle": "Supprimer le compte ?",
+  "@deleteAccountTitle": {
+    "description": "Title of the account-deletion confirmation dialog."
+  },
+  "deleteAccountBody": "Cela supprime définitivement votre compte PepMod, vos paramètres, vos protocoles, vos journaux de dose et vos mesures corporelles. Cela ne peut pas être annulé.",
+  "@deleteAccountBody": {
+    "description": "Explanation in the account-deletion confirmation dialog."
+  },
+  "deletingAccount": "Suppression du compte…",
+  "@deletingAccount": {
+    "description": "Status shown while an account is being deleted."
+  },
+  "accountDeletionFailed": "La suppression du compte a échoué. Veuillez réessayer.",
+  "@accountDeletionFailed": {
+    "description": "Generic account-deletion failure message."
+  },
+  "confirmPassword": "Confirmez le mot de passe",
+  "@confirmPassword": {
+    "description": "Title of the password confirmation dialog."
+  },
+  "deleteLabel": "Supprimer",
+  "@deleteLabel": {
+    "description": "Generic destructive delete action."
+  },
+  "signOutTitle": "Se déconnecter?",
+  "@signOutTitle": {
+    "description": "Title of the sign-out confirmation dialog."
+  },
+  "signOutBody": "Vos protocoles restent enregistrés et synchronisés lorsque vous vous reconnectez.",
+  "@signOutBody": {
+    "description": "Explanation in the sign-out confirmation dialog."
+  },
+  "signOutLabel": "Se déconnecter",
+  "@signOutLabel": {
+    "description": "Sign-out confirmation action."
+  },
+  "signOutFailed": "Échec de la déconnexion. Veuillez réessayer.",
+  "@signOutFailed": {
+    "description": "Generic sign-out failure message."
+  },
+  "notificationsDisabledSystem": "Les notifications sont désactivées dans les paramètres système.",
+  "@notificationsDisabledSystem": {
+    "description": "Message shown when notification permission is unavailable."
+  },
+  "planPro": "PRO",
+  "@planPro": {
+    "description": "Paid subscription badge."
+  },
+  "planFree": "GRATUIT",
+  "@planFree": {
+    "description": "Free subscription badge."
+  },
+  "termsBody": "PepMod est fourni uniquement à des fins éducatives et de suivi. Il ne s'agit pas d'un dispositif médical et ne fournit aucun avis médical, diagnostic, prescription ou recommandation de traitement. En utilisant PepMod, vous êtes responsable de vos propres dossiers, décisions et consultations avec des professionnels de la santé qualifiés.\n\nLes abonnements se renouvellent automatiquement, sauf annulation via l'App Store ou Google Play avant la période de renouvellement. Les remboursements sont traités par le magasin où vous avez acheté.\n\nConditions complètes : https://appstorecopilot.com/legal/yzh32x5v/terms",
+  "@termsBody": {
+    "description": "In-app summary of PepMod terms with a link to the full document."
+  },
+  "privacyBody": "PepMod utilise Firebase pour l'authentification et le stockage de données dans le cloud, RevenueCat pour les abonnements, AppRefer et Meta/Facebook App Events pour l'attribution, et Firebase/Crashlytics pour l'analyse et les diagnostics. Nous ne vendons pas vos informations personnelles. Vous pouvez supprimer votre compte et les données d'application enregistrées depuis l'application.\n\nPolitique de confidentialité complète : https://appstorecopilot.com/legal/yzh32x5v/privacy",
+  "@privacyBody": {
+    "description": "In-app privacy summary with a link to the full document."
+  },
+  "medicalDisclaimerBody": "PepMod est un outil de bien-être et de suivi – PAS un dispositif médical. Rien dans cette application ne constitue un avis médical, un diagnostic, une prescription ou une recommandation de traitement. Les peptides décrits dans la bibliothèque sont uniquement destinés à des fins éducatives. Consultez toujours un professionnel de la santé qualifié avant de commencer, de modifier ou d'arrêter un régime. Si vous ressentez des effets indésirables, consultez immédiatement un médecin.",
+  "@medicalDisclaimerBody": {
+    "description": "Full in-app medical safety disclaimer."
+  },
+  "profileSystemLabel": "SYS.UTILISATEUR // PROFIL",
+  "@profileSystemLabel": {
+    "description": "System-style heading above the profile title."
+  },
+  "legalSystemLabel": "SYS.LÉGAL",
+  "@legalSystemLabel": {
+    "description": "System-style heading in legal document sheets."
+  },
+  "progressTitle": "Progrès",
+  "@progressTitle": {
+    "description": "Title of the progress tab."
+  },
+  "progressSystemLabel": "SYS.PROGRÈS // BIOMÉTRIE",
+  "@progressSystemLabel": {
+    "description": "System-style heading above the progress title."
+  },
+  "doseHistoryTooltip": "Ouvrir l’historique des doses",
+  "@doseHistoryTooltip": {
+    "description": "Accessibility label for the dose-history button."
+  },
+  "logMeasurementTooltip": "Enregistrer une mesure",
+  "@logMeasurementTooltip": {
+    "description": "Accessibility label for the add-measurement button."
+  },
+  "thirtyDayLabel": "30 JOURS",
+  "@thirtyDayLabel": {
+    "description": "Label for the thirty-day adherence statistic."
+  },
+  "adherenceLabel": "observance",
+  "@adherenceLabel": {
+    "description": "Hint below an adherence percentage."
+  },
+  "streakLabel": "SÉRIE",
+  "@streakLabel": {
+    "description": "Label for the current tracking streak."
+  },
+  "daysLabel": "jours",
+  "@daysLabel": {
+    "description": "Unit hint for a day count."
+  },
+  "totalLabel": "TOTAL",
+  "@totalLabel": {
+    "description": "Label for the total logged dose count."
+  },
+  "dosesLabel": "doses",
+  "@dosesLabel": {
+    "description": "Unit hint for a dose count."
+  },
+  "protocolHistoryLabel": "HISTORIQUE.PROTOCOLES",
+  "@protocolHistoryLabel": {
+    "description": "System-style heading for protocol history."
+  },
+  "noProtocolsYet": "Pas encore de protocoles. Créez-en un à partir de l’onglet Protocole.",
+  "@noProtocolsYet": {
+    "description": "Empty-state message when no protocols exist."
+  },
+  "adherenceChartLabel": "OBSERVANCE // 30.JOURS",
+  "@adherenceChartLabel": {
+    "description": "System-style title of the thirty-day adherence chart."
+  },
+  "thirtyDaysAgo": "il y a 30 jours",
+  "@thirtyDaysAgo": {
+    "description": "Label for the beginning of a thirty-day chart."
+  },
+  "todayLabel": "aujourd'hui",
+  "@todayLabel": {
+    "description": "Label for the current day on a chart."
+  },
+  "noWeightData": "Aucune donnée de poids",
+  "@noWeightData": {
+    "description": "Weight-chart empty-state title."
+  },
+  "logFirstMeasurement": "Enregistrez votre première mesure pour voir les tendances ici.",
+  "@logFirstMeasurement": {
+    "description": "Weight-chart empty-state description."
+  },
+  "logMeasurementAction": "ENREGISTRER UNE MESURE",
+  "@logMeasurementAction": {
+    "description": "Action to open the measurement form."
+  },
+  "weightTrendLabel": "POIDS // TENDANCE",
+  "@weightTrendLabel": {
+    "description": "System-style title of the weight trend chart."
+  },
+  "weightKgValue": "{weight} kg",
+  "@weightKgValue": {
+    "description": "Formatted weight in kilograms.",
+    "placeholders": {
+      "weight": {
+        "type": "String"
+      }
+    }
+  },
+  "statusActive": "ACTIF",
+  "@statusActive": {
+    "description": "Active protocol status."
+  },
+  "statusPaused": "EN PAUSE",
+  "@statusPaused": {
+    "description": "Paused protocol status."
+  },
+  "statusEnded": "TERMINÉ",
+  "@statusEnded": {
+    "description": "Ended protocol status."
+  },
+  "protocolPeptideCount": "{count, plural, =1{1 peptide} other{{count} peptides}}",
+  "@protocolPeptideCount": {
+    "description": "Number of peptides in a protocol.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "enterOneMetric": "Entrez au moins une valeur.",
+  "@enterOneMetric": {
+    "description": "Validation shown when the measurement form is empty."
+  },
+  "saveMetricFailed": "Échec de l'enregistrement. Essayer à nouveau.",
+  "@saveMetricFailed": {
+    "description": "Generic measurement-save error."
+  },
+  "newMeasurement": "Nouvelle mesure",
+  "@newMeasurement": {
+    "description": "Title of the body measurement form."
+  },
+  "weightLabel": "POIDS",
+  "@weightLabel": {
+    "description": "Label for the weight input."
+  },
+  "bodyFatLabel": "GRAISSE CORPORELLE",
+  "@bodyFatLabel": {
+    "description": "Label for the body-fat input."
+  },
+  "measurementsCmLabel": "MESURES (cm)",
+  "@measurementsCmLabel": {
+    "description": "Heading for circumference measurements in centimetres."
+  },
+  "waistLabel": "TAILLE",
+  "@waistLabel": {
+    "description": "Label for the waist measurement."
+  },
+  "chestLabel": "POITRINE",
+  "@chestLabel": {
+    "description": "Label for the chest measurement."
+  },
+  "armLabel": "BRAS",
+  "@armLabel": {
+    "description": "Label for the arm measurement."
+  },
+  "saveAction": "SAUVEGARDER",
+  "@saveAction": {
+    "description": "Primary save action."
+  },
+  "logMetricSystemLabel": "LOG.MÉTRIQUE",
+  "@logMetricSystemLabel": {
+    "description": "System-style heading in the body measurement form."
+  },
+  "activeLastSevenDays": "7 DERNIERS JOURS",
+  "@activeLastSevenDays": {
+    "description": "Adherence period covering the last seven days."
+  },
+  "activeAllTime": "TOUT LE TEMPS",
+  "@activeAllTime": {
+    "description": "Adherence period covering all recorded history."
+  },
+  "activeAdherence": "observance",
+  "@activeAdherence": {
+    "description": "Label below an adherence percentage."
+  },
+  "activeStarted": "COMMENCÉ",
+  "@activeStarted": {
+    "description": "Label for a protocol start date."
+  },
+  "activeEnded": "TERMINÉ",
+  "@activeEnded": {
+    "description": "Label for a protocol end date."
+  },
+  "activeStackCount": "ASSOCIATION ({count})",
+  "@activeStackCount": {
+    "description": "Heading with the number of peptides in a protocol.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeEditProtocol": "MODIFIER LE PROTOCOLE",
+  "@activeEditProtocol": {
+    "description": "Action to edit a protocol."
+  },
+  "activePauseProtocol": "METTRE LE PROTOCOLE EN PAUSE",
+  "@activePauseProtocol": {
+    "description": "Action to pause a protocol."
+  },
+  "activeEndProtocol": "TERMINER LE PROTOCOLE",
+  "@activeEndProtocol": {
+    "description": "Action to end a protocol."
+  },
+  "activeResumeProtocol": "REPRENDRE LE PROTOCOLE",
+  "@activeResumeProtocol": {
+    "description": "Action to resume a protocol."
+  },
+  "activeDeleteProtocol": "SUPPRIMER LE PROTOCOLE",
+  "@activeDeleteProtocol": {
+    "description": "Action to permanently delete a protocol."
+  },
+  "activeTrackingDisclaimer": "Suivi pédagogique uniquement. Consultez un professionnel de la santé qualifié avant d’apporter des modifications.",
+  "@activeTrackingDisclaimer": {
+    "description": "Safety disclaimer on protocol management."
+  },
+  "activeEndQuestion": "Terminer le protocole ?",
+  "@activeEndQuestion": {
+    "description": "Confirmation title before ending a protocol."
+  },
+  "activeEndBody": "Les futures doses seront supprimées. Les journaux passés restent dans votre historique. Cela ne peut pas être annulé.",
+  "@activeEndBody": {
+    "description": "Confirmation detail before ending a protocol."
+  },
+  "activeEndAction": "TERMINER",
+  "@activeEndAction": {
+    "description": "Confirmation action that ends a protocol."
+  },
+  "activeDeleteQuestion": "Supprimer le protocole ?",
+  "@activeDeleteQuestion": {
+    "description": "Confirmation title before deleting a protocol."
+  },
+  "activeDeleteBody": "Cela supprime définitivement le protocole et tous ses journaux de doses. Cela ne peut pas être annulé.",
+  "@activeDeleteBody": {
+    "description": "Confirmation detail before deleting a protocol."
+  },
+  "activeDeleteAction": "SUPPRIMER",
+  "@activeDeleteAction": {
+    "description": "Confirmation action that deletes a protocol."
+  },
+  "cancel": "Annuler",
+  "@cancel": {
+    "description": "Generic action that dismisses without saving."
+  },
+  "activeStatusActive": "ACTIF",
+  "@activeStatusActive": {
+    "description": "Active protocol status."
+  },
+  "activeStatusPaused": "EN PAUSE",
+  "@activeStatusPaused": {
+    "description": "Paused protocol status."
+  },
+  "activeStatusEnded": "TERMINÉ",
+  "@activeStatusEnded": {
+    "description": "Ended protocol status."
+  },
+  "activeNotesLabel": "REMARQUES // PROTOCOLE",
+  "@activeNotesLabel": {
+    "description": "System heading for protocol notes."
+  },
+  "activeChangeReminders": "RAPPELS DE CHANGEMENT",
+  "@activeChangeReminders": {
+    "description": "Heading for upcoming phase-change reminders."
+  },
+  "activeChangeRemindersBody": "Lorsque les notifications sont activées, PepMod planifie un point de contrôle local à 9h00 pour chaque changement de phase à venir.",
+  "@activeChangeRemindersBody": {
+    "description": "Explanation of phase-change reminders."
+  },
+  "activePhaseAnchor": "Les plages de semaines sont ancrées à {date}.",
+  "@activePhaseAnchor": {
+    "description": "Date used to calculate phase weeks.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeWeek": "SEMAINE {week}",
+  "@activeWeek": {
+    "description": "Single-week phase range.",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      }
+    }
+  },
+  "activeWeeks": "SEMAINES {start}–{end}",
+  "@activeWeeks": {
+    "description": "Multi-week phase range.",
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "activePerDayAmounts": "Quantités quotidiennes",
+  "@activePerDayAmounts": {
+    "description": "Phase summary using different amounts by weekday."
+  },
+  "activeBaseAmount": "Quantité de base",
+  "@activeBaseAmount": {
+    "description": "Phase summary using the protocol base amount."
+  },
+  "activeCurrent": "ACTUEL",
+  "@activeCurrent": {
+    "description": "Badge on the current phase."
+  },
+  "activeBaseSchedule": "Calendrier de base",
+  "@activeBaseSchedule": {
+    "description": "Fallback schedule outside phase overrides."
+  },
+  "activeCustomDays": "Jours personnalisés",
+  "@activeCustomDays": {
+    "description": "Frequency label for selected weekdays."
+  },
+  "activeContinuousTracking": "Suivi continu",
+  "@activeContinuousTracking": {
+    "description": "Cycle status when no fixed cycle is configured."
+  },
+  "activeNoFixedCycle": "Pas de fenêtre de cycle fixe",
+  "@activeNoFixedCycle": {
+    "description": "Cycle detail when no fixed cycle is configured."
+  },
+  "activeCycleProgress": "Semaine {week} de {total}",
+  "@activeCycleProgress": {
+    "description": "Current week within a protocol cycle.",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "activeCycleEnds": "Fin du cycle {date}",
+  "@activeCycleEnds": {
+    "description": "Date a protocol cycle ends.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeRestProgress": "Semaine de repos {week} du {total}",
+  "@activeRestProgress": {
+    "description": "Current week within a rest window.",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "activeRestEnds": "La fenêtre de repos se termine {date}",
+  "@activeRestEnds": {
+    "description": "Date a rest window ends.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeCycleComplete": "Cycle terminé",
+  "@activeCycleComplete": {
+    "description": "Cycle status after completion."
+  },
+  "activeCompletedDate": "Terminé {date}",
+  "@activeCompletedDate": {
+    "description": "Date a cycle completed.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeRestEnded": "La fenêtre de repos s'est terminée le {date}",
+  "@activeRestEnded": {
+    "description": "Date a rest window ended.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeNoHistory": "Aucun protocole suspendu ou terminé pour l'instant.",
+  "@activeNoHistory": {
+    "description": "Empty state for protocol history."
+  },
+  "activeCompoundsCount": "Composés {count}",
+  "@activeCompoundsCount": {
+    "description": "Number of compounds in a blended vial.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeSyringeUnits": "{amount} unités de seringue",
+  "@activeSyringeUnits": {
+    "description": "Syringe-unit amount without a leading separator.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activeCycleWeeks": "Cycle de {count} sem.",
+  "@activeCycleWeeks": {
+    "description": "Protocol cycle length tag.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeRestWeeks": "{count} sem. de repos",
+  "@activeRestWeeks": {
+    "description": "Protocol rest length tag.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activePerDraw": "PAR PRÉLÈVEMENT",
+  "@activePerDraw": {
+    "description": "Heading for amounts in one blended-vial draw."
+  },
+  "activeVialSummary": "Flacon de {volume} mL · U-100",
+  "@activeVialSummary": {
+    "description": "Diluent volume and syringe type for a blended vial.",
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      }
+    }
+  },
+  "addCompound": "AJOUTER UN COMPOSÉ",
+  "@addCompound": {
+    "description": "Action to create a personal compound preset."
+  },
+  "addPhase": "AJOUTER UNE PHASE",
+  "@addPhase": {
+    "description": "Copy for the create protocol addPhase UI."
+  },
+  "addTime": "Ajouter du temps",
+  "@addTime": {
+    "description": "Copy for the create protocol addTime UI."
+  },
+  "addToStack": "AJOUTER À L’ASSOCIATION",
+  "@addToStack": {
+    "description": "Copy for the create protocol addToStack UI."
+  },
+  "amountRequired": "Quantité requise",
+  "@amountRequired": {
+    "description": "Copy for the create protocol amountRequired UI."
+  },
+  "baseAmount": "Quantité de base",
+  "@baseAmount": {
+    "description": "Copy for the create protocol baseAmount UI."
+  },
+  "baseSchedule": "horaire de base",
+  "@baseSchedule": {
+    "description": "Copy for the create protocol baseSchedule UI."
+  },
+  "blendConfigBody": "Saisissez exactement ce qui figure sur le flacon. PepMod convertit le prélèvement en un aperçu par composé.",
+  "@blendConfigBody": {
+    "description": "Copy for the create protocol blendConfigBody UI."
+  },
+  "blendIncompleteError": "Renseignez au moins deux composés, le volume de diluant et la quantité à prélever.",
+  "@blendIncompleteError": {
+    "description": "Copy for the create protocol blendIncompleteError UI."
+  },
+  "blendNameHint": "par ex. Mélange de récupération",
+  "@blendNameHint": {
+    "description": "Copy for the create protocol blendNameHint UI."
+  },
+  "blendNameLabel": "NOM DU MÉLANGE",
+  "@blendNameLabel": {
+    "description": "Copy for the create protocol blendNameLabel UI."
+  },
+  "blendSafetyDisclaimer": "Conversion d'unité uniquement. PepMod ne recommande pas de méthode de mélange, de dose, de fréquence ou de reconstitution.",
+  "@blendSafetyDisclaimer": {
+    "description": "Copy for the create protocol blendSafetyDisclaimer UI."
+  },
+  "changeNoteHint": "Votre propre contexte pour cette phase",
+  "@changeNoteHint": {
+    "description": "Copy for the create protocol changeNoteHint UI."
+  },
+  "changeNoteOptional": "NOTE DE MODIFICATION (FACULTATIF)",
+  "@changeNoteOptional": {
+    "description": "Copy for the create protocol changeNoteOptional UI."
+  },
+  "colorOption": "Option couleur {hex}",
+  "@colorOption": {
+    "description": "Copy for the create protocol colorOption UI.",
+    "placeholders": {
+      "hex": {
+        "type": "String"
+      }
+    }
+  },
+  "compoundNumber": "COMPOSÉ {number}",
+  "@compoundNumber": {
+    "description": "Copy for the create protocol compoundNumber UI.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "compoundsCount": "{count, plural, =1{1 composé} other{{count} composés}}",
+  "@compoundsCount": {
+    "description": "Copy for the create protocol compoundsCount UI.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "copiedVialPreset": "{amount} {unit} préréglage du flacon · copié dans ce protocole",
+  "@copiedVialPreset": {
+    "description": "Copy for the create protocol copiedVialPreset UI.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "createProtocolAction": "CRÉER UN PROTOCOLE",
+  "@createProtocolAction": {
+    "description": "Copy for the create protocol createProtocolAction UI."
+  },
+  "createProtocolAddOneError": "Ajoutez au moins un peptide.",
+  "@createProtocolAddOneError": {
+    "description": "Copy for the create protocol createProtocolAddOneError UI."
+  },
+  "createProtocolBuildStep": "Construire le protocole · Étape {step} / {total}",
+  "@createProtocolBuildStep": {
+    "description": "Copy for the create protocol createProtocolBuildStep UI.",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "createProtocolDefaultName": "Mon protocole",
+  "@createProtocolDefaultName": {
+    "description": "Copy for the create protocol createProtocolDefaultName UI."
+  },
+  "createProtocolEditStep": "Modifier le protocole · Étape {step} / {total}",
+  "@createProtocolEditStep": {
+    "description": "Copy for the create protocol createProtocolEditStep UI.",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "createProtocolFreeLimitReason": "L’offre gratuite est limitée à un peptide par protocole. Passez à Premium pour associer plusieurs composés.",
+  "@createProtocolFreeLimitReason": {
+    "description": "Copy for the create protocol createProtocolFreeLimitReason UI."
+  },
+  "createProtocolNameBody": "Donnez-lui un nom facile à reconnaître, par ex. « Association récupération » ou « Q2 Shred ».",
+  "@createProtocolNameBody": {
+    "description": "Copy for the create protocol createProtocolNameBody UI."
+  },
+  "createProtocolNameTitle": "Nommez votre protocole",
+  "@createProtocolNameTitle": {
+    "description": "Copy for the create protocol createProtocolNameTitle UI."
+  },
+  "createProtocolNoPeptides": "Pas encore de peptides",
+  "@createProtocolNoPeptides": {
+    "description": "Copy for the create protocol createProtocolNoPeptides UI."
+  },
+  "createProtocolPickHint": "Appuyez sur + pour choisir dans la bibliothèque",
+  "@createProtocolPickHint": {
+    "description": "Copy for the create protocol createProtocolPickHint UI."
+  },
+  "createProtocolReviewBody": "Confirmez les détails du protocole. Vous pouvez modifier à tout moment à partir de la vue Gérer.",
+  "@createProtocolReviewBody": {
+    "description": "Copy for the create protocol createProtocolReviewBody UI."
+  },
+  "createProtocolSaveError": "Échec de l'enregistrement du protocole. Essayer à nouveau.",
+  "@createProtocolSaveError": {
+    "description": "Copy for the create protocol createProtocolSaveError UI."
+  },
+  "createProtocolStackBody": "Ajoutez un peptide ou associez plusieurs composés. Configurez l’étiquette, la quantité, la fréquence et le cycle de chacun.",
+  "@createProtocolStackBody": {
+    "description": "Copy for the create protocol createProtocolStackBody UI."
+  },
+  "createProtocolStackTitle": "Créez votre association",
+  "@createProtocolStackTitle": {
+    "description": "Copy for the create protocol createProtocolStackTitle UI."
+  },
+  "customBlend": "Mélange personnalisé",
+  "@customBlend": {
+    "description": "Copy for the create protocol customBlend UI."
+  },
+  "customDays": "Jours personnalisés",
+  "@customDays": {
+    "description": "Copy for the create protocol customDays UI."
+  },
+  "customDaysDisclaimer": "Seuls les jours sélectionnés sont programmés. Les quantités sont des valeurs de suivi saisies par l’utilisateur, pas des conseils de dosage.",
+  "@customDaysDisclaimer": {
+    "description": "Copy for the create protocol customDaysDisclaimer UI."
+  },
+  "customPeptide": "Peptide personnalisé",
+  "@customPeptide": {
+    "description": "Copy for the create protocol customPeptide UI."
+  },
+  "cycleWeeksLabel": "SEMAINES DE CYCLE",
+  "@cycleWeeksLabel": {
+    "description": "Copy for the create protocol cycleWeeksLabel UI."
+  },
+  "cycleWindowDisclaimer": "Les fenêtres de cycle et de repos organisent l’historique de suivi. PepMod ne planifiera pas les futures doses après la fin de la fenêtre du cycle.",
+  "@cycleWindowDisclaimer": {
+    "description": "Copy for the create protocol cycleWindowDisclaimer UI."
+  },
+  "defaultAmountLabel": "QUANTITÉ PAR DÉFAUT",
+  "@defaultAmountLabel": {
+    "description": "Copy for the create protocol defaultAmountLabel UI."
+  },
+  "diluentVolumeLabel": "VOLUME DE DILUANT",
+  "@diluentVolumeLabel": {
+    "description": "Copy for the create protocol diluentVolumeLabel UI."
+  },
+  "drawExceedsVialError": "Le tirage ne peut pas dépasser le volume du flacon.",
+  "@drawExceedsVialError": {
+    "description": "Copy for the create protocol drawExceedsVialError UI."
+  },
+  "drawLabel": "PRÉLÈVEMENT",
+  "@drawLabel": {
+    "description": "Copy for the create protocol drawLabel UI."
+  },
+  "drawPreviewLabel": "APERÇU DU PRÉLÈVEMENT",
+  "@drawPreviewLabel": {
+    "description": "Copy for the create protocol drawPreviewLabel UI."
+  },
+  "drawPreviewValue": "{units} unités = {volume} mL",
+  "@drawPreviewValue": {
+    "description": "Copy for the create protocol drawPreviewValue UI.",
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "volume": {
+        "type": "String"
+      }
+    }
+  },
+  "editTime": "Modifier l'heure {time}",
+  "@editTime": {
+    "description": "Copy for the create protocol editTime UI.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "endWeekLabel": "FIN DE SEMAINE",
+  "@endWeekLabel": {
+    "description": "Copy for the create protocol endWeekLabel UI."
+  },
+  "enterPeptideName": "Entrez le nom du peptide",
+  "@enterPeptideName": {
+    "description": "Copy for the create protocol enterPeptideName UI."
+  },
+  "frequencyLabel": "FRÉQUENCE",
+  "@frequencyLabel": {
+    "description": "Copy for the create protocol frequencyLabel UI."
+  },
+  "labelColorBody": "Faites correspondre cette couleur à l’étiquette du stylo ou du flacon que vous utilisez dans la vraie vie.",
+  "@labelColorBody": {
+    "description": "Copy for the create protocol labelColorBody UI."
+  },
+  "labelColorLabel": "COULEUR DE L'ÉTIQUETTE",
+  "@labelColorLabel": {
+    "description": "Copy for the create protocol labelColorLabel UI."
+  },
+  "manageSavedCompounds": "Gérer les composés enregistrés",
+  "@manageSavedCompounds": {
+    "description": "Copy for the create protocol manageSavedCompounds UI."
+  },
+  "nextLabel": "SUIVANT",
+  "@nextLabel": {
+    "description": "Copy for the create protocol nextLabel UI."
+  },
+  "noneLabel": "Aucun",
+  "@noneLabel": {
+    "description": "Copy for the create protocol noneLabel UI."
+  },
+  "oneOffCompound": "Composé unique",
+  "@oneOffCompound": {
+    "description": "Copy for the create protocol oneOffCompound UI."
+  },
+  "oneOffCompoundBody": "Utiliser une fois sans enregistrer de préréglage",
+  "@oneOffCompoundBody": {
+    "description": "Copy for the create protocol oneOffCompoundBody UI."
+  },
+  "optionalLabel": "Facultatif",
+  "@optionalLabel": {
+    "description": "Copy for the create protocol optionalLabel UI."
+  },
+  "peptidesCount": "PEPTIDES ({count})",
+  "@peptidesCount": {
+    "description": "Copy for the create protocol peptidesCount UI.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "perDayAmounts": "Quantités quotidiennes",
+  "@perDayAmounts": {
+    "description": "Copy for the create protocol perDayAmounts UI."
+  },
+  "phaseExtendsWarning": "Une phase s’étend au-delà du cycle de {weeks} semaines. Ajustez la fenêtre de phase ou de cycle.",
+  "@phaseExtendsWarning": {
+    "description": "Copy for the create protocol phaseExtendsWarning UI.",
+    "placeholders": {
+      "weeks": {
+        "type": "int"
+      }
+    }
+  },
+  "phaseNameHint": "par ex. Suivi de la semaine 1",
+  "@phaseNameHint": {
+    "description": "Copy for the create protocol phaseNameHint UI."
+  },
+  "phaseNameLabel": "NOM DE LA PHASE",
+  "@phaseNameLabel": {
+    "description": "Copy for the create protocol phaseNameLabel UI."
+  },
+  "phaseNumber": "Phase {number}",
+  "@phaseNumber": {
+    "description": "Copy for the create protocol phaseNumber UI.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "phaseOutsideCycleError": "Ce cycle de protocole se termine après la semaine {weeks}. Gardez les semaines de phase à l’intérieur de cette fenêtre.",
+  "@phaseOutsideCycleError": {
+    "description": "Copy for the create protocol phaseOutsideCycleError UI.",
+    "placeholders": {
+      "weeks": {
+        "type": "int"
+      }
+    }
+  },
+  "phaseOverlapError": "Les plages de semaines de phases ne peuvent pas se chevaucher.",
+  "@phaseOverlapError": {
+    "description": "Copy for the create protocol phaseOverlapError UI."
+  },
+  "phaseOverrideBody": "Saisissez uniquement le calendrier de suivi que vous avez déjà l’intention de respecter. PepMod ne recommande aucune quantité.",
+  "@phaseOverrideBody": {
+    "description": "Copy for the create protocol phaseOverrideBody UI."
+  },
+  "phaseOverrideTitle": "Remplacement hebdomadaire",
+  "@phaseOverrideTitle": {
+    "description": "Copy for the create protocol phaseOverrideTitle UI."
+  },
+  "phasePreviewDisclaimer": "Aperçu de vos entrées uniquement. Aucun planning n'est recommandé par PepMod.",
+  "@phasePreviewDisclaimer": {
+    "description": "Copy for the create protocol phasePreviewDisclaimer UI."
+  },
+  "phasePreviewLabel": "APERÇU DES PHASES",
+  "@phasePreviewLabel": {
+    "description": "Copy for the create protocol phasePreviewLabel UI."
+  },
+  "phaseReminderBody": "Un rappel de changement de phase neutre est programmé à 9h00 lorsque les rappels de protocole sont activés.",
+  "@phaseReminderBody": {
+    "description": "Copy for the create protocol phaseReminderBody UI."
+  },
+  "phaseScheduleLabel": "CALENDRIER DES PHASES",
+  "@phaseScheduleLabel": {
+    "description": "Copy for the create protocol phaseScheduleLabel UI."
+  },
+  "phaseSelectDayError": "Sélectionnez au moins un jour. PepMod ne choisira pas d'horaire à votre place.",
+  "@phaseSelectDayError": {
+    "description": "Copy for the create protocol phaseSelectDayError UI."
+  },
+  "phasesBody": "Des fenêtres de dates facultatives peuvent remplacer cette quantité et ce calendrier de base. En dehors de ces fenêtres, le calendrier de base continue.",
+  "@phasesBody": {
+    "description": "Copy for the create protocol phasesBody UI."
+  },
+  "phasesCount": "{count, plural, =1{1 phase} other{{count} phases}}",
+  "@phasesCount": {
+    "description": "Copy for the create protocol phasesCount UI.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "phasesDisclaimer": "Les semaines sont comptées à partir de la date de début du protocole. Les notes de phase enregistrées et les rappels de modification ne sont que des aides au suivi.",
+  "@phasesDisclaimer": {
+    "description": "Copy for the create protocol phasesDisclaimer UI."
+  },
+  "preBlendedVial": "Flacon pré-mélangé",
+  "@preBlendedVial": {
+    "description": "Copy for the create protocol preBlendedVial UI."
+  },
+  "preBlendedVialBody": "Un flacon · un tirage · plusieurs composés",
+  "@preBlendedVialBody": {
+    "description": "Copy for the create protocol preBlendedVialBody UI."
+  },
+  "protocolNotesBody": "Enregistrez le contexte que vous souhaitez voir lors de l’examen de ce protocole.",
+  "@protocolNotesBody": {
+    "description": "Copy for the create protocol protocolNotesBody UI."
+  },
+  "protocolNotesHint": "par ex. questions, contexte de suivi ou notes du clinicien",
+  "@protocolNotesHint": {
+    "description": "Copy for the create protocol protocolNotesHint UI."
+  },
+  "protocolNotesLabel": "Notes de protocole",
+  "@protocolNotesLabel": {
+    "description": "Copy for the create protocol protocolNotesLabel UI."
+  },
+  "reminderTimesBody": "Chaque heure sélectionnée crée sa propre ligne de suivi et son propre rappel les jours planifiés.",
+  "@reminderTimesBody": {
+    "description": "Copy for the create protocol reminderTimesBody UI."
+  },
+  "reminderTimesLabel": "HORAIRES DE RAPPEL",
+  "@reminderTimesLabel": {
+    "description": "Copy for the create protocol reminderTimesLabel UI."
+  },
+  "removeLabel": "RETIRER",
+  "@removeLabel": {
+    "description": "Copy for the create protocol removeLabel UI."
+  },
+  "removePeptide": "Supprimer {name}",
+  "@removePeptide": {
+    "description": "Copy for the create protocol removePeptide UI.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "removePhase": "Supprimer la phase",
+  "@removePhase": {
+    "description": "Copy for the create protocol removePhase UI."
+  },
+  "removeTime": "Supprimer l'heure {time}",
+  "@removeTime": {
+    "description": "Copy for the create protocol removeTime UI.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "restWeeksLabel": "SEMAINES DE REPOS",
+  "@restWeeksLabel": {
+    "description": "Copy for the create protocol restWeeksLabel UI."
+  },
+  "reviewLabel": "Revoir",
+  "@reviewLabel": {
+    "description": "Copy for the create protocol reviewLabel UI."
+  },
+  "routeLabel": "VOIE",
+  "@routeLabel": {
+    "description": "Label for a route selector."
+  },
+  "saveBlend": "ENREGISTRER LE MÉLANGE",
+  "@saveBlend": {
+    "description": "Copy for the create protocol saveBlend UI."
+  },
+  "saveChanges": "ENREGISTRER LES MODIFICATIONS",
+  "@saveChanges": {
+    "description": "Action to save edits to an existing item."
+  },
+  "savePhase": "ENREGISTRER LA PHASE",
+  "@savePhase": {
+    "description": "Copy for the create protocol savePhase UI."
+  },
+  "savedVialPreset": "Flacon {amount} {unit} · Préréglage enregistré",
+  "@savedVialPreset": {
+    "description": "Copy for the create protocol savedVialPreset UI.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "scheduleLabel": "CALENDRIER",
+  "@scheduleLabel": {
+    "description": "Copy for the create protocol scheduleLabel UI."
+  },
+  "searchCompounds": "Rechercher des composés...",
+  "@searchCompounds": {
+    "description": "Copy for the create protocol searchCompounds UI."
+  },
+  "selectDayError": "Sélectionnez au moins un jour pour programmer ce peptide.",
+  "@selectDayError": {
+    "description": "Copy for the create protocol selectDayError UI."
+  },
+  "selectOption": "Sélectionnez {option}",
+  "@selectOption": {
+    "description": "Copy for the create protocol selectOption UI.",
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    }
+  },
+  "startDateLabel": "DATE DE DÉBUT",
+  "@startDateLabel": {
+    "description": "Copy for the create protocol startDateLabel UI."
+  },
+  "startWeekLabel": "DÉBUT DE LA SEMAINE",
+  "@startWeekLabel": {
+    "description": "Copy for the create protocol startWeekLabel UI."
+  },
+  "syringeUnitsAmount": "{amount} unités de seringue",
+  "@syringeUnitsAmount": {
+    "description": "Copy for the create protocol syringeUnitsAmount UI.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "syringeUnitsDisclaimer": "Marquages ​​​​facultatifs de la seringue U-100 saisis par l’utilisateur pour le suivi uniquement.",
+  "@syringeUnitsDisclaimer": {
+    "description": "Copy for the create protocol syringeUnitsDisclaimer UI."
+  },
+  "syringeUnitsHint": "par ex. 12,5",
+  "@syringeUnitsHint": {
+    "description": "Copy for the create protocol syringeUnitsHint UI."
+  },
+  "syringeUnitsLabel": "unités de seringue",
+  "@syringeUnitsLabel": {
+    "description": "Copy for the create protocol syringeUnitsLabel UI."
+  },
+  "syringeUnitsOptional": "UNITÉS DE SERINGUE (FACULTATIF)",
+  "@syringeUnitsOptional": {
+    "description": "Copy for the create protocol syringeUnitsOptional UI."
+  },
+  "trackedAmountLabel": "QUANTITÉ SUIVIE",
+  "@trackedAmountLabel": {
+    "description": "Copy for the create protocol trackedAmountLabel UI."
+  },
+  "u100TrackingDisclaimer": "Utilise les graduations de seringue U-100 (100 unités = 1 mL). Les valeurs sont des données de suivi saisies par l’utilisateur.",
+  "@u100TrackingDisclaimer": {
+    "description": "Copy for the create protocol u100TrackingDisclaimer UI."
+  },
+  "unitLabel": "UNITÉ",
+  "@unitLabel": {
+    "description": "Copy for the create protocol unitLabel UI."
+  },
+  "vialAmountHint": "Quantité du flacon",
+  "@vialAmountHint": {
+    "description": "Copy for the create protocol vialAmountHint UI."
+  },
+  "vialContentsLabel": "CONTENU DU FLACON",
+  "@vialContentsLabel": {
+    "description": "Copy for the create protocol vialContentsLabel UI."
+  },
+  "vialLabelNameHint": "Nom figurant sur l'étiquette du flacon",
+  "@vialLabelNameHint": {
+    "description": "Copy for the create protocol vialLabelNameHint UI."
+  },
+  "weekNumber": "SEMAINE {week}",
+  "@weekNumber": {
+    "description": "Copy for the create protocol weekNumber UI.",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      }
+    }
+  },
+  "weekRange": "SEMAINES {start}–{end}",
+  "@weekRange": {
+    "description": "Copy for the create protocol weekRange UI.",
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "weekToWeekPhases": "PHASES SEMAINE PAR SEMAINE",
+  "@weekToWeekPhases": {
+    "description": "Copy for the create protocol weekToWeekPhases UI."
+  },
+  "weekdayDose": "{weekday} DOSE",
+  "@weekdayDose": {
+    "description": "Copy for the create protocol weekdayDose UI.",
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "weekdaySchedule": "{weekday} HORAIRE",
+  "@weekdaySchedule": {
+    "description": "Copy for the create protocol weekdaySchedule UI.",
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "doseDrawInvalid": "Le tirage doit être supérieur à zéro et à l’intérieur du flacon.",
+  "@doseDrawInvalid": {
+    "description": "Validation error for an invalid blended-vial draw."
+  },
+  "doseGenericError": "Quelque chose s'est mal passé. Essayer à nouveau.",
+  "@doseGenericError": {
+    "description": "Generic error shown when a dose update fails."
+  },
+  "doseEditSystemLabel": "MODIFIER.DOSE",
+  "@doseEditSystemLabel": {
+    "description": "System heading when editing a recorded dose."
+  },
+  "doseLogSystemLabel": "LOG.DOSE",
+  "@doseLogSystemLabel": {
+    "description": "System heading when logging a scheduled dose."
+  },
+  "doseDraw": "PRÉLÈVEMENT",
+  "@doseDraw": {
+    "description": "Field label for a blended-vial syringe draw."
+  },
+  "doseAmount": "QUANTITÉ",
+  "@doseAmount": {
+    "description": "Field label for a dose amount."
+  },
+  "doseUnits": "unités",
+  "@doseUnits": {
+    "description": "Unit suffix for a syringe draw."
+  },
+  "doseTime": "HEURE",
+  "@doseTime": {
+    "description": "Field label for the actual dose time."
+  },
+  "doseChooseTime": "Choisissez l’heure de la dose",
+  "@doseChooseTime": {
+    "description": "Accessibility label for opening the dose time picker."
+  },
+  "doseBlendSnapshot": "INSTANTANÉ DE MÉLANGE // PAR TIRAGE",
+  "@doseBlendSnapshot": {
+    "description": "Heading for the constituent amounts in one blended-vial draw."
+  },
+  "doseSyringeUnitsRecorded": "{amount} unités de seringue enregistrées pour cette dose.",
+  "@doseSyringeUnitsRecorded": {
+    "description": "Recorded syringe-unit amount for a scheduled dose.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "doseInjectionSite": "SITE D'INJECTION",
+  "@doseInjectionSite": {
+    "description": "Heading for injection-site selection."
+  },
+  "doseLastSite": "DERNIER SITE POUR CE PEPTIDE · {site}",
+  "@doseLastSite": {
+    "description": "Most recent injection site for the selected peptide.",
+    "placeholders": {
+      "site": {
+        "type": "String"
+      }
+    }
+  },
+  "doseNotes": "REMARQUES",
+  "@doseNotes": {
+    "description": "Field label for dose notes."
+  },
+  "doseOptional": "Facultatif...",
+  "@doseOptional": {
+    "description": "Placeholder for an optional dose-notes field."
+  },
+  "doseMarkPending": "MARQUER COMME EN ATTENTE",
+  "@doseMarkPending": {
+    "description": "Action that returns a completed or skipped dose to pending."
+  },
+  "doseSaveChanges": "ENREGISTRER LES MODIFICATIONS",
+  "@doseSaveChanges": {
+    "description": "Action that saves edits to a dose record."
+  },
+  "doseSkip": "IGNORER CETTE DOSE",
+  "@doseSkip": {
+    "description": "Action that marks the current dose as skipped."
+  },
+  "doseHistorySystemLabel": "HISTORIQUE.DOSES // 30.JOURS",
+  "@doseHistorySystemLabel": {
+    "description": "System heading for the 30-day dose history."
+  },
+  "doseHistoryTitle": "Doses enregistrées",
+  "@doseHistoryTitle": {
+    "description": "Title for completed and skipped dose history."
+  },
+  "doseHistoryBody": "Appuyez sur un enregistrement pour corriger sa quantité, son heure réelle, son site d'injection, ses notes ou son statut.",
+  "@doseHistoryBody": {
+    "description": "Instructions for editing a dose-history record."
+  },
+  "doseHistoryEmpty": "Aucune dose enregistrée au cours des 30 derniers jours.",
+  "@doseHistoryEmpty": {
+    "description": "Empty state for the 30-day dose history."
+  },
+  "doseLogPrevious": "ENREGISTRER UNE DOSE PASSÉE",
+  "@doseLogPrevious": {
+    "description": "Action that opens or submits the previous-dose form."
+  },
+  "doseHistorySkipped": "Ignoré · {dateTime}",
+  "@doseHistorySkipped": {
+    "description": "Skipped dose summary with its recorded date and time.",
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "doseHistoryTaken": "{amount} {units} · {dateTime}",
+  "@doseHistoryTaken": {
+    "description": "Completed dose summary with amount, units, date, and time.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "units": {
+        "type": "String"
+      },
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "doseEditAction": "MODIFIER",
+  "@doseEditAction": {
+    "description": "Action label on a dose-history row."
+  },
+  "doseChoosePastTime": "Choisissez une heure passée pour l’enregistrement.",
+  "@doseChoosePastTime": {
+    "description": "Validation error when a historical dose time is in the future."
+  },
+  "dosePreviousError": "Impossible d'enregistrer la dose précédente. Essayer à nouveau.",
+  "@dosePreviousError": {
+    "description": "Error shown when saving a previous dose fails."
+  },
+  "doseLogPreviousSystemLabel": "ENREGISTRER.PASSÉE",
+  "@doseLogPreviousSystemLabel": {
+    "description": "System heading for manually logging a previous dose."
+  },
+  "doseNoPeptides": "Aucun peptide disponible",
+  "@doseNoPeptides": {
+    "description": "Title when no peptide can be selected for a previous dose."
+  },
+  "doseNoPeptidesBody": "Ajoutez un peptide à un protocole actif avant d’enregistrer l’historique.",
+  "@doseNoPeptidesBody": {
+    "description": "Instructions when no peptide can be selected for a previous dose."
+  },
+  "doseCorrectHistory": "Corriger l’historique des doses",
+  "@doseCorrectHistory": {
+    "description": "Title for manually adding a previous dose."
+  },
+  "dosePeptide": "PEPTIDE",
+  "@dosePeptide": {
+    "description": "Field label for peptide selection."
+  },
+  "doseDate": "DATE",
+  "@doseDate": {
+    "description": "Field label for the previous dose date."
+  },
+  "doseChooseDate": "Choisissez la date de prise",
+  "@doseChooseDate": {
+    "description": "Accessibility label for opening the dose date picker."
+  },
+  "doseSyringeUnitsEntry": "{amount} unités de seringue enregistrées pour cette entrée.",
+  "@doseSyringeUnitsEntry": {
+    "description": "Recorded syringe-unit amount for a historical dose entry.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "doseHistoryDisclaimer": "Les journaux historiques sont uniquement des enregistrements de suivi personnels. Ils ne modifient pas les conseils médicaux ni les recommandations posologiques.",
+  "@doseHistoryDisclaimer": {
+    "description": "Safety disclaimer for manually entered dose history."
+  },
+  "notificationChannelName": "Rappels de doses",
+  "@notificationChannelName": {
+    "description": "Name of the operating-system notification channel for dose reminders."
+  },
+  "notificationChannelDescription": "Rappels programmés pour vos doses de protocole de peptide actif.",
+  "@notificationChannelDescription": {
+    "description": "Description of the operating-system notification channel."
+  },
+  "notificationDoseTitle": "Il est temps de prendre votre dose",
+  "@notificationDoseTitle": {
+    "description": "Title of a scheduled dose notification."
+  },
+  "notificationDoseBody": "Votre rappel de protocole programmé est prêt.",
+  "@notificationDoseBody": {
+    "description": "Body of a scheduled dose notification."
+  },
+  "notificationCycleTitle": "Point de contrôle du protocole",
+  "@notificationCycleTitle": {
+    "description": "Title of a protocol cycle checkpoint notification."
+  },
+  "notificationCycleBody": "Un rappel de fenêtre de cycle est dû aujourd'hui. Passez en revue votre plan de suivi.",
+  "@notificationCycleBody": {
+    "description": "Body of a protocol cycle checkpoint notification."
+  },
+  "notificationRestTitle": "Point de contrôle de la période de repos",
+  "@notificationRestTitle": {
+    "description": "Title of a protocol rest-period checkpoint notification."
+  },
+  "notificationRestBody": "Un rappel de période de repos est dû aujourd'hui. Passez en revue votre plan de suivi.",
+  "@notificationRestBody": {
+    "description": "Body of a protocol rest-period checkpoint notification."
+  },
+  "notificationPhaseTitle": "Point de contrôle de la phase du protocole",
+  "@notificationPhaseTitle": {
+    "description": "Title of a protocol phase checkpoint notification."
+  },
+  "notificationPhaseBody": "Une nouvelle phase de suivi démarre aujourd’hui. Vérifiez votre emploi du temps enregistré.",
+  "@notificationPhaseBody": {
+    "description": "Body of a protocol phase checkpoint notification."
+  },
+  "personalLibrarySystemLabel": "SYS.BIBLIOTHÈQUE // PERSONNELLE",
+  "@personalLibrarySystemLabel": {
+    "description": "System-style heading for the personal compound library."
+  },
+  "customCompoundIntro": "Enregistrez les noms et tailles de flacon que vous saisissez vous-même. Les préréglages sont des raccourcis de suivi, pas des conseils de dose.",
+  "@customCompoundIntro": {
+    "description": "Safety-focused introduction to personal compound presets."
+  },
+  "archivedHeading": "ARCHIVÉ",
+  "@archivedHeading": {
+    "description": "Heading above archived personal compound presets."
+  },
+  "activePresetsHeading": "PRÉRÉGLAGES ACTIFS",
+  "@activePresetsHeading": {
+    "description": "Heading above active personal compound presets."
+  },
+  "showActive": "Afficher actif",
+  "@showActive": {
+    "description": "Action to show active personal compound presets."
+  },
+  "archivedAction": "Archivé",
+  "@archivedAction": {
+    "description": "Action to show archived personal compound presets."
+  },
+  "customCompoundsLoadFailed": "Impossible de charger vos composés. Essayer à nouveau.",
+  "@customCompoundsLoadFailed": {
+    "description": "Generic personal compound loading error."
+  },
+  "libraryLoadFailed": "Impossible de charger la bibliothèque de peptides. Essayer à nouveau.",
+  "@libraryLoadFailed": {
+    "description": "Generic peptide library loading error."
+  },
+  "compoundVialSummary": "Flacon {amount} {unit} · {route}",
+  "@compoundVialSummary": {
+    "description": "Summary of a personal compound vial and route.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      },
+      "route": {
+        "type": "String"
+      }
+    }
+  },
+  "editPreset": "Modifier le préréglage",
+  "@editPreset": {
+    "description": "Action to edit a personal compound preset."
+  },
+  "restorePreset": "Restaurer",
+  "@restorePreset": {
+    "description": "Action to restore an archived personal compound preset."
+  },
+  "archivePreset": "Archiver",
+  "@archivePreset": {
+    "description": "Action to archive a personal compound preset."
+  },
+  "noArchivedPresets": "Aucun préréglage archivé",
+  "@noArchivedPresets": {
+    "description": "Empty-state title when no archived personal presets exist."
+  },
+  "noSavedCompounds": "Aucun composé enregistré",
+  "@noSavedCompounds": {
+    "description": "Empty-state title when no personal compounds exist."
+  },
+  "archivedPresetsHint": "Les préréglages archivés restent ici jusqu'à ce que vous les restauriez.",
+  "@archivedPresetsHint": {
+    "description": "Empty-state explanation for archived personal presets."
+  },
+  "createPresetHint": "Créez une étiquette réutilisable et un préréglage de taille de flacon.",
+  "@createPresetHint": {
+    "description": "Empty-state explanation for personal compound presets."
+  },
+  "presetCompoundSystemLabel": "COMPOSÉ PRÉRÉGLÉ",
+  "@presetCompoundSystemLabel": {
+    "description": "System-style heading in the personal compound editor."
+  },
+  "newCompound": "Nouveau composé",
+  "@newCompound": {
+    "description": "Title when creating a personal compound preset."
+  },
+  "editCompound": "Modifier le composé",
+  "@editCompound": {
+    "description": "Title when editing a personal compound preset."
+  },
+  "ownVialDetailsHint": "Entrez uniquement les détails imprimés sur votre propre flacon.",
+  "@ownVialDetailsHint": {
+    "description": "Instruction in the personal compound editor."
+  },
+  "compoundLabel": "NOM DU COMPOSÉ",
+  "@compoundLabel": {
+    "description": "Label for a personal compound name field."
+  },
+  "compoundNameExample": "par ex. Mon complexe",
+  "@compoundNameExample": {
+    "description": "Example personal compound name."
+  },
+  "vialUnitLabel": "UNITÉ FLACON",
+  "@vialUnitLabel": {
+    "description": "Label for a personal compound vial unit selector."
+  },
+  "trackingUnitLabel": "UNITÉ DE SUIVI",
+  "@trackingUnitLabel": {
+    "description": "Label for a personal compound tracking unit selector."
+  },
+  "notesOptional": "REMARQUES OPTIONNELLES",
+  "@notesOptional": {
+    "description": "Label for an optional personal compound note."
+  },
+  "compoundNoteExample": "Étiquette ou note de stockage",
+  "@compoundNoteExample": {
+    "description": "Example note for a personal compound preset."
+  },
+  "noDoseRecommendation": "Aucune recommandation posologique n’est créée. Vous saisissez toujours les quantités du protocole séparément.",
+  "@noDoseRecommendation": {
+    "description": "Safety disclaimer in the personal compound editor."
+  },
+  "saveCompoundFailed": "Impossible d'enregistrer le préréglage. Essayer à nouveau.",
+  "@saveCompoundFailed": {
+    "description": "Generic personal compound save error."
+  },
+  "routeTopical": "Topique",
+  "@routeTopical": {
+    "description": "Topical administration route."
+  },
+  "frequencyCustomDays": "Jours personnalisés",
+  "@frequencyCustomDays": {
+    "description": "Frequency using user-selected weekdays."
+  },
+  "savedCalculationLabel": "{vialAmount} {vialUnit} + {diluentVolume} mL",
+  "@savedCalculationLabel": {
+    "description": "Title of a saved vial conversion.",
+    "placeholders": {
+      "vialAmount": {
+        "type": "String"
+      },
+      "vialUnit": {
+        "type": "String"
+      },
+      "diluentVolume": {
+        "type": "String"
+      }
+    }
+  },
+  "savedCalculationDetail": "{desiredAmount} {desiredUnit} · {capacity}u",
+  "@savedCalculationDetail": {
+    "description": "Detail of a saved vial conversion.",
+    "placeholders": {
+      "desiredAmount": {
+        "type": "String"
+      },
+      "desiredUnit": {
+        "type": "String"
+      },
+      "capacity": {
+        "type": "String"
+      }
+    }
+  },
+  "syringeOption": "U-100 · {volume} mL / {capacity} unités",
+  "@syringeOption": {
+    "description": "U-100 syringe capacity option.",
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      },
+      "capacity": {
+        "type": "String"
+      }
+    }
+  }
 }
