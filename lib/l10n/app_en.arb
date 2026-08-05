@@ -1184,9 +1184,9 @@
   "@unitConversionDisclaimer": {
     "description": "English onboarding copy for unit conversion disclaimer."
   },
-  "unitsLabel": "Units",
+  "unitsLabel": "units",
   "@unitsLabel": {
-    "description": "Label for measurement unit preferences."
+    "description": "English onboarding copy for units label."
   },
   "unitsToDraw": "Units to draw",
   "@unitsToDraw": {
@@ -1261,9 +1261,9 @@
   "@sectionAbout": {
     "description": "Profile section heading for app information."
   },
-  "nameLabel": "Name",
+  "nameLabel": "NAME",
   "@nameLabel": {
-    "description": "Label for the user's display name."
+    "description": "Copy for the create protocol nameLabel UI."
   },
   "accountLabel": "Account",
   "@accountLabel": {
@@ -1357,9 +1357,9 @@
   "@signOutAction": {
     "description": "Primary sign-out action."
   },
-  "educationalTrackingDisclaimer": "Educational tracking only. Not medical advice.",
+  "educationalTrackingDisclaimer": "Educational tracking only. Always consult a qualified healthcare provider.",
   "@educationalTrackingDisclaimer": {
-    "description": "Short safety disclaimer on the profile screen."
+    "description": "Copy for the create protocol educationalTrackingDisclaimer UI."
   },
   "yourName": "Your name",
   "@yourName": {
@@ -1367,11 +1367,11 @@
   },
   "cancelLabel": "Cancel",
   "@cancelLabel": {
-    "description": "Generic cancel action."
+    "description": "Copy for the create protocol cancelLabel UI."
   },
-  "saveLabel": "Save",
+  "saveLabel": "SAVE",
   "@saveLabel": {
-    "description": "Generic save action."
+    "description": "Copy for the create protocol saveLabel UI."
   },
   "dataCopied": "Data copied to clipboard.",
   "@dataCopied": {
@@ -2669,5 +2669,45 @@
   "doseHistoryDisclaimer": "Historical logs are personal tracking records only. They do not change medical guidance or dosing recommendations.",
   "@doseHistoryDisclaimer": {
     "description": "Safety disclaimer for manually entered dose history."
+  },
+  "notificationChannelName": "Dose Reminders",
+  "@notificationChannelName": {
+    "description": "Name of the operating-system notification channel for dose reminders."
+  },
+  "notificationChannelDescription": "Scheduled reminders for your active peptide protocol doses.",
+  "@notificationChannelDescription": {
+    "description": "Description of the operating-system notification channel."
+  },
+  "notificationDoseTitle": "Time for your dose",
+  "@notificationDoseTitle": {
+    "description": "Title of a scheduled dose notification."
+  },
+  "notificationDoseBody": "Your scheduled protocol reminder is ready.",
+  "@notificationDoseBody": {
+    "description": "Body of a scheduled dose notification."
+  },
+  "notificationCycleTitle": "Protocol checkpoint",
+  "@notificationCycleTitle": {
+    "description": "Title of a protocol cycle checkpoint notification."
+  },
+  "notificationCycleBody": "A cycle-window reminder is due today. Review your tracking plan.",
+  "@notificationCycleBody": {
+    "description": "Body of a protocol cycle checkpoint notification."
+  },
+  "notificationRestTitle": "Rest period checkpoint",
+  "@notificationRestTitle": {
+    "description": "Title of a protocol rest-period checkpoint notification."
+  },
+  "notificationRestBody": "A rest-period reminder is due today. Review your tracking plan.",
+  "@notificationRestBody": {
+    "description": "Body of a protocol rest-period checkpoint notification."
+  },
+  "notificationPhaseTitle": "Protocol phase checkpoint",
+  "@notificationPhaseTitle": {
+    "description": "Title of a protocol phase checkpoint notification."
+  },
+  "notificationPhaseBody": "A new tracking phase starts today. Review your saved schedule.",
+  "@notificationPhaseBody": {
+    "description": "Body of a protocol phase checkpoint notification."
   }
 }

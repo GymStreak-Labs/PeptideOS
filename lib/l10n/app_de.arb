@@ -410,7 +410,7 @@
   "trackedLabel": "tracked",
   "turnOnReminders": "TURN ON REMINDERS",
   "unitConversionDisclaimer": "Unit conversion tool for reference only. Always verify with your healthcare provider.",
-  "unitsLabel": "Einheiten",
+  "unitsLabel": "units",
   "unitsToDraw": "Units to draw",
   "unlockPepMod": "UNLOCK PEPMOD",
   "usersLabel": "USERS",
@@ -428,7 +428,7 @@
   "sectionSupport": "SUPPORT",
   "sectionLegal": "RECHTLICHES",
   "sectionAbout": "ÜBER DIE APP",
-  "nameLabel": "Name",
+  "nameLabel": "NAME",
   "accountLabel": "Konto",
   "deleteAccount": "Konto löschen",
   "removeAccountData": "Konto und Daten entfernen",
@@ -452,10 +452,10 @@
   "disclaimerTitle": "Haftungsausschluss",
   "versionLabel": "Version",
   "signOutAction": "ABMELDEN",
-  "educationalTrackingDisclaimer": "Nur zur Aufzeichnung und Information. Keine medizinische Beratung.",
+  "educationalTrackingDisclaimer": "Nur zur dokumentarischen Nutzung. Wende dich immer an qualifiziertes medizinisches Fachpersonal.",
   "yourName": "Dein Name",
   "cancelLabel": "Abbrechen",
-  "saveLabel": "Speichern",
+  "saveLabel": "SPEICHERN",
   "dataCopied": "Daten in die Zwischenablage kopiert.",
   "clearDataTitle": "Alle Daten löschen?",
   "clearDataBody": "Dadurch werden alle Protokolle, Dosisprotokolle und Körperwerte gelöscht und das Onboarding neu gestartet. Dein Konto, dein Abo und die Peptidbibliothek bleiben erhalten. Dies kann nicht rückgängig gemacht werden.",
@@ -871,5 +871,15 @@
       }
     }
   },
-  "doseHistoryDisclaimer": "Frühere Einträge dienen nur der persönlichen Dokumentation. Sie ändern weder medizinische Hinweise noch Dosierungsempfehlungen."
+  "doseHistoryDisclaimer": "Frühere Einträge dienen nur der persönlichen Dokumentation. Sie ändern weder medizinische Hinweise noch Dosierungsempfehlungen.",
+  "notificationChannelName": "Dosiserinnerungen",
+  "notificationChannelDescription": "Geplante Erinnerungen für Dosen in deinen aktiven Peptidprotokollen.",
+  "notificationDoseTitle": "Zeit für deine Dosis",
+  "notificationDoseBody": "Deine geplante Protokollerinnerung ist bereit.",
+  "notificationCycleTitle": "Protokoll-Checkpoint",
+  "notificationCycleBody": "Heute ist eine Erinnerung zum Zyklusfenster fällig. Prüfe deinen Tracking-Plan.",
+  "notificationRestTitle": "Pausen-Checkpoint",
+  "notificationRestBody": "Heute ist eine Erinnerung zur Pausenphase fällig. Prüfe deinen Tracking-Plan.",
+  "notificationPhaseTitle": "Phasen-Checkpoint",
+  "notificationPhaseBody": "Heute beginnt eine neue Tracking-Phase. Prüfe deinen gespeicherten Zeitplan."
 }

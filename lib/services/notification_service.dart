@@ -1,16 +1,60 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../models/dose_log.dart';
 import '../models/protocol.dart';
+import '../l10n/app_localizations.dart';
 
 enum ProtocolReminderKind { cycleEnds, washoutEnds, phaseStarts }
+
+typedef NotificationCopy = ({
+  String channelName,
+  String channelDescription,
+  String doseTitle,
+  String doseBody,
+  String cycleTitle,
+  String cycleBody,
+  String restTitle,
+  String restBody,
+  String phaseTitle,
+  String phaseBody,
+});
+
+@visibleForTesting
+Future<NotificationCopy> loadNotificationCopy(Locale locale) async {
+  final supported = AppLocalizations.supportedLocales;
+  final resolved =
+      supported
+          .where(
+            (candidate) =>
+                candidate.languageCode == locale.languageCode &&
+                candidate.countryCode == locale.countryCode,
+          )
+          .firstOrNull ??
+      supported
+          .where((candidate) => candidate.languageCode == locale.languageCode)
+          .firstOrNull ??
+      const Locale('en');
+  final l10n = await AppLocalizations.delegate.load(resolved);
+  return (
+    channelName: l10n.notificationChannelName,
+    channelDescription: l10n.notificationChannelDescription,
+    doseTitle: l10n.notificationDoseTitle,
+    doseBody: l10n.notificationDoseBody,
+    cycleTitle: l10n.notificationCycleTitle,
+    cycleBody: l10n.notificationCycleBody,
+    restTitle: l10n.notificationRestTitle,
+    restBody: l10n.notificationRestBody,
+    phaseTitle: l10n.notificationPhaseTitle,
+    phaseBody: l10n.notificationPhaseBody,
+  );
+}
 
 /// Schedules local notifications for upcoming peptide doses.
 ///
@@ -24,9 +68,6 @@ class NotificationService {
   static final NotificationService instance = NotificationService._();
 
   static const String _channelId = 'pepmod_dose_reminders';
-  static const String _channelName = 'Dose Reminders';
-  static const String _channelDescription =
-      'Scheduled reminders for your active peptide protocol doses.';
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
@@ -34,10 +75,14 @@ class NotificationService {
   bool _initialized = false;
   bool _permissionRequested = false;
   bool? _permissionGranted;
+  NotificationCopy? _copy;
   bool get isInitialized => _initialized;
 
   Future<void> initialize() async {
     if (_initialized) return;
+    _copy ??= await loadNotificationCopy(
+      WidgetsBinding.instance.platformDispatcher.locale,
+    );
     try {
       tz_data.initializeTimeZones();
       final localName = await FlutterTimezone.getLocalTimezone();
@@ -104,22 +149,23 @@ class NotificationService {
 
     final id = _notificationIdForUuid(log.uuid);
     final scheduled = tz.TZDateTime.from(log.scheduledAt, tz.local);
+    final copy = _copy!;
 
     try {
       await _plugin.zonedSchedule(
         id,
-        'Time for your dose',
-        'Your scheduled protocol reminder is ready.',
+        copy.doseTitle,
+        copy.doseBody,
         scheduled,
-        const NotificationDetails(
+        NotificationDetails(
           android: AndroidNotificationDetails(
             _channelId,
-            _channelName,
-            channelDescription: _channelDescription,
+            copy.channelName,
+            channelDescription: copy.channelDescription,
             importance: Importance.high,
             priority: Priority.high,
           ),
-          iOS: DarwinNotificationDetails(),
+          iOS: const DarwinNotificationDetails(),
         ),
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
@@ -151,19 +197,11 @@ class NotificationService {
       reminderKey: reminderKey,
     );
     final scheduled = tz.TZDateTime.from(scheduledAt, tz.local);
+    final copy = _copy!;
     final (title, body) = switch (kind) {
-      ProtocolReminderKind.cycleEnds => (
-        'Protocol checkpoint',
-        'A cycle-window reminder is due today. Review your tracking plan.',
-      ),
-      ProtocolReminderKind.washoutEnds => (
-        'Rest period checkpoint',
-        'A rest-period reminder is due today. Review your tracking plan.',
-      ),
-      ProtocolReminderKind.phaseStarts => (
-        'Protocol phase checkpoint',
-        'A new tracking phase starts today. Review your saved schedule.',
-      ),
+      ProtocolReminderKind.cycleEnds => (copy.cycleTitle, copy.cycleBody),
+      ProtocolReminderKind.washoutEnds => (copy.restTitle, copy.restBody),
+      ProtocolReminderKind.phaseStarts => (copy.phaseTitle, copy.phaseBody),
     };
 
     try {
@@ -172,15 +210,15 @@ class NotificationService {
         title,
         body,
         scheduled,
-        const NotificationDetails(
+        NotificationDetails(
           android: AndroidNotificationDetails(
             _channelId,
-            _channelName,
-            channelDescription: _channelDescription,
+            copy.channelName,
+            channelDescription: copy.channelDescription,
             importance: Importance.defaultImportance,
             priority: Priority.defaultPriority,
           ),
-          iOS: DarwinNotificationDetails(),
+          iOS: const DarwinNotificationDetails(),
         ),
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
