@@ -401,7 +401,7 @@ class _PlannedDoseCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      item.time,
+                      _localizedStoredTime(context, item.time),
                       style: AppTypography.tabular.copyWith(
                         color: color,
                         fontSize: 15,
@@ -587,6 +587,14 @@ String _amount(BuildContext context, double value) => NumberFormat(
   value == value.roundToDouble() ? '0' : '0.##',
   context.protocolL10n.localeName,
 ).format(value);
+
+String _localizedStoredTime(BuildContext context, String value) {
+  final parts = value.split(':');
+  final hour = parts.isNotEmpty ? int.tryParse(parts.first) : null;
+  final minute = parts.length > 1 ? int.tryParse(parts[1]) : null;
+  if (hour == null || minute == null) return value;
+  return TimeOfDay(hour: hour, minute: minute).format(context);
+}
 
 String _weekRangeLabel(BuildContext context, DateTime monday) {
   final sunday = monday.add(const Duration(days: 6));

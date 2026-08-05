@@ -609,7 +609,7 @@ class _UpcomingChangeRemindersCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${MaterialLocalizations.of(context).formatShortDate(changes[index].date)} · 09:00',
+                        '${MaterialLocalizations.of(context).formatShortDate(changes[index].date)} · ${const TimeOfDay(hour: 9, minute: 0).format(context)}',
                         style: AppTypography.tabular.copyWith(
                           color: AppColors.textSecondary,
                           fontSize: 12,
@@ -1165,13 +1165,22 @@ class _PeptideRowCard extends StatelessWidget {
                     label:
                         '${_weekdayLabel(context, d.weekday)} ${_formatAmount(context.protocolL10n, d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(context.protocolL10n, d.syringeUnits)}',
                   ),
-              for (final t in peptide.scheduledTimes) _Tag(label: t),
+              for (final t in peptide.scheduledTimes)
+                _Tag(label: _localizedStoredTime(context, t)),
             ],
           ),
         ],
       ),
     );
   }
+}
+
+String _localizedStoredTime(BuildContext context, String value) {
+  final parts = value.split(':');
+  final hour = parts.isNotEmpty ? int.tryParse(parts.first) : null;
+  final minute = parts.length > 1 ? int.tryParse(parts[1]) : null;
+  if (hour == null || minute == null) return value;
+  return TimeOfDay(hour: hour, minute: minute).format(context);
 }
 
 class _Tag extends StatelessWidget {
