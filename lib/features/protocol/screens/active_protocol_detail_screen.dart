@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/dose_log.dart';
 import '../../../models/protocol.dart';
 import '../providers/dose_log_provider.dart';
 import '../providers/protocol_provider.dart';
 import '../widgets/peptide_label_color.dart';
+import '../widgets/protocol_localizations.dart';
 import 'create_protocol_screen.dart';
 
 /// Shows all peptides in an active (or paused) protocol with adherence stats,
@@ -49,6 +52,9 @@ class _ActiveProtocolDetailScreenState
 
     final last7 = _adherenceLastNDays(doseProvider.recent30, 7);
     final allTime = _adherenceAllTime(doseProvider.recent30);
+    final numberFormat = NumberFormat.decimalPattern(
+      context.protocolL10n.localeName,
+    )..maximumFractionDigits = 0;
     final protocolHistory = provider.history
         .where((p) => p.uuid != _protocol.uuid)
         .toList();
@@ -69,6 +75,7 @@ class _ActiveProtocolDetailScreenState
               child: Row(
                 children: [
                   IconButton(
+                    tooltip: context.protocolL10n.back,
                     onPressed: () => Navigator.of(context).pop(),
                     icon: const Icon(
                       Icons.arrow_back_rounded,
@@ -114,17 +121,17 @@ class _ActiveProtocolDetailScreenState
                       children: [
                         Expanded(
                           child: _StatTile(
-                            label: 'LAST 7 DAYS',
-                            value: '${last7.toStringAsFixed(0)}%',
-                            hint: 'adherence',
+                            label: context.protocolL10n.activeLastSevenDays,
+                            value: '${numberFormat.format(last7)}%',
+                            hint: context.protocolL10n.activeAdherence,
                           ),
                         ),
                         const SizedBox(width: AppSpacing.cardGap),
                         Expanded(
                           child: _StatTile(
-                            label: 'ALL TIME',
-                            value: '${allTime.toStringAsFixed(0)}%',
-                            hint: 'adherence',
+                            label: context.protocolL10n.activeAllTime,
+                            value: '${numberFormat.format(allTime)}%',
+                            hint: context.protocolL10n.activeAdherence,
                           ),
                         ),
                       ],
@@ -140,12 +147,12 @@ class _ActiveProtocolDetailScreenState
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'STARTED',
+                                  context.protocolL10n.activeStarted,
                                   style: AppTypography.systemLabel,
                                 ),
                                 const SizedBox(height: AppSpacing.xs),
                                 Text(
-                                  _formatDate(_protocol.startDate),
+                                  _formatDate(context, _protocol.startDate),
                                   style: AppTypography.tabular.copyWith(
                                     fontSize: 16,
                                   ),
@@ -159,12 +166,12 @@ class _ActiveProtocolDetailScreenState
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'ENDED',
+                                    context.protocolL10n.activeEnded,
                                     style: AppTypography.systemLabel,
                                   ),
                                   const SizedBox(height: AppSpacing.xs),
                                   Text(
-                                    _formatDate(_protocol.endDate!),
+                                    _formatDate(context, _protocol.endDate!),
                                     style: AppTypography.tabular.copyWith(
                                       fontSize: 16,
                                     ),
@@ -204,7 +211,9 @@ class _ActiveProtocolDetailScreenState
 
                     // Peptides
                     Text(
-                      'STACK (${_protocol.peptides.length})',
+                      context.protocolL10n.activeStackCount(
+                        _protocol.peptides.length,
+                      ),
                       style: AppTypography.systemLabel,
                     ),
                     const SizedBox(height: AppSpacing.sm),
@@ -218,13 +227,13 @@ class _ActiveProtocolDetailScreenState
                     // Actions
                     if (_protocol.status == ProtocolStatus.active) ...[
                       PrimaryButton(
-                        label: 'EDIT PROTOCOL',
+                        label: context.protocolL10n.activeEditProtocol,
                         icon: Icons.edit_rounded,
                         onPressed: _editProtocol,
                       ),
                       const SizedBox(height: AppSpacing.cardGap),
                       PrimaryButton(
-                        label: 'PAUSE PROTOCOL',
+                        label: context.protocolL10n.activePauseProtocol,
                         icon: Icons.pause_rounded,
                         onPressed: () async {
                           HapticFeedback.mediumImpact();
@@ -235,20 +244,20 @@ class _ActiveProtocolDetailScreenState
                       ),
                       const SizedBox(height: AppSpacing.cardGap),
                       PrimaryButton(
-                        label: 'END PROTOCOL',
+                        label: context.protocolL10n.activeEndProtocol,
                         icon: Icons.stop_rounded,
                         isDestructive: true,
                         onPressed: () => _confirmEnd(provider),
                       ),
                     ] else if (_protocol.status == ProtocolStatus.paused) ...[
                       PrimaryButton(
-                        label: 'EDIT PROTOCOL',
+                        label: context.protocolL10n.activeEditProtocol,
                         icon: Icons.edit_rounded,
                         onPressed: _editProtocol,
                       ),
                       const SizedBox(height: AppSpacing.cardGap),
                       PrimaryButton(
-                        label: 'RESUME PROTOCOL',
+                        label: context.protocolL10n.activeResumeProtocol,
                         icon: Icons.play_arrow_rounded,
                         onPressed: () async {
                           HapticFeedback.mediumImpact();
@@ -259,14 +268,14 @@ class _ActiveProtocolDetailScreenState
                       ),
                       const SizedBox(height: AppSpacing.cardGap),
                       PrimaryButton(
-                        label: 'END PROTOCOL',
+                        label: context.protocolL10n.activeEndProtocol,
                         icon: Icons.stop_rounded,
                         isDestructive: true,
                         onPressed: () => _confirmEnd(provider),
                       ),
                     ] else ...[
                       PrimaryButton(
-                        label: 'DELETE PROTOCOL',
+                        label: context.protocolL10n.activeDeleteProtocol,
                         icon: Icons.delete_outline_rounded,
                         isDestructive: true,
                         onPressed: () => _confirmDelete(provider),
@@ -275,7 +284,7 @@ class _ActiveProtocolDetailScreenState
 
                     const SizedBox(height: AppSpacing.lg),
                     Text(
-                      'Educational tracking only. Consult a qualified healthcare provider before making changes.',
+                      context.protocolL10n.activeTrackingDisclaimer,
                       style: AppTypography.disclaimer,
                       textAlign: TextAlign.center,
                     ),
@@ -312,12 +321,7 @@ class _ActiveProtocolDetailScreenState
   }
 
   Future<void> _confirmEnd(ProtocolProvider provider) async {
-    final ok = await _confirmDialog(
-      title: 'End protocol?',
-      body:
-          'Future doses will be removed. Past logs stay in your history. This cannot be undone.',
-      confirmLabel: 'END',
-    );
+    final ok = await _confirmDialog(isDelete: false);
     if (!ok) return;
     await provider.endProtocol(_protocol);
     if (!mounted) return;
@@ -325,54 +329,54 @@ class _ActiveProtocolDetailScreenState
   }
 
   Future<void> _confirmDelete(ProtocolProvider provider) async {
-    final ok = await _confirmDialog(
-      title: 'Delete protocol?',
-      body:
-          'This permanently removes the protocol and all its dose logs. This cannot be undone.',
-      confirmLabel: 'DELETE',
-    );
+    final ok = await _confirmDialog(isDelete: true);
     if (!ok) return;
     await provider.deleteProtocol(_protocol);
     if (!mounted) return;
     Navigator.of(context).pop();
   }
 
-  Future<bool> _confirmDialog({
-    required String title,
-    required String body,
-    required String confirmLabel,
-  }) async {
+  Future<bool> _confirmDialog({required bool isDelete}) async {
     final result = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surfaceContainer,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-          side: const BorderSide(color: AppColors.border),
-        ),
-        title: Text(title, style: AppTypography.h3),
-        content: Text(body, style: AppTypography.bodyMedium),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(
-              'Cancel',
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.textTertiary,
+      builder: (ctx) {
+        final l10n = ctx.protocolL10n;
+        return AlertDialog(
+          backgroundColor: AppColors.surfaceContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+            side: const BorderSide(color: AppColors.border),
+          ),
+          title: Text(
+            isDelete ? l10n.activeDeleteQuestion : l10n.activeEndQuestion,
+            style: AppTypography.h3,
+          ),
+          content: Text(
+            isDelete ? l10n.activeDeleteBody : l10n.activeEndBody,
+            style: AppTypography.bodyMedium,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(
+                l10n.cancel,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.textTertiary,
+                ),
               ),
             ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(
-              confirmLabel,
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.warning,
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(
+                isDelete ? l10n.activeDeleteAction : l10n.activeEndAction,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.warning,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
     return result ?? false;
   }
@@ -413,22 +417,8 @@ class _ActiveProtocolDetailScreenState
     return (taken / scoped.length) * 100;
   }
 
-  static const _months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-  String _formatDate(DateTime d) =>
-      '${_months[d.month - 1]} ${d.day}, ${d.year}';
+  String _formatDate(BuildContext context, DateTime d) =>
+      MaterialLocalizations.of(context).formatMediumDate(d);
 }
 
 class _StatusPill extends StatelessWidget {
@@ -438,9 +428,18 @@ class _StatusPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (color, label) = switch (status) {
-      ProtocolStatus.active => (AppColors.primary, 'ACTIVE'),
-      ProtocolStatus.paused => (AppColors.danger, 'PAUSED'),
-      ProtocolStatus.ended => (AppColors.textTertiary, 'ENDED'),
+      ProtocolStatus.active => (
+        AppColors.primary,
+        context.protocolL10n.activeStatusActive,
+      ),
+      ProtocolStatus.paused => (
+        AppColors.danger,
+        context.protocolL10n.activeStatusPaused,
+      ),
+      ProtocolStatus.ended => (
+        AppColors.textTertiary,
+        context.protocolL10n.activeStatusEnded,
+      ),
     };
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -512,7 +511,10 @@ class _ProtocolNotesCard extends StatelessWidget {
                 color: AppColors.primary,
               ),
               const SizedBox(width: AppSpacing.sm),
-              Text('NOTES // PROTOCOL', style: AppTypography.systemLabel),
+              Text(
+                context.protocolL10n.activeNotesLabel,
+                style: AppTypography.systemLabel,
+              ),
             ],
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -567,7 +569,7 @@ class _UpcomingChangeRemindersCard extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.sm),
               Text(
-                'CHANGE REMINDERS',
+                context.protocolL10n.activeChangeReminders,
                 style: AppTypography.systemLabel.copyWith(
                   color: AppColors.aiInsightBright,
                 ),
@@ -576,7 +578,7 @@ class _UpcomingChangeRemindersCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'When Notifications is on, PepMod schedules a 09:00 local checkpoint for each upcoming phase change.',
+            context.protocolL10n.activeChangeRemindersBody,
             style: AppTypography.bodySmall.copyWith(
               color: AppColors.textSecondary,
             ),
@@ -607,7 +609,7 @@ class _UpcomingChangeRemindersCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${_date(changes[index].date)} · 09:00',
+                        '${MaterialLocalizations.of(context).formatShortDate(changes[index].date)} · 09:00',
                         style: AppTypography.tabular.copyWith(
                           color: AppColors.textSecondary,
                           fontSize: 12,
@@ -624,24 +626,6 @@ class _UpcomingChangeRemindersCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  static String _date(DateTime date) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return '${months[date.month - 1]} ${date.day}';
   }
 }
 
@@ -690,7 +674,11 @@ class _PhaseTimelineCard extends StatelessWidget {
           Text('PHASE.TIMELINE', style: AppTypography.systemLabel),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Week ranges are anchored to ${_shortDate(protocol.startDate)}.',
+            context.protocolL10n.activePhaseAnchor(
+              MaterialLocalizations.of(
+                context,
+              ).formatShortDate(protocol.startDate),
+            ),
             style: AppTypography.bodySmall,
           ),
           const SizedBox(height: AppSpacing.base),
@@ -723,24 +711,6 @@ class _PhaseTimelineCard extends StatelessWidget {
       ),
     );
   }
-
-  static String _shortDate(DateTime date) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return '${months[date.month - 1]} ${date.day}';
-  }
 }
 
 class _PhaseTimelineRow extends StatelessWidget {
@@ -760,16 +730,17 @@ class _PhaseTimelineRow extends StatelessWidget {
     final inclusiveEnd = phase
         .endsOn(protocolStart)
         .subtract(const Duration(days: 1));
+    final l10n = context.protocolL10n;
     final range = phase.startWeek == phase.endWeek
-        ? 'WEEK ${phase.startWeek}'
-        : 'WEEKS ${phase.startWeek}–${phase.endWeek}';
+        ? l10n.activeWeek(phase.startWeek)
+        : l10n.activeWeeks(phase.startWeek, phase.endWeek);
     final amount =
         phase.frequency == kCustomWeekdayFrequency &&
             phase.weekdayDoses.isNotEmpty
-        ? 'Per-day amounts'
+        ? l10n.activePerDayAmounts
         : phase.dosePerInjection == null
-        ? 'Base amount'
-        : '${_amount(phase.dosePerInjection!)} ${phase.doseUnit ?? ''}';
+        ? l10n.activeBaseAmount
+        : '${_amount(l10n, phase.dosePerInjection!)} ${phase.doseUnit ?? ''}';
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -805,20 +776,20 @@ class _PhaseTimelineRow extends StatelessWidget {
                   ),
                   if (active)
                     Text(
-                      'CURRENT',
+                      l10n.activeCurrent,
                       style: AppTypography.systemLabel.copyWith(fontSize: 8),
                     ),
                 ],
               ),
               Text(
-                '$range · ${_date(start)}–${_date(inclusiveEnd)}',
+                '$range · ${MaterialLocalizations.of(context).formatShortDate(start)}–${MaterialLocalizations.of(context).formatShortDate(inclusiveEnd)}',
                 style: AppTypography.tabular.copyWith(
                   fontSize: 11,
                   color: AppColors.textTertiary,
                 ),
               ),
               Text(
-                '$amount · ${_frequency(phase.frequency)}',
+                '$amount · ${_frequency(l10n, phase.frequency)}',
                 style: AppTypography.bodySmall,
               ),
               if (phase.note.trim().isNotEmpty)
@@ -835,37 +806,22 @@ class _PhaseTimelineRow extends StatelessWidget {
     );
   }
 
-  static String _amount(double value) => value == value.roundToDouble()
-      ? value.toStringAsFixed(0)
-      : value.toStringAsFixed(1);
-
-  static String _frequency(String? key) {
-    if (key == null) return 'Base schedule';
-    return kFrequencies
-        .firstWhere(
-          (frequency) => frequency.key == key,
-          orElse: () => kFrequencies.first,
-        )
-        .label;
+  static String _amount(AppLocalizations l10n, double value) {
+    final format = NumberFormat.decimalPattern(l10n.localeName)
+      ..maximumFractionDigits = 1;
+    return format.format(value);
   }
 
-  static String _date(DateTime date) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return '${months[date.month - 1]} ${date.day}';
-  }
+  static String _frequency(AppLocalizations l10n, String? key) => switch (key) {
+    null => l10n.activeBaseSchedule,
+    'daily' => l10n.frequencyDaily,
+    'eod' => l10n.frequencyEveryOtherDay,
+    'twice_weekly' => l10n.frequencyTwiceWeekly,
+    'weekly' => l10n.frequencyWeekly,
+    'as_needed' => l10n.frequencyAsNeeded,
+    'custom_weekdays' => l10n.activeCustomDays,
+    _ => l10n.activeBaseSchedule,
+  };
 }
 
 class _CycleStatusRow extends StatelessWidget {
@@ -881,7 +837,7 @@ class _CycleStatusRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (label, detail, color) = _state();
+    final (label, detail, color) = _state(context);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -919,13 +875,15 @@ class _CycleStatusRow extends StatelessWidget {
     );
   }
 
-  (String, String, Color) _state() {
+  (String, String, Color) _state(BuildContext context) {
+    final l10n = context.protocolL10n;
+    final material = MaterialLocalizations.of(context);
     final today = DateTime(now.year, now.month, now.day);
     final cycleEnd = peptide.cycleEndDate(protocolStart);
     if (cycleEnd == null) {
       return (
-        'Continuous tracking',
-        'No fixed cycle window',
+        l10n.activeContinuousTracking,
+        l10n.activeNoFixedCycle,
         AppColors.primary,
       );
     }
@@ -942,8 +900,11 @@ class _CycleStatusRow extends StatelessWidget {
           .inDays;
       final week = (day ~/ 7) + 1;
       return (
-        'Week ${week.clamp(1, peptide.cycleWeeks)} of ${peptide.cycleWeeks}',
-        'Cycle ends ${_formatDate(cycleEnd)}',
+        l10n.activeCycleProgress(
+          week.clamp(1, peptide.cycleWeeks),
+          peptide.cycleWeeks,
+        ),
+        l10n.activeCycleEnds(material.formatShortDate(cycleEnd)),
         AppColors.primary,
       );
     }
@@ -953,38 +914,23 @@ class _CycleStatusRow extends StatelessWidget {
       final restDay = today.difference(cycleEnd).inDays;
       final restWeek = (restDay ~/ 7) + 1;
       return (
-        'Rest week ${restWeek.clamp(1, peptide.washoutWeeks)} of ${peptide.washoutWeeks}',
-        'Rest window ends ${_formatDate(washoutEnd)}',
+        l10n.activeRestProgress(
+          restWeek.clamp(1, peptide.washoutWeeks),
+          peptide.washoutWeeks,
+        ),
+        l10n.activeRestEnds(material.formatShortDate(washoutEnd)),
         AppColors.danger,
       );
     }
 
     final washoutEnd = peptide.washoutEndDate(protocolStart);
     return (
-      'Cycle complete',
+      l10n.activeCycleComplete,
       washoutEnd == null || washoutEnd == cycleEnd
-          ? 'Completed ${_formatDate(cycleEnd)}'
-          : 'Rest window ended ${_formatDate(washoutEnd)}',
+          ? l10n.activeCompletedDate(material.formatShortDate(cycleEnd))
+          : l10n.activeRestEnded(material.formatShortDate(washoutEnd)),
       AppColors.textTertiary,
     );
-  }
-
-  static String _formatDate(DateTime d) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return '${months[d.month - 1]} ${d.day}';
   }
 }
 
@@ -1002,7 +948,7 @@ class _ProtocolHistoryList extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
           if (protocols.isEmpty)
             Text(
-              'No paused or ended protocols yet.',
+              context.protocolL10n.activeNoHistory,
               style: AppTypography.bodySmall,
             )
           else
@@ -1026,7 +972,7 @@ class _ProtocolHistoryList extends StatelessWidget {
                           children: [
                             Text(p.name, style: AppTypography.labelLarge),
                             Text(
-                              '${p.status.label} · ${_formatDate(p.startDate)}',
+                              '${_statusLabel(context, p.status)} · ${MaterialLocalizations.of(context).formatMediumDate(p.startDate)}',
                               style: AppTypography.bodySmall,
                             ),
                           ],
@@ -1047,81 +993,69 @@ class _ProtocolHistoryList extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime d) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return '${months[d.month - 1]} ${d.day}, ${d.year}';
-  }
+  String _statusLabel(BuildContext context, ProtocolStatus status) =>
+      switch (status) {
+        ProtocolStatus.active => context.protocolL10n.activeStatusActive,
+        ProtocolStatus.paused => context.protocolL10n.activeStatusPaused,
+        ProtocolStatus.ended => context.protocolL10n.activeStatusEnded,
+      };
 }
 
 class _PeptideRowCard extends StatelessWidget {
   const _PeptideRowCard({required this.peptide});
   final ProtocolPeptide peptide;
 
-  String _formatAmount(double d) =>
-      d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(1);
-
-  String _freqLabel(String key) {
-    for (final f in kFrequencies) {
-      if (f.key == key) return f.label;
-    }
-    return key;
+  String _formatAmount(AppLocalizations l10n, double value) {
+    final format = NumberFormat.decimalPattern(l10n.localeName)
+      ..maximumFractionDigits = 1;
+    return format.format(value);
   }
 
-  String _weekdayLabel(int weekday) => switch (weekday) {
-    DateTime.monday => 'Mon',
-    DateTime.tuesday => 'Tue',
-    DateTime.wednesday => 'Wed',
-    DateTime.thursday => 'Thu',
-    DateTime.friday => 'Fri',
-    DateTime.saturday => 'Sat',
-    DateTime.sunday => 'Sun',
-    _ => 'Day',
+  String _freqLabel(AppLocalizations l10n, String key) => switch (key) {
+    'daily' => l10n.frequencyDaily,
+    'eod' => l10n.frequencyEveryOtherDay,
+    'twice_weekly' => l10n.frequencyTwiceWeekly,
+    'weekly' => l10n.frequencyWeekly,
+    'as_needed' => l10n.frequencyAsNeeded,
+    _ => key,
   };
 
-  String _scheduleSummary() {
+  String _weekdayLabel(BuildContext context, int weekday) =>
+      MaterialLocalizations.of(context).narrowWeekdays[weekday % 7];
+
+  String _scheduleSummary(BuildContext context) {
+    final l10n = context.protocolL10n;
     if (peptide.isBlend) {
-      return '${_formatAmount(peptide.syringeUnits)} syringe units · '
-          '${_freqLabel(peptide.frequency)} · '
-          '${peptide.blendVial!.constituents.length} compounds';
+      return '${l10n.activeSyringeUnits(_formatAmount(l10n, peptide.syringeUnits))} · '
+          '${_freqLabel(l10n, peptide.frequency)} · '
+          '${l10n.activeCompoundsCount(peptide.blendVial!.constituents.length)}';
     }
     if (!peptide.usesCustomWeekdays) {
-      return '${_formatAmount(peptide.dosePerInjection)} ${peptide.doseUnit} · '
-          '${_freqLabel(peptide.frequency)}${_syringeSummary(peptide.syringeUnits)}';
+      return '${_formatAmount(l10n, peptide.dosePerInjection)} ${peptide.doseUnit} · '
+          '${_freqLabel(l10n, peptide.frequency)}${_syringeSummary(l10n, peptide.syringeUnits)}';
     }
     final days = [...peptide.weekdayDoses]
       ..sort((a, b) => a.weekday.compareTo(b.weekday));
     return days
         .map(
           (d) =>
-              '${_weekdayLabel(d.weekday)} ${_formatAmount(d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(d.syringeUnits)}',
+              '${_weekdayLabel(context, d.weekday)} ${_formatAmount(l10n, d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(l10n, d.syringeUnits)}',
         )
         .join(', ');
   }
 
-  String _syringeSummary(double value) {
+  String _syringeSummary(AppLocalizations l10n, double value) {
     if (value <= 0) return '';
-    return ' · ${_formatAmount(value)} syringe units';
+    return l10n.protocolSyringeUnitsSuffix(_formatAmount(l10n, value));
   }
 
-  String _routeLabel(String key) {
-    for (final r in kRoutes) {
-      if (r.key == key) return r.label;
-    }
-    return key;
-  }
+  String _routeLabel(AppLocalizations l10n, String key) => switch (key) {
+    'subcutaneous' => l10n.routeSubcutaneous,
+    'intramuscular' => l10n.routeIntramuscular,
+    'oral' => l10n.routeOral,
+    'nasal' => l10n.routeNasal,
+    _ => key,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -1139,7 +1073,7 @@ class _PeptideRowCard extends StatelessWidget {
                   children: [
                     Text(peptide.peptideName, style: AppTypography.labelLarge),
                     Text(
-                      _scheduleSummary(),
+                      _scheduleSummary(context),
                       style: AppTypography.bodySmall.copyWith(
                         fontFamily: 'JetBrainsMono',
                       ),
@@ -1162,7 +1096,10 @@ class _PeptideRowCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('PER DRAW', style: AppTypography.systemLabel),
+                  Text(
+                    context.protocolL10n.activePerDraw,
+                    style: AppTypography.systemLabel,
+                  ),
                   const SizedBox(height: AppSpacing.xs),
                   for (final item in peptide.blendVial!.constituents)
                     Padding(
@@ -1176,7 +1113,7 @@ class _PeptideRowCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '${_formatAmount(peptide.blendVial!.amountPerDraw(item))} ${item.unit}',
+                            '${_formatAmount(context.protocolL10n, peptide.blendVial!.amountPerDraw(item))} ${item.unit}',
                             style: AppTypography.tabular.copyWith(fontSize: 12),
                           ),
                         ],
@@ -1184,7 +1121,12 @@ class _PeptideRowCard extends StatelessWidget {
                     ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
-                    '${_formatAmount(peptide.blendVial!.diluentMl)} mL vial · U-100',
+                    context.protocolL10n.activeVialSummary(
+                      _formatAmount(
+                        context.protocolL10n,
+                        peptide.blendVial!.diluentMl,
+                      ),
+                    ),
                     style: AppTypography.disclaimer,
                   ),
                 ],
@@ -1196,14 +1138,24 @@ class _PeptideRowCard extends StatelessWidget {
             spacing: AppSpacing.sm,
             runSpacing: AppSpacing.xs,
             children: [
-              _Tag(label: _routeLabel(peptide.route)),
+              _Tag(label: _routeLabel(context.protocolL10n, peptide.route)),
               if (peptide.cycleWeeks > 0)
-                _Tag(label: '${peptide.cycleWeeks}wk cycle'),
+                _Tag(
+                  label: context.protocolL10n.activeCycleWeeks(
+                    peptide.cycleWeeks,
+                  ),
+                ),
               if (peptide.washoutWeeks > 0)
-                _Tag(label: '${peptide.washoutWeeks}wk rest'),
+                _Tag(
+                  label: context.protocolL10n.activeRestWeeks(
+                    peptide.washoutWeeks,
+                  ),
+                ),
               if (peptide.syringeUnits > 0)
                 _Tag(
-                  label: '${_formatAmount(peptide.syringeUnits)} syringe units',
+                  label: context.protocolL10n.activeSyringeUnits(
+                    _formatAmount(context.protocolL10n, peptide.syringeUnits),
+                  ),
                 ),
               if (peptide.usesCustomWeekdays)
                 for (final d in ([
@@ -1211,7 +1163,7 @@ class _PeptideRowCard extends StatelessWidget {
                 ]..sort((a, b) => a.weekday.compareTo(b.weekday))))
                   _Tag(
                     label:
-                        '${_weekdayLabel(d.weekday)} ${_formatAmount(d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(d.syringeUnits)}',
+                        '${_weekdayLabel(context, d.weekday)} ${_formatAmount(context.protocolL10n, d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(context.protocolL10n, d.syringeUnits)}',
                   ),
               for (final t in peptide.scheduledTimes) _Tag(label: t),
             ],

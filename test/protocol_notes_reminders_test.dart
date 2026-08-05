@@ -7,6 +7,7 @@ import 'package:peptide_os/data/repositories/protocol_repository.dart';
 import 'package:peptide_os/features/protocol/providers/dose_log_provider.dart';
 import 'package:peptide_os/features/protocol/providers/protocol_provider.dart';
 import 'package:peptide_os/features/protocol/screens/active_protocol_detail_screen.dart';
+import 'package:peptide_os/l10n/app_localizations.dart';
 import 'package:peptide_os/models/protocol.dart';
 import 'package:provider/provider.dart';
 
@@ -58,6 +59,9 @@ void main() {
             ChangeNotifierProvider.value(value: doseProvider),
           ],
           child: MaterialApp(
+            locale: const Locale('de'),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             theme: AppTheme.dark,
             home: ActiveProtocolDetailScreen(
               protocol: protocol,
@@ -68,7 +72,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('NOTES // PROTOCOL'), findsOneWidget);
+      expect(find.text('NOTIZEN // PROTOKOLL'), findsOneWidget);
       expect(
         find.text(
           'Track sleep quality and discuss questions at the next review.',
@@ -76,12 +80,12 @@ void main() {
         findsOneWidget,
       );
 
-      await tester.ensureVisible(find.text('CHANGE REMINDERS'));
+      await tester.ensureVisible(find.text('ÄNDERUNGSERINNERUNGEN'));
       await tester.pumpAndSettle();
 
-      expect(find.text('CHANGE REMINDERS'), findsOneWidget);
+      expect(find.text('ÄNDERUNGSERINNERUNGEN'), findsOneWidget);
       expect(find.text('BPC-157 · Schedule review'), findsOneWidget);
-      expect(find.text('Jan 15 · 09:00'), findsOneWidget);
+      expect(find.text('15. Jan. 2026 · 09:00'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );

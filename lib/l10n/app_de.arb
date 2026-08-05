@@ -516,5 +516,168 @@
   "chestLabel": "BRUST",
   "armLabel": "ARM",
   "saveAction": "SPEICHERN",
-  "logMetricSystemLabel": "MESSWERT.ERFASSEN"
+  "logMetricSystemLabel": "MESSWERT.ERFASSEN",
+  "activeLastSevenDays": "LETZTE 7 TAGE",
+  "activeAllTime": "GESAMT",
+  "activeAdherence": "Regelmäßigkeit",
+  "activeStarted": "GESTARTET",
+  "activeEnded": "BEENDET",
+  "activeStackCount": "STACK ({count})",
+  "@activeStackCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeEditProtocol": "BEARBEITEN",
+  "activePauseProtocol": "PAUSIEREN",
+  "activeEndProtocol": "BEENDEN",
+  "activeResumeProtocol": "FORTSETZEN",
+  "activeDeleteProtocol": "LÖSCHEN",
+  "activeTrackingDisclaimer": "Nur zur Dokumentation. Sprich vor Änderungen mit qualifiziertem medizinischem Fachpersonal.",
+  "activeEndQuestion": "Protokoll beenden?",
+  "activeEndBody": "Zukünftige Dosen werden entfernt. Bisherige Einträge bleiben im Verlauf. Dies kann nicht rückgängig gemacht werden.",
+  "activeEndAction": "BEENDEN",
+  "activeDeleteQuestion": "Protokoll löschen?",
+  "activeDeleteBody": "Dadurch werden das Protokoll und alle Dosiseinträge dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.",
+  "activeDeleteAction": "LÖSCHEN",
+  "cancel": "Abbrechen",
+  "activeStatusActive": "AKTIV",
+  "activeStatusPaused": "PAUSIERT",
+  "activeStatusEnded": "BEENDET",
+  "activeNotesLabel": "NOTIZEN // PROTOKOLL",
+  "activeChangeReminders": "ÄNDERUNGSERINNERUNGEN",
+  "activeChangeRemindersBody": "Wenn Mitteilungen aktiv sind, plant PepMod für jeden bevorstehenden Phasenwechsel einen lokalen Hinweis um 09:00 Uhr.",
+  "activePhaseAnchor": "Wochenbereiche beginnen ab {date}.",
+  "@activePhaseAnchor": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeWeek": "WOCHE {week}",
+  "@activeWeek": {
+    "placeholders": {
+      "week": {
+        "type": "int"
+      }
+    }
+  },
+  "activeWeeks": "WOCHEN {start}–{end}",
+  "@activeWeeks": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "activePerDayAmounts": "Mengen pro Tag",
+  "activeBaseAmount": "Basismenge",
+  "activeCurrent": "AKTUELL",
+  "activeBaseSchedule": "Basisplan",
+  "activeCustomDays": "Eigene Tage",
+  "activeContinuousTracking": "Fortlaufende Erfassung",
+  "activeNoFixedCycle": "Kein festes Zyklusfenster",
+  "activeCycleProgress": "Woche {week} von {total}",
+  "@activeCycleProgress": {
+    "placeholders": {
+      "week": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "activeCycleEnds": "Zyklus endet am {date}",
+  "@activeCycleEnds": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeRestProgress": "Pausenwoche {week} von {total}",
+  "@activeRestProgress": {
+    "placeholders": {
+      "week": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "activeRestEnds": "Pausenzeit endet am {date}",
+  "@activeRestEnds": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeCycleComplete": "Zyklus abgeschlossen",
+  "activeCompletedDate": "Abgeschlossen am {date}",
+  "@activeCompletedDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeRestEnded": "Pausenzeit endete am {date}",
+  "@activeRestEnded": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeNoHistory": "Noch keine pausierten oder beendeten Protokolle.",
+  "activeCompoundsCount": "{count} Wirkstoffe",
+  "@activeCompoundsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeSyringeUnits": "{amount} Spritzeneinheiten",
+  "@activeSyringeUnits": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activeCycleWeeks": "{count} Wo. Zyklus",
+  "@activeCycleWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeRestWeeks": "{count} Wo. Pause",
+  "@activeRestWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activePerDraw": "PRO ENTNAHME",
+  "activeVialSummary": "{volume} mL Flakon · U-100",
+  "@activeVialSummary": {
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      }
+    }
+  }
 }

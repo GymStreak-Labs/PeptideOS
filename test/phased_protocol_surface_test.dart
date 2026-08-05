@@ -8,6 +8,7 @@ import 'package:peptide_os/data/repositories/protocol_repository.dart';
 import 'package:peptide_os/features/protocol/providers/dose_log_provider.dart';
 import 'package:peptide_os/features/protocol/providers/protocol_provider.dart';
 import 'package:peptide_os/features/protocol/screens/active_protocol_detail_screen.dart';
+import 'package:peptide_os/l10n/app_localizations.dart';
 import 'package:peptide_os/models/protocol.dart';
 import 'package:provider/provider.dart';
 
@@ -107,6 +108,8 @@ void main() {
           ChangeNotifierProvider.value(value: doseProvider),
         ],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.dark,
           home: ActiveProtocolDetailScreen(
