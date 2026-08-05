@@ -131,5 +131,185 @@
   "premiumMetrics": "Body metric tracking + charts",
   "upgradeNow": "UPGRADE NOW",
   "restorePurchases": "Restore purchases",
-  "notRightNow": "Not right now"
+  "notRightNow": "Not right now",
+  "protocolWeeklyPlanner": "Weekly planner",
+  "protocolDoseHistory": "Dose history",
+  "protocolCreate": "Create protocol",
+  "protocolManage": "MANAGE",
+  "protocolYourProtocol": "Your Protocol",
+  "protocolNoActive": "No active protocol",
+  "protocolNoActiveBody": "Create your first protocol to start tracking doses and building adherence.",
+  "protocolStartFirst": "START FIRST PROTOCOL",
+  "protocolNoDosesScheduledToday": "No doses scheduled today",
+  "protocolDosesTaken": "{taken} of {total} doses taken",
+  "@protocolDosesTaken": {
+    "description": "Summary of completed doses today.",
+    "placeholders": {
+      "taken": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "protocolNextDose": "NEXT DOSE",
+  "protocolInTime": "In {duration}",
+  "@protocolInTime": {
+    "description": "Countdown until the next dose.",
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "protocolLogDose": "LOG DOSE",
+  "protocolNow": "now",
+  "protocolMissed": "MISSED",
+  "protocolSkipped": "SKIPPED",
+  "protocolNoDosesToday": "No doses today",
+  "protocolNoDosesTodayBody": "Your protocol has no doses scheduled for today.",
+  "protocolFreeLimit": "Free plan is limited to one protocol. Upgrade to Premium to run multiple stacks at once.",
+  "protocolSyringeUnitsSuffix": " · {amount} syringe units",
+  "@protocolSyringeUnitsSuffix": {
+    "description": "Syringe-unit detail appended to a dose amount.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "injectionSiteLeftAbdomen": "Left Abdomen",
+  "@injectionSiteLeftAbdomen": {
+    "description": "Display name for the left abdomen injection site."
+  },
+  "injectionSiteRightAbdomen": "Right Abdomen",
+  "@injectionSiteRightAbdomen": {
+    "description": "Display name for the right abdomen injection site."
+  },
+  "injectionSiteLeftThigh": "Left Thigh",
+  "@injectionSiteLeftThigh": {
+    "description": "Display name for the left thigh injection site."
+  },
+  "injectionSiteRightThigh": "Right Thigh",
+  "@injectionSiteRightThigh": {
+    "description": "Display name for the right thigh injection site."
+  },
+  "injectionSiteLeftGlute": "Left Glute",
+  "@injectionSiteLeftGlute": {
+    "description": "Display name for the left glute injection site."
+  },
+  "injectionSiteRightGlute": "Right Glute",
+  "@injectionSiteRightGlute": {
+    "description": "Display name for the right glute injection site."
+  },
+  "injectionSiteLeftTriceps": "Left Triceps",
+  "@injectionSiteLeftTriceps": {
+    "description": "Display name for the left triceps injection site."
+  },
+  "injectionSiteRightTriceps": "Right Triceps",
+  "@injectionSiteRightTriceps": {
+    "description": "Display name for the right triceps injection site."
+  },
+  "plannerToday": "TODAY",
+  "plannerBack": "Back",
+  "plannerPreviousWeek": "Previous week",
+  "plannerNextWeek": "Next week",
+  "plannerScheduledCount": "{count, plural, =1{{count} scheduled dose} other{{count} scheduled doses}}",
+  "@plannerScheduledCount": {
+    "description": "Accessible count of doses scheduled for a calendar day.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "plannerTrackingDisclaimer": "Tracking only. This calendar reflects your saved protocol and does not provide dosing advice.",
+  "plannerWashoutPeriod": "Washout period",
+  "plannerWashoutUntil": "Washout until {date}",
+  "@plannerWashoutUntil": {
+    "description": "End date shown for a saved washout window.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "plannerNoScheduledDoses": "No scheduled doses",
+  "plannerNothingPlanned": "Nothing is planned from your saved protocols.",
+  "@protocolWeeklyPlanner": {
+    "description": "Tooltip for opening the weekly planner."
+  },
+  "@protocolDoseHistory": {
+    "description": "Tooltip for opening dose history."
+  },
+  "@protocolCreate": {
+    "description": "Tooltip for creating a protocol."
+  },
+  "@protocolManage": {
+    "description": "Action that opens protocol management."
+  },
+  "@protocolYourProtocol": {
+    "description": "Heading above the empty protocol state."
+  },
+  "@protocolNoActive": {
+    "description": "Title when no protocol is active."
+  },
+  "@protocolNoActiveBody": {
+    "description": "Guidance when no protocol is active."
+  },
+  "@protocolStartFirst": {
+    "description": "Action to create the first protocol."
+  },
+  "@protocolNoDosesScheduledToday": {
+    "description": "Message when today has no scheduled doses."
+  },
+  "@protocolNextDose": {
+    "description": "Heading for the next scheduled dose."
+  },
+  "@protocolLogDose": {
+    "description": "Action to record a dose."
+  },
+  "@protocolNow": {
+    "description": "Countdown label when a dose is due now."
+  },
+  "@protocolMissed": {
+    "description": "Status for a missed dose."
+  },
+  "@protocolSkipped": {
+    "description": "Status for a skipped dose."
+  },
+  "@protocolNoDosesToday": {
+    "description": "Empty-card title for no doses today."
+  },
+  "@protocolNoDosesTodayBody": {
+    "description": "Empty-card detail for no doses today."
+  },
+  "@protocolFreeLimit": {
+    "description": "Upgrade explanation when the free protocol limit is reached."
+  },
+  "@plannerToday": {
+    "description": "Action that returns the planner to today."
+  },
+  "@plannerBack": {
+    "description": "Tooltip for leaving the weekly planner."
+  },
+  "@plannerPreviousWeek": {
+    "description": "Tooltip for moving to the previous week."
+  },
+  "@plannerNextWeek": {
+    "description": "Tooltip for moving to the next week."
+  },
+  "@plannerTrackingDisclaimer": {
+    "description": "Safety note below the weekly planner."
+  },
+  "@plannerWashoutPeriod": {
+    "description": "Label for a washout period without an end date."
+  },
+  "@plannerNoScheduledDoses": {
+    "description": "Title when a planner day has no doses."
+  },
+  "@plannerNothingPlanned": {
+    "description": "Detail when a planner day has no doses."
+  }
 }

@@ -5,6 +5,7 @@ import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/protocol.dart';
 import '../widgets/peptide_label_color.dart';
+import '../widgets/protocol_localizations.dart';
 
 /// A read-only calendar generated from the user's saved protocol schedules.
 ///
@@ -51,7 +52,7 @@ class _WeeklyPlannerScreenState extends State<WeeklyPlannerScreen> {
         child: Column(
           children: [
             _PlannerHeader(
-              rangeLabel: _weekRangeLabel(_weekStart),
+              rangeLabel: _weekRangeLabel(context, _weekStart),
               onBack: () => Navigator.of(context).pop(),
               onPrevious: () => _moveWeek(-1),
               onNext: () => _moveWeek(1),
@@ -70,7 +71,7 @@ class _WeeklyPlannerScreenState extends State<WeeklyPlannerScreen> {
                   GestureDetector(
                     onTap: _jumpToToday,
                     child: Text(
-                      'TODAY',
+                      context.protocolL10n.plannerToday,
                       style: AppTypography.systemLabel.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -112,7 +113,9 @@ class _WeeklyPlannerScreenState extends State<WeeklyPlannerScreen> {
                 ),
                 children: [
                   Text(
-                    _fullDateLabel(_selectedDate).toUpperCase(),
+                    MaterialLocalizations.of(
+                      context,
+                    ).formatFullDate(_selectedDate).toUpperCase(),
                     style: AppTypography.systemLabel.copyWith(
                       color: AppColors.textSecondary,
                     ),
@@ -132,7 +135,7 @@ class _WeeklyPlannerScreenState extends State<WeeklyPlannerScreen> {
                   ],
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    'Tracking only. This calendar reflects your saved protocol and does not provide dosing advice.',
+                    context.protocolL10n.plannerTrackingDisclaimer,
                     style: AppTypography.disclaimer.copyWith(
                       color: AppColors.textSecondary,
                     ),
@@ -256,7 +259,7 @@ class _PlannerHeader extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            tooltip: 'Back',
+            tooltip: context.protocolL10n.plannerBack,
             onPressed: onBack,
             icon: const Icon(
               Icons.arrow_back_rounded,
@@ -274,7 +277,7 @@ class _PlannerHeader extends StatelessWidget {
             ),
           ),
           IconButton(
-            tooltip: 'Previous week',
+            tooltip: context.protocolL10n.plannerPreviousWeek,
             onPressed: onPrevious,
             icon: const Icon(
               Icons.chevron_left_rounded,
@@ -282,7 +285,7 @@ class _PlannerHeader extends StatelessWidget {
             ),
           ),
           IconButton(
-            tooltip: 'Next week',
+            tooltip: context.protocolL10n.plannerNextWeek,
             onPressed: onNext,
             icon: const Icon(
               Icons.chevron_right_rounded,
@@ -316,7 +319,7 @@ class _DayButton extends StatelessWidget {
       button: true,
       selected: selected,
       label:
-          '${_weekdayNames[date.weekday - 1]} ${date.day}, $doseCount scheduled ${doseCount == 1 ? 'dose' : 'doses'}',
+          '${MaterialLocalizations.of(context).formatFullDate(date)}, ${context.protocolL10n.plannerScheduledCount(doseCount)}',
       child: GestureDetector(
         onTap: onTap,
         child: AnimatedContainer(
@@ -337,7 +340,9 @@ class _DayButton extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                _weekdayShort[date.weekday - 1],
+                MaterialLocalizations.of(
+                  context,
+                ).narrowWeekdays[date.weekday % 7].toUpperCase(),
                 style: AppTypography.labelSmall.copyWith(
                   color: selected ? AppColors.primary : AppColors.textSecondary,
                   letterSpacing: 0.4,
@@ -483,8 +488,12 @@ class _WashoutCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   end == null
-                      ? 'Washout period'
-                      : 'Washout until ${_shortDate(end)}',
+                      ? context.protocolL10n.plannerWashoutPeriod
+                      : context.protocolL10n.plannerWashoutUntil(
+                          MaterialLocalizations.of(
+                            context,
+                          ).formatShortDate(end),
+                        ),
                   style: AppTypography.bodyMedium,
                 ),
               ],
@@ -508,7 +517,7 @@ class _EmptyDayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppCard(
+    return AppCard(
       child: Row(
         children: [
           Icon(Icons.event_available_rounded, color: AppColors.textSecondary),
@@ -517,10 +526,13 @@ class _EmptyDayCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('No scheduled doses', style: AppTypography.labelLarge),
+                Text(
+                  context.protocolL10n.plannerNoScheduledDoses,
+                  style: AppTypography.labelLarge,
+                ),
                 SizedBox(height: AppSpacing.xs),
                 Text(
-                  'Nothing is planned from your saved protocols.',
+                  context.protocolL10n.plannerNothingPlanned,
                   style: AppTypography.bodySmall,
                 ),
               ],
@@ -577,40 +589,8 @@ String _amount(double value) => value == value.roundToDouble()
           .replaceFirst(RegExp(r'0+$'), '')
           .replaceFirst(RegExp(r'\.$'), '');
 
-String _weekRangeLabel(DateTime monday) {
+String _weekRangeLabel(BuildContext context, DateTime monday) {
   final sunday = monday.add(const Duration(days: 6));
-  if (monday.month == sunday.month) {
-    return '${_months[monday.month - 1]} ${monday.day}–${sunday.day}';
-  }
-  return '${_months[monday.month - 1]} ${monday.day} – ${_months[sunday.month - 1]} ${sunday.day}';
+  final material = MaterialLocalizations.of(context);
+  return '${material.formatShortDate(monday)} – ${material.formatShortDate(sunday)}';
 }
-
-String _fullDateLabel(DateTime date) =>
-    '${_weekdayNames[date.weekday - 1]}, ${_months[date.month - 1]} ${date.day}';
-
-String _shortDate(DateTime date) => '${_months[date.month - 1]} ${date.day}';
-
-const _weekdayShort = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
-const _weekdayNames = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday',
-];
-const _months = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];

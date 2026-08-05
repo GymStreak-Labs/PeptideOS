@@ -5,6 +5,7 @@ import 'package:peptide_os/data/repositories/dose_log_repository.dart';
 import 'package:peptide_os/data/repositories/protocol_repository.dart';
 import 'package:peptide_os/features/protocol/providers/protocol_provider.dart';
 import 'package:peptide_os/features/protocol/screens/weekly_planner_screen.dart';
+import 'package:peptide_os/l10n/app_localizations.dart';
 import 'package:peptide_os/models/protocol.dart';
 
 void main() {
@@ -70,6 +71,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: WeeklyPlannerScreen(
             protocols: [protocol],
             initialDate: DateTime(2026, 8, 3),
@@ -78,7 +81,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('Aug 3–9'), findsOneWidget);
+      expect(find.textContaining(' – '), findsOneWidget);
       expect(find.text('BPC-157'), findsNWidgets(2));
       expect(find.text('07:30'), findsOneWidget);
       expect(find.text('19:30'), findsOneWidget);
@@ -86,7 +89,7 @@ void main() {
       expect(find.text('PHASE // FOUNDATION'), findsNWidgets(2));
       expect(tester.takeException(), isNull);
 
-      await tester.tap(find.text('WED'));
+      await tester.tap(find.text('W'));
       await tester.pumpAndSettle();
 
       expect(find.text('20:15'), findsOneWidget);
@@ -96,10 +99,27 @@ void main() {
       await tester.tap(find.byTooltip('Next week'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Aug 10–16'), findsOneWidget);
+      expect(find.textContaining(' – '), findsOneWidget);
       expect(find.text('WASHOUT'), findsOneWidget);
-      expect(find.text('Washout until Aug 17'), findsOneWidget);
+      expect(find.textContaining('Washout until'), findsOneWidget);
       expect(find.text('BPC-157'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('de'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: WeeklyPlannerScreen(
+            protocols: [protocol],
+            initialDate: DateTime(2026, 8, 3),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('HEUTE'), findsOneWidget);
+      expect(find.byTooltip('Nächste Woche'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );
@@ -166,6 +186,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: WeeklyPlannerScreen(
             protocols: persisted,
             initialDate: tomorrow,

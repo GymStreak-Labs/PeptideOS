@@ -131,5 +131,81 @@
   "premiumMetrics": "Körperwerte und Diagramme verfolgen",
   "upgradeNow": "JETZT UPGRADEN",
   "restorePurchases": "Käufe wiederherstellen",
-  "notRightNow": "Jetzt nicht"
+  "notRightNow": "Jetzt nicht",
+  "protocolWeeklyPlanner": "Wochenplan",
+  "protocolDoseHistory": "Dosisverlauf",
+  "protocolCreate": "Protokoll erstellen",
+  "protocolManage": "VERWALTEN",
+  "protocolYourProtocol": "Dein Protokoll",
+  "protocolNoActive": "Kein aktives Protokoll",
+  "protocolNoActiveBody": "Erstelle dein erstes Protokoll, um Dosen und Regelmäßigkeit zu erfassen.",
+  "protocolStartFirst": "ERSTES PROTOKOLL STARTEN",
+  "protocolNoDosesScheduledToday": "Heute keine Dosen geplant",
+  "protocolDosesTaken": "{taken} von {total} Dosen erfasst",
+  "@protocolDosesTaken": {
+    "placeholders": {
+      "taken": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "protocolNextDose": "NÄCHSTE DOSIS",
+  "protocolInTime": "In {duration}",
+  "@protocolInTime": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "protocolLogDose": "DOSIS ERFASSEN",
+  "protocolNow": "jetzt",
+  "protocolMissed": "VERPASST",
+  "protocolSkipped": "ÜBERSPRUNGEN",
+  "protocolNoDosesToday": "Heute keine Dosen",
+  "protocolNoDosesTodayBody": "Für dein Protokoll sind heute keine Dosen geplant.",
+  "protocolFreeLimit": "Im kostenlosen Tarif ist nur ein Protokoll möglich. Mit Premium kannst du mehrere Stacks gleichzeitig nutzen.",
+  "protocolSyringeUnitsSuffix": " · {amount} Spritzeneinheiten",
+  "@protocolSyringeUnitsSuffix": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "injectionSiteLeftAbdomen": "Linker Bauch",
+  "injectionSiteRightAbdomen": "Rechter Bauch",
+  "injectionSiteLeftThigh": "Linker Oberschenkel",
+  "injectionSiteRightThigh": "Rechter Oberschenkel",
+  "injectionSiteLeftGlute": "Linke Gesäßhälfte",
+  "injectionSiteRightGlute": "Rechte Gesäßhälfte",
+  "injectionSiteLeftTriceps": "Linker Trizeps",
+  "injectionSiteRightTriceps": "Rechter Trizeps",
+  "plannerToday": "HEUTE",
+  "plannerBack": "Zurück",
+  "plannerPreviousWeek": "Vorherige Woche",
+  "plannerNextWeek": "Nächste Woche",
+  "plannerScheduledCount": "{count, plural, =1{{count} geplante Dosis} other{{count} geplante Dosen}}",
+  "@plannerScheduledCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "plannerTrackingDisclaimer": "Nur zur Dokumentation. Dieser Kalender zeigt dein gespeichertes Protokoll und gibt keine Dosierungsempfehlung.",
+  "plannerWashoutPeriod": "Pausenzeit",
+  "plannerWashoutUntil": "Pause bis {date}",
+  "@plannerWashoutUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "plannerNoScheduledDoses": "Keine Dosen geplant",
+  "plannerNothingPlanned": "In deinen gespeicherten Protokollen ist nichts geplant."
 }

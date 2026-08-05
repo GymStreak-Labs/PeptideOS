@@ -13,6 +13,7 @@ import '../providers/protocol_provider.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/log_dose_sheet.dart';
 import '../widgets/peptide_label_color.dart';
+import '../widgets/protocol_localizations.dart';
 import 'active_protocol_detail_screen.dart';
 import 'create_protocol_screen.dart';
 import 'weekly_planner_screen.dart';
@@ -74,12 +75,12 @@ class ProtocolHomeScreen extends StatelessWidget {
                           style: AppTypography.systemLabel,
                         ),
                         const SizedBox(height: AppSpacing.sm),
-                        Text(_dayLabel(now), style: AppTypography.h1),
+                        Text(_dayLabel(context, now), style: AppTypography.h1),
                       ],
                     ),
                   ),
                   _HeaderIconButton(
-                    tooltip: 'Weekly planner',
+                    tooltip: context.protocolL10n.protocolWeeklyPlanner,
                     icon: Icons.calendar_view_week_rounded,
                     onTap: () {
                       HapticFeedback.lightImpact();
@@ -94,7 +95,7 @@ class ProtocolHomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   _HeaderIconButton(
-                    tooltip: 'Dose history',
+                    tooltip: context.protocolL10n.protocolDoseHistory,
                     icon: Icons.history_rounded,
                     onTap: () {
                       HapticFeedback.lightImpact();
@@ -103,7 +104,7 @@ class ProtocolHomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   _HeaderIconButton(
-                    tooltip: 'Create protocol',
+                    tooltip: context.protocolL10n.protocolCreate,
                     icon: Icons.add_rounded,
                     onTap: () {
                       HapticFeedback.lightImpact();
@@ -173,7 +174,7 @@ class ProtocolHomeScreen extends StatelessWidget {
                       );
                     },
                     child: Text(
-                      'MANAGE',
+                      context.protocolL10n.protocolManage,
                       style: AppTypography.systemLabel.copyWith(
                         color: AppColors.primary,
                       ),
@@ -243,32 +244,8 @@ class ProtocolHomeScreen extends StatelessWidget {
     );
   }
 
-  static const _months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-  static const _weekdays = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-  ];
-
-  String _dayLabel(DateTime d) =>
-      '${_weekdays[d.weekday - 1]}\n${_months[d.month - 1]} ${d.day}';
+  String _dayLabel(BuildContext context, DateTime d) =>
+      MaterialLocalizations.of(context).formatFullDate(d);
 
   Map<String, String> _labelColorsByPeptideUuid(List<Protocol> protocols) {
     return <String, String>{
@@ -353,16 +330,18 @@ class _NoProtocolView extends StatelessWidget {
             const SizedBox(height: AppSpacing.xxl),
             Text('SYS.PROTOCOL // IDLE', style: AppTypography.systemLabel),
             const SizedBox(height: AppSpacing.sm),
-            Text('Your Protocol', style: AppTypography.h1),
+            Text(
+              context.protocolL10n.protocolYourProtocol,
+              style: AppTypography.h1,
+            ),
             const SizedBox(height: AppSpacing.huge),
             Expanded(
               child: Center(
                 child: EmptyState(
                   icon: Icons.medical_services_rounded,
-                  title: 'No active protocol',
-                  description:
-                      'Create your first protocol to start tracking doses and building adherence.',
-                  actionLabel: 'START FIRST PROTOCOL',
+                  title: context.protocolL10n.protocolNoActive,
+                  description: context.protocolL10n.protocolNoActiveBody,
+                  actionLabel: context.protocolL10n.protocolStartFirst,
                   onAction: () => _onCreateProtocol(context),
                 ),
               ),
@@ -384,9 +363,7 @@ Future<void> _onCreateProtocol(BuildContext context) async {
     final purchased = await showSoftPaywall(
       context,
       source: 'protocol_limit',
-      reason:
-          'Free plan is limited to one protocol. Upgrade to Premium to run '
-          'multiple stacks at once.',
+      reason: context.protocolL10n.protocolFreeLimit,
     );
     if (!purchased) return;
     if (!context.mounted) return;
@@ -439,8 +416,8 @@ class _TodayHeroCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   total == 0
-                      ? 'No doses scheduled today'
-                      : '$taken of $total doses taken',
+                      ? context.protocolL10n.protocolNoDosesScheduledToday
+                      : context.protocolL10n.protocolDosesTaken(taken, total),
                   style: AppTypography.bodySmall,
                 ),
               ],
@@ -493,7 +470,10 @@ class _NextDoseCard extends StatelessWidget {
             children: [
               PeptideLabelSwatch(hex: labelColorHex, size: 8),
               const SizedBox(width: AppSpacing.sm),
-              Text('NEXT DOSE', style: AppTypography.systemLabel),
+              Text(
+                context.protocolL10n.protocolNextDose,
+                style: AppTypography.systemLabel,
+              ),
               const Spacer(),
               Text(_formatTime(dose.scheduledAt), style: AppTypography.tabular),
             ],
@@ -520,13 +500,15 @@ class _NextDoseCard extends StatelessWidget {
             dose.peptideName +
                 (dose.injectionSite.isEmpty
                     ? ''
-                    : ' · ${_siteLabel(dose.injectionSite)}') +
-                _syringeLabel(dose.syringeUnits),
+                    : ' · ${_siteLabel(context, dose.injectionSite)}') +
+                _syringeLabel(context, dose.syringeUnits),
             style: AppTypography.bodySmall,
           ),
           const SizedBox(height: AppSpacing.base),
           Text(
-            'In ${_formatDuration(remaining)}',
+            context.protocolL10n.protocolInTime(
+              _formatDuration(context, remaining),
+            ),
             style: AppTypography.tabular.copyWith(
               fontSize: 13,
               color: AppColors.textTertiary,
@@ -534,7 +516,7 @@ class _NextDoseCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.lg),
           PrimaryButton(
-            label: 'LOG DOSE',
+            label: context.protocolL10n.protocolLogDose,
             icon: Icons.check_rounded,
             onPressed: onLog,
           ),
@@ -543,8 +525,8 @@ class _NextDoseCard extends StatelessWidget {
     );
   }
 
-  String _formatDuration(Duration d) {
-    if (d.isNegative) return 'now';
+  String _formatDuration(BuildContext context, Duration d) {
+    if (d.isNegative) return context.protocolL10n.protocolNow;
     if (d.inHours > 0) return '${d.inHours}h ${d.inMinutes.remainder(60)}m';
     return '${d.inMinutes}m';
   }
@@ -555,16 +537,23 @@ class _NextDoseCard extends StatelessWidget {
     return '$h:$m';
   }
 
-  String _siteLabel(String key) {
-    return key
-        .split('-')
-        .map((s) => s.isEmpty ? s : '${s[0].toUpperCase()}${s.substring(1)}')
-        .join(' ');
-  }
+  String _siteLabel(BuildContext context, String key) => switch (key) {
+    'left-abdomen' => context.protocolL10n.injectionSiteLeftAbdomen,
+    'right-abdomen' => context.protocolL10n.injectionSiteRightAbdomen,
+    'left-thigh' => context.protocolL10n.injectionSiteLeftThigh,
+    'right-thigh' => context.protocolL10n.injectionSiteRightThigh,
+    'left-glute' => context.protocolL10n.injectionSiteLeftGlute,
+    'right-glute' => context.protocolL10n.injectionSiteRightGlute,
+    'left-triceps' => context.protocolL10n.injectionSiteLeftTriceps,
+    'right-triceps' => context.protocolL10n.injectionSiteRightTriceps,
+    _ => key,
+  };
 
-  String _syringeLabel(double value) {
+  String _syringeLabel(BuildContext context, double value) {
     if (value <= 0) return '';
-    return ' · ${_formatAmount(value)} syringe units';
+    return context.protocolL10n.protocolSyringeUnitsSuffix(
+      _formatAmount(value),
+    );
   }
 
   String _formatAmount(double d) =>
@@ -659,8 +648,8 @@ class _DoseCard extends StatelessWidget {
                 ),
                 Text(
                   '${_formatAmount(dose.amountTaken)} ${dose.units}'
-                  '${_syringeLabel(dose.syringeUnits)}'
-                  '${dose.injectionSite.isEmpty ? '' : ' · ${_siteLabel(dose.injectionSite)}'}',
+                  '${_syringeLabel(context, dose.syringeUnits)}'
+                  '${dose.injectionSite.isEmpty ? '' : ' · ${_siteLabel(context, dose.injectionSite)}'}',
                   style: AppTypography.bodySmall.copyWith(
                     fontFamily: 'JetBrainsMono',
                   ),
@@ -674,7 +663,7 @@ class _DoseCard extends StatelessWidget {
               Text(_formatTime(dose.scheduledAt), style: AppTypography.tabular),
               if (isMissed && !taken && !skipped)
                 Text(
-                  'MISSED',
+                  context.protocolL10n.protocolMissed,
                   style: AppTypography.systemLabel.copyWith(
                     color: AppColors.danger,
                     fontSize: 9,
@@ -682,7 +671,7 @@ class _DoseCard extends StatelessWidget {
                 ),
               if (skipped)
                 Text(
-                  'SKIPPED',
+                  context.protocolL10n.protocolSkipped,
                   style: AppTypography.systemLabel.copyWith(
                     color: AppColors.textTertiary,
                     fontSize: 9,
@@ -704,16 +693,23 @@ class _DoseCard extends StatelessWidget {
     return '$h:$m';
   }
 
-  String _siteLabel(String key) {
-    return key
-        .split('-')
-        .map((s) => s.isEmpty ? s : '${s[0].toUpperCase()}${s.substring(1)}')
-        .join(' ');
-  }
+  String _siteLabel(BuildContext context, String key) => switch (key) {
+    'left-abdomen' => context.protocolL10n.injectionSiteLeftAbdomen,
+    'right-abdomen' => context.protocolL10n.injectionSiteRightAbdomen,
+    'left-thigh' => context.protocolL10n.injectionSiteLeftThigh,
+    'right-thigh' => context.protocolL10n.injectionSiteRightThigh,
+    'left-glute' => context.protocolL10n.injectionSiteLeftGlute,
+    'right-glute' => context.protocolL10n.injectionSiteRightGlute,
+    'left-triceps' => context.protocolL10n.injectionSiteLeftTriceps,
+    'right-triceps' => context.protocolL10n.injectionSiteRightTriceps,
+    _ => key,
+  };
 
-  String _syringeLabel(double value) {
+  String _syringeLabel(BuildContext context, double value) {
     if (value <= 0) return '';
-    return ' · ${_formatAmount(value)} syringe units';
+    return context.protocolL10n.protocolSyringeUnitsSuffix(
+      _formatAmount(value),
+    );
   }
 }
 
@@ -738,10 +734,13 @@ class _EmptyTodayCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('No doses today', style: AppTypography.labelLarge),
+                  Text(
+                    context.protocolL10n.protocolNoDosesToday,
+                    style: AppTypography.labelLarge,
+                  ),
                   const SizedBox(height: 2),
                   Text(
-                    'Your protocol has no doses scheduled for today.',
+                    context.protocolL10n.protocolNoDosesTodayBody,
                     style: AppTypography.bodySmall,
                   ),
                 ],
