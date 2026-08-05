@@ -32,13 +32,13 @@ class SubscriptionProvider extends ChangeNotifier {
   bool _isPremium = false;
   bool _loadingOfferings = false;
   Offerings? _offerings;
-  String? _offeringsError;
+  SubscriptionErrorCode? _offeringsErrorCode;
 
   bool get isPremium => _isPremium;
   bool get isFree => !_isPremium;
   bool get isLoadingOfferings => _loadingOfferings;
   Offerings? get offerings => _offerings;
-  String? get offeringsError => _offeringsError;
+  SubscriptionErrorCode? get offeringsErrorCode => _offeringsErrorCode;
   bool get showSpecialOffer => _service.shouldShowSpecialOffer(_offerings);
 
   /// Onboarding paywall plan index:
@@ -78,16 +78,16 @@ class SubscriptionProvider extends ChangeNotifier {
 
   Future<void> loadOfferings() async {
     _loadingOfferings = true;
-    _offeringsError = null;
+    _offeringsErrorCode = null;
     notifyListeners();
     try {
       final o = await _service.getOfferings();
       _offerings = o;
       if (o == null) {
-        _offeringsError = 'Unable to load plans. Check your connection.';
+        _offeringsErrorCode = SubscriptionErrorCode.plansUnavailable;
       }
     } catch (e) {
-      _offeringsError = 'Unable to load plans.';
+      _offeringsErrorCode = SubscriptionErrorCode.plansUnavailable;
       debugPrint('SubscriptionProvider loadOfferings failed: $e');
     }
     _loadingOfferings = false;
@@ -108,7 +108,7 @@ class SubscriptionProvider extends ChangeNotifier {
       unawaited(
         _analytics.logPurchaseFailed(
           package.identifier,
-          result.error ?? 'unknown',
+          result.errorCode?.name ?? 'unknown',
         ),
       );
     }

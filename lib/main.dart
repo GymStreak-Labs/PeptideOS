@@ -37,6 +37,7 @@ import 'features/progress/providers/body_metric_provider.dart';
 import 'features/protocol/providers/dose_log_provider.dart';
 import 'features/protocol/providers/protocol_provider.dart';
 import 'features/subscription/providers/subscription_provider.dart';
+import 'features/subscription/subscription_error_localization.dart';
 import 'l10n/app_localizations.dart';
 import 'services/notification_service.dart';
 
@@ -519,7 +520,12 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(sub.offeringsError ?? l10n.subscriptionUnavailable),
+          content: Text(
+            localizedSubscriptionError(
+              l10n,
+              sub.offeringsErrorCode ?? SubscriptionErrorCode.plansUnavailable,
+            ),
+          ),
         ),
       );
       return;
@@ -532,10 +538,12 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
       await widget.onComplete();
     } else if (result.cancelled) {
       return;
-    } else if (result.error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(result.error!)));
+    } else if (result.errorCode != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(localizedSubscriptionError(l10n, result.errorCode!)),
+        ),
+      );
     }
   }
 
@@ -548,7 +556,13 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
       await widget.onComplete();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result.error ?? l10n.noPurchasesToRestore)),
+        SnackBar(
+          content: Text(
+            result.errorCode == null
+                ? l10n.noPurchasesToRestore
+                : localizedSubscriptionError(l10n, result.errorCode!),
+          ),
+        ),
       );
     }
   }

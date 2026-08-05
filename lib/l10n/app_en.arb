@@ -124,6 +124,42 @@
   "subscriptionUnavailable": "Subscription plans are not available right now. Please try again.",
   "upgradeUnavailable": "Upgrade is not available right now. Please try again later.",
   "noPurchasesToRestore": "No purchases found to restore.",
+  "subscriptionErrorServiceUnavailable": "Purchases are temporarily unavailable. Please try again shortly.",
+  "@subscriptionErrorServiceUnavailable": {
+    "description": "Shown when the subscription SDK is not ready or configured."
+  },
+  "subscriptionErrorPlansUnavailable": "Subscription plans could not be loaded. Check your connection and try again.",
+  "@subscriptionErrorPlansUnavailable": {
+    "description": "Shown when available subscription plans cannot be loaded."
+  },
+  "subscriptionErrorPurchaseCancelled": "Purchase cancelled.",
+  "@subscriptionErrorPurchaseCancelled": {
+    "description": "Shown when a customer cancels the store purchase flow. Normally suppressed by paywall UI."
+  },
+  "subscriptionErrorPurchaseNotAllowed": "Purchases are not allowed on this device.",
+  "@subscriptionErrorPurchaseNotAllowed": {
+    "description": "Shown when device or account restrictions prevent purchases."
+  },
+  "subscriptionErrorPurchaseInvalid": "The purchase could not be completed. Please check your account and try again.",
+  "@subscriptionErrorPurchaseInvalid": {
+    "description": "Shown when the app store rejects a purchase as invalid."
+  },
+  "subscriptionErrorProductUnavailable": "This subscription is not available right now. Please choose another plan or try again later.",
+  "@subscriptionErrorProductUnavailable": {
+    "description": "Shown when the selected store subscription product is unavailable."
+  },
+  "subscriptionErrorNetwork": "You're offline. Check your connection and try again.",
+  "@subscriptionErrorNetwork": {
+    "description": "Shown when a subscription purchase fails because of network connectivity."
+  },
+  "subscriptionErrorPurchaseFailed": "Purchase failed. Please try again.",
+  "@subscriptionErrorPurchaseFailed": {
+    "description": "Generic purchase failure shown when no more specific customer-safe cause is available."
+  },
+  "subscriptionErrorRestoreFailed": "Purchases could not be restored. Check your connection and try again.",
+  "@subscriptionErrorRestoreFailed": {
+    "description": "Shown when restoring previous purchases fails."
+  },
   "unlockFullProtocol": "Unlock the full protocol",
   "premiumUnlimitedPeptides": "Unlimited peptides per protocol",
   "premiumMultipleProtocols": "Multiple active protocols",

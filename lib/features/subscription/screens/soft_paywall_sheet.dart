@@ -7,6 +7,7 @@ import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../providers/subscription_provider.dart';
+import '../subscription_error_localization.dart';
 
 /// Simple bottom-sheet paywall shown when a free-tier user hits the peptide
 /// or protocol cap. The heavy onboarding paywall is reserved for first open —
@@ -71,10 +72,17 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
       Navigator.of(context).pop(true);
     } else if (result.cancelled) {
       // user backed out — leave the sheet open
-    } else if (result.error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(result.error!)));
+    } else if (result.errorCode != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            localizedSubscriptionError(
+              AppLocalizations.of(context),
+              result.errorCode!,
+            ),
+          ),
+        ),
+      );
     }
   }
 
@@ -90,7 +98,13 @@ class _SoftPaywallSheetState extends State<_SoftPaywallSheet> {
       Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result.error ?? l10n.noPurchasesToRestore)),
+        SnackBar(
+          content: Text(
+            result.errorCode == null
+                ? l10n.noPurchasesToRestore
+                : localizedSubscriptionError(l10n, result.errorCode!),
+          ),
+        ),
       );
     }
   }
