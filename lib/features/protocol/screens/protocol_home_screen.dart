@@ -161,7 +161,10 @@ class ProtocolHomeScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Text('SCHEDULE // TODAY', style: AppTypography.systemLabel),
+                  Text(
+                    context.protocolL10n.protocolScheduleTodaySystemLabel,
+                    style: AppTypography.systemLabel,
+                  ),
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
@@ -398,7 +401,10 @@ class _TodayHeroCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('ADHERENCE // TODAY', style: AppTypography.systemLabel),
+                Text(
+                  context.protocolL10n.protocolAdherenceTodaySystemLabel,
+                  style: AppTypography.systemLabel,
+                ),
                 const SizedBox(height: AppSpacing.sm),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -532,8 +538,13 @@ class _NextDoseCard extends StatelessWidget {
 
   String _formatDuration(BuildContext context, Duration d) {
     if (d.isNegative) return context.protocolL10n.protocolNow;
-    if (d.inHours > 0) return '${d.inHours}h ${d.inMinutes.remainder(60)}m';
-    return '${d.inMinutes}m';
+    if (d.inHours > 0) {
+      return context.protocolL10n.protocolDurationHoursMinutes(
+        d.inHours,
+        d.inMinutes.remainder(60),
+      );
+    }
+    return context.protocolL10n.protocolDurationMinutes(d.inMinutes);
   }
 
   String _siteLabel(BuildContext context, String key) => switch (key) {

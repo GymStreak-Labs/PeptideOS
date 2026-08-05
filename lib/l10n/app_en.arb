@@ -140,6 +140,14 @@
   "protocolNoActive": "No active protocol",
   "protocolNoActiveBody": "Create your first protocol to start tracking doses and building adherence.",
   "protocolStartFirst": "START FIRST PROTOCOL",
+  "protocolScheduleTodaySystemLabel": "SCHEDULE // TODAY",
+  "@protocolScheduleTodaySystemLabel": {
+    "description": "System-style label above today's dose schedule."
+  },
+  "protocolAdherenceTodaySystemLabel": "ADHERENCE // TODAY",
+  "@protocolAdherenceTodaySystemLabel": {
+    "description": "System-style label above today's adherence summary."
+  },
   "protocolNoDosesScheduledToday": "No doses scheduled today",
   "protocolDosesTaken": "{taken} of {total} doses taken",
   "@protocolDosesTaken": {
@@ -160,6 +168,27 @@
     "placeholders": {
       "duration": {
         "type": "String"
+      }
+    }
+  },
+  "protocolDurationHoursMinutes": "{hours}h {minutes}m",
+  "@protocolDurationHoursMinutes": {
+    "description": "Compact countdown duration containing hours and minutes.",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "protocolDurationMinutes": "{minutes}m",
+  "@protocolDurationMinutes": {
+    "description": "Compact countdown duration containing minutes only.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
       }
     }
   },
