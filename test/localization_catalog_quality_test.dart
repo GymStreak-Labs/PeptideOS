@@ -62,10 +62,20 @@ void main() {
     });
   }
 
-  test('Brazilian Portuguese is an explicit regional copy of Portuguese', () {
-    final base = _readJson('lib/l10n/app_pt.arb')..remove('@@locale');
-    final brazil = _readJson('lib/l10n/app_pt_BR.arb')..remove('@@locale');
-    expect(brazil, base);
+  test('Portuguese base and Brazilian regional catalogs are explicit', () {
+    final base = _readJson('lib/l10n/app_pt.arb');
+    final brazil = _readJson('lib/l10n/app_pt_BR.arb');
+
+    expect(base['@@locale'], 'pt');
+    expect(brazil['@@locale'], 'pt_BR');
+    final regionalDifferences = _messageKeys(
+      base,
+    ).where((key) => base[key] != brazil[key]).length;
+    expect(
+      regionalDifferences,
+      greaterThan(0),
+      reason: 'pt_BR must contain intentional regional wording overrides',
+    );
   });
 
   test(
