@@ -11,6 +11,7 @@ import '../../protocol/widgets/empty_state.dart';
 import '../../profile/providers/settings_provider.dart';
 import '../providers/peptide_provider.dart';
 import '../utils/library_labels.dart';
+import '../utils/localized_peptide_content.dart';
 import 'custom_compound_library_screen.dart';
 import 'peptide_detail_screen.dart';
 import 'reconstitution_screen.dart';
@@ -47,7 +48,12 @@ class _LibraryScreenState extends State<LibraryScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final provider = context.watch<PeptideProvider>();
-    final results = provider.search(query: _query, category: _category);
+    final results = provider.search(
+      query: _query,
+      category: _category,
+      localizedTerms: (peptide) =>
+          localizedPeptideContent(l10n, peptide).searchTerms(l10n, peptide),
+    );
 
     return RefreshIndicator(
       color: AppColors.primary,

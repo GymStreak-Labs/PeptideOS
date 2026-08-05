@@ -72,14 +72,25 @@ class PeptideProvider extends ChangeNotifier {
   }
 
   /// Case-insensitive search + optional category filter.
-  List<Peptide> search({String query = '', PeptideCategory? category}) {
+  List<Peptide> search({
+    String query = '',
+    PeptideCategory? category,
+    Iterable<String> Function(Peptide peptide)? localizedTerms,
+  }) {
     final q = query.trim().toLowerCase();
     return _all.where((p) {
       if (category != null && p.category != category) return false;
       if (q.isEmpty) return true;
-      return p.name.toLowerCase().contains(q) ||
-          p.description.toLowerCase().contains(q) ||
-          p.category.label.toLowerCase().contains(q);
+      final terms = <String>[
+        p.name,
+        p.description,
+        p.typicalDose,
+        p.halfLife,
+        p.notes,
+        p.category.label,
+        ...?localizedTerms?.call(p),
+      ];
+      return terms.any((term) => term.toLowerCase().contains(q));
     }).toList();
   }
 

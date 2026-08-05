@@ -14,6 +14,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../library/providers/custom_compound_provider.dart';
 import '../../library/providers/peptide_provider.dart';
 import '../../library/screens/custom_compound_library_screen.dart';
+import '../../library/utils/localized_peptide_content.dart';
 import '../../subscription/providers/subscription_provider.dart';
 import '../../subscription/screens/soft_paywall_sheet.dart';
 import '../providers/dose_log_provider.dart';
@@ -832,7 +833,11 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final peptides = context.watch<PeptideProvider>().search(query: _query);
+    final peptides = context.watch<PeptideProvider>().search(
+      query: _query,
+      localizedTerms: (peptide) =>
+          localizedPeptideContent(l10n, peptide).searchTerms(l10n, peptide),
+    );
     final normalizedQuery = _query.trim().toLowerCase();
     final customCompounds = context
         .watch<CustomCompoundProvider>()

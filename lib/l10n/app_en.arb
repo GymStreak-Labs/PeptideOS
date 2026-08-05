@@ -2947,5 +2947,601 @@
         "type": "String"
       }
     }
+  },
+  "peptideContentHcgDescription": "Human chorionic gonadotropin (HCG) is a glycoprotein hormone used in regulated clinical settings and frequently discussed alongside peptide protocols. This entry is provided as a neutral tracking reference for user-entered schedules.",
+  "@peptideContentHcgDescription": {
+    "description": "Educational reference description for HCG."
+  },
+  "peptideContentHcgTypicalDose": "User-entered IU",
+  "@peptideContentHcgTypicalDose": {
+    "description": "Reference amount text for HCG; this is not a dosing recommendation."
+  },
+  "peptideContentHcgHalfLife": "~24-36 hours",
+  "@peptideContentHcgHalfLife": {
+    "description": "Educational half-life reference for HCG."
+  },
+  "peptideContentHcgNotes": "Prescription-only in many jurisdictions. Track only what has already been directed by a qualified healthcare professional; PepMod does not provide HCG dosing guidance.",
+  "@peptideContentHcgNotes": {
+    "description": "Neutral educational notes for HCG; preserve non-prescriptive framing."
+  },
+  "peptideContentBpc157Description": "BPC-157 (Body Protection Compound 157) is a 15-amino-acid synthetic peptide derived from a protein found in gastric juice. It has been studied in animal models for its role in soft-tissue and gut-lining repair. Human clinical data remains limited.",
+  "@peptideContentBpc157Description": {
+    "description": "Educational reference description for BPC-157."
+  },
+  "peptideContentBpc157TypicalDose": "250–500 mcg",
+  "@peptideContentBpc157TypicalDose": {
+    "description": "Reference amount text for BPC-157; this is not a dosing recommendation."
+  },
+  "peptideContentBpc157HalfLife": "~4 hours",
+  "@peptideContentBpc157HalfLife": {
+    "description": "Educational half-life reference for BPC-157."
+  },
+  "peptideContentBpc157Notes": "Reconstitute with bacteriostatic water and store refrigerated. Commonly stacked with TB-500 for tendon and ligament recovery protocols in animal studies.",
+  "@peptideContentBpc157Notes": {
+    "description": "Neutral educational notes for BPC-157; preserve non-prescriptive framing."
+  },
+  "peptideContentTb500Description": "TB-500 is a synthetic fragment of the naturally occurring protein thymosin beta-4. In animal studies it has been investigated for roles in cellular migration and tissue regeneration. It is widely used off-label by researchers and in veterinary settings.",
+  "@peptideContentTb500Description": {
+    "description": "Educational reference description for TB-500."
+  },
+  "peptideContentTb500TypicalDose": "2–5 mg weekly loading, then 2 mg maintenance",
+  "@peptideContentTb500TypicalDose": {
+    "description": "Reference amount text for TB-500; this is not a dosing recommendation."
+  },
+  "peptideContentTb500HalfLife": "~2 days",
+  "@peptideContentTb500HalfLife": {
+    "description": "Educational half-life reference for TB-500."
+  },
+  "peptideContentTb500Notes": "Often paired with BPC-157 for soft-tissue protocols. Split dosing twice weekly is common due to long half-life.",
+  "@peptideContentTb500Notes": {
+    "description": "Neutral educational notes for TB-500; preserve non-prescriptive framing."
+  },
+  "peptideContentGhkCuDescription": "GHK-Cu (Copper Peptide) is a naturally occurring copper-binding tripeptide present in human plasma. It has been studied in topical cosmetic applications for skin remodelling and hair-follicle signalling.",
+  "@peptideContentGhkCuDescription": {
+    "description": "Educational reference description for GHK-Cu."
+  },
+  "peptideContentGhkCuTypicalDose": "1–2 mg",
+  "@peptideContentGhkCuTypicalDose": {
+    "description": "Reference amount text for GHK-Cu; this is not a dosing recommendation."
+  },
+  "peptideContentGhkCuHalfLife": "~1 hour",
+  "@peptideContentGhkCuHalfLife": {
+    "description": "Educational half-life reference for GHK-Cu."
+  },
+  "peptideContentGhkCuNotes": "Also used topically in skincare formulations. Subcutaneous dosing is typically lower than topical concentrations.",
+  "@peptideContentGhkCuNotes": {
+    "description": "Neutral educational notes for GHK-Cu; preserve non-prescriptive framing."
+  },
+  "peptideContentEpitalonDescription": "Epitalon is a synthetic tetrapeptide analogue of epithalamin, a peptide extracted from the pineal gland. Russian research has explored its effects on telomerase activity and circadian regulation.",
+  "@peptideContentEpitalonDescription": {
+    "description": "Educational reference description for Epitalon."
+  },
+  "peptideContentEpitalonTypicalDose": "5–10 mg per cycle day",
+  "@peptideContentEpitalonTypicalDose": {
+    "description": "Reference amount text for Epitalon; this is not a dosing recommendation."
+  },
+  "peptideContentEpitalonHalfLife": "~30 minutes",
+  "@peptideContentEpitalonHalfLife": {
+    "description": "Educational half-life reference for Epitalon."
+  },
+  "peptideContentEpitalonNotes": "Typically run in short pulsed cycles (e.g., 10–20 days on, months off) based on Russian longevity research protocols.",
+  "@peptideContentEpitalonNotes": {
+    "description": "Neutral educational notes for Epitalon; preserve non-prescriptive framing."
+  },
+  "peptideContentSemaglutideDescription": "Semaglutide is a GLP-1 receptor agonist originally developed for type 2 diabetes and later approved for chronic weight management under brand names Ozempic and Wegovy. It slows gastric emptying and modulates appetite signalling.",
+  "@peptideContentSemaglutideDescription": {
+    "description": "Educational reference description for Semaglutide."
+  },
+  "peptideContentSemaglutideTypicalDose": "0.25–2.4 mg weekly (titrated)",
+  "@peptideContentSemaglutideTypicalDose": {
+    "description": "Reference amount text for Semaglutide; this is not a dosing recommendation."
+  },
+  "peptideContentSemaglutideHalfLife": "~7 days",
+  "@peptideContentSemaglutideHalfLife": {
+    "description": "Educational half-life reference for Semaglutide."
+  },
+  "peptideContentSemaglutideNotes": "Prescription only in most countries. Titration schedule starts low and increases every 4 weeks to manage GI side effects.",
+  "@peptideContentSemaglutideNotes": {
+    "description": "Neutral educational notes for Semaglutide; preserve non-prescriptive framing."
+  },
+  "peptideContentTirzepatideDescription": "Tirzepatide is a dual GIP/GLP-1 receptor agonist approved for type 2 diabetes (Mounjaro) and obesity (Zepbound). Clinical trials have shown it to produce larger weight reductions than single-agonist GLP-1s.",
+  "@peptideContentTirzepatideDescription": {
+    "description": "Educational reference description for Tirzepatide."
+  },
+  "peptideContentTirzepatideTypicalDose": "2.5–15 mg weekly (titrated)",
+  "@peptideContentTirzepatideTypicalDose": {
+    "description": "Reference amount text for Tirzepatide; this is not a dosing recommendation."
+  },
+  "peptideContentTirzepatideHalfLife": "~5 days",
+  "@peptideContentTirzepatideHalfLife": {
+    "description": "Educational half-life reference for Tirzepatide."
+  },
+  "peptideContentTirzepatideNotes": "Prescription only in most countries. Standard titration is 4-week increments. Injected subcutaneously once weekly.",
+  "@peptideContentTirzepatideNotes": {
+    "description": "Neutral educational notes for Tirzepatide; preserve non-prescriptive framing."
+  },
+  "peptideContentRetatrutideDescription": "Retatrutide is an investigational triple agonist targeting GIP, GLP-1, and glucagon receptors. Phase 2 trials reported weight reductions exceeding those of existing GLP-1-based therapies.",
+  "@peptideContentRetatrutideDescription": {
+    "description": "Educational reference description for Retatrutide."
+  },
+  "peptideContentRetatrutideTypicalDose": "Trial doses 1–12 mg weekly",
+  "@peptideContentRetatrutideTypicalDose": {
+    "description": "Reference amount text for Retatrutide; this is not a dosing recommendation."
+  },
+  "peptideContentRetatrutideHalfLife": "~6 days",
+  "@peptideContentRetatrutideHalfLife": {
+    "description": "Educational half-life reference for Retatrutide."
+  },
+  "peptideContentRetatrutideNotes": "Still investigational — not FDA approved at time of writing. Any use outside a clinical trial is strictly research-only.",
+  "@peptideContentRetatrutideNotes": {
+    "description": "Neutral educational notes for Retatrutide; preserve non-prescriptive framing."
+  },
+  "peptideContentIpamorelinDescription": "Ipamorelin is a pentapeptide ghrelin-mimetic and selective growth-hormone secretagogue. It has been investigated for its ability to stimulate a pulsatile GH release with minimal effect on cortisol or prolactin.",
+  "@peptideContentIpamorelinDescription": {
+    "description": "Educational reference description for Ipamorelin."
+  },
+  "peptideContentIpamorelinTypicalDose": "200–300 mcg per injection",
+  "@peptideContentIpamorelinTypicalDose": {
+    "description": "Reference amount text for Ipamorelin; this is not a dosing recommendation."
+  },
+  "peptideContentIpamorelinHalfLife": "~2 hours",
+  "@peptideContentIpamorelinHalfLife": {
+    "description": "Educational half-life reference for Ipamorelin."
+  },
+  "peptideContentIpamorelinNotes": "Commonly stacked with CJC-1295 (no DAC) for a synergistic GH pulse. Typical timing: before bed and/or pre-workout on an empty stomach.",
+  "@peptideContentIpamorelinNotes": {
+    "description": "Neutral educational notes for Ipamorelin; preserve non-prescriptive framing."
+  },
+  "peptideContentCjc1295DacDescription": "CJC-1295 is a synthetic GHRH analogue. The DAC (Drug Affinity Complex) variant binds to serum albumin, extending its half-life and producing sustained GH levels rather than discrete pulses.",
+  "@peptideContentCjc1295DacDescription": {
+    "description": "Educational reference description for CJC-1295 (with DAC)."
+  },
+  "peptideContentCjc1295DacTypicalDose": "1–2 mg weekly",
+  "@peptideContentCjc1295DacTypicalDose": {
+    "description": "Reference amount text for CJC-1295 (with DAC); this is not a dosing recommendation."
+  },
+  "peptideContentCjc1295DacHalfLife": "~8 days",
+  "@peptideContentCjc1295DacHalfLife": {
+    "description": "Educational half-life reference for CJC-1295 (with DAC)."
+  },
+  "peptideContentCjc1295DacNotes": "Long-acting — typically dosed once or twice per week. Elevates baseline GH/IGF-1 rather than producing sharp pulses.",
+  "@peptideContentCjc1295DacNotes": {
+    "description": "Neutral educational notes for CJC-1295 (with DAC); preserve non-prescriptive framing."
+  },
+  "peptideContentCjc1295NoDacDescription": "CJC-1295 without DAC — also known as Mod-GRF(1-29) — is a GHRH analogue with a short half-life. It is typically combined with a GHRP such as Ipamorelin to trigger natural pulsatile GH release.",
+  "@peptideContentCjc1295NoDacDescription": {
+    "description": "Educational reference description for CJC-1295 (no DAC)."
+  },
+  "peptideContentCjc1295NoDacTypicalDose": "100 mcg per injection",
+  "@peptideContentCjc1295NoDacTypicalDose": {
+    "description": "Reference amount text for CJC-1295 (no DAC); this is not a dosing recommendation."
+  },
+  "peptideContentCjc1295NoDacHalfLife": "~30 minutes",
+  "@peptideContentCjc1295NoDacHalfLife": {
+    "description": "Educational half-life reference for CJC-1295 (no DAC)."
+  },
+  "peptideContentCjc1295NoDacNotes": "Short acting — stack with a GHRP (Ipamorelin, GHRP-2, GHRP-6) to amplify GH pulses. Usually dosed 1–3x per day on an empty stomach.",
+  "@peptideContentCjc1295NoDacNotes": {
+    "description": "Neutral educational notes for CJC-1295 (no DAC); preserve non-prescriptive framing."
+  },
+  "peptideContentTesamorelinDescription": "Tesamorelin is a stabilised GHRH analogue approved to reduce excess abdominal visceral fat in HIV-associated lipodystrophy (brand name Egrifta). It has also been studied in cognitive ageing contexts.",
+  "@peptideContentTesamorelinDescription": {
+    "description": "Educational reference description for Tesamorelin."
+  },
+  "peptideContentTesamorelinTypicalDose": "1–2 mg daily",
+  "@peptideContentTesamorelinTypicalDose": {
+    "description": "Reference amount text for Tesamorelin; this is not a dosing recommendation."
+  },
+  "peptideContentTesamorelinHalfLife": "~30 minutes",
+  "@peptideContentTesamorelinHalfLife": {
+    "description": "Educational half-life reference for Tesamorelin."
+  },
+  "peptideContentTesamorelinNotes": "Prescription medication. Primarily studied for visceral adipose tissue reduction. Administered once daily subcutaneously.",
+  "@peptideContentTesamorelinNotes": {
+    "description": "Neutral educational notes for Tesamorelin; preserve non-prescriptive framing."
+  },
+  "peptideContentMotsCDescription": "MOTS-c is a mitochondrial-derived peptide encoded within the MT-RNR1 gene. Research has investigated its role in metabolic homeostasis, insulin sensitivity, and exercise physiology.",
+  "@peptideContentMotsCDescription": {
+    "description": "Educational reference description for MOTS-c."
+  },
+  "peptideContentMotsCTypicalDose": "5–10 mg 2–3x per week",
+  "@peptideContentMotsCTypicalDose": {
+    "description": "Reference amount text for MOTS-c; this is not a dosing recommendation."
+  },
+  "peptideContentMotsCHalfLife": "~90 minutes",
+  "@peptideContentMotsCHalfLife": {
+    "description": "Educational half-life reference for MOTS-c."
+  },
+  "peptideContentMotsCNotes": "Research still emerging. Some users report improved exercise recovery and metabolic markers in self-experiment logs.",
+  "@peptideContentMotsCNotes": {
+    "description": "Neutral educational notes for MOTS-c; preserve non-prescriptive framing."
+  },
+  "peptideContentCerebrolysinDescription": "Cerebrolysin is a mixture of low-molecular-weight peptides and amino acids derived from porcine brain tissue. It is prescribed in several European and Asian countries for neurodegenerative and stroke-recovery indications.",
+  "@peptideContentCerebrolysinDescription": {
+    "description": "Educational reference description for Cerebrolysin."
+  },
+  "peptideContentCerebrolysinTypicalDose": "5–30 ml ampoules (clinical setting)",
+  "@peptideContentCerebrolysinTypicalDose": {
+    "description": "Reference amount text for Cerebrolysin; this is not a dosing recommendation."
+  },
+  "peptideContentCerebrolysinHalfLife": "Variable (mixture)",
+  "@peptideContentCerebrolysinHalfLife": {
+    "description": "Educational half-life reference for Cerebrolysin."
+  },
+  "peptideContentCerebrolysinNotes": "Typically administered as a course under clinical supervision. Not available in the US. Research in ischemic stroke and Alzheimer's disease.",
+  "@peptideContentCerebrolysinNotes": {
+    "description": "Neutral educational notes for Cerebrolysin; preserve non-prescriptive framing."
+  },
+  "peptideContentSelankDescription": "Selank is a synthetic heptapeptide developed in Russia as an analogue of the immunomodulatory peptide tuftsin. It has been studied for anxiolytic effects without the sedation or dependence of benzodiazepines.",
+  "@peptideContentSelankDescription": {
+    "description": "Educational reference description for Selank."
+  },
+  "peptideContentSelankTypicalDose": "250–500 mcg intranasally",
+  "@peptideContentSelankTypicalDose": {
+    "description": "Reference amount text for Selank; this is not a dosing recommendation."
+  },
+  "peptideContentSelankHalfLife": "~few minutes (systemic)",
+  "@peptideContentSelankHalfLife": {
+    "description": "Educational half-life reference for Selank."
+  },
+  "peptideContentSelankNotes": "Most commonly administered intranasally. Russian research focuses on anxiety and attention. Short half-life but reported effects last several hours.",
+  "@peptideContentSelankNotes": {
+    "description": "Neutral educational notes for Selank; preserve non-prescriptive framing."
+  },
+  "peptideContentSemaxDescription": "Semax is a synthetic heptapeptide derived from a fragment of ACTH (4–10). Russian research has investigated its nootropic and neuroprotective effects, particularly in stroke recovery protocols.",
+  "@peptideContentSemaxDescription": {
+    "description": "Educational reference description for Semax."
+  },
+  "peptideContentSemaxTypicalDose": "250–1000 mcg intranasally",
+  "@peptideContentSemaxTypicalDose": {
+    "description": "Reference amount text for Semax; this is not a dosing recommendation."
+  },
+  "peptideContentSemaxHalfLife": "~30 minutes",
+  "@peptideContentSemaxHalfLife": {
+    "description": "Educational half-life reference for Semax."
+  },
+  "peptideContentSemaxNotes": "Intranasal administration is typical. Approved in Russia for ischaemic stroke. Often cycled with Selank for complementary effects.",
+  "@peptideContentSemaxNotes": {
+    "description": "Neutral educational notes for Semax; preserve non-prescriptive framing."
+  },
+  "peptideContentMelanotanIiDescription": "Melanotan II is a synthetic analogue of the alpha-melanocyte-stimulating hormone (α-MSH). It was originally developed as a potential sunless tanning agent and has also been associated with appetite and libido effects.",
+  "@peptideContentMelanotanIiDescription": {
+    "description": "Educational reference description for Melanotan II."
+  },
+  "peptideContentMelanotanIiTypicalDose": "250–1000 mcg loading, then maintenance",
+  "@peptideContentMelanotanIiTypicalDose": {
+    "description": "Reference amount text for Melanotan II; this is not a dosing recommendation."
+  },
+  "peptideContentMelanotanIiHalfLife": "~1 hour",
+  "@peptideContentMelanotanIiHalfLife": {
+    "description": "Educational half-life reference for Melanotan II."
+  },
+  "peptideContentMelanotanIiNotes": "Not approved for any medical use. Common reported side effects include nausea and darkening of existing moles. Any new or changing mole should be evaluated by a dermatologist.",
+  "@peptideContentMelanotanIiNotes": {
+    "description": "Neutral educational notes for Melanotan II; preserve non-prescriptive framing."
+  },
+  "peptideContentPt141Description": "PT-141, also known as Bremelanotide and marketed as Vyleesi, is a melanocortin receptor agonist approved by the FDA for hypoactive sexual desire disorder in premenopausal women. It acts on central nervous system pathways.",
+  "@peptideContentPt141Description": {
+    "description": "Educational reference description for PT-141 (Bremelanotide)."
+  },
+  "peptideContentPt141TypicalDose": "1.25–1.75 mg as needed",
+  "@peptideContentPt141TypicalDose": {
+    "description": "Reference amount text for PT-141 (Bremelanotide); this is not a dosing recommendation."
+  },
+  "peptideContentPt141HalfLife": "~2 hours",
+  "@peptideContentPt141HalfLife": {
+    "description": "Educational half-life reference for PT-141 (Bremelanotide)."
+  },
+  "peptideContentPt141Notes": "Prescription medication in some markets. Taken as needed rather than on a fixed schedule. Common side effects include nausea and transient blood pressure increases.",
+  "@peptideContentPt141Notes": {
+    "description": "Neutral educational notes for PT-141 (Bremelanotide); preserve non-prescriptive framing."
+  },
+  "peptideContentDsipDescription": "Delta Sleep-Inducing Peptide (DSIP) is a nonapeptide isolated from rabbit brain in the 1970s. It has been studied for possible roles in sleep regulation, pain modulation, and stress response, though mechanisms remain unclear.",
+  "@peptideContentDsipDescription": {
+    "description": "Educational reference description for DSIP."
+  },
+  "peptideContentDsipTypicalDose": "100–500 mcg before bed",
+  "@peptideContentDsipTypicalDose": {
+    "description": "Reference amount text for DSIP; this is not a dosing recommendation."
+  },
+  "peptideContentDsipHalfLife": "~7 minutes",
+  "@peptideContentDsipHalfLife": {
+    "description": "Educational half-life reference for DSIP."
+  },
+  "peptideContentDsipNotes": "Typically administered before bed. Short plasma half-life but reported effects may outlast it. Evidence base remains limited.",
+  "@peptideContentDsipNotes": {
+    "description": "Neutral educational notes for DSIP; preserve non-prescriptive framing."
+  },
+  "peptideContentThymosinAlpha1Description": "Thymosin Alpha-1 is a 28-amino-acid peptide originally isolated from thymus tissue. It has been approved in multiple countries as an adjunct immune-modulating therapy (brand name Zadaxin) for hepatitis B and C.",
+  "@peptideContentThymosinAlpha1Description": {
+    "description": "Educational reference description for Thymosin Alpha-1."
+  },
+  "peptideContentThymosinAlpha1TypicalDose": "1.6 mg twice weekly",
+  "@peptideContentThymosinAlpha1TypicalDose": {
+    "description": "Reference amount text for Thymosin Alpha-1; this is not a dosing recommendation."
+  },
+  "peptideContentThymosinAlpha1HalfLife": "~2 hours",
+  "@peptideContentThymosinAlpha1HalfLife": {
+    "description": "Educational half-life reference for Thymosin Alpha-1."
+  },
+  "peptideContentThymosinAlpha1Notes": "Used in several international markets as part of immune-modulation protocols. Typically administered twice weekly. Research continues in various indications.",
+  "@peptideContentThymosinAlpha1Notes": {
+    "description": "Neutral educational notes for Thymosin Alpha-1; preserve non-prescriptive framing."
+  },
+  "peptideContentNadPlusDescription": "NAD+ (nicotinamide adenine dinucleotide) is a coenzyme central to cellular energy metabolism and DNA repair. Injectable NAD+ and its precursors (NR, NMN) are studied in the context of mitochondrial health and ageing.",
+  "@peptideContentNadPlusDescription": {
+    "description": "Educational reference description for NAD+."
+  },
+  "peptideContentNadPlusTypicalDose": "100–500 mg IV or SubQ per session",
+  "@peptideContentNadPlusTypicalDose": {
+    "description": "Reference amount text for NAD+; this is not a dosing recommendation."
+  },
+  "peptideContentNadPlusHalfLife": "~90 minutes",
+  "@peptideContentNadPlusHalfLife": {
+    "description": "Educational half-life reference for NAD+."
+  },
+  "peptideContentNadPlusNotes": "Technically a coenzyme rather than a peptide, but commonly grouped with longevity protocols. Slow infusion is recommended to minimise flushing and discomfort.",
+  "@peptideContentNadPlusNotes": {
+    "description": "Neutral educational notes for NAD+; preserve non-prescriptive framing."
+  },
+  "peptideContentSermorelinDescription": "Sermorelin is a synthetic analogue of growth hormone-releasing hormone (GHRH). It has been used clinically as a diagnostic agent for growth-hormone reserve and is commonly discussed in wellness settings as a GH-axis support peptide.",
+  "@peptideContentSermorelinDescription": {
+    "description": "Educational reference description for Sermorelin."
+  },
+  "peptideContentSermorelinTypicalDose": "100–300 mcg before bed",
+  "@peptideContentSermorelinTypicalDose": {
+    "description": "Reference amount text for Sermorelin; this is not a dosing recommendation."
+  },
+  "peptideContentSermorelinHalfLife": "~10–20 minutes",
+  "@peptideContentSermorelinHalfLife": {
+    "description": "Educational half-life reference for Sermorelin."
+  },
+  "peptideContentSermorelinNotes": "Often compared with CJC-1295 no-DAC because both act on the GHRH pathway. Short half-life makes evening dosing common in non-clinical protocols.",
+  "@peptideContentSermorelinNotes": {
+    "description": "Neutral educational notes for Sermorelin; preserve non-prescriptive framing."
+  },
+  "peptideContentAod9604Description": "AOD-9604 is a modified fragment of human growth hormone, derived from the 176–191 region. It has been investigated for metabolic and lipolysis signalling, but published human evidence is limited and mixed.",
+  "@peptideContentAod9604Description": {
+    "description": "Educational reference description for AOD-9604."
+  },
+  "peptideContentAod9604TypicalDose": "250–500 mcg daily",
+  "@peptideContentAod9604TypicalDose": {
+    "description": "Reference amount text for AOD-9604; this is not a dosing recommendation."
+  },
+  "peptideContentAod9604HalfLife": "~30 minutes",
+  "@peptideContentAod9604HalfLife": {
+    "description": "Educational half-life reference for AOD-9604."
+  },
+  "peptideContentAod9604Notes": "Also called HGH fragment 176–191 in some discussions. Not an approved weight-loss drug; use neutral tracking language and avoid outcome guarantees.",
+  "@peptideContentAod9604Notes": {
+    "description": "Neutral educational notes for AOD-9604; preserve non-prescriptive framing."
+  },
+  "peptideContentKpvDescription": "KPV is a short tripeptide sequence (lysine-proline-valine) derived from alpha-melanocyte-stimulating hormone. It is discussed in research contexts for immune and gut-barrier signalling.",
+  "@peptideContentKpvDescription": {
+    "description": "Educational reference description for KPV."
+  },
+  "peptideContentKpvTypicalDose": "250–500 mcg daily",
+  "@peptideContentKpvTypicalDose": {
+    "description": "Reference amount text for KPV; this is not a dosing recommendation."
+  },
+  "peptideContentKpvHalfLife": "Not well established",
+  "@peptideContentKpvHalfLife": {
+    "description": "Educational half-life reference for KPV."
+  },
+  "peptideContentKpvNotes": "Appears in gut-health and topical discussions, including informal stacks with BPC-157. Human dosing evidence is limited, so protocols should be conservative.",
+  "@peptideContentKpvNotes": {
+    "description": "Neutral educational notes for KPV; preserve non-prescriptive framing."
+  },
+  "peptideContentSs31Description": "SS-31, also known as Elamipretide, is a mitochondria-targeted tetrapeptide studied for interactions with cardiolipin and mitochondrial membrane function. Clinical research has focused on rare mitochondrial and cardiac conditions.",
+  "@peptideContentSs31Description": {
+    "description": "Educational reference description for SS-31 (Elamipretide)."
+  },
+  "peptideContentSs31TypicalDose": "Trial protocols vary",
+  "@peptideContentSs31TypicalDose": {
+    "description": "Reference amount text for SS-31 (Elamipretide); this is not a dosing recommendation."
+  },
+  "peptideContentSs31HalfLife": "~4 hours",
+  "@peptideContentSs31HalfLife": {
+    "description": "Educational half-life reference for SS-31 (Elamipretide)."
+  },
+  "peptideContentSs31Notes": "Investigational in many contexts. Community protocols often differ from clinical-trial formulations and should be treated as research-only.",
+  "@peptideContentSs31Notes": {
+    "description": "Neutral educational notes for SS-31 (Elamipretide); preserve non-prescriptive framing."
+  },
+  "peptideContentLl37Description": "LL-37 is a human cathelicidin antimicrobial peptide involved in innate immune signalling. It is discussed in research communities for host-defense and tissue-response pathways, but safety considerations are significant.",
+  "@peptideContentLl37Description": {
+    "description": "Educational reference description for LL-37."
+  },
+  "peptideContentLl37TypicalDose": "Research protocols vary",
+  "@peptideContentLl37TypicalDose": {
+    "description": "Reference amount text for LL-37; this is not a dosing recommendation."
+  },
+  "peptideContentLl37HalfLife": "Not well established",
+  "@peptideContentLl37HalfLife": {
+    "description": "Educational half-life reference for LL-37."
+  },
+  "peptideContentLl37Notes": "Highly experimental outside controlled research. Because antimicrobial peptides can affect immune signalling, conservative educational framing is important.",
+  "@peptideContentLl37Notes": {
+    "description": "Neutral educational notes for LL-37; preserve non-prescriptive framing."
+  },
+  "peptideContentDihexaDescription": "Dihexa is an orally active angiotensin IV-derived peptide analogue studied preclinically for hepatocyte growth factor/c-Met signalling and synaptogenic activity. Human safety and efficacy data are not established.",
+  "@peptideContentDihexaDescription": {
+    "description": "Educational reference description for Dihexa."
+  },
+  "peptideContentDihexaTypicalDose": "Research-only; protocols vary",
+  "@peptideContentDihexaTypicalDose": {
+    "description": "Reference amount text for Dihexa; this is not a dosing recommendation."
+  },
+  "peptideContentDihexaHalfLife": "Not well established",
+  "@peptideContentDihexaHalfLife": {
+    "description": "Educational half-life reference for Dihexa."
+  },
+  "peptideContentDihexaNotes": "Popular in nootropic discussions but very experimental. Treat as a research compound entry rather than a suggested protocol.",
+  "@peptideContentDihexaNotes": {
+    "description": "Neutral educational notes for Dihexa; preserve non-prescriptive framing."
+  },
+  "peptideContentGhrp2Description": "GHRP-2 is a synthetic growth hormone-releasing peptide that acts as a ghrelin receptor agonist. It has been studied for GH secretion, appetite signalling, and endocrine testing.",
+  "@peptideContentGhrp2Description": {
+    "description": "Educational reference description for GHRP-2."
+  },
+  "peptideContentGhrp2TypicalDose": "100–300 mcg per injection",
+  "@peptideContentGhrp2TypicalDose": {
+    "description": "Reference amount text for GHRP-2; this is not a dosing recommendation."
+  },
+  "peptideContentGhrp2HalfLife": "~20–30 minutes",
+  "@peptideContentGhrp2HalfLife": {
+    "description": "Educational half-life reference for GHRP-2."
+  },
+  "peptideContentGhrp2Notes": "Often paired with a GHRH analogue such as CJC-1295 no-DAC or Sermorelin. It may affect appetite, cortisol, and prolactin more than Ipamorelin.",
+  "@peptideContentGhrp2Notes": {
+    "description": "Neutral educational notes for GHRP-2; preserve non-prescriptive framing."
+  },
+  "peptideContentGhrp6Description": "GHRP-6 is a synthetic hexapeptide and ghrelin receptor agonist studied for growth-hormone release and appetite signalling. It is one of the older peptides in the GHRP family.",
+  "@peptideContentGhrp6Description": {
+    "description": "Educational reference description for GHRP-6."
+  },
+  "peptideContentGhrp6TypicalDose": "100–300 mcg per injection",
+  "@peptideContentGhrp6TypicalDose": {
+    "description": "Reference amount text for GHRP-6; this is not a dosing recommendation."
+  },
+  "peptideContentGhrp6HalfLife": "~20–30 minutes",
+  "@peptideContentGhrp6HalfLife": {
+    "description": "Educational half-life reference for GHRP-6."
+  },
+  "peptideContentGhrp6Notes": "Community use often emphasises appetite stimulation. More selective options such as Ipamorelin are commonly preferred when appetite effects are unwanted.",
+  "@peptideContentGhrp6Notes": {
+    "description": "Neutral educational notes for GHRP-6; preserve non-prescriptive framing."
+  },
+  "peptideContentHexarelinDescription": "Hexarelin is a synthetic growth hormone secretagogue and ghrelin receptor agonist studied for GH release and cardiovascular research signals. It is generally considered one of the more potent GHRPs.",
+  "@peptideContentHexarelinDescription": {
+    "description": "Educational reference description for Hexarelin."
+  },
+  "peptideContentHexarelinTypicalDose": "100–200 mcg per injection",
+  "@peptideContentHexarelinTypicalDose": {
+    "description": "Reference amount text for Hexarelin; this is not a dosing recommendation."
+  },
+  "peptideContentHexarelinHalfLife": "~70 minutes",
+  "@peptideContentHexarelinHalfLife": {
+    "description": "Educational half-life reference for Hexarelin."
+  },
+  "peptideContentHexarelinNotes": "Often cycled more conservatively than Ipamorelin due to potency and desensitisation concerns discussed in research communities.",
+  "@peptideContentHexarelinNotes": {
+    "description": "Neutral educational notes for Hexarelin; preserve non-prescriptive framing."
+  },
+  "peptideContentIgf1Lr3Description": "IGF-1 LR3 is a modified insulin-like growth factor-1 analogue with amino-acid substitutions that reduce binding-protein affinity and extend activity. It is discussed mostly in advanced performance and cell-growth research contexts.",
+  "@peptideContentIgf1Lr3Description": {
+    "description": "Educational reference description for IGF-1 LR3."
+  },
+  "peptideContentIgf1Lr3TypicalDose": "20–50 mcg daily in research protocols",
+  "@peptideContentIgf1Lr3TypicalDose": {
+    "description": "Reference amount text for IGF-1 LR3; this is not a dosing recommendation."
+  },
+  "peptideContentIgf1Lr3HalfLife": "~20–30 hours",
+  "@peptideContentIgf1Lr3HalfLife": {
+    "description": "Educational half-life reference for IGF-1 LR3."
+  },
+  "peptideContentIgf1Lr3Notes": "Higher-risk research compound. Potential glucose and tissue-growth signalling concerns make medical supervision especially important.",
+  "@peptideContentIgf1Lr3Notes": {
+    "description": "Neutral educational notes for IGF-1 LR3; preserve non-prescriptive framing."
+  },
+  "peptideContentIgf1DesDescription": "IGF-1 DES is a shorter IGF-1 analogue missing the first three amino acids. It is discussed as a shorter-acting IGF variant in local tissue-signalling research.",
+  "@peptideContentIgf1DesDescription": {
+    "description": "Educational reference description for IGF-1 DES."
+  },
+  "peptideContentIgf1DesTypicalDose": "20–50 mcg in research protocols",
+  "@peptideContentIgf1DesTypicalDose": {
+    "description": "Reference amount text for IGF-1 DES; this is not a dosing recommendation."
+  },
+  "peptideContentIgf1DesHalfLife": "~20–30 minutes",
+  "@peptideContentIgf1DesHalfLife": {
+    "description": "Educational half-life reference for IGF-1 DES."
+  },
+  "peptideContentIgf1DesNotes": "Very advanced and experimental. Avoid broad protocol suggestions because human safety data and appropriate monitoring are limited.",
+  "@peptideContentIgf1DesNotes": {
+    "description": "Neutral educational notes for IGF-1 DES; preserve non-prescriptive framing."
+  },
+  "peptideContentPegMgfDescription": "PEG-MGF is a pegylated variant of mechano growth factor, an IGF-1 splice-variant peptide. The pegylation is intended to extend circulation time compared with unmodified MGF.",
+  "@peptideContentPegMgfDescription": {
+    "description": "Educational reference description for PEG-MGF."
+  },
+  "peptideContentPegMgfTypicalDose": "100–300 mcg weekly in research protocols",
+  "@peptideContentPegMgfTypicalDose": {
+    "description": "Reference amount text for PEG-MGF; this is not a dosing recommendation."
+  },
+  "peptideContentPegMgfHalfLife": "Extended by PEGylation",
+  "@peptideContentPegMgfHalfLife": {
+    "description": "Educational half-life reference for PEG-MGF."
+  },
+  "peptideContentPegMgfNotes": "Common in performance forums but not an approved therapy. Treat as an advanced research entry with conservative tracking defaults.",
+  "@peptideContentPegMgfNotes": {
+    "description": "Neutral educational notes for PEG-MGF; preserve non-prescriptive framing."
+  },
+  "peptideContentMk677Description": "MK-677, also known as Ibutamoren, is an orally active ghrelin receptor agonist and growth-hormone secretagogue. It is not a peptide, but it is commonly discussed alongside GH-axis peptides.",
+  "@peptideContentMk677Description": {
+    "description": "Educational reference description for MK-677 (Ibutamoren)."
+  },
+  "peptideContentMk677TypicalDose": "10–25 mg daily",
+  "@peptideContentMk677TypicalDose": {
+    "description": "Reference amount text for MK-677 (Ibutamoren); this is not a dosing recommendation."
+  },
+  "peptideContentMk677HalfLife": "~24 hours",
+  "@peptideContentMk677HalfLife": {
+    "description": "Educational half-life reference for MK-677 (Ibutamoren)."
+  },
+  "peptideContentMk677Notes": "Related compound, not a peptide. Community discussions often mention appetite, water retention, sleep, and glucose-monitoring considerations.",
+  "@peptideContentMk677Notes": {
+    "description": "Neutral educational notes for MK-677 (Ibutamoren); preserve non-prescriptive framing."
+  },
+  "peptideContentFiveAmino1mqDescription": "5-Amino-1MQ is a small-molecule NNMT inhibitor discussed in metabolic and body-composition communities. It is not a peptide, but it often appears in peptide-adjacent longevity and fat-loss stacks.",
+  "@peptideContentFiveAmino1mqDescription": {
+    "description": "Educational reference description for 5-Amino-1MQ."
+  },
+  "peptideContentFiveAmino1mqTypicalDose": "25–100 mg daily",
+  "@peptideContentFiveAmino1mqTypicalDose": {
+    "description": "Reference amount text for 5-Amino-1MQ; this is not a dosing recommendation."
+  },
+  "peptideContentFiveAmino1mqHalfLife": "Not well established",
+  "@peptideContentFiveAmino1mqHalfLife": {
+    "description": "Educational half-life reference for 5-Amino-1MQ."
+  },
+  "peptideContentFiveAmino1mqNotes": "Related compound, not a peptide. Human evidence is limited; avoid claims about fat loss or insulin sensitivity outcomes.",
+  "@peptideContentFiveAmino1mqNotes": {
+    "description": "Neutral educational notes for 5-Amino-1MQ; preserve non-prescriptive framing."
+  },
+  "peptideContentTesofensineDescription": "Tesofensine is an oral monoamine reuptake inhibitor investigated for obesity and neurodegenerative conditions. It is not a peptide, but it is frequently discussed in weight-management communities near GLP-1 compounds.",
+  "@peptideContentTesofensineDescription": {
+    "description": "Educational reference description for Tesofensine."
+  },
+  "peptideContentTesofensineTypicalDose": "0.25–0.5 mg daily in studies",
+  "@peptideContentTesofensineTypicalDose": {
+    "description": "Reference amount text for Tesofensine; this is not a dosing recommendation."
+  },
+  "peptideContentTesofensineHalfLife": "~9 days",
+  "@peptideContentTesofensineHalfLife": {
+    "description": "Educational half-life reference for Tesofensine."
+  },
+  "peptideContentTesofensineNotes": "Related compound, not a peptide. Because it affects neurotransmitter pathways, blood pressure, heart rate, and interaction screening matter.",
+  "@peptideContentTesofensineNotes": {
+    "description": "Neutral educational notes for Tesofensine; preserve non-prescriptive framing."
+  },
+  "peptideContentRu58841Description": "RU-58841 is a topical nonsteroidal antiandrogen researched for androgen-receptor signalling in hair-follicle contexts. It is not a peptide, but it is often discussed in peptide-adjacent aesthetic communities.",
+  "@peptideContentRu58841Description": {
+    "description": "Educational reference description for RU-58841."
+  },
+  "peptideContentRu58841TypicalDose": "Topical 25–50 mg daily in informal protocols",
+  "@peptideContentRu58841TypicalDose": {
+    "description": "Reference amount text for RU-58841; this is not a dosing recommendation."
+  },
+  "peptideContentRu58841HalfLife": "Not well established",
+  "@peptideContentRu58841HalfLife": {
+    "description": "Educational half-life reference for RU-58841."
+  },
+  "peptideContentRu58841Notes": "Related compound, not a peptide and not an approved medication. Quality-control and systemic exposure concerns are common discussion points.",
+  "@peptideContentRu58841Notes": {
+    "description": "Neutral educational notes for RU-58841; preserve non-prescriptive framing."
+  },
+  "peptideContentEducationalDisclaimer": "For educational reference only. Not medical advice. Research peptides are not approved for human use in most jurisdictions — always consult a qualified healthcare provider.",
+  "@peptideContentEducationalDisclaimer": {
+    "description": "Safety disclaimer shown below every bundled peptide reference. Preserve educational-only, non-medical-advice wording."
   }
 }

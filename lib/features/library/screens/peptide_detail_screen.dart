@@ -12,6 +12,7 @@ import '../../protocol/screens/create_protocol_screen.dart';
 import '../widgets/syringe_visual.dart';
 import '../providers/peptide_provider.dart';
 import '../utils/library_labels.dart';
+import '../utils/localized_peptide_content.dart';
 
 /// Peptide detail — factual description, typical dose, stack info, and an
 /// inline reconstitution calculator. CTA to add to a protocol.
@@ -23,6 +24,7 @@ class PeptideDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final content = localizedPeptideContent(l10n, peptide);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -90,9 +92,9 @@ class PeptideDetailScreen extends StatelessWidget {
                             peptide.category,
                           ),
                         ),
-                        if (peptide.halfLife.isNotEmpty)
+                        if (content.halfLife.isNotEmpty)
                           _InfoChip(
-                            label: '${l10n.halfLife}: ${peptide.halfLife}',
+                            label: '${l10n.halfLife}: ${content.halfLife}',
                           ),
                         if (peptide.typicalCycleWeeks > 0)
                           _InfoChip(
@@ -104,7 +106,7 @@ class PeptideDetailScreen extends StatelessWidget {
                     const SizedBox(height: AppSpacing.lg),
 
                     // Description
-                    Text(peptide.description, style: AppTypography.bodyLarge),
+                    Text(content.description, style: AppTypography.bodyLarge),
                     const SizedBox(height: AppSpacing.xl),
 
                     // Typical dose card
@@ -118,7 +120,7 @@ class PeptideDetailScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: AppSpacing.xs),
                           Text(
-                            peptide.typicalDose,
+                            content.typicalDose,
                             style: AppTypography.heroSmall.copyWith(
                               color: AppColors.primary,
                             ),
@@ -134,7 +136,7 @@ class PeptideDetailScreen extends StatelessWidget {
                     const SizedBox(height: AppSpacing.cardGap),
 
                     // Notes (if any)
-                    if (peptide.notes.isNotEmpty) ...[
+                    if (content.notes.isNotEmpty) ...[
                       AppCard(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +144,7 @@ class PeptideDetailScreen extends StatelessWidget {
                             Text(l10n.notes, style: AppTypography.systemLabel),
                             const SizedBox(height: AppSpacing.xs),
                             Text(
-                              peptide.notes,
+                              content.notes,
                               style: AppTypography.bodyMedium,
                             ),
                           ],
@@ -220,7 +222,7 @@ class PeptideDetailScreen extends StatelessWidget {
                           const SizedBox(width: AppSpacing.sm),
                           Expanded(
                             child: Text(
-                              peptide.disclaimer,
+                              content.disclaimer,
                               style: AppTypography.disclaimer.copyWith(
                                 color: AppColors.textSecondary,
                               ),

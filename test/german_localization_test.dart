@@ -39,6 +39,11 @@ void main() {
     expect(find.text('EINHEITENRECHNER'), findsOneWidget);
     expect(find.text('Fläschchenwerte jetzt umrechnen'), findsOneWidget);
     expect(find.bySemanticsLabel('Einheitenrechner öffnen'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField).first, 'Darmschleimhaut');
+    await tester.pump();
+    expect(find.text('BPC-157'), findsOneWidget);
+    expect(find.text('Keine Peptide gefunden'), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
@@ -106,11 +111,11 @@ void main() {
       typicalDose: 'Reference amount',
       defaultDoseMcg: 0,
       defaultFrequency: 'daily',
-      halfLife: '',
+      halfLife: 'Reference half-life',
       typicalCycleWeeks: 0,
       defaultRoute: 'subcutaneous',
       commonStack: const [],
-      notes: '',
+      notes: 'Reference notes',
       disclaimer: 'Reference only',
     );
 
@@ -119,6 +124,18 @@ void main() {
 
     expect(find.text('Regeneration'), findsOneWidget);
     expect(find.text('Healing'), findsNothing);
+    expect(
+      find.textContaining('ist ein synthetisches Peptid aus 15 Aminosäuren'),
+      findsOneWidget,
+    );
+    expect(find.text('Reference description'), findsNothing);
+    expect(find.text('Halbwertszeit: ~4 Stunden'), findsOneWidget);
+    expect(find.text('Reference half-life'), findsNothing);
+    expect(find.text('250–500 mcg'), findsOneWidget);
+    expect(find.text('Reference amount'), findsNothing);
+    expect(find.text('Reference notes'), findsNothing);
+    expect(find.text('Reference only'), findsNothing);
+    expect(find.textContaining('Nur als Bildungsreferenz'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }
