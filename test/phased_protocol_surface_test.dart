@@ -147,8 +147,8 @@ void main() {
     expect(find.text('SAVE PHASE'), findsOneWidget);
     await tester.ensureVisible(find.text('PHASE PREVIEW'));
     await tester.pumpAndSettle();
-    expect(find.textContaining('125 mcg · 07:15'), findsOneWidget);
-    expect(find.textContaining('150 mcg · 19:30'), findsOneWidget);
+    expect(find.textContaining('125 mcg · 7:15 AM'), findsOneWidget);
+    expect(find.textContaining('150 mcg · 7:30 PM'), findsOneWidget);
     expect(tester.takeException(), isNull);
     await expectLater(
       find.byType(MaterialApp),

@@ -568,10 +568,12 @@ class _UpcomingChangeRemindersCard extends StatelessWidget {
                 color: AppColors.aiInsightBright,
               ),
               const SizedBox(width: AppSpacing.sm),
-              Text(
-                context.protocolL10n.activeChangeReminders,
-                style: AppTypography.systemLabel.copyWith(
-                  color: AppColors.aiInsightBright,
+              Expanded(
+                child: Text(
+                  context.protocolL10n.activeChangeReminders,
+                  style: AppTypography.systemLabel.copyWith(
+                    color: AppColors.aiInsightBright,
+                  ),
                 ),
               ),
             ],

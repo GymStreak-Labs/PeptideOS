@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:peptide_os/core/theme/theme.dart';
 import 'package:peptide_os/features/protocol/screens/create_protocol_screen.dart';
+import 'package:peptide_os/l10n/app_localizations.dart';
 import 'package:peptide_os/models/blend_vial.dart';
 import 'package:peptide_os/models/protocol.dart';
 
@@ -25,6 +26,8 @@ void main() {
       MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.dark,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           backgroundColor: AppColors.background,
           body: Align(

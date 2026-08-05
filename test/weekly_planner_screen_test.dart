@@ -83,8 +83,8 @@ void main() {
 
       expect(find.textContaining(' – '), findsOneWidget);
       expect(find.text('BPC-157'), findsNWidgets(2));
-      expect(find.text('07:30'), findsOneWidget);
-      expect(find.text('19:30'), findsOneWidget);
+      expect(find.text('7:30 AM'), findsOneWidget);
+      expect(find.text('7:30 PM'), findsOneWidget);
       expect(find.text('250 mcg'), findsNWidgets(2));
       expect(find.text('PHASE // FOUNDATION'), findsNWidgets(2));
       expect(tester.takeException(), isNull);
@@ -92,7 +92,7 @@ void main() {
       await tester.tap(find.text('W'));
       await tester.pumpAndSettle();
 
-      expect(find.text('20:15'), findsOneWidget);
+      expect(find.text('8:15 PM'), findsOneWidget);
       expect(find.text('300 mcg'), findsOneWidget);
       expect(tester.takeException(), isNull);
 
@@ -197,7 +197,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Tracked peptide'), findsOneWidget);
-      expect(find.text('09:15'), findsOneWidget);
+      expect(find.text('9:15 AM'), findsOneWidget);
       expect(find.text('125 mcg'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },

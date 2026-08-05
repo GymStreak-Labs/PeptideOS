@@ -107,7 +107,7 @@ void main() {
     expect(find.text('CA\$39.99'), findsOneWidget);
     expect(find.text('CA\$79.99'), findsNWidgets(2));
     expect(find.text('CA\$12.99'), findsOneWidget);
-    expect(find.text('ACTIVATE PRO - CA\$39.99/year'), findsOneWidget);
+    expect(find.text('ACTIVATE PRO — CA\$39.99/year'), findsOneWidget);
     expect(find.text('\$29.99'), findsNothing);
     expect(find.text('\$59.99'), findsNothing);
     expect(find.text('\$9.99'), findsNothing);
@@ -142,8 +142,8 @@ void main() {
     );
 
     expect(find.text('Pre-blended vial'), findsOneWidget);
-    expect(find.text('10.0 units = 0.10 mL'), findsOneWidget);
-    expect(find.text('0.50 mg'), findsOneWidget);
+    expect(find.text('10 units = 0.1 mL'), findsOneWidget);
+    expect(find.text('0.5 mg'), findsOneWidget);
     expect(find.text('0.25 mg'), findsOneWidget);
     expect(find.text('SAVE BLEND'), findsOneWidget);
     expect(tester.takeException(), isNull);

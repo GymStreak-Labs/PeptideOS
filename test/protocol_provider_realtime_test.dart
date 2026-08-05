@@ -8,6 +8,8 @@ import 'package:peptide_os/models/dose_log.dart';
 import 'package:peptide_os/models/protocol.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test(
     'pausing a protocol updates history before persistence completes',
     () async {
