@@ -79,5 +79,2808 @@
   "frequencyEveryOtherDay": "격일",
   "frequencyTwiceWeekly": "주 2회",
   "frequencyWeekly": "매주",
-  "frequencyAsNeeded": "필요할 때"
+  "frequencyAsNeeded": "필요할 때",
+  "tabProtocol": "프로토콜",
+  "tabProgress": "진행",
+  "tabLibrary": "라이브러리",
+  "tabYou": "나",
+  "continueLabel": "계속",
+  "processingLabel": "처리 중…",
+  "authAppleFailed": "Apple 로그인에 실패했습니다. 다시 시도해 주세요.",
+  "authGoogleFailed": "Google 로그인에 실패했습니다. 다시 시도해 주세요.",
+  "authGenericError": "문제가 발생했습니다. 다시 시도해 주세요.",
+  "authUserNotFound": "이 이메일 주소로 등록된 사용자를 찾을 수 없습니다.",
+  "authIncorrectCredentials": "이메일 또는 비밀번호가 올바르지 않습니다.",
+  "authAccountExists": "이미 이 이메일로 가입된 계정이 있습니다.",
+  "authWeakPassword": "비밀번호가 너무 약합니다. 6자 이상 입력해 주세요.",
+  "authInvalidEmail": "유효하지 않은 이메일 주소입니다.",
+  "authAppleUnavailable": "이 앱에서는 Apple로 로그인을 사용할 수 없습니다.",
+  "authRequiredTitle": "나만의 맞춤\n프로토콜 저장하기",
+  "authRequiredBody": "프로토콜이 열리기 전에 로드맵, 일정, 투여 기록, 알림을 계정에 연결해 보관하세요.",
+  "continueWithEmail": "이메일로 계속하기",
+  "signInWithApple": "APPLE로 로그인",
+  "continueWithGoogle": "GOOGLE로 계속하기",
+  "authTermsDisclaimer": "계속 진행하면 이용약관 및 개인정보처리방침에 동의하게 됩니다. PepMod는 교육용 도구이며, 의학적 조언이 아닙니다.",
+  "signIn": "로그인",
+  "createAccount": "계정 만들기",
+  "resetPassword": "비밀번호 재설정",
+  "signInAction": "로그인",
+  "createAccountAction": "계정 만들기",
+  "sendResetLink": "재설정 링크 보내기",
+  "passwordResetSent": "비밀번호 재설정 이메일을 보냈습니다. 받은편지함을 확인하세요.",
+  "enterEmail": "이메일을 입력하세요",
+  "enterValidEmail": "유효한 이메일을 입력하세요",
+  "enterPassword": "비밀번호를 입력하세요",
+  "passwordMinLength": "6자 이상 입력하세요",
+  "forgotPassword": "비밀번호를 잊으셨나요?",
+  "alreadyHaveAccount": "이미 계정이 있으신가요? 로그인",
+  "backToSignIn": "로그인으로 돌아가기",
+  "emailLabel": "이메일",
+  "passwordLabel": "비밀번호",
+  "showPassword": "비밀번호 표시",
+  "hidePassword": "비밀번호 숨기기",
+  "accountDeletedTitle": "계정 삭제됨",
+  "accountDeletedBody": "PepMod 계정과 저장된 앱 데이터가 삭제되었습니다.",
+  "subscriptionUnavailable": "지금은 구독 플랜을 이용할 수 없습니다. 잠시 후 다시 시도해 주세요.",
+  "upgradeUnavailable": "지금은 업그레이드를 이용할 수 없습니다. 나중에 다시 시도해 주세요.",
+  "noPurchasesToRestore": "복원할 구매 내역이 없습니다.",
+  "unlockFullProtocol": "전체 프로토콜 잠금 해제",
+  "premiumUnlimitedPeptides": "프로토콜당 무제한 펩타이드",
+  "premiumMultipleProtocols": "여러 개의 활성 프로토콜",
+  "premiumCalculator": "재구성 계산기 (전체 펩타이드)",
+  "premiumMetrics": "체성분 기록 + 차트",
+  "upgradeNow": "지금 업그레이드",
+  "restorePurchases": "구매 복원",
+  "notRightNow": "나중에 할게요",
+  "protocolWeeklyPlanner": "주간 플래너",
+  "protocolDoseHistory": "투여 기록",
+  "protocolCreate": "프로토콜 만들기",
+  "protocolManage": "관리",
+  "protocolYourProtocol": "내 프로토콜",
+  "protocolNoActive": "활성 프로토콜 없음",
+  "protocolNoActiveBody": "첫 프로토콜을 만들어 투여 기록과 준수율 관리를 시작하세요.",
+  "protocolStartFirst": "첫 프로토콜 시작하기",
+  "protocolNoDosesScheduledToday": "오늘 예정된 투여 없음",
+  "protocolDosesTaken": "총 {total}회 중 {taken}회 투여 완료",
+  "@protocolDosesTaken": {
+    "description": "Summary of completed doses today.",
+    "placeholders": {
+      "taken": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "protocolNextDose": "다음 투여",
+  "protocolInTime": "{duration} 후",
+  "@protocolInTime": {
+    "description": "Countdown until the next dose.",
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "protocolLogDose": "투여 기록",
+  "protocolNow": "지금",
+  "protocolMissed": "놓침",
+  "protocolSkipped": "건너뜀",
+  "protocolNoDosesToday": "오늘 투여 없음",
+  "protocolNoDosesTodayBody": "이 프로토콜에는 오늘 예정된 투여가 없습니다.",
+  "protocolFreeLimit": "무료 플랜은 프로토콜 1개로 제한됩니다. Premium으로 업그레이드하면 여러 스택을 동시에 운영할 수 있습니다.",
+  "protocolSyringeUnitsSuffix": " · {amount} 시린지 단위",
+  "@protocolSyringeUnitsSuffix": {
+    "description": "Syringe-unit detail appended to a dose amount.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "injectionSiteLeftAbdomen": "왼쪽 복부",
+  "@injectionSiteLeftAbdomen": {
+    "description": "Display name for the left abdomen injection site."
+  },
+  "injectionSiteRightAbdomen": "오른쪽 복부",
+  "@injectionSiteRightAbdomen": {
+    "description": "Display name for the right abdomen injection site."
+  },
+  "injectionSiteLeftThigh": "왼쪽 허벅지",
+  "@injectionSiteLeftThigh": {
+    "description": "Display name for the left thigh injection site."
+  },
+  "injectionSiteRightThigh": "오른쪽 허벅지",
+  "@injectionSiteRightThigh": {
+    "description": "Display name for the right thigh injection site."
+  },
+  "injectionSiteLeftGlute": "왼쪽 둔부",
+  "@injectionSiteLeftGlute": {
+    "description": "Display name for the left glute injection site."
+  },
+  "injectionSiteRightGlute": "오른쪽 둔부",
+  "@injectionSiteRightGlute": {
+    "description": "Display name for the right glute injection site."
+  },
+  "injectionSiteLeftTriceps": "왼쪽 삼두근",
+  "@injectionSiteLeftTriceps": {
+    "description": "Display name for the left triceps injection site."
+  },
+  "injectionSiteRightTriceps": "오른쪽 삼두근",
+  "@injectionSiteRightTriceps": {
+    "description": "Display name for the right triceps injection site."
+  },
+  "plannerToday": "오늘",
+  "plannerBack": "뒤로",
+  "plannerPreviousWeek": "이전 주",
+  "plannerNextWeek": "다음 주",
+  "plannerScheduledCount": "{count, plural, =1{예정된 투여 {count}건} other{예정된 투여 {count}건}}",
+  "@plannerScheduledCount": {
+    "description": "Accessible count of doses scheduled for a calendar day.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "plannerTrackingDisclaimer": "기록 전용입니다. 이 캘린더는 저장된 프로토콜을 반영할 뿐, 투여에 대한 조언을 제공하지 않습니다.",
+  "plannerWashoutPeriod": "휴약 기간",
+  "plannerWashoutUntil": "{date}까지 휴약",
+  "@plannerWashoutUntil": {
+    "description": "End date shown for a saved washout window.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "plannerNoScheduledDoses": "예정된 투여 없음",
+  "plannerNothingPlanned": "저장된 프로토콜에 예정된 일정이 없습니다.",
+  "@protocolWeeklyPlanner": {
+    "description": "Tooltip for opening the weekly planner."
+  },
+  "@protocolDoseHistory": {
+    "description": "Tooltip for opening dose history."
+  },
+  "@protocolCreate": {
+    "description": "Tooltip for creating a protocol."
+  },
+  "@protocolManage": {
+    "description": "Action that opens protocol management."
+  },
+  "@protocolYourProtocol": {
+    "description": "Heading above the empty protocol state."
+  },
+  "@protocolNoActive": {
+    "description": "Title when no protocol is active."
+  },
+  "@protocolNoActiveBody": {
+    "description": "Guidance when no protocol is active."
+  },
+  "@protocolStartFirst": {
+    "description": "Action to create the first protocol."
+  },
+  "@protocolNoDosesScheduledToday": {
+    "description": "Message when today has no scheduled doses."
+  },
+  "@protocolNextDose": {
+    "description": "Heading for the next scheduled dose."
+  },
+  "@protocolLogDose": {
+    "description": "Action to record a dose."
+  },
+  "@protocolNow": {
+    "description": "Countdown label when a dose is due now."
+  },
+  "@protocolMissed": {
+    "description": "Status for a missed dose."
+  },
+  "@protocolSkipped": {
+    "description": "Status for a skipped dose."
+  },
+  "@protocolNoDosesToday": {
+    "description": "Empty-card title for no doses today."
+  },
+  "@protocolNoDosesTodayBody": {
+    "description": "Empty-card detail for no doses today."
+  },
+  "@protocolFreeLimit": {
+    "description": "Upgrade explanation when the free protocol limit is reached."
+  },
+  "@plannerToday": {
+    "description": "Action that returns the planner to today."
+  },
+  "@plannerBack": {
+    "description": "Tooltip for leaving the weekly planner."
+  },
+  "@plannerPreviousWeek": {
+    "description": "Tooltip for moving to the previous week."
+  },
+  "@plannerNextWeek": {
+    "description": "Tooltip for moving to the next week."
+  },
+  "@plannerTrackingDisclaimer": {
+    "description": "Safety note below the weekly planner."
+  },
+  "@plannerWashoutPeriod": {
+    "description": "Label for a washout period without an end date."
+  },
+  "@plannerNoScheduledDoses": {
+    "description": "Title when a planner day has no doses."
+  },
+  "@plannerNothingPlanned": {
+    "description": "Detail when a planner day has no doses."
+  },
+  "activatePro": "PRO 활성화",
+  "@activatePro": {
+    "description": "English onboarding copy for activate pro."
+  },
+  "activateProPrice": "PRO 활성화 — {price}/년",
+  "@activateProPrice": {
+    "description": "English onboarding copy for activate pro price.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "annualAccess": "연간 이용권",
+  "@annualAccess": {
+    "description": "English onboarding copy for annual access."
+  },
+  "annualLabel": "연간",
+  "@annualLabel": {
+    "description": "English onboarding copy for annual label."
+  },
+  "averageRating": "평균 평점",
+  "@averageRating": {
+    "description": "English onboarding copy for average rating."
+  },
+  "bacWaterLabel": "희석수",
+  "@bacWaterLabel": {
+    "description": "English onboarding copy for bac water label."
+  },
+  "basedOnInputs": "입력값 기준 //",
+  "@basedOnInputs": {
+    "description": "English onboarding copy for based on inputs."
+  },
+  "bestValue": "최고 가치",
+  "@bestValue": {
+    "description": "English onboarding copy for best value."
+  },
+  "birthDateInvalid": "만 18세 이상에 해당하는 유효한 날짜를 입력하세요.",
+  "@birthDateInvalid": {
+    "description": "English onboarding copy for birth date invalid."
+  },
+  "birthDateValid": "연령 확인 완료",
+  "@birthDateValid": {
+    "description": "English onboarding copy for birth date valid."
+  },
+  "calculatorDemoBody": "{peptideName}(으)로 작동 방식을 보여드릴게요",
+  "@calculatorDemoBody": {
+    "description": "English onboarding copy for calculator demo body.",
+    "placeholders": {
+      "peptideName": {
+        "type": "String"
+      }
+    }
+  },
+  "calculatorDemoResult": "이렇게 간단합니다. 값을 입력하면\n정확한 시린지 단위가 나옵니다.",
+  "@calculatorDemoResult": {
+    "description": "English onboarding copy for calculator demo result."
+  },
+  "calculatorDemoTitle": "이제 복잡한\n계산은 그만.",
+  "@calculatorDemoTitle": {
+    "description": "English onboarding copy for calculator demo title."
+  },
+  "confidenceCycleTiming": "주기 타이밍",
+  "@confidenceCycleTiming": {
+    "description": "English onboarding copy for confidence cycle timing."
+  },
+  "confidenceCycleTimingDetail": "프로토콜 일정과 주기 구간을 한눈에 확인",
+  "@confidenceCycleTimingDetail": {
+    "description": "English onboarding copy for confidence cycle timing detail."
+  },
+  "confidenceDoseMath": "용량 계산",
+  "@confidenceDoseMath": {
+    "description": "English onboarding copy for confidence dose math."
+  },
+  "confidenceDoseMathDetail": "바이알, 희석액, 용량, 흡입 단위를 한 곳에서 관리",
+  "@confidenceDoseMathDetail": {
+    "description": "English onboarding copy for confidence dose math detail."
+  },
+  "confidenceLabel": "신뢰도",
+  "@confidenceLabel": {
+    "description": "English onboarding copy for confidence label."
+  },
+  "confidencePlainInfo": "쉬운 설명",
+  "@confidencePlainInfo": {
+    "description": "English onboarding copy for confidence plain info."
+  },
+  "confidencePlainInfoDetail": "복잡함 없이 연구 노트 확인",
+  "@confidencePlainInfoDetail": {
+    "description": "English onboarding copy for confidence plain info detail."
+  },
+  "confidenceProgressSignals": "진행 신호",
+  "@confidenceProgressSignals": {
+    "description": "English onboarding copy for confidence progress signals."
+  },
+  "confidenceProgressSignalsDetail": "이행률과 신체 지표 변화를 시간순으로 확인",
+  "@confidenceProgressSignalsDetail": {
+    "description": "English onboarding copy for confidence progress signals detail."
+  },
+  "confidenceSafetyFraming": "안전 안내",
+  "@confidenceSafetyFraming": {
+    "description": "English onboarding copy for confidence safety framing."
+  },
+  "confidenceSafetyFramingDetail": "교육용 안내와 유의사항을 항상 표시",
+  "@confidenceSafetyFramingDetail": {
+    "description": "English onboarding copy for confidence safety framing detail."
+  },
+  "confidenceSiteRotation": "부위 로테이션",
+  "@confidenceSiteRotation": {
+    "description": "English onboarding copy for confidence site rotation."
+  },
+  "confidenceSiteRotationDetail": "각 투여 부위 기록을 기억",
+  "@confidenceSiteRotationDetail": {
+    "description": "English onboarding copy for confidence site rotation detail."
+  },
+  "connectingToStore": "스토어 연결 중...",
+  "@connectingToStore": {
+    "description": "English onboarding copy for connecting to store."
+  },
+  "@continueLabel": {
+    "description": "English onboarding copy for continue label."
+  },
+  "continueSelected": "계속 ({count})",
+  "@continueSelected": {
+    "description": "English onboarding copy for continue selected.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customProtocol": "맞춤 프로토콜",
+  "@customProtocol": {
+    "description": "English onboarding copy for custom protocol."
+  },
+  "dateOfBirthLabel": "생년월일",
+  "@dateOfBirthLabel": {
+    "description": "English onboarding copy for date of birth label."
+  },
+  "dayOne": "1일차",
+  "@dayOne": {
+    "description": "English onboarding copy for day one."
+  },
+  "dayShortLabel": "일",
+  "@dayShortLabel": {
+    "description": "English onboarding copy for day short label."
+  },
+  "defaultConfidence": "용량 계산 · 부위 로테이션",
+  "@defaultConfidence": {
+    "description": "English onboarding copy for default confidence."
+  },
+  "defaultFrustration": "투여 누락",
+  "@defaultFrustration": {
+    "description": "English onboarding copy for default frustration."
+  },
+  "defaultGoals": "회복 · 장수",
+  "@defaultGoals": {
+    "description": "English onboarding copy for default goals."
+  },
+  "doseLabel": "용량",
+  "@doseLabel": {
+    "description": "English onboarding copy for dose label."
+  },
+  "dosesLogged": "기록된 투여 횟수",
+  "@dosesLogged": {
+    "description": "English onboarding copy for doses logged."
+  },
+  "dosesPerDay": "일일 투여 횟수",
+  "@dosesPerDay": {
+    "description": "English onboarding copy for doses per day."
+  },
+  "drawVolumeLabel": "흡입량",
+  "@drawVolumeLabel": {
+    "description": "English onboarding copy for draw volume label."
+  },
+  "durationLabel": "기간",
+  "@durationLabel": {
+    "description": "English onboarding copy for duration label."
+  },
+  "experienceAdvanced": "숙련자",
+  "@experienceAdvanced": {
+    "description": "English onboarding copy for experience advanced."
+  },
+  "experienceAdvancedDetail": "세부적인 프로토콜 관리에 익숙해요",
+  "@experienceAdvancedDetail": {
+    "description": "English onboarding copy for experience advanced detail."
+  },
+  "experienceFirstTime": "처음이에요",
+  "@experienceFirstTime": {
+    "description": "English onboarding copy for experience first time."
+  },
+  "experienceFirstTimeDetail": "펩타이드 기록이 처음이에요",
+  "@experienceFirstTimeDetail": {
+    "description": "English onboarding copy for experience first time detail."
+  },
+  "experienceIntermediate": "중급",
+  "@experienceIntermediate": {
+    "description": "English onboarding copy for experience intermediate."
+  },
+  "experienceLabel": "경험 수준",
+  "@experienceLabel": {
+    "description": "English onboarding copy for experience label."
+  },
+  "experienceNovice": "입문",
+  "@experienceNovice": {
+    "description": "English onboarding copy for experience novice."
+  },
+  "experienceSome": "약간의 경험",
+  "@experienceSome": {
+    "description": "English onboarding copy for experience some."
+  },
+  "experienceSomeDetail": "한두 개의 프로토콜을 기록해봤어요",
+  "@experienceSomeDetail": {
+    "description": "English onboarding copy for experience some detail."
+  },
+  "experienceVeteran": "전문가",
+  "@experienceVeteran": {
+    "description": "English onboarding copy for experience veteran."
+  },
+  "featureDoseMathBody": "지금 기록 중인 프로토콜 옆에 바이알 크기, 희석액 부피, 용량, 흡입 단위를 함께 확인하세요.",
+  "@featureDoseMathBody": {
+    "description": "English onboarding copy for feature dose math body."
+  },
+  "featureDoseMathTitle": "맥락 속\n용량 계산",
+  "@featureDoseMathTitle": {
+    "description": "English onboarding copy for feature dose math title."
+  },
+  "featureProtocolArcBody": "계획된 투여, 기록된 투여, 이행률, 신체 지표가 하나의 타임라인으로 이어지는 것을 확인하세요.",
+  "@featureProtocolArcBody": {
+    "description": "English onboarding copy for feature protocol arc body."
+  },
+  "featureProtocolArcTitle": "시간에 따른\n프로토콜 흐름",
+  "@featureProtocolArcTitle": {
+    "description": "English onboarding copy for feature protocol arc title."
+  },
+  "featureShowcaseTitle": "필요한 모든 것.\n앱 하나로.",
+  "@featureShowcaseTitle": {
+    "description": "English onboarding copy for feature showcase title."
+  },
+  "featureSiteRotationBody": "기록한 모든 부위를 기억하고 로테이션 이력을 투여 기록에 함께 보관하세요.",
+  "@featureSiteRotationBody": {
+    "description": "English onboarding copy for feature site rotation body."
+  },
+  "featureSiteRotationTitle": "주사 부위\n로테이션",
+  "@featureSiteRotationTitle": {
+    "description": "English onboarding copy for feature site rotation title."
+  },
+  "firstNameExample": "예: 민준",
+  "@firstNameExample": {
+    "description": "English onboarding copy for first name example."
+  },
+  "firstNameLabel": "이름",
+  "@firstNameLabel": {
+    "description": "English onboarding copy for first name label."
+  },
+  "frustrationForgetting": "투여를 잊어버림",
+  "@frustrationForgetting": {
+    "description": "English onboarding copy for frustration forgetting."
+  },
+  "frustrationLabel": "불편했던 점",
+  "@frustrationLabel": {
+    "description": "English onboarding copy for frustration label."
+  },
+  "frustrationMath": "바이알·주사기 계산",
+  "@frustrationMath": {
+    "description": "English onboarding copy for frustration math."
+  },
+  "frustrationProgress": "꾸준히 하고 있는지 확인하기 어려움",
+  "@frustrationProgress": {
+    "description": "English onboarding copy for frustration progress."
+  },
+  "frustrationSchedule": "일정 관리가 어려움",
+  "@frustrationSchedule": {
+    "description": "English onboarding copy for frustration schedule."
+  },
+  "frustrationStacking": "여러 펩타이드 동시 관리",
+  "@frustrationStacking": {
+    "description": "English onboarding copy for frustration stacking."
+  },
+  "frustrationTrust": "믿을 수 있는 정보 찾기",
+  "@frustrationTrust": {
+    "description": "English onboarding copy for frustration trust."
+  },
+  "goalAntiAging": "건강한 노화",
+  "@goalAntiAging": {
+    "description": "English onboarding copy for goal anti aging."
+  },
+  "goalAntiAgingDetail": "장수 중심의 기록 정리",
+  "@goalAntiAgingDetail": {
+    "description": "English onboarding copy for goal anti aging detail."
+  },
+  "goalCognitive": "인지 기능 지원",
+  "@goalCognitive": {
+    "description": "English onboarding copy for goal cognitive."
+  },
+  "goalCognitiveDetail": "집중력과 정신적 컨디션 모니터링",
+  "@goalCognitiveDetail": {
+    "description": "English onboarding copy for goal cognitive detail."
+  },
+  "goalImmune": "면역 지원",
+  "@goalImmune": {
+    "description": "English onboarding copy for goal immune."
+  },
+  "goalImmuneDetail": "면역 중심 프로토콜 정리",
+  "@goalImmuneDetail": {
+    "description": "English onboarding copy for goal immune detail."
+  },
+  "goalMuscleGrowth": "근육 성장",
+  "@goalMuscleGrowth": {
+    "description": "English onboarding copy for goal muscle growth."
+  },
+  "goalMuscleGrowthDetail": "트레이닝과 성장 목표 추적",
+  "@goalMuscleGrowthDetail": {
+    "description": "English onboarding copy for goal muscle growth detail."
+  },
+  "goalOther": "기타",
+  "@goalOther": {
+    "description": "English onboarding copy for goal other."
+  },
+  "goalOtherDetail": "다른 목표로 추적 설정",
+  "@goalOtherDetail": {
+    "description": "English onboarding copy for goal other detail."
+  },
+  "goalRecovery": "회복",
+  "@goalRecovery": {
+    "description": "English onboarding copy for goal recovery."
+  },
+  "goalRecoveryDetail": "회복 기록과 루틴 지원",
+  "@goalRecoveryDetail": {
+    "description": "English onboarding copy for goal recovery detail."
+  },
+  "goalSleep": "수면",
+  "@goalSleep": {
+    "description": "English onboarding copy for goal sleep."
+  },
+  "goalSleepDetail": "수면 관련 목표와 패턴 추적",
+  "@goalSleepDetail": {
+    "description": "English onboarding copy for goal sleep detail."
+  },
+  "goalWeightLoss": "체중 감량",
+  "@goalWeightLoss": {
+    "description": "English onboarding copy for goal weight loss."
+  },
+  "goalWeightLossDetail": "대사 목표와 진행 상황 추적",
+  "@goalWeightLossDetail": {
+    "description": "English onboarding copy for goal weight loss detail."
+  },
+  "goalsLabel": "목표",
+  "@goalsLabel": {
+    "description": "English onboarding copy for goals label."
+  },
+  "iUnderstand": "이해했습니다",
+  "@iUnderstand": {
+    "description": "English onboarding copy for i understand."
+  },
+  "lastThreeDaysAgo": "최근: 3일 전",
+  "@lastThreeDaysAgo": {
+    "description": "English onboarding copy for last three days ago."
+  },
+  "leftAbdomen": "왼쪽 복부",
+  "@leftAbdomen": {
+    "description": "English onboarding copy for left abdomen."
+  },
+  "loveIt": "정말 좋아요",
+  "@loveIt": {
+    "description": "English onboarding copy for love it."
+  },
+  "maybeLater": "나중에",
+  "@maybeLater": {
+    "description": "English onboarding copy for maybe later."
+  },
+  "monthOne": "1개월차",
+  "@monthOne": {
+    "description": "English onboarding copy for month one."
+  },
+  "monthShortLabel": "월",
+  "@monthShortLabel": {
+    "description": "English onboarding copy for month short label."
+  },
+  "monthTwo": "2개월차",
+  "@monthTwo": {
+    "description": "English onboarding copy for month two."
+  },
+  "moreCount": "{shown} 외 {count}개",
+  "@moreCount": {
+    "description": "English onboarding copy for more count.",
+    "placeholders": {
+      "shown": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "needsWork": "개선이 필요해요",
+  "@needsWork": {
+    "description": "English onboarding copy for needs work."
+  },
+  "notificationBody": "예정된 프로토콜 시간이 되면 은근한 알림을 받으세요. 알림에 펩타이드 이름은 표시되지 않으며, 가벼운 리마인더만 제공됩니다.",
+  "@notificationBody": {
+    "description": "English onboarding copy for notification body."
+  },
+  "notificationTitle": "투여 시간을\n놓치지 마세요.",
+  "@notificationTitle": {
+    "description": "English onboarding copy for notification title."
+  },
+  "nowLabel": "지금",
+  "@nowLabel": {
+    "description": "English onboarding copy for now label."
+  },
+  "ok": "확인",
+  "@ok": {
+    "description": "English onboarding copy for ok."
+  },
+  "onboardingAgeConfirmed": "18세 이상입니다",
+  "@onboardingAgeConfirmed": {
+    "description": "English onboarding copy for onboarding age confirmed."
+  },
+  "onboardingAgeRequirementBody": "PepMod를 사용하려면 18세 이상이어야 합니다.",
+  "@onboardingAgeRequirementBody": {
+    "description": "English onboarding copy for onboarding age requirement body."
+  },
+  "onboardingAgeRequirementTitle": "연령 요건",
+  "@onboardingAgeRequirementTitle": {
+    "description": "English onboarding copy for onboarding age requirement title."
+  },
+  "onboardingAgeVerificationBody": "PepMod는 18세 이상 성인을 위한 앱입니다.",
+  "@onboardingAgeVerificationBody": {
+    "description": "English onboarding copy for onboarding age verification body."
+  },
+  "onboardingAgeVerificationTitle": "먼저 연령을\n확인해주세요.",
+  "@onboardingAgeVerificationTitle": {
+    "description": "English onboarding copy for onboarding age verification title."
+  },
+  "onboardingAheadBody": "몇 가지 질문에 답하면 PepMod가 맞춤 트래킹 미리보기를 구성해드립니다.",
+  "@onboardingAheadBody": {
+    "description": "English onboarding copy for onboarding ahead body."
+  },
+  "onboardingAheadTitle": "시작하기 전에\n프로토콜을 먼저 확인하세요.",
+  "@onboardingAheadTitle": {
+    "description": "English onboarding copy for onboarding ahead title."
+  },
+  "onboardingBirthDateBody": "연령 요건 충족 여부를 확인하는 정보예요.",
+  "@onboardingBirthDateBody": {
+    "description": "English onboarding copy for onboarding birth date body."
+  },
+  "onboardingBirthDateTitle": "생년월일이\n어떻게 되시나요?",
+  "@onboardingBirthDateTitle": {
+    "description": "English onboarding copy for onboarding birth date title."
+  },
+  "onboardingConfidenceBody": "PepMod가 더 명확하게 도와드렸으면 하는 항목을 모두 선택하세요.",
+  "@onboardingConfidenceBody": {
+    "description": "English onboarding copy for onboarding confidence body."
+  },
+  "onboardingConfidenceTitle": "어떤 부분에서\n더 확신이 필요하신가요?",
+  "@onboardingConfidenceTitle": {
+    "description": "English onboarding copy for onboarding confidence title."
+  },
+  "onboardingConversionValueBody": "바이알과 플랜의 값을 부피와 주사기 단위로 변환합니다.",
+  "@onboardingConversionValueBody": {
+    "description": "English onboarding copy for onboarding conversion value body."
+  },
+  "onboardingConversionValueTitle": "바이알 계산을\n더 쉽게 확인하세요.",
+  "@onboardingConversionValueTitle": {
+    "description": "English onboarding copy for onboarding conversion value title."
+  },
+  "onboardingDisclaimerBody": "PepMod는 기록, 알림, 단위 변환을 정리하는 데 도움을 줍니다. 진단, 처방을 하거나 전문 의료 상담을 대체하지 않습니다.",
+  "@onboardingDisclaimerBody": {
+    "description": "English onboarding copy for onboarding disclaimer body."
+  },
+  "onboardingDisclaimerTitle": "명확함을 위해.\n처방을 위한 것이 아닙니다.",
+  "@onboardingDisclaimerTitle": {
+    "description": "English onboarding copy for onboarding disclaimer title."
+  },
+  "onboardingExperienceTitle": "어느 정도의\n경험이 있으신가요?",
+  "@onboardingExperienceTitle": {
+    "description": "English onboarding copy for onboarding experience title."
+  },
+  "onboardingFrustrationBody": "가장 큰 불편함을 선택하세요.",
+  "@onboardingFrustrationBody": {
+    "description": "English onboarding copy for onboarding frustration body."
+  },
+  "onboardingFrustrationTitle": "지금 가장\n어려운 점은 무엇인가요?",
+  "@onboardingFrustrationTitle": {
+    "description": "English onboarding copy for onboarding frustration title."
+  },
+  "onboardingGoalsTitle": "주요 목표가\n무엇인가요?",
+  "@onboardingGoalsTitle": {
+    "description": "English onboarding copy for onboarding goals title."
+  },
+  "onboardingGuidedStartBody": "목표, 경험, 그리고 원하시는 기록 방식에 맞춰 설정을 맞춤화해 드릴게요.",
+  "@onboardingGuidedStartBody": {
+    "description": "English onboarding copy for onboarding guided start body."
+  },
+  "onboardingGuidedStartTitle": "당신에게 맞춘\n가이드 시작.",
+  "@onboardingGuidedStartTitle": {
+    "description": "English onboarding copy for onboarding guided start title."
+  },
+  "onboardingHookAnswer": "PepMod는 답을 프로토콜 옆에 바로 보여줍니다.",
+  "@onboardingHookAnswer": {
+    "description": "English onboarding copy for onboarding hook answer."
+  },
+  "onboardingHookQuestion": "몇 유닛을\n주입하시나요?",
+  "@onboardingHookQuestion": {
+    "description": "English onboarding copy for onboarding hook question."
+  },
+  "onboardingHookResearch": "리서치 라이브러리",
+  "@onboardingHookResearch": {
+    "description": "English onboarding copy for onboarding hook research."
+  },
+  "onboardingHookSources": "근거 링크가 연결된 출처",
+  "@onboardingHookSources": {
+    "description": "English onboarding copy for onboarding hook sources."
+  },
+  "onboardingHookVial": "바이알 + 희석액",
+  "@onboardingHookVial": {
+    "description": "English onboarding copy for onboarding hook vial."
+  },
+  "onboardingNameBody": "PepMod 경험을 맞춤화하는 데 사용됩니다.",
+  "@onboardingNameBody": {
+    "description": "English onboarding copy for onboarding name body."
+  },
+  "onboardingNameTitle": "어떻게\n불러드릴까요?",
+  "@onboardingNameTitle": {
+    "description": "English onboarding copy for onboarding name title."
+  },
+  "onboardingPeptideSelectBody": "사용 중이거나 주시하고 싶은 펩타이드를 선택하세요.",
+  "@onboardingPeptideSelectBody": {
+    "description": "English onboarding copy for onboarding peptide select body."
+  },
+  "onboardingPeptideSelectTitle": "무엇을\n추적하고 계신가요?",
+  "@onboardingPeptideSelectTitle": {
+    "description": "English onboarding copy for onboarding peptide select title."
+  },
+  "onboardingProgressValueBody": "순응도, 투여 기록, 신체 지표를 하나의 명확한 기록으로 모아드립니다.",
+  "@onboardingProgressValueBody": {
+    "description": "English onboarding copy for onboarding progress value body."
+  },
+  "onboardingProgressValueTitle": "시간에 따른\n전체 흐름을 확인하세요.",
+  "@onboardingProgressValueTitle": {
+    "description": "English onboarding copy for onboarding progress value title."
+  },
+  "onboardingProtocolValueBody": "일정을 계획하고, 투여를 기록하고, 각 프로토콜에 세부 정보를 함께 보관하세요.",
+  "@onboardingProtocolValueBody": {
+    "description": "English onboarding copy for onboarding protocol value body."
+  },
+  "onboardingProtocolValueTitle": "모든 프로토콜을\n한곳에 보관하세요.",
+  "@onboardingProtocolValueTitle": {
+    "description": "English onboarding copy for onboarding protocol value title."
+  },
+  "onboardingUnder18": "18세 미만입니다",
+  "@onboardingUnder18": {
+    "description": "English onboarding copy for onboarding under18."
+  },
+  "openingPermission": "권한 확인 중...",
+  "@openingPermission": {
+    "description": "English onboarding copy for opening permission."
+  },
+  "paywallArcBody": "계획한 내용, 기록된 내용, 그리고 다음에 더 정리가 필요한 부분을 확인하세요.",
+  "@paywallArcBody": {
+    "description": "English onboarding copy for paywall arc body."
+  },
+  "paywallArcTitle": "시간에 따른 흐름 보기",
+  "@paywallArcTitle": {
+    "description": "English onboarding copy for paywall arc title."
+  },
+  "paywallBody": "투여 계산, 부위 로테이션, 알림, 프로토콜 기록까지 — 하나의 기록으로 관리하세요.",
+  "@paywallBody": {
+    "description": "English onboarding copy for paywall body."
+  },
+  "paywallDoseMathBody": "바이알, 희석수, 투여량, 주입 유닛을 함께 관리해 각 기록을 더 쉽게 확인하세요.",
+  "@paywallDoseMathBody": {
+    "description": "English onboarding copy for paywall dose math body."
+  },
+  "paywallDoseMathTitle": "정확한 투여 계산하기",
+  "@paywallDoseMathTitle": {
+    "description": "English onboarding copy for paywall dose math title."
+  },
+  "paywallPreviewDisclaimer": "기록, 알림, 단위 명확성을 위한 도구이며 의료 조언이 아닙니다.",
+  "@paywallPreviewDisclaimer": {
+    "description": "English onboarding copy for paywall preview disclaimer."
+  },
+  "paywallRotationBody": "모든 부위, 주기, 알림이 프로토콜 기록에 계속 연결됩니다.",
+  "@paywallRotationBody": {
+    "description": "English onboarding copy for paywall rotation body."
+  },
+  "paywallRotationTitle": "로테이션을 놓치지 마세요",
+  "@paywallRotationTitle": {
+    "description": "English onboarding copy for paywall rotation title."
+  },
+  "paywallTitle": "프로토콜을 제대로\n운영하기 위한 모든 것.",
+  "@paywallTitle": {
+    "description": "English onboarding copy for paywall title."
+  },
+  "paywallValueNote": "바이알 계산이 헷갈리면 시간과 제품이 낭비될 수 있습니다. PepMod는 계산을 기록 옆에 함께 보관해, 오래된 메모를 바탕으로 행동하기 전에 기록을 다시 확인할 수 있게 해줍니다.",
+  "@paywallValueNote": {
+    "description": "English onboarding copy for paywall value note."
+  },
+  "peptideLabel": "펩타이드",
+  "@peptideLabel": {
+    "description": "English onboarding copy for peptide label."
+  },
+  "peptidesLabel": "펩타이드",
+  "@peptidesLabel": {
+    "description": "English onboarding copy for peptides label."
+  },
+  "peptidesTracked": "추적 중인\n펩타이드",
+  "@peptidesTracked": {
+    "description": "English onboarding copy for peptides tracked."
+  },
+  "perWeek": "/주",
+  "@perWeek": {
+    "description": "English onboarding copy for per week."
+  },
+  "perYear": "/년",
+  "@perYear": {
+    "description": "English onboarding copy for per year."
+  },
+  "privacyLabel": "개인정보처리방침",
+  "@privacyLabel": {
+    "description": "English onboarding copy for privacy label."
+  },
+  "processingGoals": "목표 {count}개 분석 중...",
+  "@processingGoals": {
+    "description": "English onboarding copy for processing goals.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "processingPeptides": "펩타이드 기록 {count}개 연결 중...",
+  "@processingPeptides": {
+    "description": "English onboarding copy for processing peptides.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "processingProtocol": "프로토콜 구성 중...",
+  "@processingProtocol": {
+    "description": "English onboarding copy for processing protocol."
+  },
+  "processingSchedule": "일정 정리 중...",
+  "@processingSchedule": {
+    "description": "English onboarding copy for processing schedule."
+  },
+  "processingTitle": "프로토콜을\n구성하는 중",
+  "@processingTitle": {
+    "description": "English onboarding copy for processing title."
+  },
+  "progressLabel": "진행 상황",
+  "@progressLabel": {
+    "description": "English onboarding copy for progress label."
+  },
+  "protocolClarity": "프로토콜 명확성",
+  "@protocolClarity": {
+    "description": "English onboarding copy for protocol clarity."
+  },
+  "protocolIncludes": "프로토콜 구성 항목 //",
+  "@protocolIncludes": {
+    "description": "English onboarding copy for protocol includes."
+  },
+  "protocolPreviewTitle": "프로토콜이\n준비되었습니다.",
+  "@protocolPreviewTitle": {
+    "description": "English onboarding copy for protocol preview title."
+  },
+  "protocolReady": "프로토콜 준비 완료 //",
+  "@protocolReady": {
+    "description": "English onboarding copy for protocol ready."
+  },
+  "protocolReminderReady": "프로토콜 알림이 준비되었습니다",
+  "@protocolReminderReady": {
+    "description": "English onboarding copy for protocol reminder ready."
+  },
+  "protocolReservedFor": "맞춤 프로토콜이 예약된 시간",
+  "@protocolReservedFor": {
+    "description": "English onboarding copy for protocol reserved for."
+  },
+  "restorePurchase": "구매 복원",
+  "@restorePurchase": {
+    "description": "English onboarding copy for restore purchase."
+  },
+  "resultsSummaryBody": "데이터가 쌓이는 동안 투여 기록, 재구성 계산, 추세 기록을 함께 관리해 드릴게요.",
+  "@resultsSummaryBody": {
+    "description": "English onboarding copy for results summary body."
+  },
+  "reviewGateBody": "회원님의 피드백은 모든 바이오해커를 위해 플랫폼을 개선하는 데 도움이 됩니다.",
+  "@reviewGateBody": {
+    "description": "English onboarding copy for review gate body."
+  },
+  "reviewGateTitle": "지금까지 PepMod가\n만족스러우셨나요?",
+  "@reviewGateTitle": {
+    "description": "English onboarding copy for review gate title."
+  },
+  "roadmapBody": "추적 중인 펩타이드 {count}개와 {need}에 대한 필요를 바탕으로 구성되었습니다.",
+  "@roadmapBody": {
+    "description": "English onboarding copy for roadmap body.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "need": {
+        "type": "String"
+      }
+    }
+  },
+  "roadmapDayOneBody": "펩타이드, 투여 기록, 부위 로테이션, 알림이 준비되었습니다.",
+  "@roadmapDayOneBody": {
+    "description": "English onboarding copy for roadmap day one body."
+  },
+  "roadmapDayOneTitle": "첫 번째 프로토콜이 정리되었습니다",
+  "@roadmapDayOneTitle": {
+    "description": "English onboarding copy for roadmap day one title."
+  },
+  "roadmapDisclaimer": "PepMod는 기록과 알림을 정리해 드립니다. 처방, 진단을 하거나 임상의의 지침을 대체하지 않습니다.",
+  "@roadmapDisclaimer": {
+    "description": "English onboarding copy for roadmap disclaimer."
+  },
+  "roadmapMonthOneBody": "순응도, 놓친 투여, 신체 지표가 더 명확한 기록으로 형성되기 시작합니다.",
+  "@roadmapMonthOneBody": {
+    "description": "English onboarding copy for roadmap month one body."
+  },
+  "roadmapMonthOneTitle": "꾸준함의 기록이 쌓이기 시작합니다",
+  "@roadmapMonthOneTitle": {
+    "description": "English onboarding copy for roadmap month one title."
+  },
+  "roadmapMonthTwoBody": "계획한 내용, 실제 진행된 내용, 그리고 기록에서 주의가 필요한 부분을 확인하세요.",
+  "@roadmapMonthTwoBody": {
+    "description": "English onboarding copy for roadmap month two body."
+  },
+  "roadmapMonthTwoTitle": "프로토콜 전체 흐름을 확인할 수 있습니다",
+  "@roadmapMonthTwoTitle": {
+    "description": "English onboarding copy for roadmap month two title."
+  },
+  "roadmapTitle": "앞으로\n이런 일이 펼쳐집니다.",
+  "@roadmapTitle": {
+    "description": "English onboarding copy for roadmap title."
+  },
+  "roadmapWeekOneBody": "이해하기 쉬운 리서치와 추적 메모가 계획에 함께 유지됩니다.",
+  "@roadmapWeekOneBody": {
+    "description": "English onboarding copy for roadmap week one body."
+  },
+  "roadmapWeekOneTitle": "{goal}을(를) 중심으로 라이브러리가 채워집니다",
+  "@roadmapWeekOneTitle": {
+    "description": "English onboarding copy for roadmap week one title.",
+    "placeholders": {
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "savePercent": "{percent}% 절약",
+  "@savePercent": {
+    "description": "English onboarding copy for save percent.",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "saveRoadmap": "이 로드맵 저장하기",
+  "@saveRoadmap": {
+    "description": "English onboarding copy for save roadmap."
+  },
+  "schedulePreview": "일정 미리보기",
+  "@schedulePreview": {
+    "description": "English onboarding copy for schedule preview."
+  },
+  "seeWhatsInside": "구성 내용 확인하기",
+  "@seeWhatsInside": {
+    "description": "English onboarding copy for see whats inside."
+  },
+  "selectAllThatApply": "해당하는 항목을 모두 선택하세요.",
+  "@selectAllThatApply": {
+    "description": "English onboarding copy for select all that apply."
+  },
+  "siteMap": "부위 맵",
+  "@siteMap": {
+    "description": "English onboarding copy for site map."
+  },
+  "skipForNow": "나중에 하기",
+  "@skipForNow": {
+    "description": "English onboarding copy for skip for now."
+  },
+  "socialProofBody": "실제 진행 상황을 추적하는 수천 명과 함께하세요.",
+  "@socialProofBody": {
+    "description": "English onboarding copy for social proof body."
+  },
+  "socialProofTitle": "전 세계 바이오해커들이\n신뢰하는 앱",
+  "@socialProofTitle": {
+    "description": "English onboarding copy for social proof title."
+  },
+  "specialOffer": "특별 혜택",
+  "@specialOffer": {
+    "description": "English onboarding copy for special offer."
+  },
+  "startFreeTrial": "무료 체험 시작",
+  "@startFreeTrial": {
+    "description": "English onboarding copy for start free trial."
+  },
+  "subscribeLabel": "구독하기",
+  "@subscribeLabel": {
+    "description": "English onboarding copy for subscribe label."
+  },
+  "subscribePrice": "구독하기 — {price}/주",
+  "@subscribePrice": {
+    "description": "English onboarding copy for subscribe price.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "subscribeToActivate": "구독하고 프로토콜을 활성화하세요",
+  "@subscribeToActivate": {
+    "description": "English onboarding copy for subscribe to activate."
+  },
+  "subscriptionRenewalDisclaimer": "구독은 현재 기간 종료 최소 24시간 전에 취소하지 않으면 자동으로 갱신됩니다. 설정 > Apple ID > 구독에서 관리할 수 있습니다.",
+  "@subscriptionRenewalDisclaimer": {
+    "description": "English onboarding copy for subscription renewal disclaimer."
+  },
+  "syringeVolume": "1 mL 주사기 기준 {volume} mL",
+  "@syringeVolume": {
+    "description": "English onboarding copy for syringe volume.",
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      }
+    }
+  },
+  "termsLabel": "이용약관",
+  "@termsLabel": {
+    "description": "English onboarding copy for terms label."
+  },
+  "testimonialOne": "이제 투여를 놓치는 일이 없어졌어요. 재구성 계산기 하나만으로도 스프레드시트 계산에 들이던 시간을 크게 아꼈습니다.",
+  "@testimonialOne": {
+    "description": "English onboarding copy for testimonial one."
+  },
+  "testimonialThree": "지금까지 써본 것 중 가장 깔끔한 펩타이드 트래커. 진지한 유저를 위해 만든 티가 나요, 실제로 그러니까요.",
+  "@testimonialThree": {
+    "description": "English onboarding copy for testimonial three."
+  },
+  "testimonialTwo": "주간 인사이트 덕분에 몇 달간 몰랐던 타이밍 문제를 발견했어요. 완전 게임체인저.",
+  "@testimonialTwo": {
+    "description": "English onboarding copy for testimonial two."
+  },
+  "thirtyDayAdherence": "30일 순응도",
+  "@thirtyDayAdherence": {
+    "description": "English onboarding copy for thirty day adherence."
+  },
+  "threeDayFreeTrial": "3일 무료 체험",
+  "@threeDayFreeTrial": {
+    "description": "English onboarding copy for three day free trial."
+  },
+  "timelineLabel": "타임라인",
+  "@timelineLabel": {
+    "description": "English onboarding copy for timeline label."
+  },
+  "trackedLabel": "기록됨",
+  "@trackedLabel": {
+    "description": "English onboarding copy for tracked label."
+  },
+  "turnOnReminders": "알림 켜기",
+  "@turnOnReminders": {
+    "description": "English onboarding copy for turn on reminders."
+  },
+  "unitConversionDisclaimer": "단위 변환 도구는 참고용입니다. 반드시 의료 전문가와 확인하세요.",
+  "@unitConversionDisclaimer": {
+    "description": "English onboarding copy for unit conversion disclaimer."
+  },
+  "unitsLabel": "단위",
+  "@unitsLabel": {
+    "description": "Label for measurement unit preferences."
+  },
+  "unitsToDraw": "흡입할 단위",
+  "@unitsToDraw": {
+    "description": "English onboarding copy for units to draw."
+  },
+  "unlockPepMod": "PEPMOD 잠금 해제",
+  "@unlockPepMod": {
+    "description": "English onboarding copy for unlock pep mod."
+  },
+  "usersLabel": "사용자",
+  "@usersLabel": {
+    "description": "English onboarding copy for users label."
+  },
+  "viewLabel": "보기",
+  "@viewLabel": {
+    "description": "English onboarding copy for view label."
+  },
+  "weekDuration": "주\n기간",
+  "@weekDuration": {
+    "description": "English onboarding copy for week duration."
+  },
+  "weekOne": "1주차",
+  "@weekOne": {
+    "description": "English onboarding copy for week one."
+  },
+  "weeklyLabel": "주간",
+  "@weeklyLabel": {
+    "description": "English onboarding copy for weekly label."
+  },
+  "weeksCount": "{count}주",
+  "@weeksCount": {
+    "description": "English onboarding copy for weeks count.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yearLabel": "연도",
+  "@yearLabel": {
+    "description": "English onboarding copy for year label."
+  },
+  "profileTitle": "프로필",
+  "@profileTitle": {
+    "description": "Title of the user profile tab."
+  },
+  "signedIn": "로그인됨",
+  "@signedIn": {
+    "description": "Fallback account status when no email is available."
+  },
+  "sectionAccount": "계정",
+  "@sectionAccount": {
+    "description": "Profile section heading for account settings."
+  },
+  "sectionPreferences": "환경설정",
+  "@sectionPreferences": {
+    "description": "Profile section heading for preferences."
+  },
+  "sectionData": "데이터",
+  "@sectionData": {
+    "description": "Profile section heading for user data tools."
+  },
+  "sectionSupport": "지원",
+  "@sectionSupport": {
+    "description": "Profile section heading for support."
+  },
+  "sectionLegal": "법적 정보",
+  "@sectionLegal": {
+    "description": "Profile section heading for legal documents."
+  },
+  "sectionAbout": "정보",
+  "@sectionAbout": {
+    "description": "Profile section heading for app information."
+  },
+  "nameLabel": "이름",
+  "@nameLabel": {
+    "description": "Label for the user's display name."
+  },
+  "accountLabel": "계정",
+  "@accountLabel": {
+    "description": "Label for account information."
+  },
+  "deleteAccount": "계정 삭제",
+  "@deleteAccount": {
+    "description": "Action to permanently delete an account."
+  },
+  "removeAccountData": "계정 및 데이터 삭제",
+  "@removeAccountData": {
+    "description": "Description of the delete-account action."
+  },
+  "metricLabel": "미터법",
+  "@metricLabel": {
+    "description": "Metric measurement system label."
+  },
+  "imperialLabel": "야드파운드법",
+  "@imperialLabel": {
+    "description": "Imperial measurement system label."
+  },
+  "notificationsLabel": "알림",
+  "@notificationsLabel": {
+    "description": "Label for notification preferences."
+  },
+  "onLabel": "켜짐",
+  "@onLabel": {
+    "description": "Enabled state label."
+  },
+  "offLabel": "꺼짐",
+  "@offLabel": {
+    "description": "Disabled state label."
+  },
+  "myCompoundsProfile": "내 화합물",
+  "@myCompoundsProfile": {
+    "description": "Profile action that opens saved custom compounds."
+  },
+  "savedVialPresets": "저장된 바이알 프리셋",
+  "@savedVialPresets": {
+    "description": "Description for saved custom compounds."
+  },
+  "exportData": "데이터 내보내기",
+  "@exportData": {
+    "description": "Action to export user data."
+  },
+  "copyAsJson": "JSON으로 복사",
+  "@copyAsJson": {
+    "description": "Description of the JSON export action."
+  },
+  "clearAllData": "모든 데이터 삭제",
+  "@clearAllData": {
+    "description": "Action to reset all app tracking data."
+  },
+  "clearingLabel": "삭제 중…",
+  "@clearingLabel": {
+    "description": "Status shown while app data is being cleared."
+  },
+  "resetApp": "앱 초기화",
+  "@resetApp": {
+    "description": "Description of the clear-data action."
+  },
+  "contactSupport": "지원팀 문의",
+  "@contactSupport": {
+    "description": "Action to contact app support."
+  },
+  "chatWithUs": "채팅으로 문의하기",
+  "@chatWithUs": {
+    "description": "Description of the support action."
+  },
+  "termsOfService": "이용약관",
+  "@termsOfService": {
+    "description": "Title of the terms document."
+  },
+  "privacyPolicy": "개인정보처리방침",
+  "@privacyPolicy": {
+    "description": "Title of the privacy document."
+  },
+  "medicalDisclaimer": "의료 관련 고지",
+  "@medicalDisclaimer": {
+    "description": "Title of the medical disclaimer."
+  },
+  "disclaimerTitle": "고지사항",
+  "@disclaimerTitle": {
+    "description": "Short title for the disclaimer sheet."
+  },
+  "versionLabel": "버전",
+  "@versionLabel": {
+    "description": "Label for the app version."
+  },
+  "signOutAction": "로그아웃",
+  "@signOutAction": {
+    "description": "Primary sign-out action."
+  },
+  "educationalTrackingDisclaimer": "교육 및 기록 목적으로만 제공됩니다. 의료 조언이 아닙니다.",
+  "@educationalTrackingDisclaimer": {
+    "description": "Short safety disclaimer on the profile screen."
+  },
+  "yourName": "이름 입력",
+  "@yourName": {
+    "description": "Title of the display-name editor."
+  },
+  "cancelLabel": "취소",
+  "@cancelLabel": {
+    "description": "Generic cancel action."
+  },
+  "saveLabel": "저장",
+  "@saveLabel": {
+    "description": "Generic save action."
+  },
+  "dataCopied": "데이터가 클립보드에 복사되었습니다.",
+  "@dataCopied": {
+    "description": "Confirmation after copying an account export."
+  },
+  "clearDataTitle": "모든 데이터를 삭제할까요?",
+  "@clearDataTitle": {
+    "description": "Title of the clear-data confirmation dialog."
+  },
+  "clearDataBody": "모든 프로토콜, 투여 기록, 신체 지표가 삭제되고 온보딩이 다시 시작됩니다. 계정, 구독, 펩타이드 라이브러리는 유지됩니다. 이 작업은 되돌릴 수 없습니다.",
+  "@clearDataBody": {
+    "description": "Explanation in the clear-data confirmation dialog."
+  },
+  "clearLabel": "삭제",
+  "@clearLabel": {
+    "description": "Destructive action that clears app data."
+  },
+  "clearingDataTitle": "데이터 삭제 중…",
+  "@clearingDataTitle": {
+    "description": "Title of the blocking clear-data progress dialog."
+  },
+  "clearingDataBody": "기록 데이터가 삭제되는 동안 PepMod를 열어두세요.",
+  "@clearingDataBody": {
+    "description": "Instruction in the clear-data progress dialog."
+  },
+  "clearDataFailed": "데이터를 삭제하지 못했습니다. 연결 상태를 확인하고 다시 시도하세요.",
+  "@clearDataFailed": {
+    "description": "Error shown when clearing app data fails."
+  },
+  "allDataCleared": "모든 데이터가 삭제되었습니다.",
+  "@allDataCleared": {
+    "description": "Confirmation after all app data is cleared."
+  },
+  "deleteAccountTitle": "계정을 삭제할까요?",
+  "@deleteAccountTitle": {
+    "description": "Title of the account-deletion confirmation dialog."
+  },
+  "deleteAccountBody": "PepMod 계정, 설정, 프로토콜, 투여 기록, 신체 지표가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+  "@deleteAccountBody": {
+    "description": "Explanation in the account-deletion confirmation dialog."
+  },
+  "deletingAccount": "계정 삭제 중…",
+  "@deletingAccount": {
+    "description": "Status shown while an account is being deleted."
+  },
+  "accountDeletionFailed": "계정 삭제에 실패했습니다. 다시 시도해 주세요.",
+  "@accountDeletionFailed": {
+    "description": "Generic account-deletion failure message."
+  },
+  "confirmPassword": "비밀번호 확인",
+  "@confirmPassword": {
+    "description": "Title of the password confirmation dialog."
+  },
+  "deleteLabel": "삭제",
+  "@deleteLabel": {
+    "description": "Generic destructive delete action."
+  },
+  "signOutTitle": "로그아웃할까요?",
+  "@signOutTitle": {
+    "description": "Title of the sign-out confirmation dialog."
+  },
+  "signOutBody": "프로토콜은 그대로 저장되며 다시 로그인하면 동기화됩니다.",
+  "@signOutBody": {
+    "description": "Explanation in the sign-out confirmation dialog."
+  },
+  "signOutLabel": "로그아웃",
+  "@signOutLabel": {
+    "description": "Sign-out confirmation action."
+  },
+  "signOutFailed": "로그아웃에 실패했습니다. 다시 시도해 주세요.",
+  "@signOutFailed": {
+    "description": "Generic sign-out failure message."
+  },
+  "notificationsDisabledSystem": "시스템 설정에서 알림이 비활성화되어 있습니다.",
+  "@notificationsDisabledSystem": {
+    "description": "Message shown when notification permission is unavailable."
+  },
+  "planPro": "PRO",
+  "@planPro": {
+    "description": "Paid subscription badge."
+  },
+  "planFree": "무료",
+  "@planFree": {
+    "description": "Free subscription badge."
+  },
+  "termsBody": "PepMod는 교육 및 기록 목적으로만 제공됩니다. 의료 기기가 아니며 의료 조언, 진단, 처방, 치료 권장을 제공하지 않습니다. PepMod를 사용함으로써 귀하는 자신의 기록, 결정, 자격을 갖춘 의료 전문가와의 상담에 대한 책임을 집니다.\n\n구독은 갱신 기간 전에 App Store 또는 Google Play를 통해 취소하지 않는 한 자동으로 갱신됩니다. 환불은 구매한 스토어에서 처리됩니다.\n\n전체 이용약관: https://appstorecopilot.com/legal/yzh32x5v/terms",
+  "@termsBody": {
+    "description": "In-app summary of PepMod terms with a link to the full document."
+  },
+  "privacyBody": "PepMod는 인증 및 클라우드 데이터 저장에 Firebase를, 구독 관리에 RevenueCat을, 어트리뷰션에 AppRefer와 Meta/Facebook App Events를, 분석 및 진단에 Firebase/Crashlytics를 사용합니다. 당사는 귀하의 개인정보를 판매하지 않습니다. 앱 내에서 계정과 저장된 앱 데이터를 삭제할 수 있습니다.\n\n전체 개인정보처리방침: https://appstorecopilot.com/legal/yzh32x5v/privacy",
+  "@privacyBody": {
+    "description": "In-app privacy summary with a link to the full document."
+  },
+  "medicalDisclaimerBody": "PepMod는 웰니스 및 기록 도구로, 의료 기기가 아닙니다. 이 앱의 어떤 내용도 의료 조언, 진단, 처방, 치료 권장에 해당하지 않습니다. 라이브러리에 설명된 펩타이드는 교육 목적으로만 제공됩니다. 요법을 시작, 변경, 중단하기 전에는 반드시 자격을 갖춘 의료 전문가와 상담하세요. 이상 반응이 나타나면 즉시 의료 도움을 받으세요.",
+  "@medicalDisclaimerBody": {
+    "description": "Full in-app medical safety disclaimer."
+  },
+  "profileSystemLabel": "SYS.사용자 // 프로필",
+  "@profileSystemLabel": {
+    "description": "System-style heading above the profile title."
+  },
+  "legalSystemLabel": "SYS.법률",
+  "@legalSystemLabel": {
+    "description": "System-style heading in legal document sheets."
+  },
+  "progressTitle": "진행 상황",
+  "@progressTitle": {
+    "description": "Title of the progress tab."
+  },
+  "progressSystemLabel": "SYS.진행 // 신체지표",
+  "@progressSystemLabel": {
+    "description": "System-style heading above the progress title."
+  },
+  "doseHistoryTooltip": "투여 기록 열기",
+  "@doseHistoryTooltip": {
+    "description": "Accessibility label for the dose-history button."
+  },
+  "logMeasurementTooltip": "측정값 기록",
+  "@logMeasurementTooltip": {
+    "description": "Accessibility label for the add-measurement button."
+  },
+  "thirtyDayLabel": "30일",
+  "@thirtyDayLabel": {
+    "description": "Label for the thirty-day adherence statistic."
+  },
+  "adherenceLabel": "순응도",
+  "@adherenceLabel": {
+    "description": "Hint below an adherence percentage."
+  },
+  "streakLabel": "연속 기록",
+  "@streakLabel": {
+    "description": "Label for the current tracking streak."
+  },
+  "daysLabel": "일",
+  "@daysLabel": {
+    "description": "Unit hint for a day count."
+  },
+  "totalLabel": "누적",
+  "@totalLabel": {
+    "description": "Label for the total logged dose count."
+  },
+  "dosesLabel": "회 투여",
+  "@dosesLabel": {
+    "description": "Unit hint for a dose count."
+  },
+  "protocolHistoryLabel": "프로토콜.기록",
+  "@protocolHistoryLabel": {
+    "description": "System-style heading for protocol history."
+  },
+  "noProtocolsYet": "아직 프로토콜이 없습니다. 프로토콜 탭에서 새로 만들어보세요.",
+  "@noProtocolsYet": {
+    "description": "Empty-state message when no protocols exist."
+  },
+  "adherenceChartLabel": "이행률 // 30일",
+  "@adherenceChartLabel": {
+    "description": "System-style title of the thirty-day adherence chart."
+  },
+  "thirtyDaysAgo": "30일 전",
+  "@thirtyDaysAgo": {
+    "description": "Label for the beginning of a thirty-day chart."
+  },
+  "todayLabel": "오늘",
+  "@todayLabel": {
+    "description": "Label for the current day on a chart."
+  },
+  "noWeightData": "체중 데이터 없음",
+  "@noWeightData": {
+    "description": "Weight-chart empty-state title."
+  },
+  "logFirstMeasurement": "첫 측정을 기록하면 여기서 추이를 확인할 수 있어요.",
+  "@logFirstMeasurement": {
+    "description": "Weight-chart empty-state description."
+  },
+  "logMeasurementAction": "측정 기록",
+  "@logMeasurementAction": {
+    "description": "Action to open the measurement form."
+  },
+  "weightTrendLabel": "체중 // 추이",
+  "@weightTrendLabel": {
+    "description": "System-style title of the weight trend chart."
+  },
+  "weightKgValue": "{weight}kg",
+  "@weightKgValue": {
+    "description": "Formatted weight in kilograms.",
+    "placeholders": {
+      "weight": {
+        "type": "String"
+      }
+    }
+  },
+  "statusActive": "진행 중",
+  "@statusActive": {
+    "description": "Active protocol status."
+  },
+  "statusPaused": "일시중지",
+  "@statusPaused": {
+    "description": "Paused protocol status."
+  },
+  "statusEnded": "종료됨",
+  "@statusEnded": {
+    "description": "Ended protocol status."
+  },
+  "protocolPeptideCount": "{count, plural, =1{펩타이드 1개} other{펩타이드 {count}개}}",
+  "@protocolPeptideCount": {
+    "description": "Number of peptides in a protocol.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "enterOneMetric": "값을 하나 이상 입력하세요.",
+  "@enterOneMetric": {
+    "description": "Validation shown when the measurement form is empty."
+  },
+  "saveMetricFailed": "저장하지 못했습니다. 다시 시도해주세요.",
+  "@saveMetricFailed": {
+    "description": "Generic measurement-save error."
+  },
+  "newMeasurement": "새 측정",
+  "@newMeasurement": {
+    "description": "Title of the body measurement form."
+  },
+  "weightLabel": "체중",
+  "@weightLabel": {
+    "description": "Label for the weight input."
+  },
+  "bodyFatLabel": "체지방",
+  "@bodyFatLabel": {
+    "description": "Label for the body-fat input."
+  },
+  "measurementsCmLabel": "측정치 (cm)",
+  "@measurementsCmLabel": {
+    "description": "Heading for circumference measurements in centimetres."
+  },
+  "waistLabel": "허리",
+  "@waistLabel": {
+    "description": "Label for the waist measurement."
+  },
+  "chestLabel": "가슴",
+  "@chestLabel": {
+    "description": "Label for the chest measurement."
+  },
+  "armLabel": "팔",
+  "@armLabel": {
+    "description": "Label for the arm measurement."
+  },
+  "saveAction": "저장",
+  "@saveAction": {
+    "description": "Primary save action."
+  },
+  "logMetricSystemLabel": "기록.측정",
+  "@logMetricSystemLabel": {
+    "description": "System-style heading in the body measurement form."
+  },
+  "activeLastSevenDays": "최근 7일",
+  "@activeLastSevenDays": {
+    "description": "Adherence period covering the last seven days."
+  },
+  "activeAllTime": "전체 기간",
+  "@activeAllTime": {
+    "description": "Adherence period covering all recorded history."
+  },
+  "activeAdherence": "이행률",
+  "@activeAdherence": {
+    "description": "Label below an adherence percentage."
+  },
+  "activeStarted": "시작일",
+  "@activeStarted": {
+    "description": "Label for a protocol start date."
+  },
+  "activeEnded": "종료일",
+  "@activeEnded": {
+    "description": "Label for a protocol end date."
+  },
+  "activeStackCount": "스택 ({count})",
+  "@activeStackCount": {
+    "description": "Heading with the number of peptides in a protocol.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeEditProtocol": "프로토콜 수정",
+  "@activeEditProtocol": {
+    "description": "Action to edit a protocol."
+  },
+  "activePauseProtocol": "프로토콜 일시중지",
+  "@activePauseProtocol": {
+    "description": "Action to pause a protocol."
+  },
+  "activeEndProtocol": "프로토콜 종료",
+  "@activeEndProtocol": {
+    "description": "Action to end a protocol."
+  },
+  "activeResumeProtocol": "프로토콜 재개",
+  "@activeResumeProtocol": {
+    "description": "Action to resume a protocol."
+  },
+  "activeDeleteProtocol": "프로토콜 삭제",
+  "@activeDeleteProtocol": {
+    "description": "Action to permanently delete a protocol."
+  },
+  "activeTrackingDisclaimer": "교육용 기록 도구입니다. 변경 전 반드시 전문 의료인과 상담하세요.",
+  "@activeTrackingDisclaimer": {
+    "description": "Safety disclaimer on protocol management."
+  },
+  "activeEndQuestion": "프로토콜을 종료할까요?",
+  "@activeEndQuestion": {
+    "description": "Confirmation title before ending a protocol."
+  },
+  "activeEndBody": "앞으로 예정된 기록은 삭제됩니다. 지난 기록은 이력에 남습니다. 이 작업은 되돌릴 수 없습니다.",
+  "@activeEndBody": {
+    "description": "Confirmation detail before ending a protocol."
+  },
+  "activeEndAction": "종료",
+  "@activeEndAction": {
+    "description": "Confirmation action that ends a protocol."
+  },
+  "activeDeleteQuestion": "프로토콜을 삭제할까요?",
+  "@activeDeleteQuestion": {
+    "description": "Confirmation title before deleting a protocol."
+  },
+  "activeDeleteBody": "프로토콜과 관련된 모든 기록이 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+  "@activeDeleteBody": {
+    "description": "Confirmation detail before deleting a protocol."
+  },
+  "activeDeleteAction": "삭제",
+  "@activeDeleteAction": {
+    "description": "Confirmation action that deletes a protocol."
+  },
+  "cancel": "취소",
+  "@cancel": {
+    "description": "Generic action that dismisses without saving."
+  },
+  "activeStatusActive": "진행 중",
+  "@activeStatusActive": {
+    "description": "Active protocol status."
+  },
+  "activeStatusPaused": "일시중지",
+  "@activeStatusPaused": {
+    "description": "Paused protocol status."
+  },
+  "activeStatusEnded": "종료됨",
+  "@activeStatusEnded": {
+    "description": "Ended protocol status."
+  },
+  "activeNotesLabel": "메모 // 프로토콜",
+  "@activeNotesLabel": {
+    "description": "System heading for protocol notes."
+  },
+  "activeChangeReminders": "변경 알림",
+  "@activeChangeReminders": {
+    "description": "Heading for upcoming phase-change reminders."
+  },
+  "activeChangeRemindersBody": "알림이 켜져 있으면 PepMod가 다가오는 단계 변경마다 현지 시간 09:00에 체크포인트를 예약합니다.",
+  "@activeChangeRemindersBody": {
+    "description": "Explanation of phase-change reminders."
+  },
+  "activePhaseAnchor": "주차 범위는 {date} 기준입니다.",
+  "@activePhaseAnchor": {
+    "description": "Date used to calculate phase weeks.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeWeek": "{week}주차",
+  "@activeWeek": {
+    "description": "Single-week phase range.",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      }
+    }
+  },
+  "activeWeeks": "{start}–{end}주차",
+  "@activeWeeks": {
+    "description": "Multi-week phase range.",
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "activePerDayAmounts": "일별 양",
+  "@activePerDayAmounts": {
+    "description": "Phase summary using different amounts by weekday."
+  },
+  "activeBaseAmount": "기본량",
+  "@activeBaseAmount": {
+    "description": "Phase summary using the protocol base amount."
+  },
+  "activeCurrent": "현재",
+  "@activeCurrent": {
+    "description": "Badge on the current phase."
+  },
+  "activeBaseSchedule": "기본 일정",
+  "@activeBaseSchedule": {
+    "description": "Fallback schedule outside phase overrides."
+  },
+  "activeCustomDays": "사용자 지정 요일",
+  "@activeCustomDays": {
+    "description": "Frequency label for selected weekdays."
+  },
+  "activeContinuousTracking": "연속 기록",
+  "@activeContinuousTracking": {
+    "description": "Cycle status when no fixed cycle is configured."
+  },
+  "activeNoFixedCycle": "고정된 주기 없음",
+  "@activeNoFixedCycle": {
+    "description": "Cycle detail when no fixed cycle is configured."
+  },
+  "activeCycleProgress": "{total}주 중 {week}주차",
+  "@activeCycleProgress": {
+    "description": "Current week within a protocol cycle.",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "activeCycleEnds": "주기 종료일 {date}",
+  "@activeCycleEnds": {
+    "description": "Date a protocol cycle ends.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeRestProgress": "휴식 {total}주 중 {week}주차",
+  "@activeRestProgress": {
+    "description": "Current week within a rest window.",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "activeRestEnds": "휴식 기간 종료일 {date}",
+  "@activeRestEnds": {
+    "description": "Date a rest window ends.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeCycleComplete": "주기 완료",
+  "@activeCycleComplete": {
+    "description": "Cycle status after completion."
+  },
+  "activeCompletedDate": "{date} 완료",
+  "@activeCompletedDate": {
+    "description": "Date a cycle completed.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeRestEnded": "휴식 기간이 {date}에 종료됨",
+  "@activeRestEnded": {
+    "description": "Date a rest window ended.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeNoHistory": "일시중지되거나 종료된 프로토콜이 아직 없습니다.",
+  "@activeNoHistory": {
+    "description": "Empty state for protocol history."
+  },
+  "activeCompoundsCount": "화합물 {count}개",
+  "@activeCompoundsCount": {
+    "description": "Number of compounds in a blended vial.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeSyringeUnits": "{amount} 시린지 단위",
+  "@activeSyringeUnits": {
+    "description": "Syringe-unit amount without a leading separator.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activeCycleWeeks": "{count}주 주기",
+  "@activeCycleWeeks": {
+    "description": "Protocol cycle length tag.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeRestWeeks": "{count}주 휴식",
+  "@activeRestWeeks": {
+    "description": "Protocol rest length tag.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activePerDraw": "드로우당",
+  "@activePerDraw": {
+    "description": "Heading for amounts in one blended-vial draw."
+  },
+  "activeVialSummary": "{volume}mL 바이알 · U-100",
+  "@activeVialSummary": {
+    "description": "Diluent volume and syringe type for a blended vial.",
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      }
+    }
+  },
+  "addCompound": "화합물 추가",
+  "@addCompound": {
+    "description": "Action to create a personal compound preset."
+  },
+  "addPhase": "단계 추가",
+  "@addPhase": {
+    "description": "Copy for the create protocol addPhase UI."
+  },
+  "addTime": "시간 추가",
+  "@addTime": {
+    "description": "Copy for the create protocol addTime UI."
+  },
+  "addToStack": "스택에 추가",
+  "@addToStack": {
+    "description": "Copy for the create protocol addToStack UI."
+  },
+  "amountRequired": "양을 입력하세요",
+  "@amountRequired": {
+    "description": "Copy for the create protocol amountRequired UI."
+  },
+  "baseAmount": "기본량",
+  "@baseAmount": {
+    "description": "Copy for the create protocol baseAmount UI."
+  },
+  "baseSchedule": "기본 일정",
+  "@baseSchedule": {
+    "description": "Copy for the create protocol baseSchedule UI."
+  },
+  "blendConfigBody": "바이알에 인쇄된 내용을 그대로 입력하세요. PepMod가 드로우 값을 화합물별 스냅샷으로 변환합니다.",
+  "@blendConfigBody": {
+    "description": "Copy for the create protocol blendConfigBody UI."
+  },
+  "blendIncompleteError": "화합물 2개 이상, 희석액 부피, 드로우 값을 모두 입력하세요.",
+  "@blendIncompleteError": {
+    "description": "Copy for the create protocol blendIncompleteError UI."
+  },
+  "blendNameHint": "예: 회복 블렌드",
+  "@blendNameHint": {
+    "description": "Copy for the create protocol blendNameHint UI."
+  },
+  "blendNameLabel": "블렌드 이름",
+  "@blendNameLabel": {
+    "description": "Copy for the create protocol blendNameLabel UI."
+  },
+  "blendSafetyDisclaimer": "단위 변환 전용입니다. PepMod는 블렌드, 용량, 빈도, 재구성 방법을 권장하지 않습니다.",
+  "@blendSafetyDisclaimer": {
+    "description": "Copy for the create protocol blendSafetyDisclaimer UI."
+  },
+  "changeNoteHint": "이 단계에 대한 나만의 메모",
+  "@changeNoteHint": {
+    "description": "Copy for the create protocol changeNoteHint UI."
+  },
+  "changeNoteOptional": "변경 메모 (선택)",
+  "@changeNoteOptional": {
+    "description": "Copy for the create protocol changeNoteOptional UI."
+  },
+  "colorOption": "색상 옵션 {hex}",
+  "@colorOption": {
+    "description": "Copy for the create protocol colorOption UI.",
+    "placeholders": {
+      "hex": {
+        "type": "String"
+      }
+    }
+  },
+  "compoundNumber": "화합물 {number}",
+  "@compoundNumber": {
+    "description": "Copy for the create protocol compoundNumber UI.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "compoundsCount": "{count, plural, =1{화합물 1개} other{화합물 {count}개}}",
+  "@compoundsCount": {
+    "description": "Copy for the create protocol compoundsCount UI.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "copiedVialPreset": "{amount} {unit} 바이알 프리셋 · 이 프로토콜에 복사됨",
+  "@copiedVialPreset": {
+    "description": "Copy for the create protocol copiedVialPreset UI.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "createProtocolAction": "프로토콜 생성",
+  "@createProtocolAction": {
+    "description": "Copy for the create protocol createProtocolAction UI."
+  },
+  "createProtocolAddOneError": "펩타이드를 하나 이상 추가하세요.",
+  "@createProtocolAddOneError": {
+    "description": "Copy for the create protocol createProtocolAddOneError UI."
+  },
+  "createProtocolBuildStep": "프로토콜 만들기 · {step} / {total}단계",
+  "@createProtocolBuildStep": {
+    "description": "Copy for the create protocol createProtocolBuildStep UI.",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "createProtocolDefaultName": "내 프로토콜",
+  "@createProtocolDefaultName": {
+    "description": "Copy for the create protocol createProtocolDefaultName UI."
+  },
+  "createProtocolEditStep": "프로토콜 편집 · {step} / {total}단계",
+  "@createProtocolEditStep": {
+    "description": "Copy for the create protocol createProtocolEditStep UI.",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "createProtocolFreeLimitReason": "무료 플랜은 프로토콜당 펩타이드 1개로 제한됩니다. 여러 화합물을 조합하려면 업그레이드하세요.",
+  "@createProtocolFreeLimitReason": {
+    "description": "Copy for the create protocol createProtocolFreeLimitReason UI."
+  },
+  "createProtocolNameBody": "기억하기 쉬운 이름을 지어주세요 — 예: “회복 스택” 또는 “2분기 감량”.",
+  "@createProtocolNameBody": {
+    "description": "Copy for the create protocol createProtocolNameBody UI."
+  },
+  "createProtocolNameTitle": "프로토콜 이름 짓기",
+  "@createProtocolNameTitle": {
+    "description": "Copy for the create protocol createProtocolNameTitle UI."
+  },
+  "createProtocolNoPeptides": "아직 펩타이드가 없습니다",
+  "@createProtocolNoPeptides": {
+    "description": "Copy for the create protocol createProtocolNoPeptides UI."
+  },
+  "createProtocolPickHint": "+를 눌러 라이브러리에서 선택",
+  "@createProtocolPickHint": {
+    "description": "Copy for the create protocol createProtocolPickHint UI."
+  },
+  "createProtocolReviewBody": "프로토콜 세부 정보를 확인하세요. 관리 화면에서 언제든 수정할 수 있습니다.",
+  "@createProtocolReviewBody": {
+    "description": "Copy for the create protocol createProtocolReviewBody UI."
+  },
+  "createProtocolSaveError": "프로토콜 저장에 실패했습니다. 다시 시도하세요.",
+  "@createProtocolSaveError": {
+    "description": "Copy for the create protocol createProtocolSaveError UI."
+  },
+  "createProtocolStackBody": "펩타이드 하나를 추가하거나 여러 화합물을 조합하세요. 각 라벨, 용량, 빈도, 사이클을 설정하세요.",
+  "@createProtocolStackBody": {
+    "description": "Copy for the create protocol createProtocolStackBody UI."
+  },
+  "createProtocolStackTitle": "스택 구성하기",
+  "@createProtocolStackTitle": {
+    "description": "Copy for the create protocol createProtocolStackTitle UI."
+  },
+  "customBlend": "맞춤 블렌드",
+  "@customBlend": {
+    "description": "Copy for the create protocol customBlend UI."
+  },
+  "customDays": "요일 지정",
+  "@customDays": {
+    "description": "Copy for the create protocol customDays UI."
+  },
+  "customDaysDisclaimer": "선택한 요일만 예정됩니다. 입력한 양은 사용자 기록용 값이며 투여 권고가 아닙니다.",
+  "@customDaysDisclaimer": {
+    "description": "Copy for the create protocol customDaysDisclaimer UI."
+  },
+  "customPeptide": "맞춤 펩타이드",
+  "@customPeptide": {
+    "description": "Copy for the create protocol customPeptide UI."
+  },
+  "cycleWeeksLabel": "사이클 주차",
+  "@cycleWeeksLabel": {
+    "description": "Copy for the create protocol cycleWeeksLabel UI."
+  },
+  "cycleWindowDisclaimer": "사이클과 휴식 기간은 기록 히스토리를 정리합니다. PepMod는 사이클 기간이 끝난 후 향후 복용을 예약하지 않습니다.",
+  "@cycleWindowDisclaimer": {
+    "description": "Copy for the create protocol cycleWindowDisclaimer UI."
+  },
+  "defaultAmountLabel": "기본 용량",
+  "@defaultAmountLabel": {
+    "description": "Copy for the create protocol defaultAmountLabel UI."
+  },
+  "diluentVolumeLabel": "희석액 용량",
+  "@diluentVolumeLabel": {
+    "description": "Copy for the create protocol diluentVolumeLabel UI."
+  },
+  "drawExceedsVialError": "드로우 양이 바이알 용량을 초과할 수 없습니다.",
+  "@drawExceedsVialError": {
+    "description": "Copy for the create protocol drawExceedsVialError UI."
+  },
+  "drawLabel": "드로우",
+  "@drawLabel": {
+    "description": "Copy for the create protocol drawLabel UI."
+  },
+  "drawPreviewLabel": "드로우 미리보기",
+  "@drawPreviewLabel": {
+    "description": "Copy for the create protocol drawPreviewLabel UI."
+  },
+  "drawPreviewValue": "{units} 단위 = {volume} mL",
+  "@drawPreviewValue": {
+    "description": "Copy for the create protocol drawPreviewValue UI.",
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "volume": {
+        "type": "String"
+      }
+    }
+  },
+  "editTime": "{time} 시간 편집",
+  "@editTime": {
+    "description": "Copy for the create protocol editTime UI.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "endWeekLabel": "종료 주차",
+  "@endWeekLabel": {
+    "description": "Copy for the create protocol endWeekLabel UI."
+  },
+  "enterPeptideName": "펩타이드 이름 입력",
+  "@enterPeptideName": {
+    "description": "Copy for the create protocol enterPeptideName UI."
+  },
+  "frequencyLabel": "빈도",
+  "@frequencyLabel": {
+    "description": "Copy for the create protocol frequencyLabel UI."
+  },
+  "labelColorBody": "실제로 사용하는 펜이나 바이알 라벨과 이 색상을 맞춰보세요.",
+  "@labelColorBody": {
+    "description": "Copy for the create protocol labelColorBody UI."
+  },
+  "labelColorLabel": "라벨 색상",
+  "@labelColorLabel": {
+    "description": "Copy for the create protocol labelColorLabel UI."
+  },
+  "manageSavedCompounds": "저장된 화합물 관리",
+  "@manageSavedCompounds": {
+    "description": "Copy for the create protocol manageSavedCompounds UI."
+  },
+  "nextLabel": "다음",
+  "@nextLabel": {
+    "description": "Copy for the create protocol nextLabel UI."
+  },
+  "noneLabel": "없음",
+  "@noneLabel": {
+    "description": "Copy for the create protocol noneLabel UI."
+  },
+  "oneOffCompound": "일회성 화합물",
+  "@oneOffCompound": {
+    "description": "Copy for the create protocol oneOffCompound UI."
+  },
+  "oneOffCompoundBody": "프리셋 저장 없이 한 번만 사용",
+  "@oneOffCompoundBody": {
+    "description": "Copy for the create protocol oneOffCompoundBody UI."
+  },
+  "optionalLabel": "선택사항",
+  "@optionalLabel": {
+    "description": "Copy for the create protocol optionalLabel UI."
+  },
+  "peptidesCount": "펩타이드 ({count})",
+  "@peptidesCount": {
+    "description": "Copy for the create protocol peptidesCount UI.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "perDayAmounts": "일별 용량",
+  "@perDayAmounts": {
+    "description": "Copy for the create protocol perDayAmounts UI."
+  },
+  "phaseExtendsWarning": "단계가 {weeks}주 사이클 범위를 벗어납니다. 단계 또는 사이클 기간을 조정하세요.",
+  "@phaseExtendsWarning": {
+    "description": "Copy for the create protocol phaseExtendsWarning UI.",
+    "placeholders": {
+      "weeks": {
+        "type": "int"
+      }
+    }
+  },
+  "phaseNameHint": "예: 1주차 기록",
+  "@phaseNameHint": {
+    "description": "Copy for the create protocol phaseNameHint UI."
+  },
+  "phaseNameLabel": "단계 이름",
+  "@phaseNameLabel": {
+    "description": "Copy for the create protocol phaseNameLabel UI."
+  },
+  "phaseNumber": "{number}단계",
+  "@phaseNumber": {
+    "description": "Copy for the create protocol phaseNumber UI.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "phaseOutsideCycleError": "이 프로토콜 사이클은 {weeks}주차 이후 종료됩니다. 단계 주차를 해당 범위 안에 유지하세요.",
+  "@phaseOutsideCycleError": {
+    "description": "Copy for the create protocol phaseOutsideCycleError UI.",
+    "placeholders": {
+      "weeks": {
+        "type": "int"
+      }
+    }
+  },
+  "phaseOverlapError": "단계 주차 범위가 겹칠 수 없습니다.",
+  "@phaseOverlapError": {
+    "description": "Copy for the create protocol phaseOverlapError UI."
+  },
+  "phaseOverrideBody": "이미 따르기로 한 기록 일정만 입력하세요. PepMod는 용량을 권고하지 않습니다.",
+  "@phaseOverrideBody": {
+    "description": "Copy for the create protocol phaseOverrideBody UI."
+  },
+  "phaseOverrideTitle": "주차별 재정의",
+  "@phaseOverrideTitle": {
+    "description": "Copy for the create protocol phaseOverrideTitle UI."
+  },
+  "phasePreviewDisclaimer": "입력한 항목만의 미리보기입니다. PepMod가 일정을 권고하지 않습니다.",
+  "@phasePreviewDisclaimer": {
+    "description": "Copy for the create protocol phasePreviewDisclaimer UI."
+  },
+  "phasePreviewLabel": "단계 미리보기",
+  "@phasePreviewLabel": {
+    "description": "Copy for the create protocol phasePreviewLabel UI."
+  },
+  "phaseReminderBody": "프로토콜 알림이 활성화되어 있으면 오전 9:00에 중립적인 단계 변경 알림이 예약됩니다.",
+  "@phaseReminderBody": {
+    "description": "Copy for the create protocol phaseReminderBody UI."
+  },
+  "phaseScheduleLabel": "단계 일정",
+  "@phaseScheduleLabel": {
+    "description": "Copy for the create protocol phaseScheduleLabel UI."
+  },
+  "phaseSelectDayError": "요일을 하나 이상 선택하세요. PepMod는 일정을 대신 선택하지 않습니다.",
+  "@phaseSelectDayError": {
+    "description": "Copy for the create protocol phaseSelectDayError UI."
+  },
+  "phasesBody": "선택적 날짜 구간으로 기본 용량과 일정을 재정의할 수 있습니다. 구간 밖에서는 기본 일정이 계속됩니다.",
+  "@phasesBody": {
+    "description": "Copy for the create protocol phasesBody UI."
+  },
+  "phasesCount": "{count, plural, =1{1개 단계} other{{count}개 단계}}",
+  "@phasesCount": {
+    "description": "Copy for the create protocol phasesCount UI.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "phasesDisclaimer": "주차는 프로토콜 시작일부터 계산됩니다. 저장된 단계 메모와 변경 알림은 기록 보조 용도일 뿐입니다.",
+  "@phasesDisclaimer": {
+    "description": "Copy for the create protocol phasesDisclaimer UI."
+  },
+  "preBlendedVial": "사전 블렌드 바이알",
+  "@preBlendedVial": {
+    "description": "Copy for the create protocol preBlendedVial UI."
+  },
+  "preBlendedVialBody": "바이알 하나 · 드로우 한 번 · 여러 화합물",
+  "@preBlendedVialBody": {
+    "description": "Copy for the create protocol preBlendedVialBody UI."
+  },
+  "protocolNotesBody": "이 프로토콜을 검토할 때 표시할 참고 내용을 저장하세요.",
+  "@protocolNotesBody": {
+    "description": "Copy for the create protocol protocolNotesBody UI."
+  },
+  "protocolNotesHint": "예: 질문, 기록 관련 메모, 임상 담당자 메모",
+  "@protocolNotesHint": {
+    "description": "Copy for the create protocol protocolNotesHint UI."
+  },
+  "protocolNotesLabel": "프로토콜 메모",
+  "@protocolNotesLabel": {
+    "description": "Copy for the create protocol protocolNotesLabel UI."
+  },
+  "reminderTimesBody": "선택한 각 시간마다 예정된 날짜에 별도의 기록 행과 알림이 생성됩니다.",
+  "@reminderTimesBody": {
+    "description": "Copy for the create protocol reminderTimesBody UI."
+  },
+  "reminderTimesLabel": "알림 시간",
+  "@reminderTimesLabel": {
+    "description": "Copy for the create protocol reminderTimesLabel UI."
+  },
+  "removeLabel": "제거",
+  "@removeLabel": {
+    "description": "Copy for the create protocol removeLabel UI."
+  },
+  "removePeptide": "{name} 제거",
+  "@removePeptide": {
+    "description": "Copy for the create protocol removePeptide UI.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "removePhase": "단계 제거",
+  "@removePhase": {
+    "description": "Copy for the create protocol removePhase UI."
+  },
+  "removeTime": "{time} 시간 제거",
+  "@removeTime": {
+    "description": "Copy for the create protocol removeTime UI.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "restWeeksLabel": "휴식 주차",
+  "@restWeeksLabel": {
+    "description": "Copy for the create protocol restWeeksLabel UI."
+  },
+  "reviewLabel": "검토",
+  "@reviewLabel": {
+    "description": "Copy for the create protocol reviewLabel UI."
+  },
+  "routeLabel": "투여 경로",
+  "@routeLabel": {
+    "description": "Label for a route selector."
+  },
+  "saveBlend": "블렌드 저장",
+  "@saveBlend": {
+    "description": "Copy for the create protocol saveBlend UI."
+  },
+  "saveChanges": "변경사항 저장",
+  "@saveChanges": {
+    "description": "Action to save edits to an existing item."
+  },
+  "savePhase": "단계 저장",
+  "@savePhase": {
+    "description": "Copy for the create protocol savePhase UI."
+  },
+  "savedVialPreset": "{amount} {unit} 바이알 · 저장된 프리셋",
+  "@savedVialPreset": {
+    "description": "Copy for the create protocol savedVialPreset UI.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "scheduleLabel": "일정",
+  "@scheduleLabel": {
+    "description": "Copy for the create protocol scheduleLabel UI."
+  },
+  "searchCompounds": "화합물 검색...",
+  "@searchCompounds": {
+    "description": "Copy for the create protocol searchCompounds UI."
+  },
+  "selectDayError": "이 펩타이드를 예약할 요일을 하나 이상 선택하세요.",
+  "@selectDayError": {
+    "description": "Copy for the create protocol selectDayError UI."
+  },
+  "selectOption": "{option} 선택",
+  "@selectOption": {
+    "description": "Copy for the create protocol selectOption UI.",
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    }
+  },
+  "startDateLabel": "시작일",
+  "@startDateLabel": {
+    "description": "Copy for the create protocol startDateLabel UI."
+  },
+  "startWeekLabel": "시작 주차",
+  "@startWeekLabel": {
+    "description": "Copy for the create protocol startWeekLabel UI."
+  },
+  "syringeUnitsAmount": "{amount} 주사기 단위",
+  "@syringeUnitsAmount": {
+    "description": "Copy for the create protocol syringeUnitsAmount UI.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "syringeUnitsDisclaimer": "기록 전용으로 사용하는 선택적 U-100 주사기 눈금 입력값입니다.",
+  "@syringeUnitsDisclaimer": {
+    "description": "Copy for the create protocol syringeUnitsDisclaimer UI."
+  },
+  "syringeUnitsHint": "예: 12.5",
+  "@syringeUnitsHint": {
+    "description": "Copy for the create protocol syringeUnitsHint UI."
+  },
+  "syringeUnitsLabel": "주사기 단위",
+  "@syringeUnitsLabel": {
+    "description": "Copy for the create protocol syringeUnitsLabel UI."
+  },
+  "syringeUnitsOptional": "주사기 단위 (선택사항)",
+  "@syringeUnitsOptional": {
+    "description": "Copy for the create protocol syringeUnitsOptional UI."
+  },
+  "trackedAmountLabel": "기록된 용량",
+  "@trackedAmountLabel": {
+    "description": "Copy for the create protocol trackedAmountLabel UI."
+  },
+  "u100TrackingDisclaimer": "U-100 주사기 눈금을 사용합니다 (100단위 = 1mL). 값은 사용자가 직접 입력한 기록 데이터입니다.",
+  "@u100TrackingDisclaimer": {
+    "description": "Copy for the create protocol u100TrackingDisclaimer UI."
+  },
+  "unitLabel": "단위",
+  "@unitLabel": {
+    "description": "Copy for the create protocol unitLabel UI."
+  },
+  "vialAmountHint": "바이알 용량",
+  "@vialAmountHint": {
+    "description": "Copy for the create protocol vialAmountHint UI."
+  },
+  "vialContentsLabel": "바이알 내용물",
+  "@vialContentsLabel": {
+    "description": "Copy for the create protocol vialContentsLabel UI."
+  },
+  "vialLabelNameHint": "바이알 라벨의 이름",
+  "@vialLabelNameHint": {
+    "description": "Copy for the create protocol vialLabelNameHint UI."
+  },
+  "weekNumber": "{week}주차",
+  "@weekNumber": {
+    "description": "Copy for the create protocol weekNumber UI.",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      }
+    }
+  },
+  "weekRange": "{start}–{end}주차",
+  "@weekRange": {
+    "description": "Copy for the create protocol weekRange UI.",
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "weekToWeekPhases": "주차별 단계",
+  "@weekToWeekPhases": {
+    "description": "Copy for the create protocol weekToWeekPhases UI."
+  },
+  "weekdayDose": "{weekday} 투여",
+  "@weekdayDose": {
+    "description": "Copy for the create protocol weekdayDose UI.",
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "weekdaySchedule": "{weekday} 일정",
+  "@weekdaySchedule": {
+    "description": "Copy for the create protocol weekdaySchedule UI.",
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "doseDrawInvalid": "흡입량은 0보다 크고 바이알 용량 이내여야 합니다.",
+  "@doseDrawInvalid": {
+    "description": "Validation error for an invalid blended-vial draw."
+  },
+  "doseGenericError": "문제가 발생했습니다. 다시 시도해 주세요.",
+  "@doseGenericError": {
+    "description": "Generic error shown when a dose update fails."
+  },
+  "doseEditSystemLabel": "편집.투여",
+  "@doseEditSystemLabel": {
+    "description": "System heading when editing a recorded dose."
+  },
+  "doseLogSystemLabel": "기록.투여",
+  "@doseLogSystemLabel": {
+    "description": "System heading when logging a scheduled dose."
+  },
+  "doseDraw": "흡입량",
+  "@doseDraw": {
+    "description": "Field label for a blended-vial syringe draw."
+  },
+  "doseAmount": "용량",
+  "@doseAmount": {
+    "description": "Field label for a dose amount."
+  },
+  "doseUnits": "단위",
+  "@doseUnits": {
+    "description": "Unit suffix for a syringe draw."
+  },
+  "doseTime": "시간",
+  "@doseTime": {
+    "description": "Field label for the actual dose time."
+  },
+  "doseChooseTime": "투여 시간 선택",
+  "@doseChooseTime": {
+    "description": "Accessibility label for opening the dose time picker."
+  },
+  "doseBlendSnapshot": "혼합.요약 // 1회.흡입",
+  "@doseBlendSnapshot": {
+    "description": "Heading for the constituent amounts in one blended-vial draw."
+  },
+  "doseSyringeUnitsRecorded": "이번 투여에 {amount} 시린지 단위가 기록되었습니다.",
+  "@doseSyringeUnitsRecorded": {
+    "description": "Recorded syringe-unit amount for a scheduled dose.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "doseInjectionSite": "주사.부위",
+  "@doseInjectionSite": {
+    "description": "Heading for injection-site selection."
+  },
+  "doseLastSite": "이 펩타이드의 마지막 부위 · {site}",
+  "@doseLastSite": {
+    "description": "Most recent injection site for the selected peptide.",
+    "placeholders": {
+      "site": {
+        "type": "String"
+      }
+    }
+  },
+  "doseNotes": "메모",
+  "@doseNotes": {
+    "description": "Field label for dose notes."
+  },
+  "doseOptional": "선택 사항...",
+  "@doseOptional": {
+    "description": "Placeholder for an optional dose-notes field."
+  },
+  "doseMarkPending": "보류로 표시",
+  "@doseMarkPending": {
+    "description": "Action that returns a completed or skipped dose to pending."
+  },
+  "doseSaveChanges": "변경사항 저장",
+  "@doseSaveChanges": {
+    "description": "Action that saves edits to a dose record."
+  },
+  "doseSkip": "이 투여 건너뛰기",
+  "@doseSkip": {
+    "description": "Action that marks the current dose as skipped."
+  },
+  "doseHistorySystemLabel": "투여.기록 // 30일",
+  "@doseHistorySystemLabel": {
+    "description": "System heading for the 30-day dose history."
+  },
+  "doseHistoryTitle": "기록된 투여",
+  "@doseHistoryTitle": {
+    "description": "Title for completed and skipped dose history."
+  },
+  "doseHistoryBody": "기록을 탭하면 용량, 실제 시간, 주사 부위, 메모, 상태를 수정할 수 있습니다.",
+  "@doseHistoryBody": {
+    "description": "Instructions for editing a dose-history record."
+  },
+  "doseHistoryEmpty": "최근 30일간 기록된 투여가 없습니다.",
+  "@doseHistoryEmpty": {
+    "description": "Empty state for the 30-day dose history."
+  },
+  "doseLogPrevious": "이전 투여 기록",
+  "@doseLogPrevious": {
+    "description": "Action that opens or submits the previous-dose form."
+  },
+  "doseHistorySkipped": "건너뜀 · {dateTime}",
+  "@doseHistorySkipped": {
+    "description": "Skipped dose summary with its recorded date and time.",
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "doseHistoryTaken": "{amount} {units} · {dateTime}",
+  "@doseHistoryTaken": {
+    "description": "Completed dose summary with amount, units, date, and time.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "units": {
+        "type": "String"
+      },
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "doseEditAction": "편집",
+  "@doseEditAction": {
+    "description": "Action label on a dose-history row."
+  },
+  "doseChoosePastTime": "기록할 과거 시간을 선택하세요.",
+  "@doseChoosePastTime": {
+    "description": "Validation error when a historical dose time is in the future."
+  },
+  "dosePreviousError": "이전 투여를 기록할 수 없습니다. 다시 시도해 주세요.",
+  "@dosePreviousError": {
+    "description": "Error shown when saving a previous dose fails."
+  },
+  "doseLogPreviousSystemLabel": "이전.기록",
+  "@doseLogPreviousSystemLabel": {
+    "description": "System heading for manually logging a previous dose."
+  },
+  "doseNoPeptides": "사용 가능한 펩타이드 없음",
+  "@doseNoPeptides": {
+    "description": "Title when no peptide can be selected for a previous dose."
+  },
+  "doseNoPeptidesBody": "기록을 남기기 전에 활성 프로토콜에 펩타이드를 추가하세요.",
+  "@doseNoPeptidesBody": {
+    "description": "Instructions when no peptide can be selected for a previous dose."
+  },
+  "doseCorrectHistory": "투여 기록 수정",
+  "@doseCorrectHistory": {
+    "description": "Title for manually adding a previous dose."
+  },
+  "dosePeptide": "펩타이드",
+  "@dosePeptide": {
+    "description": "Field label for peptide selection."
+  },
+  "doseDate": "날짜",
+  "@doseDate": {
+    "description": "Field label for the previous dose date."
+  },
+  "doseChooseDate": "투여 날짜 선택",
+  "@doseChooseDate": {
+    "description": "Accessibility label for opening the dose date picker."
+  },
+  "doseSyringeUnitsEntry": "이 항목에 {amount} 시린지 단위가 기록되었습니다.",
+  "@doseSyringeUnitsEntry": {
+    "description": "Recorded syringe-unit amount for a historical dose entry.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "doseHistoryDisclaimer": "기록 로그는 개인 추적용일 뿐입니다. 의학적 지침이나 투여 권장사항을 대체하지 않습니다.",
+  "@doseHistoryDisclaimer": {
+    "description": "Safety disclaimer for manually entered dose history."
+  },
+  "notificationChannelName": "투여 알림",
+  "@notificationChannelName": {
+    "description": "Name of the operating-system notification channel for dose reminders."
+  },
+  "notificationChannelDescription": "활성 펩타이드 프로토콜 투여를 위한 예약 알림입니다.",
+  "@notificationChannelDescription": {
+    "description": "Description of the operating-system notification channel."
+  },
+  "notificationDoseTitle": "투여 시간입니다",
+  "@notificationDoseTitle": {
+    "description": "Title of a scheduled dose notification."
+  },
+  "notificationDoseBody": "예약된 프로토콜 알림이 준비되었습니다.",
+  "@notificationDoseBody": {
+    "description": "Body of a scheduled dose notification."
+  },
+  "notificationCycleTitle": "프로토콜 체크포인트",
+  "@notificationCycleTitle": {
+    "description": "Title of a protocol cycle checkpoint notification."
+  },
+  "notificationCycleBody": "오늘 주기 구간 알림이 예정되어 있습니다. 추적 계획을 확인하세요.",
+  "@notificationCycleBody": {
+    "description": "Body of a protocol cycle checkpoint notification."
+  },
+  "notificationRestTitle": "휴식기 체크포인트",
+  "@notificationRestTitle": {
+    "description": "Title of a protocol rest-period checkpoint notification."
+  },
+  "notificationRestBody": "오늘 휴식기 알림이 예정되어 있습니다. 추적 계획을 확인하세요.",
+  "@notificationRestBody": {
+    "description": "Body of a protocol rest-period checkpoint notification."
+  },
+  "notificationPhaseTitle": "프로토콜 단계 체크포인트",
+  "@notificationPhaseTitle": {
+    "description": "Title of a protocol phase checkpoint notification."
+  },
+  "notificationPhaseBody": "오늘 새로운 추적 단계가 시작됩니다. 저장된 일정을 확인하세요.",
+  "@notificationPhaseBody": {
+    "description": "Body of a protocol phase checkpoint notification."
+  },
+  "personalLibrarySystemLabel": "SYS.라이브러리 // 개인",
+  "@personalLibrarySystemLabel": {
+    "description": "System-style heading for the personal compound library."
+  },
+  "customCompoundIntro": "직접 입력한 라벨과 바이알 용량을 저장하세요. 프리셋은 추적 단축키일 뿐 투여 지침이 아닙니다.",
+  "@customCompoundIntro": {
+    "description": "Safety-focused introduction to personal compound presets."
+  },
+  "archivedHeading": "보관됨",
+  "@archivedHeading": {
+    "description": "Heading above archived personal compound presets."
+  },
+  "activePresetsHeading": "활성 프리셋",
+  "@activePresetsHeading": {
+    "description": "Heading above active personal compound presets."
+  },
+  "showActive": "활성 항목 보기",
+  "@showActive": {
+    "description": "Action to show active personal compound presets."
+  },
+  "archivedAction": "보관됨",
+  "@archivedAction": {
+    "description": "Action to show archived personal compound presets."
+  },
+  "customCompoundsLoadFailed": "화합물을 불러올 수 없습니다. 다시 시도해 주세요.",
+  "@customCompoundsLoadFailed": {
+    "description": "Generic personal compound loading error."
+  },
+  "libraryLoadFailed": "펩타이드 라이브러리를 불러올 수 없습니다. 다시 시도해 주세요.",
+  "@libraryLoadFailed": {
+    "description": "Generic peptide library loading error."
+  },
+  "compoundVialSummary": "{amount} {unit} 바이알 · {route}",
+  "@compoundVialSummary": {
+    "description": "Summary of a personal compound vial and route.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      },
+      "route": {
+        "type": "String"
+      }
+    }
+  },
+  "editPreset": "프리셋 편집",
+  "@editPreset": {
+    "description": "Action to edit a personal compound preset."
+  },
+  "restorePreset": "복원",
+  "@restorePreset": {
+    "description": "Action to restore an archived personal compound preset."
+  },
+  "archivePreset": "보관",
+  "@archivePreset": {
+    "description": "Action to archive a personal compound preset."
+  },
+  "noArchivedPresets": "보관된 프리셋 없음",
+  "@noArchivedPresets": {
+    "description": "Empty-state title when no archived personal presets exist."
+  },
+  "noSavedCompounds": "저장된 화합물 없음",
+  "@noSavedCompounds": {
+    "description": "Empty-state title when no personal compounds exist."
+  },
+  "archivedPresetsHint": "보관된 프리셋은 복원할 때까지 여기에 남아 있습니다.",
+  "@archivedPresetsHint": {
+    "description": "Empty-state explanation for archived personal presets."
+  },
+  "createPresetHint": "재사용 가능한 라벨과 바이알 용량 프리셋을 만드세요.",
+  "@createPresetHint": {
+    "description": "Empty-state explanation for personal compound presets."
+  },
+  "presetCompoundSystemLabel": "프리셋.화합물",
+  "@presetCompoundSystemLabel": {
+    "description": "System-style heading in the personal compound editor."
+  },
+  "newCompound": "새 화합물",
+  "@newCompound": {
+    "description": "Title when creating a personal compound preset."
+  },
+  "editCompound": "화합물 편집",
+  "@editCompound": {
+    "description": "Title when editing a personal compound preset."
+  },
+  "ownVialDetailsHint": "본인 바이알에 인쇄된 정보만 입력하세요.",
+  "@ownVialDetailsHint": {
+    "description": "Instruction in the personal compound editor."
+  },
+  "compoundLabel": "화합물 라벨",
+  "@compoundLabel": {
+    "description": "Label for a personal compound name field."
+  },
+  "compoundNameExample": "예: 내 화합물",
+  "@compoundNameExample": {
+    "description": "Example personal compound name."
+  },
+  "vialUnitLabel": "바이알 단위",
+  "@vialUnitLabel": {
+    "description": "Label for a personal compound vial unit selector."
+  },
+  "trackingUnitLabel": "추적 단위",
+  "@trackingUnitLabel": {
+    "description": "Label for a personal compound tracking unit selector."
+  },
+  "notesOptional": "메모 (선택)",
+  "@notesOptional": {
+    "description": "Label for an optional personal compound note."
+  },
+  "compoundNoteExample": "라벨 또는 보관 메모",
+  "@compoundNoteExample": {
+    "description": "Example note for a personal compound preset."
+  },
+  "noDoseRecommendation": "투여 권장사항은 생성되지 않습니다. 프로토콜 용량은 항상 사용자가 직접 별도로 입력합니다.",
+  "@noDoseRecommendation": {
+    "description": "Safety disclaimer in the personal compound editor."
+  },
+  "saveCompoundFailed": "프리셋을 저장할 수 없습니다. 다시 시도해 주세요.",
+  "@saveCompoundFailed": {
+    "description": "Generic personal compound save error."
+  },
+  "routeTopical": "국소",
+  "@routeTopical": {
+    "description": "Topical administration route."
+  },
+  "frequencyCustomDays": "사용자 지정 요일",
+  "@frequencyCustomDays": {
+    "description": "Frequency using user-selected weekdays."
+  },
+  "savedCalculationLabel": "{vialAmount} {vialUnit} + {diluentVolume} mL",
+  "@savedCalculationLabel": {
+    "description": "Title of a saved vial conversion.",
+    "placeholders": {
+      "vialAmount": {
+        "type": "String"
+      },
+      "vialUnit": {
+        "type": "String"
+      },
+      "diluentVolume": {
+        "type": "String"
+      }
+    }
+  },
+  "savedCalculationDetail": "{desiredAmount} {desiredUnit} · {capacity}단위",
+  "@savedCalculationDetail": {
+    "description": "Detail of a saved vial conversion.",
+    "placeholders": {
+      "desiredAmount": {
+        "type": "String"
+      },
+      "desiredUnit": {
+        "type": "String"
+      },
+      "capacity": {
+        "type": "String"
+      }
+    }
+  },
+  "syringeOption": "U-100 · {volume} mL / {capacity}단위",
+  "@syringeOption": {
+    "description": "U-100 syringe capacity option.",
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      },
+      "capacity": {
+        "type": "String"
+      }
+    }
+  }
 }

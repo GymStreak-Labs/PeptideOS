@@ -79,5 +79,2808 @@
   "frequencyEveryOtherDay": "1日おき",
   "frequencyTwiceWeekly": "週2回",
   "frequencyWeekly": "毎週",
-  "frequencyAsNeeded": "必要に応じて"
+  "frequencyAsNeeded": "必要に応じて",
+  "tabProtocol": "プロトコル",
+  "tabProgress": "経過",
+  "tabLibrary": "ライブラリ",
+  "tabYou": "あなた",
+  "continueLabel": "続ける",
+  "processingLabel": "処理中…",
+  "authAppleFailed": "Appleサインインに失敗しました。もう一度お試しください。",
+  "authGoogleFailed": "Googleサインインに失敗しました。もう一度お試しください。",
+  "authGenericError": "問題が発生しました。もう一度お試しください。",
+  "authUserNotFound": "このメールアドレスのユーザーが見つかりません。",
+  "authIncorrectCredentials": "メールアドレスまたはパスワードが正しくありません。",
+  "authAccountExists": "このメールアドレスのアカウントは既に存在します。",
+  "authWeakPassword": "パスワードが脆弱です。6文字以上で入力してください。",
+  "authInvalidEmail": "メールアドレスが無効です。",
+  "authAppleUnavailable": "このアプリではApple IDでのサインインは利用できません。",
+  "authRequiredTitle": "あなた専用のプロトコルを\n保存しましょう",
+  "authRequiredBody": "プロトコルが解放される前に、ロードマップ、スケジュール、投与ログ、リマインダーをアカウントに紐づけて保存しましょう。",
+  "continueWithEmail": "メールで続ける",
+  "signInWithApple": "APPLEでサインイン",
+  "continueWithGoogle": "GOOGLEで続ける",
+  "authTermsDisclaimer": "続行することで利用規約とプライバシーポリシーに同意したことになります。PepModは教育目的のツールであり、医療アドバイスではありません。",
+  "signIn": "サインイン",
+  "createAccount": "アカウント作成",
+  "resetPassword": "パスワードを再設定",
+  "signInAction": "サインイン",
+  "createAccountAction": "アカウントを作成",
+  "sendResetLink": "再設定リンクを送信",
+  "passwordResetSent": "パスワード再設定メールを送信しました。受信ボックスをご確認ください。",
+  "enterEmail": "メールアドレスを入力",
+  "enterValidEmail": "有効なメールアドレスを入力してください",
+  "enterPassword": "パスワードを入力",
+  "passwordMinLength": "6文字以上",
+  "forgotPassword": "パスワードをお忘れですか？",
+  "alreadyHaveAccount": "アカウントをお持ちの方はサインイン",
+  "backToSignIn": "サインインに戻る",
+  "emailLabel": "メールアドレス",
+  "passwordLabel": "パスワード",
+  "showPassword": "パスワードを表示",
+  "hidePassword": "パスワードを隠す",
+  "accountDeletedTitle": "アカウントを削除しました",
+  "accountDeletedBody": "PepModアカウントと保存されたアプリデータは削除されました。",
+  "subscriptionUnavailable": "現在サブスクリプションプランをご利用いただけません。もう一度お試しください。",
+  "upgradeUnavailable": "現在アップグレードをご利用いただけません。後でもう一度お試しください。",
+  "noPurchasesToRestore": "復元できる購入履歴が見つかりません。",
+  "unlockFullProtocol": "フルプロトコルを解放",
+  "premiumUnlimitedPeptides": "プロトコルごとにペプチドを無制限に追加",
+  "premiumMultipleProtocols": "複数のプロトコルを同時に管理",
+  "premiumCalculator": "希釈計算ツール（全ペプチド対応）",
+  "premiumMetrics": "体組成トラッキング＋グラフ",
+  "upgradeNow": "今すぐアップグレード",
+  "restorePurchases": "購入を復元",
+  "notRightNow": "今はしない",
+  "protocolWeeklyPlanner": "週間プランナー",
+  "protocolDoseHistory": "投与履歴",
+  "protocolCreate": "プロトコルを作成",
+  "protocolManage": "管理",
+  "protocolYourProtocol": "あなたのプロトコル",
+  "protocolNoActive": "有効なプロトコルがありません",
+  "protocolNoActiveBody": "最初のプロトコルを作成して、投与のトラッキングとアドヒアランスの記録を始めましょう。",
+  "protocolStartFirst": "最初のプロトコルを開始",
+  "protocolNoDosesScheduledToday": "本日予定されている投与はありません",
+  "protocolDosesTaken": "{total}回中{taken}回の投与を完了",
+  "@protocolDosesTaken": {
+    "description": "Summary of completed doses today.",
+    "placeholders": {
+      "taken": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "protocolNextDose": "次回の投与",
+  "protocolInTime": "あと{duration}",
+  "@protocolInTime": {
+    "description": "Countdown until the next dose.",
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "protocolLogDose": "投与を記録",
+  "protocolNow": "今",
+  "protocolMissed": "未実施",
+  "protocolSkipped": "スキップ済み",
+  "protocolNoDosesToday": "本日の投与はありません",
+  "protocolNoDosesTodayBody": "本日はプロトコルに予定されている投与がありません。",
+  "protocolFreeLimit": "無料プランではプロトコルを1つまで作成できます。複数のスタックを同時に運用するにはPremiumにアップグレードしてください。",
+  "protocolSyringeUnitsSuffix": " ・ {amount}シリンジ単位",
+  "@protocolSyringeUnitsSuffix": {
+    "description": "Syringe-unit detail appended to a dose amount.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "injectionSiteLeftAbdomen": "左腹部",
+  "@injectionSiteLeftAbdomen": {
+    "description": "Display name for the left abdomen injection site."
+  },
+  "injectionSiteRightAbdomen": "右腹部",
+  "@injectionSiteRightAbdomen": {
+    "description": "Display name for the right abdomen injection site."
+  },
+  "injectionSiteLeftThigh": "左大腿",
+  "@injectionSiteLeftThigh": {
+    "description": "Display name for the left thigh injection site."
+  },
+  "injectionSiteRightThigh": "右大腿",
+  "@injectionSiteRightThigh": {
+    "description": "Display name for the right thigh injection site."
+  },
+  "injectionSiteLeftGlute": "左臀部",
+  "@injectionSiteLeftGlute": {
+    "description": "Display name for the left glute injection site."
+  },
+  "injectionSiteRightGlute": "右臀部",
+  "@injectionSiteRightGlute": {
+    "description": "Display name for the right glute injection site."
+  },
+  "injectionSiteLeftTriceps": "左上腕三頭筋",
+  "@injectionSiteLeftTriceps": {
+    "description": "Display name for the left triceps injection site."
+  },
+  "injectionSiteRightTriceps": "右上腕三頭筋",
+  "@injectionSiteRightTriceps": {
+    "description": "Display name for the right triceps injection site."
+  },
+  "plannerToday": "本日",
+  "plannerBack": "戻る",
+  "plannerPreviousWeek": "前の週",
+  "plannerNextWeek": "次の週",
+  "plannerScheduledCount": "{count, plural, =1{予定されている投与 {count} 件} other{予定されている投与 {count} 件}}",
+  "@plannerScheduledCount": {
+    "description": "Accessible count of doses scheduled for a calendar day.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "plannerTrackingDisclaimer": "これは記録専用です。このカレンダーは保存されたプロトコルを反映するものであり、投与に関する助言を提供するものではありません。",
+  "plannerWashoutPeriod": "休薬期間",
+  "plannerWashoutUntil": "{date}まで休薬",
+  "@plannerWashoutUntil": {
+    "description": "End date shown for a saved washout window.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "plannerNoScheduledDoses": "予定されている投与はありません",
+  "plannerNothingPlanned": "保存されたプロトコルには予定がありません。",
+  "@protocolWeeklyPlanner": {
+    "description": "Tooltip for opening the weekly planner."
+  },
+  "@protocolDoseHistory": {
+    "description": "Tooltip for opening dose history."
+  },
+  "@protocolCreate": {
+    "description": "Tooltip for creating a protocol."
+  },
+  "@protocolManage": {
+    "description": "Action that opens protocol management."
+  },
+  "@protocolYourProtocol": {
+    "description": "Heading above the empty protocol state."
+  },
+  "@protocolNoActive": {
+    "description": "Title when no protocol is active."
+  },
+  "@protocolNoActiveBody": {
+    "description": "Guidance when no protocol is active."
+  },
+  "@protocolStartFirst": {
+    "description": "Action to create the first protocol."
+  },
+  "@protocolNoDosesScheduledToday": {
+    "description": "Message when today has no scheduled doses."
+  },
+  "@protocolNextDose": {
+    "description": "Heading for the next scheduled dose."
+  },
+  "@protocolLogDose": {
+    "description": "Action to record a dose."
+  },
+  "@protocolNow": {
+    "description": "Countdown label when a dose is due now."
+  },
+  "@protocolMissed": {
+    "description": "Status for a missed dose."
+  },
+  "@protocolSkipped": {
+    "description": "Status for a skipped dose."
+  },
+  "@protocolNoDosesToday": {
+    "description": "Empty-card title for no doses today."
+  },
+  "@protocolNoDosesTodayBody": {
+    "description": "Empty-card detail for no doses today."
+  },
+  "@protocolFreeLimit": {
+    "description": "Upgrade explanation when the free protocol limit is reached."
+  },
+  "@plannerToday": {
+    "description": "Action that returns the planner to today."
+  },
+  "@plannerBack": {
+    "description": "Tooltip for leaving the weekly planner."
+  },
+  "@plannerPreviousWeek": {
+    "description": "Tooltip for moving to the previous week."
+  },
+  "@plannerNextWeek": {
+    "description": "Tooltip for moving to the next week."
+  },
+  "@plannerTrackingDisclaimer": {
+    "description": "Safety note below the weekly planner."
+  },
+  "@plannerWashoutPeriod": {
+    "description": "Label for a washout period without an end date."
+  },
+  "@plannerNoScheduledDoses": {
+    "description": "Title when a planner day has no doses."
+  },
+  "@plannerNothingPlanned": {
+    "description": "Detail when a planner day has no doses."
+  },
+  "activatePro": "PROを有効化",
+  "@activatePro": {
+    "description": "English onboarding copy for activate pro."
+  },
+  "activateProPrice": "PROを有効化 — {price}/年",
+  "@activateProPrice": {
+    "description": "English onboarding copy for activate pro price.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "annualAccess": "年間アクセス",
+  "@annualAccess": {
+    "description": "English onboarding copy for annual access."
+  },
+  "annualLabel": "年間",
+  "@annualLabel": {
+    "description": "English onboarding copy for annual label."
+  },
+  "averageRating": "平均評価",
+  "@averageRating": {
+    "description": "English onboarding copy for average rating."
+  },
+  "bacWaterLabel": "静菌水",
+  "@bacWaterLabel": {
+    "description": "English onboarding copy for bac water label."
+  },
+  "basedOnInputs": "入力内容に基づく //",
+  "@basedOnInputs": {
+    "description": "English onboarding copy for based on inputs."
+  },
+  "bestValue": "ベストバリュー",
+  "@bestValue": {
+    "description": "English onboarding copy for best value."
+  },
+  "birthDateInvalid": "18歳以上になる有効な日付を入力してください。",
+  "@birthDateInvalid": {
+    "description": "English onboarding copy for birth date invalid."
+  },
+  "birthDateValid": "年齢確認済み",
+  "@birthDateValid": {
+    "description": "English onboarding copy for birth date valid."
+  },
+  "calculatorDemoBody": "{peptideName}を例にした使い方はこちら",
+  "@calculatorDemoBody": {
+    "description": "English onboarding copy for calculator demo body.",
+    "placeholders": {
+      "peptideName": {
+        "type": "String"
+      }
+    }
+  },
+  "calculatorDemoResult": "これだけです。数値を入力すれば、\n正確なシリンジ単位がわかります。",
+  "@calculatorDemoResult": {
+    "description": "English onboarding copy for calculator demo result."
+  },
+  "calculatorDemoTitle": "もう、\n難しい計算はいりません。",
+  "@calculatorDemoTitle": {
+    "description": "English onboarding copy for calculator demo title."
+  },
+  "confidenceCycleTiming": "サイクルタイミング",
+  "@confidenceCycleTiming": {
+    "description": "English onboarding copy for confidence cycle timing."
+  },
+  "confidenceCycleTimingDetail": "プロトコルの日程とスケジュール期間を明確に確認",
+  "@confidenceCycleTimingDetail": {
+    "description": "English onboarding copy for confidence cycle timing detail."
+  },
+  "confidenceDoseMath": "投与量計算",
+  "@confidenceDoseMath": {
+    "description": "English onboarding copy for confidence dose math."
+  },
+  "confidenceDoseMathDetail": "バイアル・希釈水・投与量・吸引単位をまとめて管理",
+  "@confidenceDoseMathDetail": {
+    "description": "English onboarding copy for confidence dose math detail."
+  },
+  "confidenceLabel": "信頼度",
+  "@confidenceLabel": {
+    "description": "English onboarding copy for confidence label."
+  },
+  "confidencePlainInfo": "わかりやすい情報",
+  "@confidencePlainInfo": {
+    "description": "English onboarding copy for confidence plain info."
+  },
+  "confidencePlainInfoDetail": "余計な情報を省いて研究メモを読む",
+  "@confidencePlainInfoDetail": {
+    "description": "English onboarding copy for confidence plain info detail."
+  },
+  "confidenceProgressSignals": "進捗シグナル",
+  "@confidenceProgressSignals": {
+    "description": "English onboarding copy for confidence progress signals."
+  },
+  "confidenceProgressSignalsDetail": "アドヒアランスと身体指標の推移を確認",
+  "@confidenceProgressSignalsDetail": {
+    "description": "English onboarding copy for confidence progress signals detail."
+  },
+  "confidenceSafetyFraming": "安全性の枠組み",
+  "@confidenceSafetyFraming": {
+    "description": "English onboarding copy for confidence safety framing."
+  },
+  "confidenceSafetyFramingDetail": "教育的ガイダンスと免責事項を常に表示",
+  "@confidenceSafetyFramingDetail": {
+    "description": "English onboarding copy for confidence safety framing detail."
+  },
+  "confidenceSiteRotation": "注射部位ローテーション",
+  "@confidenceSiteRotation": {
+    "description": "English onboarding copy for confidence site rotation."
+  },
+  "confidenceSiteRotationDetail": "各投与の記録部位を記憶",
+  "@confidenceSiteRotationDetail": {
+    "description": "English onboarding copy for confidence site rotation detail."
+  },
+  "connectingToStore": "ストアに接続中...",
+  "@connectingToStore": {
+    "description": "English onboarding copy for connecting to store."
+  },
+  "@continueLabel": {
+    "description": "English onboarding copy for continue label."
+  },
+  "continueSelected": "続ける ({count})",
+  "@continueSelected": {
+    "description": "English onboarding copy for continue selected.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customProtocol": "カスタムプロトコル",
+  "@customProtocol": {
+    "description": "English onboarding copy for custom protocol."
+  },
+  "dateOfBirthLabel": "生年月日",
+  "@dateOfBirthLabel": {
+    "description": "English onboarding copy for date of birth label."
+  },
+  "dayOne": "1日目",
+  "@dayOne": {
+    "description": "English onboarding copy for day one."
+  },
+  "dayShortLabel": "DD",
+  "@dayShortLabel": {
+    "description": "English onboarding copy for day short label."
+  },
+  "defaultConfidence": "投与量計算・注射部位ローテーション",
+  "@defaultConfidence": {
+    "description": "English onboarding copy for default confidence."
+  },
+  "defaultFrustration": "投与忘れ",
+  "@defaultFrustration": {
+    "description": "English onboarding copy for default frustration."
+  },
+  "defaultGoals": "回復・長寿",
+  "@defaultGoals": {
+    "description": "English onboarding copy for default goals."
+  },
+  "doseLabel": "投与量",
+  "@doseLabel": {
+    "description": "English onboarding copy for dose label."
+  },
+  "dosesLogged": "記録した投与回数",
+  "@dosesLogged": {
+    "description": "English onboarding copy for doses logged."
+  },
+  "dosesPerDay": "1日の投与回数",
+  "@dosesPerDay": {
+    "description": "English onboarding copy for doses per day."
+  },
+  "drawVolumeLabel": "吸引量",
+  "@drawVolumeLabel": {
+    "description": "English onboarding copy for draw volume label."
+  },
+  "durationLabel": "期間",
+  "@durationLabel": {
+    "description": "English onboarding copy for duration label."
+  },
+  "experienceAdvanced": "上級",
+  "@experienceAdvanced": {
+    "description": "English onboarding copy for experience advanced."
+  },
+  "experienceAdvancedDetail": "詳細なプロトコル管理に慣れています",
+  "@experienceAdvancedDetail": {
+    "description": "English onboarding copy for experience advanced detail."
+  },
+  "experienceFirstTime": "初めて",
+  "@experienceFirstTime": {
+    "description": "English onboarding copy for experience first time."
+  },
+  "experienceFirstTimeDetail": "ペプチド記録は初めてです",
+  "@experienceFirstTimeDetail": {
+    "description": "English onboarding copy for experience first time detail."
+  },
+  "experienceIntermediate": "中級",
+  "@experienceIntermediate": {
+    "description": "English onboarding copy for experience intermediate."
+  },
+  "experienceLabel": "経験レベル",
+  "@experienceLabel": {
+    "description": "English onboarding copy for experience label."
+  },
+  "experienceNovice": "初心者",
+  "@experienceNovice": {
+    "description": "English onboarding copy for experience novice."
+  },
+  "experienceSome": "多少経験あり",
+  "@experienceSome": {
+    "description": "English onboarding copy for experience some."
+  },
+  "experienceSomeDetail": "1〜2件のプロトコルを記録したことがあります",
+  "@experienceSomeDetail": {
+    "description": "English onboarding copy for experience some detail."
+  },
+  "experienceVeteran": "熟練者",
+  "@experienceVeteran": {
+    "description": "English onboarding copy for experience veteran."
+  },
+  "featureDoseMathBody": "バイアルサイズ、希釈水量、投与量、吸引単位を、実際に記録中のプロトコルと並べて確認できます。",
+  "@featureDoseMathBody": {
+    "description": "English onboarding copy for feature dose math body."
+  },
+  "featureDoseMathTitle": "投与量計算を\n文脈の中で",
+  "@featureDoseMathTitle": {
+    "description": "English onboarding copy for feature dose math title."
+  },
+  "featureProtocolArcBody": "予定投与、記録済み投与、アドヒアランス、身体指標が1つのタイムラインにまとまります。",
+  "@featureProtocolArcBody": {
+    "description": "English onboarding copy for feature protocol arc body."
+  },
+  "featureProtocolArcTitle": "プロトコルの推移を\n時系列で",
+  "@featureProtocolArcTitle": {
+    "description": "English onboarding copy for feature protocol arc title."
+  },
+  "featureShowcaseTitle": "必要なものすべてが\n1つのアプリに。",
+  "@featureShowcaseTitle": {
+    "description": "English onboarding copy for feature showcase title."
+  },
+  "featureSiteRotationBody": "記録したすべての部位を記憶し、ローテーション履歴を投与記録に紐づけます。",
+  "@featureSiteRotationBody": {
+    "description": "English onboarding copy for feature site rotation body."
+  },
+  "featureSiteRotationTitle": "注射部位の\nローテーション",
+  "@featureSiteRotationTitle": {
+    "description": "English onboarding copy for feature site rotation title."
+  },
+  "firstNameExample": "例：あかり",
+  "@firstNameExample": {
+    "description": "English onboarding copy for first name example."
+  },
+  "firstNameLabel": "名前",
+  "@firstNameLabel": {
+    "description": "English onboarding copy for first name label."
+  },
+  "frustrationForgetting": "投与を忘れる",
+  "@frustrationForgetting": {
+    "description": "English onboarding copy for frustration forgetting."
+  },
+  "frustrationLabel": "悩み",
+  "@frustrationLabel": {
+    "description": "English onboarding copy for frustration label."
+  },
+  "frustrationMath": "バイアルとシリンジの計算",
+  "@frustrationMath": {
+    "description": "English onboarding copy for frustration math."
+  },
+  "frustrationProgress": "継続できているか把握できない",
+  "@frustrationProgress": {
+    "description": "English onboarding copy for frustration progress."
+  },
+  "frustrationSchedule": "スケジュール管理が大変",
+  "@frustrationSchedule": {
+    "description": "English onboarding copy for frustration schedule."
+  },
+  "frustrationStacking": "複数のペプチドの管理",
+  "@frustrationStacking": {
+    "description": "English onboarding copy for frustration stacking."
+  },
+  "frustrationTrust": "信頼できる情報を見つけること",
+  "@frustrationTrust": {
+    "description": "English onboarding copy for frustration trust."
+  },
+  "goalAntiAging": "健康的なエイジング",
+  "@goalAntiAging": {
+    "description": "English onboarding copy for goal anti aging."
+  },
+  "goalAntiAgingDetail": "長寿を意識した記録を整理",
+  "@goalAntiAgingDetail": {
+    "description": "English onboarding copy for goal anti aging detail."
+  },
+  "goalCognitive": "認知機能サポート",
+  "@goalCognitive": {
+    "description": "English onboarding copy for goal cognitive."
+  },
+  "goalCognitiveDetail": "集中力とメンタルパフォーマンスをモニタリング",
+  "@goalCognitiveDetail": {
+    "description": "English onboarding copy for goal cognitive detail."
+  },
+  "goalImmune": "免疫サポート",
+  "@goalImmune": {
+    "description": "English onboarding copy for goal immune."
+  },
+  "goalImmuneDetail": "免疫サポート向けプロトコルを整理",
+  "@goalImmuneDetail": {
+    "description": "English onboarding copy for goal immune detail."
+  },
+  "goalMuscleGrowth": "筋肉増強",
+  "@goalMuscleGrowth": {
+    "description": "English onboarding copy for goal muscle growth."
+  },
+  "goalMuscleGrowthDetail": "トレーニングと成長の目標を記録",
+  "@goalMuscleGrowthDetail": {
+    "description": "English onboarding copy for goal muscle growth detail."
+  },
+  "goalOther": "その他",
+  "@goalOther": {
+    "description": "English onboarding copy for goal other."
+  },
+  "goalOtherDetail": "別の記録目標を設定",
+  "@goalOtherDetail": {
+    "description": "English onboarding copy for goal other detail."
+  },
+  "goalRecovery": "回復",
+  "@goalRecovery": {
+    "description": "English onboarding copy for goal recovery."
+  },
+  "goalRecoveryDetail": "回復記録とルーティンをサポート",
+  "@goalRecoveryDetail": {
+    "description": "English onboarding copy for goal recovery detail."
+  },
+  "goalSleep": "睡眠",
+  "@goalSleep": {
+    "description": "English onboarding copy for goal sleep."
+  },
+  "goalSleepDetail": "睡眠に関する目標とパターンを記録",
+  "@goalSleepDetail": {
+    "description": "English onboarding copy for goal sleep detail."
+  },
+  "goalWeightLoss": "減量",
+  "@goalWeightLoss": {
+    "description": "English onboarding copy for goal weight loss."
+  },
+  "goalWeightLossDetail": "代謝目標と進捗を記録",
+  "@goalWeightLossDetail": {
+    "description": "English onboarding copy for goal weight loss detail."
+  },
+  "goalsLabel": "目標",
+  "@goalsLabel": {
+    "description": "English onboarding copy for goals label."
+  },
+  "iUnderstand": "理解しました",
+  "@iUnderstand": {
+    "description": "English onboarding copy for i understand."
+  },
+  "lastThreeDaysAgo": "前回：3日前",
+  "@lastThreeDaysAgo": {
+    "description": "English onboarding copy for last three days ago."
+  },
+  "leftAbdomen": "左腹部",
+  "@leftAbdomen": {
+    "description": "English onboarding copy for left abdomen."
+  },
+  "loveIt": "気に入っている",
+  "@loveIt": {
+    "description": "English onboarding copy for love it."
+  },
+  "maybeLater": "後で",
+  "@maybeLater": {
+    "description": "English onboarding copy for maybe later."
+  },
+  "monthOne": "1ヶ月目",
+  "@monthOne": {
+    "description": "English onboarding copy for month one."
+  },
+  "monthShortLabel": "MM",
+  "@monthShortLabel": {
+    "description": "English onboarding copy for month short label."
+  },
+  "monthTwo": "2ヶ月目",
+  "@monthTwo": {
+    "description": "English onboarding copy for month two."
+  },
+  "moreCount": "{shown} 他{count}件",
+  "@moreCount": {
+    "description": "English onboarding copy for more count.",
+    "placeholders": {
+      "shown": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "needsWork": "要改善",
+  "@needsWork": {
+    "description": "English onboarding copy for needs work."
+  },
+  "notificationBody": "予定されたプロトコルの時間になると、控えめなリマインダーが届きます。通知にペプチド名は表示されず、そっと知らせるだけです。",
+  "@notificationBody": {
+    "description": "English onboarding copy for notification body."
+  },
+  "notificationTitle": "投与時間を\n見える化。",
+  "@notificationTitle": {
+    "description": "English onboarding copy for notification title."
+  },
+  "nowLabel": "たった今",
+  "@nowLabel": {
+    "description": "English onboarding copy for now label."
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "English onboarding copy for ok."
+  },
+  "onboardingAgeConfirmed": "18歳以上です",
+  "@onboardingAgeConfirmed": {
+    "description": "English onboarding copy for onboarding age confirmed."
+  },
+  "onboardingAgeRequirementBody": "PepModを利用するには18歳以上である必要があります。",
+  "@onboardingAgeRequirementBody": {
+    "description": "English onboarding copy for onboarding age requirement body."
+  },
+  "onboardingAgeRequirementTitle": "年齢要件",
+  "@onboardingAgeRequirementTitle": {
+    "description": "English onboarding copy for onboarding age requirement title."
+  },
+  "onboardingAgeVerificationBody": "PepModは18歳以上の成人を対象としています。",
+  "@onboardingAgeVerificationBody": {
+    "description": "English onboarding copy for onboarding age verification body."
+  },
+  "onboardingAgeVerificationTitle": "まず、\n年齢を確認します。",
+  "@onboardingAgeVerificationTitle": {
+    "description": "English onboarding copy for onboarding age verification title."
+  },
+  "onboardingAheadBody": "いくつかの質問に答えると、PepModがパーソナライズされた記録プレビューを用意します。",
+  "@onboardingAheadBody": {
+    "description": "English onboarding copy for onboarding ahead body."
+  },
+  "onboardingAheadTitle": "始める前に\nプロトコルを確認",
+  "@onboardingAheadTitle": {
+    "description": "English onboarding copy for onboarding ahead title."
+  },
+  "onboardingBirthDateBody": "年齢要件の確認に使用します。",
+  "@onboardingBirthDateBody": {
+    "description": "English onboarding copy for onboarding birth date body."
+  },
+  "onboardingBirthDateTitle": "生年月日を\n教えてください",
+  "@onboardingBirthDateTitle": {
+    "description": "English onboarding copy for onboarding birth date title."
+  },
+  "onboardingConfidenceBody": "PepModにもっと明確にしてほしいことを選んでください。",
+  "@onboardingConfidenceBody": {
+    "description": "English onboarding copy for onboarding confidence body."
+  },
+  "onboardingConfidenceTitle": "どこにもっと\n自信を持ちたいですか?",
+  "@onboardingConfidenceTitle": {
+    "description": "English onboarding copy for onboarding confidence title."
+  },
+  "onboardingConversionValueBody": "バイアルとプランの数値を、容量とシリンジ単位に変換します。",
+  "@onboardingConversionValueBody": {
+    "description": "English onboarding copy for onboarding conversion value body."
+  },
+  "onboardingConversionValueTitle": "バイアル計算を\nもっと確認しやすく",
+  "@onboardingConversionValueTitle": {
+    "description": "English onboarding copy for onboarding conversion value title."
+  },
+  "onboardingDisclaimerBody": "PepModは記録・リマインダー・単位換算の整理をサポートします。診断・処方、専門家によるアドバイスの代わりにはなりません。",
+  "@onboardingDisclaimerBody": {
+    "description": "English onboarding copy for onboarding disclaimer body."
+  },
+  "onboardingDisclaimerTitle": "明確さのために。\n処方のためではありません。",
+  "@onboardingDisclaimerTitle": {
+    "description": "English onboarding copy for onboarding disclaimer title."
+  },
+  "onboardingExperienceTitle": "経験レベルは\nどのくらいですか?",
+  "@onboardingExperienceTitle": {
+    "description": "English onboarding copy for onboarding experience title."
+  },
+  "onboardingFrustrationBody": "一番のストレスポイントを選んでください。",
+  "@onboardingFrustrationBody": {
+    "description": "English onboarding copy for onboarding frustration body."
+  },
+  "onboardingFrustrationTitle": "今、一番\n大変なことは?",
+  "@onboardingFrustrationTitle": {
+    "description": "English onboarding copy for onboarding frustration title."
+  },
+  "onboardingGoalsTitle": "主な目標は\n何ですか?",
+  "@onboardingGoalsTitle": {
+    "description": "English onboarding copy for onboarding goals title."
+  },
+  "onboardingGuidedStartBody": "あなたの目標、経験、そして残したい記録に合わせてセットアップします。",
+  "@onboardingGuidedStartBody": {
+    "description": "English onboarding copy for onboarding guided start body."
+  },
+  "onboardingGuidedStartTitle": "あなたに合わせた、\nガイド付きスタート",
+  "@onboardingGuidedStartTitle": {
+    "description": "English onboarding copy for onboarding guided start title."
+  },
+  "onboardingHookAnswer": "PepModなら答えをプロトコルのそばに保持できます。",
+  "@onboardingHookAnswer": {
+    "description": "English onboarding copy for onboarding hook answer."
+  },
+  "onboardingHookQuestion": "何単位\n引きますか?",
+  "@onboardingHookQuestion": {
+    "description": "English onboarding copy for onboarding hook question."
+  },
+  "onboardingHookResearch": "リサーチライブラリ",
+  "@onboardingHookResearch": {
+    "description": "English onboarding copy for onboarding hook research."
+  },
+  "onboardingHookSources": "根拠付きソース",
+  "@onboardingHookSources": {
+    "description": "English onboarding copy for onboarding hook sources."
+  },
+  "onboardingHookVial": "バイアル + 希釈液",
+  "@onboardingHookVial": {
+    "description": "English onboarding copy for onboarding hook vial."
+  },
+  "onboardingNameBody": "PepModをあなた向けにパーソナライズするために使用します。",
+  "@onboardingNameBody": {
+    "description": "English onboarding copy for onboarding name body."
+  },
+  "onboardingNameTitle": "何とお呼び\nすればいいですか?",
+  "@onboardingNameTitle": {
+    "description": "English onboarding copy for onboarding name title."
+  },
+  "onboardingPeptideSelectBody": "使用中、または注目しておきたいペプチドを選んでください。",
+  "@onboardingPeptideSelectBody": {
+    "description": "English onboarding copy for onboarding peptide select body."
+  },
+  "onboardingPeptideSelectTitle": "何を\n記録していますか?",
+  "@onboardingPeptideSelectTitle": {
+    "description": "English onboarding copy for onboarding peptide select title."
+  },
+  "onboardingProgressValueBody": "アドヒアランス、投与履歴、身体データを一つの明確な記録にまとめます。",
+  "@onboardingProgressValueBody": {
+    "description": "English onboarding copy for onboarding progress value body."
+  },
+  "onboardingProgressValueTitle": "全体の流れを\n時系列で確認",
+  "@onboardingProgressValueTitle": {
+    "description": "English onboarding copy for onboarding progress value title."
+  },
+  "onboardingProtocolValueBody": "スケジュールを計画し、投与を記録し、詳細を各プロトコルに紐づけて管理します。",
+  "@onboardingProtocolValueBody": {
+    "description": "English onboarding copy for onboarding protocol value body."
+  },
+  "onboardingProtocolValueTitle": "すべてのプロトコルを\n一箇所で管理",
+  "@onboardingProtocolValueTitle": {
+    "description": "English onboarding copy for onboarding protocol value title."
+  },
+  "onboardingUnder18": "18歳未満です",
+  "@onboardingUnder18": {
+    "description": "English onboarding copy for onboarding under18."
+  },
+  "openingPermission": "権限を確認中...",
+  "@openingPermission": {
+    "description": "English onboarding copy for opening permission."
+  },
+  "paywallArcBody": "計画したこと、記録したこと、次にもっと整理すべきことを確認できます。",
+  "@paywallArcBody": {
+    "description": "English onboarding copy for paywall arc body."
+  },
+  "paywallArcTitle": "経過を時系列で確認",
+  "@paywallArcTitle": {
+    "description": "English onboarding copy for paywall arc title."
+  },
+  "paywallBody": "投与計算、部位ローテーション、リマインダー、プロトコル履歴 — すべてを一つの記録に。",
+  "@paywallBody": {
+    "description": "English onboarding copy for paywall body."
+  },
+  "paywallDoseMathBody": "バイアル・水・投与量・引く単位をまとめて管理し、記録を確認しやすくします。",
+  "@paywallDoseMathBody": {
+    "description": "English onboarding copy for paywall dose math body."
+  },
+  "paywallDoseMathTitle": "投与計算を正確に",
+  "@paywallDoseMathTitle": {
+    "description": "English onboarding copy for paywall dose math title."
+  },
+  "paywallPreviewDisclaimer": "記録・リマインダー・単位の明確化のためのアプリです。医療アドバイスではありません。",
+  "@paywallPreviewDisclaimer": {
+    "description": "English onboarding copy for paywall preview disclaimer."
+  },
+  "paywallRotationBody": "すべての部位、サイクル、リマインダーがプロトコル記録に紐づいたままになります。",
+  "@paywallRotationBody": {
+    "description": "English onboarding copy for paywall rotation body."
+  },
+  "paywallRotationTitle": "ローテーションを見失わない",
+  "@paywallRotationTitle": {
+    "description": "English onboarding copy for paywall rotation title."
+  },
+  "paywallTitle": "プロトコル管理に\n必要なすべて",
+  "@paywallTitle": {
+    "description": "English onboarding copy for paywall title."
+  },
+  "paywallValueNote": "バイアル計算を間違えると、時間や製品を無駄にすることがあります。PepModなら計算を記録のそばに保持できるので、古いメモをもとに行動する前に記録を確認し直せます。",
+  "@paywallValueNote": {
+    "description": "English onboarding copy for paywall value note."
+  },
+  "peptideLabel": "ペプチド",
+  "@peptideLabel": {
+    "description": "English onboarding copy for peptide label."
+  },
+  "peptidesLabel": "ペプチド",
+  "@peptidesLabel": {
+    "description": "English onboarding copy for peptides label."
+  },
+  "peptidesTracked": "記録した\nペプチド数",
+  "@peptidesTracked": {
+    "description": "English onboarding copy for peptides tracked."
+  },
+  "perWeek": "/週",
+  "@perWeek": {
+    "description": "English onboarding copy for per week."
+  },
+  "perYear": "/年",
+  "@perYear": {
+    "description": "English onboarding copy for per year."
+  },
+  "privacyLabel": "プライバシー",
+  "@privacyLabel": {
+    "description": "English onboarding copy for privacy label."
+  },
+  "processingGoals": "{count}件の目標を分析中...",
+  "@processingGoals": {
+    "description": "English onboarding copy for processing goals.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "processingPeptides": "{count}件のペプチド記録をリンク中...",
+  "@processingPeptides": {
+    "description": "English onboarding copy for processing peptides.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "processingProtocol": "プロトコルを構築中...",
+  "@processingProtocol": {
+    "description": "English onboarding copy for processing protocol."
+  },
+  "processingSchedule": "スケジュールを整理中...",
+  "@processingSchedule": {
+    "description": "English onboarding copy for processing schedule."
+  },
+  "processingTitle": "プロトコルを\n構築しています",
+  "@processingTitle": {
+    "description": "English onboarding copy for processing title."
+  },
+  "progressLabel": "進捗",
+  "@progressLabel": {
+    "description": "English onboarding copy for progress label."
+  },
+  "protocolClarity": "プロトコルの明確さ",
+  "@protocolClarity": {
+    "description": "English onboarding copy for protocol clarity."
+  },
+  "protocolIncludes": "あなたのプロトコル内容 //",
+  "@protocolIncludes": {
+    "description": "English onboarding copy for protocol includes."
+  },
+  "protocolPreviewTitle": "プロトコルの\n準備ができました",
+  "@protocolPreviewTitle": {
+    "description": "English onboarding copy for protocol preview title."
+  },
+  "protocolReady": "プロトコル準備完了 //",
+  "@protocolReady": {
+    "description": "English onboarding copy for protocol ready."
+  },
+  "protocolReminderReady": "プロトコルリマインダーの準備ができました",
+  "@protocolReminderReady": {
+    "description": "English onboarding copy for protocol reminder ready."
+  },
+  "protocolReservedFor": "パーソナライズされたプロトコルを確保中",
+  "@protocolReservedFor": {
+    "description": "English onboarding copy for protocol reserved for."
+  },
+  "restorePurchase": "購入を復元",
+  "@restorePurchase": {
+    "description": "English onboarding copy for restore purchase."
+  },
+  "resultsSummaryBody": "データが蓄積されるにつれ、投与記録・再構成計算・トレンド記録をひとつにまとめていきます。",
+  "@resultsSummaryBody": {
+    "description": "English onboarding copy for results summary body."
+  },
+  "reviewGateBody": "あなたのフィードバックは、すべてのバイオハッカーのためのプラットフォーム改善に役立ちます。",
+  "@reviewGateBody": {
+    "description": "English onboarding copy for review gate body."
+  },
+  "reviewGateTitle": "PepModは\nいかがですか?",
+  "@reviewGateTitle": {
+    "description": "English onboarding copy for review gate title."
+  },
+  "roadmapBody": "記録中の{count}件のペプチドと、{need}へのニーズに合わせて構成されています。",
+  "@roadmapBody": {
+    "description": "English onboarding copy for roadmap body.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "need": {
+        "type": "String"
+      }
+    }
+  },
+  "roadmapDayOneBody": "ペプチド、投与記録、部位ローテーション、リマインダーの準備が整いました。",
+  "@roadmapDayOneBody": {
+    "description": "English onboarding copy for roadmap day one body."
+  },
+  "roadmapDayOneTitle": "最初のプロトコルが整理されました",
+  "@roadmapDayOneTitle": {
+    "description": "English onboarding copy for roadmap day one title."
+  },
+  "roadmapDisclaimer": "PepModは記録とリマインダーの整理をサポートします。処方・診断、または臨床専門家によるアドバイスの代わりにはなりません。",
+  "@roadmapDisclaimer": {
+    "description": "English onboarding copy for roadmap disclaimer."
+  },
+  "roadmapMonthOneBody": "アドヒアランス、投与漏れ、身体データがより明確な記録として形になり始めます。",
+  "@roadmapMonthOneBody": {
+    "description": "English onboarding copy for roadmap month one body."
+  },
+  "roadmapMonthOneTitle": "継続履歴が形になっていきます",
+  "@roadmapMonthOneTitle": {
+    "description": "English onboarding copy for roadmap month one title."
+  },
+  "roadmapMonthTwoBody": "計画したこと、実際に起きたこと、注意が必要な記録が見えるようになります。",
+  "@roadmapMonthTwoBody": {
+    "description": "English onboarding copy for roadmap month two body."
+  },
+  "roadmapMonthTwoTitle": "プロトコル全体の流れが見えるようになります",
+  "@roadmapMonthTwoTitle": {
+    "description": "English onboarding copy for roadmap month two title."
+  },
+  "roadmapTitle": "この先に\n待っていること",
+  "@roadmapTitle": {
+    "description": "English onboarding copy for roadmap title."
+  },
+  "roadmapWeekOneBody": "平易な言葉によるリサーチと記録メモがプランに紐づいたままになります。",
+  "@roadmapWeekOneBody": {
+    "description": "English onboarding copy for roadmap week one body."
+  },
+  "roadmapWeekOneTitle": "{goal}を中心にライブラリが充実していきます",
+  "@roadmapWeekOneTitle": {
+    "description": "English onboarding copy for roadmap week one title.",
+    "placeholders": {
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "savePercent": "{percent}%お得",
+  "@savePercent": {
+    "description": "English onboarding copy for save percent.",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "saveRoadmap": "このロードマップを保存",
+  "@saveRoadmap": {
+    "description": "English onboarding copy for save roadmap."
+  },
+  "schedulePreview": "スケジュールプレビュー",
+  "@schedulePreview": {
+    "description": "English onboarding copy for schedule preview."
+  },
+  "seeWhatsInside": "中身を見る",
+  "@seeWhatsInside": {
+    "description": "English onboarding copy for see whats inside."
+  },
+  "selectAllThatApply": "当てはまるものをすべて選んでください。",
+  "@selectAllThatApply": {
+    "description": "English onboarding copy for select all that apply."
+  },
+  "siteMap": "部位マップ",
+  "@siteMap": {
+    "description": "English onboarding copy for site map."
+  },
+  "skipForNow": "今はスキップ",
+  "@skipForNow": {
+    "description": "English onboarding copy for skip for now."
+  },
+  "socialProofBody": "実際の進捗を記録する数千人の仲間に参加しましょう。",
+  "@socialProofBody": {
+    "description": "English onboarding copy for social proof body."
+  },
+  "socialProofTitle": "世界中のバイオハッカーに\n選ばれています",
+  "@socialProofTitle": {
+    "description": "English onboarding copy for social proof title."
+  },
+  "specialOffer": "特別オファー",
+  "@specialOffer": {
+    "description": "English onboarding copy for special offer."
+  },
+  "startFreeTrial": "無料トライアルを開始",
+  "@startFreeTrial": {
+    "description": "English onboarding copy for start free trial."
+  },
+  "subscribeLabel": "登録する",
+  "@subscribeLabel": {
+    "description": "English onboarding copy for subscribe label."
+  },
+  "subscribePrice": "登録する — {price}/週",
+  "@subscribePrice": {
+    "description": "English onboarding copy for subscribe price.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "subscribeToActivate": "登録してプロトコルを有効化",
+  "@subscribeToActivate": {
+    "description": "English onboarding copy for subscribe to activate."
+  },
+  "subscriptionRenewalDisclaimer": "サブスクリプションは、現在の期間終了の24時間前までにキャンセルしない限り自動更新されます。設定 > Apple ID > サブスクリプションから管理できます。",
+  "@subscriptionRenewalDisclaimer": {
+    "description": "English onboarding copy for subscription renewal disclaimer."
+  },
+  "syringeVolume": "1 mLシリンジでは{volume} mL",
+  "@syringeVolume": {
+    "description": "English onboarding copy for syringe volume.",
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      }
+    }
+  },
+  "termsLabel": "利用規約",
+  "@termsLabel": {
+    "description": "English onboarding copy for terms label."
+  },
+  "testimonialOne": "投与忘れがついになくなりました。再構成計算機だけでもスプレッドシート計算の何時間分もの時間を節約できました。",
+  "@testimonialOne": {
+    "description": "English onboarding copy for testimonial one."
+  },
+  "testimonialThree": "今まで使った中で一番洗練されたペプチドトラッカー。本格的なユーザー向けに作られている、まさにその通りに。",
+  "@testimonialThree": {
+    "description": "English onboarding copy for testimonial three."
+  },
+  "testimonialTwo": "週次インサイトが数か月気づかなかったタイミングの問題を見つけてくれた。まさにゲームチェンジャー。",
+  "@testimonialTwo": {
+    "description": "English onboarding copy for testimonial two."
+  },
+  "thirtyDayAdherence": "30日間のアドヒアランス",
+  "@thirtyDayAdherence": {
+    "description": "English onboarding copy for thirty day adherence."
+  },
+  "threeDayFreeTrial": "3日間無料トライアル",
+  "@threeDayFreeTrial": {
+    "description": "English onboarding copy for three day free trial."
+  },
+  "timelineLabel": "タイムライン",
+  "@timelineLabel": {
+    "description": "English onboarding copy for timeline label."
+  },
+  "trackedLabel": "記録済み",
+  "@trackedLabel": {
+    "description": "English onboarding copy for tracked label."
+  },
+  "turnOnReminders": "リマインダーをオンにする",
+  "@turnOnReminders": {
+    "description": "English onboarding copy for turn on reminders."
+  },
+  "unitConversionDisclaimer": "単位換算ツールは参考情報のみを目的としています。必ず医療従事者にご確認ください。",
+  "@unitConversionDisclaimer": {
+    "description": "English onboarding copy for unit conversion disclaimer."
+  },
+  "unitsLabel": "単位",
+  "@unitsLabel": {
+    "description": "Label for measurement unit preferences."
+  },
+  "unitsToDraw": "吸引する単位数",
+  "@unitsToDraw": {
+    "description": "English onboarding copy for units to draw."
+  },
+  "unlockPepMod": "PEPMODをアンロック",
+  "@unlockPepMod": {
+    "description": "English onboarding copy for unlock pep mod."
+  },
+  "usersLabel": "ユーザー",
+  "@usersLabel": {
+    "description": "English onboarding copy for users label."
+  },
+  "viewLabel": "表示",
+  "@viewLabel": {
+    "description": "English onboarding copy for view label."
+  },
+  "weekDuration": "週間\n期間",
+  "@weekDuration": {
+    "description": "English onboarding copy for week duration."
+  },
+  "weekOne": "第1週",
+  "@weekOne": {
+    "description": "English onboarding copy for week one."
+  },
+  "weeklyLabel": "週次",
+  "@weeklyLabel": {
+    "description": "English onboarding copy for weekly label."
+  },
+  "weeksCount": "{count}週間",
+  "@weeksCount": {
+    "description": "English onboarding copy for weeks count.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yearLabel": "年",
+  "@yearLabel": {
+    "description": "English onboarding copy for year label."
+  },
+  "profileTitle": "マイページ",
+  "@profileTitle": {
+    "description": "Title of the user profile tab."
+  },
+  "signedIn": "サインイン済み",
+  "@signedIn": {
+    "description": "Fallback account status when no email is available."
+  },
+  "sectionAccount": "アカウント",
+  "@sectionAccount": {
+    "description": "Profile section heading for account settings."
+  },
+  "sectionPreferences": "環境設定",
+  "@sectionPreferences": {
+    "description": "Profile section heading for preferences."
+  },
+  "sectionData": "データ",
+  "@sectionData": {
+    "description": "Profile section heading for user data tools."
+  },
+  "sectionSupport": "サポート",
+  "@sectionSupport": {
+    "description": "Profile section heading for support."
+  },
+  "sectionLegal": "法的情報",
+  "@sectionLegal": {
+    "description": "Profile section heading for legal documents."
+  },
+  "sectionAbout": "アプリについて",
+  "@sectionAbout": {
+    "description": "Profile section heading for app information."
+  },
+  "nameLabel": "名前",
+  "@nameLabel": {
+    "description": "Label for the user's display name."
+  },
+  "accountLabel": "アカウント",
+  "@accountLabel": {
+    "description": "Label for account information."
+  },
+  "deleteAccount": "アカウントを削除",
+  "@deleteAccount": {
+    "description": "Action to permanently delete an account."
+  },
+  "removeAccountData": "アカウントとデータを削除",
+  "@removeAccountData": {
+    "description": "Description of the delete-account action."
+  },
+  "metricLabel": "メートル法",
+  "@metricLabel": {
+    "description": "Metric measurement system label."
+  },
+  "imperialLabel": "ヤード・ポンド法",
+  "@imperialLabel": {
+    "description": "Imperial measurement system label."
+  },
+  "notificationsLabel": "通知",
+  "@notificationsLabel": {
+    "description": "Label for notification preferences."
+  },
+  "onLabel": "オン",
+  "@onLabel": {
+    "description": "Enabled state label."
+  },
+  "offLabel": "オフ",
+  "@offLabel": {
+    "description": "Disabled state label."
+  },
+  "myCompoundsProfile": "マイ化合物",
+  "@myCompoundsProfile": {
+    "description": "Profile action that opens saved custom compounds."
+  },
+  "savedVialPresets": "保存済みバイアルプリセット",
+  "@savedVialPresets": {
+    "description": "Description for saved custom compounds."
+  },
+  "exportData": "データをエクスポート",
+  "@exportData": {
+    "description": "Action to export user data."
+  },
+  "copyAsJson": "JSONとしてコピー",
+  "@copyAsJson": {
+    "description": "Description of the JSON export action."
+  },
+  "clearAllData": "すべてのデータを消去",
+  "@clearAllData": {
+    "description": "Action to reset all app tracking data."
+  },
+  "clearingLabel": "消去中…",
+  "@clearingLabel": {
+    "description": "Status shown while app data is being cleared."
+  },
+  "resetApp": "アプリをリセット",
+  "@resetApp": {
+    "description": "Description of the clear-data action."
+  },
+  "contactSupport": "サポートに問い合わせる",
+  "@contactSupport": {
+    "description": "Action to contact app support."
+  },
+  "chatWithUs": "チャットで問い合わせる",
+  "@chatWithUs": {
+    "description": "Description of the support action."
+  },
+  "termsOfService": "利用規約",
+  "@termsOfService": {
+    "description": "Title of the terms document."
+  },
+  "privacyPolicy": "プライバシーポリシー",
+  "@privacyPolicy": {
+    "description": "Title of the privacy document."
+  },
+  "medicalDisclaimer": "医療免責事項",
+  "@medicalDisclaimer": {
+    "description": "Title of the medical disclaimer."
+  },
+  "disclaimerTitle": "免責事項",
+  "@disclaimerTitle": {
+    "description": "Short title for the disclaimer sheet."
+  },
+  "versionLabel": "バージョン",
+  "@versionLabel": {
+    "description": "Label for the app version."
+  },
+  "signOutAction": "サインアウト",
+  "@signOutAction": {
+    "description": "Primary sign-out action."
+  },
+  "educationalTrackingDisclaimer": "教育目的の記録専用です。医療的助言ではありません。",
+  "@educationalTrackingDisclaimer": {
+    "description": "Short safety disclaimer on the profile screen."
+  },
+  "yourName": "お名前",
+  "@yourName": {
+    "description": "Title of the display-name editor."
+  },
+  "cancelLabel": "キャンセル",
+  "@cancelLabel": {
+    "description": "Generic cancel action."
+  },
+  "saveLabel": "保存",
+  "@saveLabel": {
+    "description": "Generic save action."
+  },
+  "dataCopied": "データをクリップボードにコピーしました。",
+  "@dataCopied": {
+    "description": "Confirmation after copying an account export."
+  },
+  "clearDataTitle": "すべてのデータを消去しますか?",
+  "@clearDataTitle": {
+    "description": "Title of the clear-data confirmation dialog."
+  },
+  "clearDataBody": "すべてのプロトコル、投与ログ、身体測定値が削除され、オンボーディングが再開されます。アカウント、サブスクリプション、ペプチドライブラリは保持されます。この操作は取り消せません。",
+  "@clearDataBody": {
+    "description": "Explanation in the clear-data confirmation dialog."
+  },
+  "clearLabel": "消去",
+  "@clearLabel": {
+    "description": "Destructive action that clears app data."
+  },
+  "clearingDataTitle": "データを消去中…",
+  "@clearingDataTitle": {
+    "description": "Title of the blocking clear-data progress dialog."
+  },
+  "clearingDataBody": "記録データの削除中はPepModを開いたままにしてください。",
+  "@clearingDataBody": {
+    "description": "Instruction in the clear-data progress dialog."
+  },
+  "clearDataFailed": "データを消去できませんでした。接続を確認して再試行してください。",
+  "@clearDataFailed": {
+    "description": "Error shown when clearing app data fails."
+  },
+  "allDataCleared": "すべてのデータを消去しました。",
+  "@allDataCleared": {
+    "description": "Confirmation after all app data is cleared."
+  },
+  "deleteAccountTitle": "アカウントを削除しますか?",
+  "@deleteAccountTitle": {
+    "description": "Title of the account-deletion confirmation dialog."
+  },
+  "deleteAccountBody": "PepModのアカウント、設定、プロトコル、投与ログ、身体測定値が完全に削除されます。この操作は取り消せません。",
+  "@deleteAccountBody": {
+    "description": "Explanation in the account-deletion confirmation dialog."
+  },
+  "deletingAccount": "アカウントを削除中…",
+  "@deletingAccount": {
+    "description": "Status shown while an account is being deleted."
+  },
+  "accountDeletionFailed": "アカウントの削除に失敗しました。もう一度お試しください。",
+  "@accountDeletionFailed": {
+    "description": "Generic account-deletion failure message."
+  },
+  "confirmPassword": "パスワードを確認",
+  "@confirmPassword": {
+    "description": "Title of the password confirmation dialog."
+  },
+  "deleteLabel": "削除",
+  "@deleteLabel": {
+    "description": "Generic destructive delete action."
+  },
+  "signOutTitle": "サインアウトしますか?",
+  "@signOutTitle": {
+    "description": "Title of the sign-out confirmation dialog."
+  },
+  "signOutBody": "プロトコルは保存されたままになり、再度サインインすると同期されます。",
+  "@signOutBody": {
+    "description": "Explanation in the sign-out confirmation dialog."
+  },
+  "signOutLabel": "サインアウト",
+  "@signOutLabel": {
+    "description": "Sign-out confirmation action."
+  },
+  "signOutFailed": "サインアウトに失敗しました。もう一度お試しください。",
+  "@signOutFailed": {
+    "description": "Generic sign-out failure message."
+  },
+  "notificationsDisabledSystem": "通知はシステム設定で無効になっています。",
+  "@notificationsDisabledSystem": {
+    "description": "Message shown when notification permission is unavailable."
+  },
+  "planPro": "PRO",
+  "@planPro": {
+    "description": "Paid subscription badge."
+  },
+  "planFree": "無料",
+  "@planFree": {
+    "description": "Free subscription badge."
+  },
+  "termsBody": "PepModは教育および記録の目的でのみ提供されています。医療機器ではなく、医療的助言、診断、処方、治療の推奨は行いません。PepModの利用にあたり、ご自身の記録や判断、資格を持つ医療従事者への相談についてはご自身の責任となります。\n\nサブスクリプションは、更新期間前にApp StoreまたはGoogle Playを通じて解約されない限り自動更新されます。返金については購入元のストアの規定が適用されます。\n\n利用規約全文: https://appstorecopilot.com/legal/yzh32x5v/terms",
+  "@termsBody": {
+    "description": "In-app summary of PepMod terms with a link to the full document."
+  },
+  "privacyBody": "PepModは認証とクラウドデータ保存にFirebase、サブスクリプションにRevenueCat、アトリビューションにAppReferおよびMeta/Facebook App Events、分析と診断にFirebase/Crashlyticsを使用しています。お客様の個人情報を販売することはありません。アカウントおよびアプリ内の保存データは、アプリ内からいつでも削除できます。\n\nプライバシーポリシー全文: https://appstorecopilot.com/legal/yzh32x5v/privacy",
+  "@privacyBody": {
+    "description": "In-app privacy summary with a link to the full document."
+  },
+  "medicalDisclaimerBody": "PepModはウェルネス・記録ツールであり、医療機器ではありません。本アプリのいかなる内容も、医療的助言、診断、処方、治療の推奨を構成するものではありません。ライブラリに記載されているペプチドは教育目的のみを意図しています。レジメンを開始・変更・中止する前は、必ず資格を持つ医療従事者にご相談ください。副作用を感じた場合は、直ちに医療機関を受診してください。",
+  "@medicalDisclaimerBody": {
+    "description": "Full in-app medical safety disclaimer."
+  },
+  "profileSystemLabel": "SYS.ユーザー // プロフィール",
+  "@profileSystemLabel": {
+    "description": "System-style heading above the profile title."
+  },
+  "legalSystemLabel": "SYS.法務",
+  "@legalSystemLabel": {
+    "description": "System-style heading in legal document sheets."
+  },
+  "progressTitle": "進捗",
+  "@progressTitle": {
+    "description": "Title of the progress tab."
+  },
+  "progressSystemLabel": "SYS.進捗 // 生体指標",
+  "@progressSystemLabel": {
+    "description": "System-style heading above the progress title."
+  },
+  "doseHistoryTooltip": "投与履歴を開く",
+  "@doseHistoryTooltip": {
+    "description": "Accessibility label for the dose-history button."
+  },
+  "logMeasurementTooltip": "測定値を記録",
+  "@logMeasurementTooltip": {
+    "description": "Accessibility label for the add-measurement button."
+  },
+  "thirtyDayLabel": "30日間",
+  "@thirtyDayLabel": {
+    "description": "Label for the thirty-day adherence statistic."
+  },
+  "adherenceLabel": "アドヒアランス",
+  "@adherenceLabel": {
+    "description": "Hint below an adherence percentage."
+  },
+  "streakLabel": "連続記録",
+  "@streakLabel": {
+    "description": "Label for the current tracking streak."
+  },
+  "daysLabel": "日",
+  "@daysLabel": {
+    "description": "Unit hint for a day count."
+  },
+  "totalLabel": "合計",
+  "@totalLabel": {
+    "description": "Label for the total logged dose count."
+  },
+  "dosesLabel": "回分",
+  "@dosesLabel": {
+    "description": "Unit hint for a dose count."
+  },
+  "protocolHistoryLabel": "プロトコル.履歴",
+  "@protocolHistoryLabel": {
+    "description": "System-style heading for protocol history."
+  },
+  "noProtocolsYet": "プロトコルはまだありません。プロトコルタブから作成してください。",
+  "@noProtocolsYet": {
+    "description": "Empty-state message when no protocols exist."
+  },
+  "adherenceChartLabel": "アドヒアランス // 過去30日",
+  "@adherenceChartLabel": {
+    "description": "System-style title of the thirty-day adherence chart."
+  },
+  "thirtyDaysAgo": "30日前",
+  "@thirtyDaysAgo": {
+    "description": "Label for the beginning of a thirty-day chart."
+  },
+  "todayLabel": "今日",
+  "@todayLabel": {
+    "description": "Label for the current day on a chart."
+  },
+  "noWeightData": "体重データなし",
+  "@noWeightData": {
+    "description": "Weight-chart empty-state title."
+  },
+  "logFirstMeasurement": "最初の測定を記録すると、ここに推移が表示されます。",
+  "@logFirstMeasurement": {
+    "description": "Weight-chart empty-state description."
+  },
+  "logMeasurementAction": "測定を記録",
+  "@logMeasurementAction": {
+    "description": "Action to open the measurement form."
+  },
+  "weightTrendLabel": "体重 // 推移",
+  "@weightTrendLabel": {
+    "description": "System-style title of the weight trend chart."
+  },
+  "weightKgValue": "{weight} kg",
+  "@weightKgValue": {
+    "description": "Formatted weight in kilograms.",
+    "placeholders": {
+      "weight": {
+        "type": "String"
+      }
+    }
+  },
+  "statusActive": "実行中",
+  "@statusActive": {
+    "description": "Active protocol status."
+  },
+  "statusPaused": "一時停止中",
+  "@statusPaused": {
+    "description": "Paused protocol status."
+  },
+  "statusEnded": "終了",
+  "@statusEnded": {
+    "description": "Ended protocol status."
+  },
+  "protocolPeptideCount": "{count, plural, =1{ペプチド1種} other{ペプチド{count}種}}",
+  "@protocolPeptideCount": {
+    "description": "Number of peptides in a protocol.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "enterOneMetric": "少なくとも1つの値を入力してください。",
+  "@enterOneMetric": {
+    "description": "Validation shown when the measurement form is empty."
+  },
+  "saveMetricFailed": "保存に失敗しました。もう一度お試しください。",
+  "@saveMetricFailed": {
+    "description": "Generic measurement-save error."
+  },
+  "newMeasurement": "新規測定",
+  "@newMeasurement": {
+    "description": "Title of the body measurement form."
+  },
+  "weightLabel": "体重",
+  "@weightLabel": {
+    "description": "Label for the weight input."
+  },
+  "bodyFatLabel": "体脂肪率",
+  "@bodyFatLabel": {
+    "description": "Label for the body-fat input."
+  },
+  "measurementsCmLabel": "各部位サイズ（cm）",
+  "@measurementsCmLabel": {
+    "description": "Heading for circumference measurements in centimetres."
+  },
+  "waistLabel": "ウエスト",
+  "@waistLabel": {
+    "description": "Label for the waist measurement."
+  },
+  "chestLabel": "胸囲",
+  "@chestLabel": {
+    "description": "Label for the chest measurement."
+  },
+  "armLabel": "腕",
+  "@armLabel": {
+    "description": "Label for the arm measurement."
+  },
+  "saveAction": "保存",
+  "@saveAction": {
+    "description": "Primary save action."
+  },
+  "logMetricSystemLabel": "指標.記録",
+  "@logMetricSystemLabel": {
+    "description": "System-style heading in the body measurement form."
+  },
+  "activeLastSevenDays": "過去7日間",
+  "@activeLastSevenDays": {
+    "description": "Adherence period covering the last seven days."
+  },
+  "activeAllTime": "全期間",
+  "@activeAllTime": {
+    "description": "Adherence period covering all recorded history."
+  },
+  "activeAdherence": "アドヒアランス",
+  "@activeAdherence": {
+    "description": "Label below an adherence percentage."
+  },
+  "activeStarted": "開始日",
+  "@activeStarted": {
+    "description": "Label for a protocol start date."
+  },
+  "activeEnded": "終了日",
+  "@activeEnded": {
+    "description": "Label for a protocol end date."
+  },
+  "activeStackCount": "スタック（{count}）",
+  "@activeStackCount": {
+    "description": "Heading with the number of peptides in a protocol.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeEditProtocol": "プロトコルを編集",
+  "@activeEditProtocol": {
+    "description": "Action to edit a protocol."
+  },
+  "activePauseProtocol": "プロトコルを一時停止",
+  "@activePauseProtocol": {
+    "description": "Action to pause a protocol."
+  },
+  "activeEndProtocol": "プロトコルを終了",
+  "@activeEndProtocol": {
+    "description": "Action to end a protocol."
+  },
+  "activeResumeProtocol": "プロトコルを再開",
+  "@activeResumeProtocol": {
+    "description": "Action to resume a protocol."
+  },
+  "activeDeleteProtocol": "プロトコルを削除",
+  "@activeDeleteProtocol": {
+    "description": "Action to permanently delete a protocol."
+  },
+  "activeTrackingDisclaimer": "教育目的の記録専用です。変更前には必ず有資格の医療専門家にご相談ください。",
+  "@activeTrackingDisclaimer": {
+    "description": "Safety disclaimer on protocol management."
+  },
+  "activeEndQuestion": "プロトコルを終了しますか？",
+  "@activeEndQuestion": {
+    "description": "Confirmation title before ending a protocol."
+  },
+  "activeEndBody": "今後の予定投与は削除されます。過去の記録は履歴に残ります。この操作は取り消せません。",
+  "@activeEndBody": {
+    "description": "Confirmation detail before ending a protocol."
+  },
+  "activeEndAction": "終了",
+  "@activeEndAction": {
+    "description": "Confirmation action that ends a protocol."
+  },
+  "activeDeleteQuestion": "プロトコルを削除しますか？",
+  "@activeDeleteQuestion": {
+    "description": "Confirmation title before deleting a protocol."
+  },
+  "activeDeleteBody": "このプロトコルとすべての投与記録が完全に削除されます。この操作は取り消せません。",
+  "@activeDeleteBody": {
+    "description": "Confirmation detail before deleting a protocol."
+  },
+  "activeDeleteAction": "削除",
+  "@activeDeleteAction": {
+    "description": "Confirmation action that deletes a protocol."
+  },
+  "cancel": "キャンセル",
+  "@cancel": {
+    "description": "Generic action that dismisses without saving."
+  },
+  "activeStatusActive": "実行中",
+  "@activeStatusActive": {
+    "description": "Active protocol status."
+  },
+  "activeStatusPaused": "一時停止中",
+  "@activeStatusPaused": {
+    "description": "Paused protocol status."
+  },
+  "activeStatusEnded": "終了",
+  "@activeStatusEnded": {
+    "description": "Ended protocol status."
+  },
+  "activeNotesLabel": "メモ // プロトコル",
+  "@activeNotesLabel": {
+    "description": "System heading for protocol notes."
+  },
+  "activeChangeReminders": "変更リマインダー",
+  "@activeChangeReminders": {
+    "description": "Heading for upcoming phase-change reminders."
+  },
+  "activeChangeRemindersBody": "通知がオンの場合、PepModは今後のフェーズ変更ごとに現地時間09:00のチェックポイントを設定します。",
+  "@activeChangeRemindersBody": {
+    "description": "Explanation of phase-change reminders."
+  },
+  "activePhaseAnchor": "週の区切りは{date}を起点としています。",
+  "@activePhaseAnchor": {
+    "description": "Date used to calculate phase weeks.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeWeek": "第{week}週",
+  "@activeWeek": {
+    "description": "Single-week phase range.",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      }
+    }
+  },
+  "activeWeeks": "第{start}〜{end}週",
+  "@activeWeeks": {
+    "description": "Multi-week phase range.",
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "activePerDayAmounts": "1日あたりの量",
+  "@activePerDayAmounts": {
+    "description": "Phase summary using different amounts by weekday."
+  },
+  "activeBaseAmount": "基本量",
+  "@activeBaseAmount": {
+    "description": "Phase summary using the protocol base amount."
+  },
+  "activeCurrent": "現在",
+  "@activeCurrent": {
+    "description": "Badge on the current phase."
+  },
+  "activeBaseSchedule": "基本スケジュール",
+  "@activeBaseSchedule": {
+    "description": "Fallback schedule outside phase overrides."
+  },
+  "activeCustomDays": "カスタム日程",
+  "@activeCustomDays": {
+    "description": "Frequency label for selected weekdays."
+  },
+  "activeContinuousTracking": "継続記録",
+  "@activeContinuousTracking": {
+    "description": "Cycle status when no fixed cycle is configured."
+  },
+  "activeNoFixedCycle": "固定サイクル期間なし",
+  "@activeNoFixedCycle": {
+    "description": "Cycle detail when no fixed cycle is configured."
+  },
+  "activeCycleProgress": "第{week}週 / 全{total}週",
+  "@activeCycleProgress": {
+    "description": "Current week within a protocol cycle.",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "activeCycleEnds": "サイクル終了：{date}",
+  "@activeCycleEnds": {
+    "description": "Date a protocol cycle ends.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeRestProgress": "休止第{week}週 / 全{total}週",
+  "@activeRestProgress": {
+    "description": "Current week within a rest window.",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "activeRestEnds": "休止期間終了：{date}",
+  "@activeRestEnds": {
+    "description": "Date a rest window ends.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeCycleComplete": "サイクル完了",
+  "@activeCycleComplete": {
+    "description": "Cycle status after completion."
+  },
+  "activeCompletedDate": "完了日：{date}",
+  "@activeCompletedDate": {
+    "description": "Date a cycle completed.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeRestEnded": "休止期間終了：{date}",
+  "@activeRestEnded": {
+    "description": "Date a rest window ended.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activeNoHistory": "一時停止・終了したプロトコルはまだありません。",
+  "@activeNoHistory": {
+    "description": "Empty state for protocol history."
+  },
+  "activeCompoundsCount": "{count}種の成分",
+  "@activeCompoundsCount": {
+    "description": "Number of compounds in a blended vial.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeSyringeUnits": "{amount}シリンジ単位",
+  "@activeSyringeUnits": {
+    "description": "Syringe-unit amount without a leading separator.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activeCycleWeeks": "{count}週サイクル",
+  "@activeCycleWeeks": {
+    "description": "Protocol cycle length tag.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeRestWeeks": "{count}週休止",
+  "@activeRestWeeks": {
+    "description": "Protocol rest length tag.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activePerDraw": "1回の吸引あたり",
+  "@activePerDraw": {
+    "description": "Heading for amounts in one blended-vial draw."
+  },
+  "activeVialSummary": "{volume} mLバイアル・U-100",
+  "@activeVialSummary": {
+    "description": "Diluent volume and syringe type for a blended vial.",
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      }
+    }
+  },
+  "addCompound": "成分を追加",
+  "@addCompound": {
+    "description": "Action to create a personal compound preset."
+  },
+  "addPhase": "フェーズを追加",
+  "@addPhase": {
+    "description": "Copy for the create protocol addPhase UI."
+  },
+  "addTime": "時間を追加",
+  "@addTime": {
+    "description": "Copy for the create protocol addTime UI."
+  },
+  "addToStack": "スタックに追加",
+  "@addToStack": {
+    "description": "Copy for the create protocol addToStack UI."
+  },
+  "amountRequired": "量を入力してください",
+  "@amountRequired": {
+    "description": "Copy for the create protocol amountRequired UI."
+  },
+  "baseAmount": "基本量",
+  "@baseAmount": {
+    "description": "Copy for the create protocol baseAmount UI."
+  },
+  "baseSchedule": "基本スケジュール",
+  "@baseSchedule": {
+    "description": "Copy for the create protocol baseSchedule UI."
+  },
+  "blendConfigBody": "バイアルに記載されている内容をそのまま入力してください。PepModが吸引量を成分ごとのスナップショットに変換します。",
+  "@blendConfigBody": {
+    "description": "Copy for the create protocol blendConfigBody UI."
+  },
+  "blendIncompleteError": "成分は最低2つ、希釈液量、吸引量をすべて入力してください。",
+  "@blendIncompleteError": {
+    "description": "Copy for the create protocol blendIncompleteError UI."
+  },
+  "blendNameHint": "例：リカバリーブレンド",
+  "@blendNameHint": {
+    "description": "Copy for the create protocol blendNameHint UI."
+  },
+  "blendNameLabel": "ブレンド名",
+  "@blendNameLabel": {
+    "description": "Copy for the create protocol blendNameLabel UI."
+  },
+  "blendSafetyDisclaimer": "単位変換のみを行う機能です。PepModはブレンド、用量、頻度、再構成方法を推奨するものではありません。",
+  "@blendSafetyDisclaimer": {
+    "description": "Copy for the create protocol blendSafetyDisclaimer UI."
+  },
+  "changeNoteHint": "このフェーズについての自分用メモ",
+  "@changeNoteHint": {
+    "description": "Copy for the create protocol changeNoteHint UI."
+  },
+  "changeNoteOptional": "変更メモ（任意）",
+  "@changeNoteOptional": {
+    "description": "Copy for the create protocol changeNoteOptional UI."
+  },
+  "colorOption": "カラーオプション {hex}",
+  "@colorOption": {
+    "description": "Copy for the create protocol colorOption UI.",
+    "placeholders": {
+      "hex": {
+        "type": "String"
+      }
+    }
+  },
+  "compoundNumber": "成分 {number}",
+  "@compoundNumber": {
+    "description": "Copy for the create protocol compoundNumber UI.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "compoundsCount": "{count, plural, =1{成分1種} other{成分{count}種}}",
+  "@compoundsCount": {
+    "description": "Copy for the create protocol compoundsCount UI.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "copiedVialPreset": "{amount} {unit} バイアルプリセット・このプロトコルにコピーしました",
+  "@copiedVialPreset": {
+    "description": "Copy for the create protocol copiedVialPreset UI.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "createProtocolAction": "プロトコルを作成",
+  "@createProtocolAction": {
+    "description": "Copy for the create protocol createProtocolAction UI."
+  },
+  "createProtocolAddOneError": "ペプチドを1つ以上追加してください。",
+  "@createProtocolAddOneError": {
+    "description": "Copy for the create protocol createProtocolAddOneError UI."
+  },
+  "createProtocolBuildStep": "プロトコル作成 · ステップ {step} / {total}",
+  "@createProtocolBuildStep": {
+    "description": "Copy for the create protocol createProtocolBuildStep UI.",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "createProtocolDefaultName": "マイプロトコル",
+  "@createProtocolDefaultName": {
+    "description": "Copy for the create protocol createProtocolDefaultName UI."
+  },
+  "createProtocolEditStep": "プロトコル編集 · ステップ {step} / {total}",
+  "@createProtocolEditStep": {
+    "description": "Copy for the create protocol createProtocolEditStep UI.",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "createProtocolFreeLimitReason": "無料プランではプロトコルごとにペプチド1種類までです。複数の化合物を組み合わせるにはアップグレードしてください。",
+  "@createProtocolFreeLimitReason": {
+    "description": "Copy for the create protocol createProtocolFreeLimitReason UI."
+  },
+  "createProtocolNameBody": "「リカバリースタック」や「Q2シュレッド」のような覚えやすい名前を付けましょう。",
+  "@createProtocolNameBody": {
+    "description": "Copy for the create protocol createProtocolNameBody UI."
+  },
+  "createProtocolNameTitle": "プロトコルに名前を付ける",
+  "@createProtocolNameTitle": {
+    "description": "Copy for the create protocol createProtocolNameTitle UI."
+  },
+  "createProtocolNoPeptides": "ペプチドがまだありません",
+  "@createProtocolNoPeptides": {
+    "description": "Copy for the create protocol createProtocolNoPeptides UI."
+  },
+  "createProtocolPickHint": "+をタップしてライブラリから選択",
+  "@createProtocolPickHint": {
+    "description": "Copy for the create protocol createProtocolPickHint UI."
+  },
+  "createProtocolReviewBody": "プロトコルの詳細を確認してください。管理画面からいつでも編集できます。",
+  "@createProtocolReviewBody": {
+    "description": "Copy for the create protocol createProtocolReviewBody UI."
+  },
+  "createProtocolSaveError": "プロトコルの保存に失敗しました。もう一度お試しください。",
+  "@createProtocolSaveError": {
+    "description": "Copy for the create protocol createProtocolSaveError UI."
+  },
+  "createProtocolStackBody": "ペプチドを1つ追加するか、複数の化合物を組み合わせましょう。それぞれのラベル、用量、頻度、サイクルを設定します。",
+  "@createProtocolStackBody": {
+    "description": "Copy for the create protocol createProtocolStackBody UI."
+  },
+  "createProtocolStackTitle": "スタックを作成",
+  "@createProtocolStackTitle": {
+    "description": "Copy for the create protocol createProtocolStackTitle UI."
+  },
+  "customBlend": "カスタムブレンド",
+  "@customBlend": {
+    "description": "Copy for the create protocol customBlend UI."
+  },
+  "customDays": "カスタム曜日",
+  "@customDays": {
+    "description": "Copy for the create protocol customDays UI."
+  },
+  "customDaysDisclaimer": "選択した曜日のみがスケジュールされます。入力する量はユーザーによる記録値であり、投与に関する助言ではありません。",
+  "@customDaysDisclaimer": {
+    "description": "Copy for the create protocol customDaysDisclaimer UI."
+  },
+  "customPeptide": "カスタムペプチド",
+  "@customPeptide": {
+    "description": "Copy for the create protocol customPeptide UI."
+  },
+  "cycleWeeksLabel": "サイクル週数",
+  "@cycleWeeksLabel": {
+    "description": "Copy for the create protocol cycleWeeksLabel UI."
+  },
+  "cycleWindowDisclaimer": "サイクルと休止期間は記録履歴を整理するためのものです。サイクル期間の終了後、PepModは今後の摂取をスケジュールしません。",
+  "@cycleWindowDisclaimer": {
+    "description": "Copy for the create protocol cycleWindowDisclaimer UI."
+  },
+  "defaultAmountLabel": "デフォルト量",
+  "@defaultAmountLabel": {
+    "description": "Copy for the create protocol defaultAmountLabel UI."
+  },
+  "diluentVolumeLabel": "希釈液量",
+  "@diluentVolumeLabel": {
+    "description": "Copy for the create protocol diluentVolumeLabel UI."
+  },
+  "drawExceedsVialError": "吸引量はバイアルの容量を超えることはできません。",
+  "@drawExceedsVialError": {
+    "description": "Copy for the create protocol drawExceedsVialError UI."
+  },
+  "drawLabel": "吸引量",
+  "@drawLabel": {
+    "description": "Copy for the create protocol drawLabel UI."
+  },
+  "drawPreviewLabel": "吸引量プレビュー",
+  "@drawPreviewLabel": {
+    "description": "Copy for the create protocol drawPreviewLabel UI."
+  },
+  "drawPreviewValue": "{units} ユニット = {volume} mL",
+  "@drawPreviewValue": {
+    "description": "Copy for the create protocol drawPreviewValue UI.",
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "volume": {
+        "type": "String"
+      }
+    }
+  },
+  "editTime": "時刻 {time} を編集",
+  "@editTime": {
+    "description": "Copy for the create protocol editTime UI.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "endWeekLabel": "終了週",
+  "@endWeekLabel": {
+    "description": "Copy for the create protocol endWeekLabel UI."
+  },
+  "enterPeptideName": "ペプチド名を入力",
+  "@enterPeptideName": {
+    "description": "Copy for the create protocol enterPeptideName UI."
+  },
+  "frequencyLabel": "頻度",
+  "@frequencyLabel": {
+    "description": "Copy for the create protocol frequencyLabel UI."
+  },
+  "labelColorBody": "実際に使っているペンやバイアルのラベルに合わせた色を選んでください。",
+  "@labelColorBody": {
+    "description": "Copy for the create protocol labelColorBody UI."
+  },
+  "labelColorLabel": "ラベルカラー",
+  "@labelColorLabel": {
+    "description": "Copy for the create protocol labelColorLabel UI."
+  },
+  "manageSavedCompounds": "保存済み化合物を管理",
+  "@manageSavedCompounds": {
+    "description": "Copy for the create protocol manageSavedCompounds UI."
+  },
+  "nextLabel": "次へ",
+  "@nextLabel": {
+    "description": "Copy for the create protocol nextLabel UI."
+  },
+  "noneLabel": "なし",
+  "@noneLabel": {
+    "description": "Copy for the create protocol noneLabel UI."
+  },
+  "oneOffCompound": "単発の化合物",
+  "@oneOffCompound": {
+    "description": "Copy for the create protocol oneOffCompound UI."
+  },
+  "oneOffCompoundBody": "プリセットとして保存せず一度だけ使用",
+  "@oneOffCompoundBody": {
+    "description": "Copy for the create protocol oneOffCompoundBody UI."
+  },
+  "optionalLabel": "任意",
+  "@optionalLabel": {
+    "description": "Copy for the create protocol optionalLabel UI."
+  },
+  "peptidesCount": "ペプチド（{count}）",
+  "@peptidesCount": {
+    "description": "Copy for the create protocol peptidesCount UI.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "perDayAmounts": "1日ごとの量",
+  "@perDayAmounts": {
+    "description": "Copy for the create protocol perDayAmounts UI."
+  },
+  "phaseExtendsWarning": "フェーズが{weeks}週間のサイクルを超えています。フェーズまたはサイクル期間を調整してください。",
+  "@phaseExtendsWarning": {
+    "description": "Copy for the create protocol phaseExtendsWarning UI.",
+    "placeholders": {
+      "weeks": {
+        "type": "int"
+      }
+    }
+  },
+  "phaseNameHint": "例：1週目の記録",
+  "@phaseNameHint": {
+    "description": "Copy for the create protocol phaseNameHint UI."
+  },
+  "phaseNameLabel": "フェーズ名",
+  "@phaseNameLabel": {
+    "description": "Copy for the create protocol phaseNameLabel UI."
+  },
+  "phaseNumber": "フェーズ {number}",
+  "@phaseNumber": {
+    "description": "Copy for the create protocol phaseNumber UI.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "phaseOutsideCycleError": "このプロトコルのサイクルは{weeks}週目で終了します。フェーズの週数はその範囲内に収めてください。",
+  "@phaseOutsideCycleError": {
+    "description": "Copy for the create protocol phaseOutsideCycleError UI.",
+    "placeholders": {
+      "weeks": {
+        "type": "int"
+      }
+    }
+  },
+  "phaseOverlapError": "フェーズの週範囲を重複させることはできません。",
+  "@phaseOverlapError": {
+    "description": "Copy for the create protocol phaseOverlapError UI."
+  },
+  "phaseOverrideBody": "すでに実践予定の記録スケジュールのみを入力してください。PepModは量を推奨しません。",
+  "@phaseOverrideBody": {
+    "description": "Copy for the create protocol phaseOverrideBody UI."
+  },
+  "phaseOverrideTitle": "週ごとのオーバーライド",
+  "@phaseOverrideTitle": {
+    "description": "Copy for the create protocol phaseOverrideTitle UI."
+  },
+  "phasePreviewDisclaimer": "入力内容のプレビューのみです。PepModによるスケジュールの推奨ではありません。",
+  "@phasePreviewDisclaimer": {
+    "description": "Copy for the create protocol phasePreviewDisclaimer UI."
+  },
+  "phasePreviewLabel": "フェーズプレビュー",
+  "@phasePreviewLabel": {
+    "description": "Copy for the create protocol phasePreviewLabel UI."
+  },
+  "phaseReminderBody": "プロトコルのリマインダーが有効な場合、フェーズ変更の通知は午前9:00に設定されます。",
+  "@phaseReminderBody": {
+    "description": "Copy for the create protocol phaseReminderBody UI."
+  },
+  "phaseScheduleLabel": "フェーズスケジュール",
+  "@phaseScheduleLabel": {
+    "description": "Copy for the create protocol phaseScheduleLabel UI."
+  },
+  "phaseSelectDayError": "少なくとも1日を選択してください。PepModが代わりにスケジュールを選ぶことはありません。",
+  "@phaseSelectDayError": {
+    "description": "Copy for the create protocol phaseSelectDayError UI."
+  },
+  "phasesBody": "任意で期間を設定し、この基本の量やスケジュールを上書きできます。期間外は基本スケジュールが継続します。",
+  "@phasesBody": {
+    "description": "Copy for the create protocol phasesBody UI."
+  },
+  "phasesCount": "{count, plural, =1{フェーズ1件} other{フェーズ{count}件}}",
+  "@phasesCount": {
+    "description": "Copy for the create protocol phasesCount UI.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "phasesDisclaimer": "週数はプロトコル開始日から数えられます。保存されたフェーズのメモや変更リマインダーは記録の補助にすぎません。",
+  "@phasesDisclaimer": {
+    "description": "Copy for the create protocol phasesDisclaimer UI."
+  },
+  "preBlendedVial": "プレブレンドバイアル",
+  "@preBlendedVial": {
+    "description": "Copy for the create protocol preBlendedVial UI."
+  },
+  "preBlendedVialBody": "バイアル1本・吸引1回・複数の化合物",
+  "@preBlendedVialBody": {
+    "description": "Copy for the create protocol preBlendedVialBody UI."
+  },
+  "protocolNotesBody": "このプロトコルを確認する際に表示したい情報を保存できます。",
+  "@protocolNotesBody": {
+    "description": "Copy for the create protocol protocolNotesBody UI."
+  },
+  "protocolNotesHint": "例：疑問点、記録の背景、専門家からのメモなど",
+  "@protocolNotesHint": {
+    "description": "Copy for the create protocol protocolNotesHint UI."
+  },
+  "protocolNotesLabel": "プロトコルメモ",
+  "@protocolNotesLabel": {
+    "description": "Copy for the create protocol protocolNotesLabel UI."
+  },
+  "reminderTimesBody": "選択した時刻ごとに、専用の記録行とスケジュール日のリマインダーが作成されます。",
+  "@reminderTimesBody": {
+    "description": "Copy for the create protocol reminderTimesBody UI."
+  },
+  "reminderTimesLabel": "リマインダー時刻",
+  "@reminderTimesLabel": {
+    "description": "Copy for the create protocol reminderTimesLabel UI."
+  },
+  "removeLabel": "削除",
+  "@removeLabel": {
+    "description": "Copy for the create protocol removeLabel UI."
+  },
+  "removePeptide": "{name}を削除",
+  "@removePeptide": {
+    "description": "Copy for the create protocol removePeptide UI.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "removePhase": "フェーズを削除",
+  "@removePhase": {
+    "description": "Copy for the create protocol removePhase UI."
+  },
+  "removeTime": "時刻 {time} を削除",
+  "@removeTime": {
+    "description": "Copy for the create protocol removeTime UI.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "restWeeksLabel": "休止週数",
+  "@restWeeksLabel": {
+    "description": "Copy for the create protocol restWeeksLabel UI."
+  },
+  "reviewLabel": "確認",
+  "@reviewLabel": {
+    "description": "Copy for the create protocol reviewLabel UI."
+  },
+  "routeLabel": "投与経路",
+  "@routeLabel": {
+    "description": "Label for a route selector."
+  },
+  "saveBlend": "ブレンドを保存",
+  "@saveBlend": {
+    "description": "Copy for the create protocol saveBlend UI."
+  },
+  "saveChanges": "変更を保存",
+  "@saveChanges": {
+    "description": "Action to save edits to an existing item."
+  },
+  "savePhase": "フェーズを保存",
+  "@savePhase": {
+    "description": "Copy for the create protocol savePhase UI."
+  },
+  "savedVialPreset": "{amount} {unit} バイアル · 保存済みプリセット",
+  "@savedVialPreset": {
+    "description": "Copy for the create protocol savedVialPreset UI.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "scheduleLabel": "スケジュール",
+  "@scheduleLabel": {
+    "description": "Copy for the create protocol scheduleLabel UI."
+  },
+  "searchCompounds": "化合物を検索...",
+  "@searchCompounds": {
+    "description": "Copy for the create protocol searchCompounds UI."
+  },
+  "selectDayError": "このペプチドをスケジュールするには、少なくとも1日選択してください。",
+  "@selectDayError": {
+    "description": "Copy for the create protocol selectDayError UI."
+  },
+  "selectOption": "{option}を選択",
+  "@selectOption": {
+    "description": "Copy for the create protocol selectOption UI.",
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    }
+  },
+  "startDateLabel": "開始日",
+  "@startDateLabel": {
+    "description": "Copy for the create protocol startDateLabel UI."
+  },
+  "startWeekLabel": "開始週",
+  "@startWeekLabel": {
+    "description": "Copy for the create protocol startWeekLabel UI."
+  },
+  "syringeUnitsAmount": "{amount} シリンジユニット",
+  "@syringeUnitsAmount": {
+    "description": "Copy for the create protocol syringeUnitsAmount UI.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "syringeUnitsDisclaimer": "記録用として任意で入力するU-100シリンジの目盛りです。",
+  "@syringeUnitsDisclaimer": {
+    "description": "Copy for the create protocol syringeUnitsDisclaimer UI."
+  },
+  "syringeUnitsHint": "例：12.5",
+  "@syringeUnitsHint": {
+    "description": "Copy for the create protocol syringeUnitsHint UI."
+  },
+  "syringeUnitsLabel": "シリンジユニット",
+  "@syringeUnitsLabel": {
+    "description": "Copy for the create protocol syringeUnitsLabel UI."
+  },
+  "syringeUnitsOptional": "シリンジユニット（任意）",
+  "@syringeUnitsOptional": {
+    "description": "Copy for the create protocol syringeUnitsOptional UI."
+  },
+  "trackedAmountLabel": "記録量",
+  "@trackedAmountLabel": {
+    "description": "Copy for the create protocol trackedAmountLabel UI."
+  },
+  "u100TrackingDisclaimer": "U-100シリンジの目盛り（100ユニット = 1 mL）を使用します。値はユーザーが入力する記録データです。",
+  "@u100TrackingDisclaimer": {
+    "description": "Copy for the create protocol u100TrackingDisclaimer UI."
+  },
+  "unitLabel": "単位",
+  "@unitLabel": {
+    "description": "Copy for the create protocol unitLabel UI."
+  },
+  "vialAmountHint": "バイアルの量",
+  "@vialAmountHint": {
+    "description": "Copy for the create protocol vialAmountHint UI."
+  },
+  "vialContentsLabel": "バイアルの内容",
+  "@vialContentsLabel": {
+    "description": "Copy for the create protocol vialContentsLabel UI."
+  },
+  "vialLabelNameHint": "バイアルラベルに記載の名前",
+  "@vialLabelNameHint": {
+    "description": "Copy for the create protocol vialLabelNameHint UI."
+  },
+  "weekNumber": "第{week}週",
+  "@weekNumber": {
+    "description": "Copy for the create protocol weekNumber UI.",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      }
+    }
+  },
+  "weekRange": "第{start}〜{end}週",
+  "@weekRange": {
+    "description": "Copy for the create protocol weekRange UI.",
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "weekToWeekPhases": "週次フェーズ",
+  "@weekToWeekPhases": {
+    "description": "Copy for the create protocol weekToWeekPhases UI."
+  },
+  "weekdayDose": "{weekday}投与",
+  "@weekdayDose": {
+    "description": "Copy for the create protocol weekdayDose UI.",
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "weekdaySchedule": "{weekday}スケジュール",
+  "@weekdaySchedule": {
+    "description": "Copy for the create protocol weekdaySchedule UI.",
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "doseDrawInvalid": "吸引量はゼロより大きく、バイアルの容量内である必要があります。",
+  "@doseDrawInvalid": {
+    "description": "Validation error for an invalid blended-vial draw."
+  },
+  "doseGenericError": "問題が発生しました。もう一度お試しください。",
+  "@doseGenericError": {
+    "description": "Generic error shown when a dose update fails."
+  },
+  "doseEditSystemLabel": "編集.投与",
+  "@doseEditSystemLabel": {
+    "description": "System heading when editing a recorded dose."
+  },
+  "doseLogSystemLabel": "記録.投与",
+  "@doseLogSystemLabel": {
+    "description": "System heading when logging a scheduled dose."
+  },
+  "doseDraw": "吸引量",
+  "@doseDraw": {
+    "description": "Field label for a blended-vial syringe draw."
+  },
+  "doseAmount": "量",
+  "@doseAmount": {
+    "description": "Field label for a dose amount."
+  },
+  "doseUnits": "ユニット",
+  "@doseUnits": {
+    "description": "Unit suffix for a syringe draw."
+  },
+  "doseTime": "時刻",
+  "@doseTime": {
+    "description": "Field label for the actual dose time."
+  },
+  "doseChooseTime": "投与時刻を選択",
+  "@doseChooseTime": {
+    "description": "Accessibility label for opening the dose time picker."
+  },
+  "doseBlendSnapshot": "配合スナップショット // 1回あたり",
+  "@doseBlendSnapshot": {
+    "description": "Heading for the constituent amounts in one blended-vial draw."
+  },
+  "doseSyringeUnitsRecorded": "この投与に{amount}シリンジユニットを記録しました。",
+  "@doseSyringeUnitsRecorded": {
+    "description": "Recorded syringe-unit amount for a scheduled dose.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "doseInjectionSite": "注射.部位",
+  "@doseInjectionSite": {
+    "description": "Heading for injection-site selection."
+  },
+  "doseLastSite": "このペプチドの前回部位 · {site}",
+  "@doseLastSite": {
+    "description": "Most recent injection site for the selected peptide.",
+    "placeholders": {
+      "site": {
+        "type": "String"
+      }
+    }
+  },
+  "doseNotes": "メモ",
+  "@doseNotes": {
+    "description": "Field label for dose notes."
+  },
+  "doseOptional": "任意…",
+  "@doseOptional": {
+    "description": "Placeholder for an optional dose-notes field."
+  },
+  "doseMarkPending": "保留にする",
+  "@doseMarkPending": {
+    "description": "Action that returns a completed or skipped dose to pending."
+  },
+  "doseSaveChanges": "変更を保存",
+  "@doseSaveChanges": {
+    "description": "Action that saves edits to a dose record."
+  },
+  "doseSkip": "この投与をスキップ",
+  "@doseSkip": {
+    "description": "Action that marks the current dose as skipped."
+  },
+  "doseHistorySystemLabel": "投与.履歴 // 30日",
+  "@doseHistorySystemLabel": {
+    "description": "System heading for the 30-day dose history."
+  },
+  "doseHistoryTitle": "記録済みの投与",
+  "@doseHistoryTitle": {
+    "description": "Title for completed and skipped dose history."
+  },
+  "doseHistoryBody": "記録をタップすると、量・実施時刻・注射部位・メモ・ステータスを修正できます。",
+  "@doseHistoryBody": {
+    "description": "Instructions for editing a dose-history record."
+  },
+  "doseHistoryEmpty": "過去30日間に記録された投与はありません。",
+  "@doseHistoryEmpty": {
+    "description": "Empty state for the 30-day dose history."
+  },
+  "doseLogPrevious": "過去の投与を記録",
+  "@doseLogPrevious": {
+    "description": "Action that opens or submits the previous-dose form."
+  },
+  "doseHistorySkipped": "スキップ · {dateTime}",
+  "@doseHistorySkipped": {
+    "description": "Skipped dose summary with its recorded date and time.",
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "doseHistoryTaken": "{amount} {units} · {dateTime}",
+  "@doseHistoryTaken": {
+    "description": "Completed dose summary with amount, units, date, and time.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "units": {
+        "type": "String"
+      },
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "doseEditAction": "編集",
+  "@doseEditAction": {
+    "description": "Action label on a dose-history row."
+  },
+  "doseChoosePastTime": "記録する過去の時刻を選択してください。",
+  "@doseChoosePastTime": {
+    "description": "Validation error when a historical dose time is in the future."
+  },
+  "dosePreviousError": "過去の投与を記録できませんでした。もう一度お試しください。",
+  "@dosePreviousError": {
+    "description": "Error shown when saving a previous dose fails."
+  },
+  "doseLogPreviousSystemLabel": "記録.過去分",
+  "@doseLogPreviousSystemLabel": {
+    "description": "System heading for manually logging a previous dose."
+  },
+  "doseNoPeptides": "利用可能なペプチドがありません",
+  "@doseNoPeptides": {
+    "description": "Title when no peptide can be selected for a previous dose."
+  },
+  "doseNoPeptidesBody": "履歴を記録する前に、進行中のプロトコルにペプチドを追加してください。",
+  "@doseNoPeptidesBody": {
+    "description": "Instructions when no peptide can be selected for a previous dose."
+  },
+  "doseCorrectHistory": "投与履歴を修正",
+  "@doseCorrectHistory": {
+    "description": "Title for manually adding a previous dose."
+  },
+  "dosePeptide": "ペプチド",
+  "@dosePeptide": {
+    "description": "Field label for peptide selection."
+  },
+  "doseDate": "日付",
+  "@doseDate": {
+    "description": "Field label for the previous dose date."
+  },
+  "doseChooseDate": "投与日を選択",
+  "@doseChooseDate": {
+    "description": "Accessibility label for opening the dose date picker."
+  },
+  "doseSyringeUnitsEntry": "この記録に{amount}シリンジユニットを記録しました。",
+  "@doseSyringeUnitsEntry": {
+    "description": "Recorded syringe-unit amount for a historical dose entry.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "doseHistoryDisclaimer": "履歴の記録は個人のトラッキング用データにすぎません。医学的な助言や投与に関する推奨を変更するものではありません。",
+  "@doseHistoryDisclaimer": {
+    "description": "Safety disclaimer for manually entered dose history."
+  },
+  "notificationChannelName": "投与リマインダー",
+  "@notificationChannelName": {
+    "description": "Name of the operating-system notification channel for dose reminders."
+  },
+  "notificationChannelDescription": "進行中のペプチドプロトコルの投与について設定したリマインダーです。",
+  "@notificationChannelDescription": {
+    "description": "Description of the operating-system notification channel."
+  },
+  "notificationDoseTitle": "投与の時間です",
+  "@notificationDoseTitle": {
+    "description": "Title of a scheduled dose notification."
+  },
+  "notificationDoseBody": "設定した投与リマインダーの時間になりました。",
+  "@notificationDoseBody": {
+    "description": "Body of a scheduled dose notification."
+  },
+  "notificationCycleTitle": "プロトコルチェックポイント",
+  "@notificationCycleTitle": {
+    "description": "Title of a protocol cycle checkpoint notification."
+  },
+  "notificationCycleBody": "本日、サイクル期間のリマインダーがあります。トラッキングプランを確認してください。",
+  "@notificationCycleBody": {
+    "description": "Body of a protocol cycle checkpoint notification."
+  },
+  "notificationRestTitle": "休止期間チェックポイント",
+  "@notificationRestTitle": {
+    "description": "Title of a protocol rest-period checkpoint notification."
+  },
+  "notificationRestBody": "本日、休止期間のリマインダーがあります。トラッキングプランを確認してください。",
+  "@notificationRestBody": {
+    "description": "Body of a protocol rest-period checkpoint notification."
+  },
+  "notificationPhaseTitle": "プロトコルフェーズチェックポイント",
+  "@notificationPhaseTitle": {
+    "description": "Title of a protocol phase checkpoint notification."
+  },
+  "notificationPhaseBody": "本日、新しいトラッキングフェーズが始まります。保存済みのスケジュールを確認してください。",
+  "@notificationPhaseBody": {
+    "description": "Body of a protocol phase checkpoint notification."
+  },
+  "personalLibrarySystemLabel": "SYS.ライブラリ // 個人用",
+  "@personalLibrarySystemLabel": {
+    "description": "System-style heading for the personal compound library."
+  },
+  "customCompoundIntro": "自分で入力したラベルとバイアルサイズを保存できます。プリセットはトラッキングを効率化するためのもので、投与の指示ではありません。",
+  "@customCompoundIntro": {
+    "description": "Safety-focused introduction to personal compound presets."
+  },
+  "archivedHeading": "アーカイブ済み",
+  "@archivedHeading": {
+    "description": "Heading above archived personal compound presets."
+  },
+  "activePresetsHeading": "有効なプリセット",
+  "@activePresetsHeading": {
+    "description": "Heading above active personal compound presets."
+  },
+  "showActive": "有効なものを表示",
+  "@showActive": {
+    "description": "Action to show active personal compound presets."
+  },
+  "archivedAction": "アーカイブ済み",
+  "@archivedAction": {
+    "description": "Action to show archived personal compound presets."
+  },
+  "customCompoundsLoadFailed": "成分を読み込めませんでした。もう一度お試しください。",
+  "@customCompoundsLoadFailed": {
+    "description": "Generic personal compound loading error."
+  },
+  "libraryLoadFailed": "ペプチドライブラリを読み込めませんでした。もう一度お試しください。",
+  "@libraryLoadFailed": {
+    "description": "Generic peptide library loading error."
+  },
+  "compoundVialSummary": "{amount} {unit} バイアル · {route}",
+  "@compoundVialSummary": {
+    "description": "Summary of a personal compound vial and route.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      },
+      "route": {
+        "type": "String"
+      }
+    }
+  },
+  "editPreset": "プリセットを編集",
+  "@editPreset": {
+    "description": "Action to edit a personal compound preset."
+  },
+  "restorePreset": "復元",
+  "@restorePreset": {
+    "description": "Action to restore an archived personal compound preset."
+  },
+  "archivePreset": "アーカイブ",
+  "@archivePreset": {
+    "description": "Action to archive a personal compound preset."
+  },
+  "noArchivedPresets": "アーカイブ済みのプリセットはありません",
+  "@noArchivedPresets": {
+    "description": "Empty-state title when no archived personal presets exist."
+  },
+  "noSavedCompounds": "保存された成分はありません",
+  "@noSavedCompounds": {
+    "description": "Empty-state title when no personal compounds exist."
+  },
+  "archivedPresetsHint": "アーカイブしたプリセットは、復元するまでここに保存されます。",
+  "@archivedPresetsHint": {
+    "description": "Empty-state explanation for archived personal presets."
+  },
+  "createPresetHint": "繰り返し使えるラベルとバイアルサイズのプリセットを作成します。",
+  "@createPresetHint": {
+    "description": "Empty-state explanation for personal compound presets."
+  },
+  "presetCompoundSystemLabel": "プリセット.成分",
+  "@presetCompoundSystemLabel": {
+    "description": "System-style heading in the personal compound editor."
+  },
+  "newCompound": "新しい成分",
+  "@newCompound": {
+    "description": "Title when creating a personal compound preset."
+  },
+  "editCompound": "成分を編集",
+  "@editCompound": {
+    "description": "Title when editing a personal compound preset."
+  },
+  "ownVialDetailsHint": "ご自身のバイアルに記載されている情報のみを入力してください。",
+  "@ownVialDetailsHint": {
+    "description": "Instruction in the personal compound editor."
+  },
+  "compoundLabel": "成分ラベル",
+  "@compoundLabel": {
+    "description": "Label for a personal compound name field."
+  },
+  "compoundNameExample": "例：自分の成分",
+  "@compoundNameExample": {
+    "description": "Example personal compound name."
+  },
+  "vialUnitLabel": "バイアル単位",
+  "@vialUnitLabel": {
+    "description": "Label for a personal compound vial unit selector."
+  },
+  "trackingUnitLabel": "トラッキング単位",
+  "@trackingUnitLabel": {
+    "description": "Label for a personal compound tracking unit selector."
+  },
+  "notesOptional": "メモ（任意）",
+  "@notesOptional": {
+    "description": "Label for an optional personal compound note."
+  },
+  "compoundNoteExample": "ラベルや保管に関するメモ",
+  "@compoundNoteExample": {
+    "description": "Example note for a personal compound preset."
+  },
+  "noDoseRecommendation": "投与に関する推奨は作成されません。プロトコルの量は常にご自身で個別に入力します。",
+  "@noDoseRecommendation": {
+    "description": "Safety disclaimer in the personal compound editor."
+  },
+  "saveCompoundFailed": "プリセットを保存できませんでした。もう一度お試しください。",
+  "@saveCompoundFailed": {
+    "description": "Generic personal compound save error."
+  },
+  "routeTopical": "外用",
+  "@routeTopical": {
+    "description": "Topical administration route."
+  },
+  "frequencyCustomDays": "カスタム日数",
+  "@frequencyCustomDays": {
+    "description": "Frequency using user-selected weekdays."
+  },
+  "savedCalculationLabel": "{vialAmount} {vialUnit} + {diluentVolume} mL",
+  "@savedCalculationLabel": {
+    "description": "Title of a saved vial conversion.",
+    "placeholders": {
+      "vialAmount": {
+        "type": "String"
+      },
+      "vialUnit": {
+        "type": "String"
+      },
+      "diluentVolume": {
+        "type": "String"
+      }
+    }
+  },
+  "savedCalculationDetail": "{desiredAmount} {desiredUnit} · {capacity}u",
+  "@savedCalculationDetail": {
+    "description": "Detail of a saved vial conversion.",
+    "placeholders": {
+      "desiredAmount": {
+        "type": "String"
+      },
+      "desiredUnit": {
+        "type": "String"
+      },
+      "capacity": {
+        "type": "String"
+      }
+    }
+  },
+  "syringeOption": "U-100 · {volume} mL / {capacity}ユニット",
+  "@syringeOption": {
+    "description": "U-100 syringe capacity option.",
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      },
+      "capacity": {
+        "type": "String"
+      }
+    }
+  }
 }
