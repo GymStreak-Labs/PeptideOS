@@ -1184,9 +1184,9 @@
   "@unitConversionDisclaimer": {
     "description": "English onboarding copy for unit conversion disclaimer."
   },
-  "unitsLabel": "units",
+  "unitsLabel": "Units",
   "@unitsLabel": {
-    "description": "English onboarding copy for units label."
+    "description": "Label for measurement unit preferences."
   },
   "unitsToDraw": "Units to draw",
   "@unitsToDraw": {
@@ -1261,9 +1261,9 @@
   "@sectionAbout": {
     "description": "Profile section heading for app information."
   },
-  "nameLabel": "NAME",
+  "nameLabel": "Name",
   "@nameLabel": {
-    "description": "Copy for the create protocol nameLabel UI."
+    "description": "Label for the user's display name."
   },
   "accountLabel": "Account",
   "@accountLabel": {
@@ -1357,9 +1357,9 @@
   "@signOutAction": {
     "description": "Primary sign-out action."
   },
-  "educationalTrackingDisclaimer": "Educational tracking only. Always consult a qualified healthcare provider.",
+  "educationalTrackingDisclaimer": "Educational tracking only. Not medical advice.",
   "@educationalTrackingDisclaimer": {
-    "description": "Copy for the create protocol educationalTrackingDisclaimer UI."
+    "description": "Short safety disclaimer on the profile screen."
   },
   "yourName": "Your name",
   "@yourName": {
@@ -1367,11 +1367,11 @@
   },
   "cancelLabel": "Cancel",
   "@cancelLabel": {
-    "description": "Copy for the create protocol cancelLabel UI."
+    "description": "Generic cancel action."
   },
-  "saveLabel": "SAVE",
+  "saveLabel": "Save",
   "@saveLabel": {
-    "description": "Copy for the create protocol saveLabel UI."
+    "description": "Generic save action."
   },
   "dataCopied": "Data copied to clipboard.",
   "@dataCopied": {
@@ -2490,5 +2490,184 @@
         "type": "String"
       }
     }
+  },
+  "doseDrawInvalid": "Draw must be greater than zero and within the vial.",
+  "@doseDrawInvalid": {
+    "description": "Validation error for an invalid blended-vial draw."
+  },
+  "doseGenericError": "Something went wrong. Try again.",
+  "@doseGenericError": {
+    "description": "Generic error shown when a dose update fails."
+  },
+  "doseEditSystemLabel": "EDIT.DOSE",
+  "@doseEditSystemLabel": {
+    "description": "System heading when editing a recorded dose."
+  },
+  "doseLogSystemLabel": "LOG.DOSE",
+  "@doseLogSystemLabel": {
+    "description": "System heading when logging a scheduled dose."
+  },
+  "doseDraw": "DRAW",
+  "@doseDraw": {
+    "description": "Field label for a blended-vial syringe draw."
+  },
+  "doseAmount": "AMOUNT",
+  "@doseAmount": {
+    "description": "Field label for a dose amount."
+  },
+  "doseUnits": "units",
+  "@doseUnits": {
+    "description": "Unit suffix for a syringe draw."
+  },
+  "doseTime": "TIME",
+  "@doseTime": {
+    "description": "Field label for the actual dose time."
+  },
+  "doseChooseTime": "Choose dose time",
+  "@doseChooseTime": {
+    "description": "Accessibility label for opening the dose time picker."
+  },
+  "doseBlendSnapshot": "BLEND SNAPSHOT // PER DRAW",
+  "@doseBlendSnapshot": {
+    "description": "Heading for the constituent amounts in one blended-vial draw."
+  },
+  "doseSyringeUnitsRecorded": "{amount} syringe units recorded for this dose.",
+  "@doseSyringeUnitsRecorded": {
+    "description": "Recorded syringe-unit amount for a scheduled dose.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "doseInjectionSite": "INJECTION.SITE",
+  "@doseInjectionSite": {
+    "description": "Heading for injection-site selection."
+  },
+  "doseLastSite": "LAST SITE FOR THIS PEPTIDE · {site}",
+  "@doseLastSite": {
+    "description": "Most recent injection site for the selected peptide.",
+    "placeholders": {
+      "site": {
+        "type": "String"
+      }
+    }
+  },
+  "doseNotes": "NOTES",
+  "@doseNotes": {
+    "description": "Field label for dose notes."
+  },
+  "doseOptional": "Optional...",
+  "@doseOptional": {
+    "description": "Placeholder for an optional dose-notes field."
+  },
+  "doseMarkPending": "MARK AS PENDING",
+  "@doseMarkPending": {
+    "description": "Action that returns a completed or skipped dose to pending."
+  },
+  "doseSaveChanges": "SAVE CHANGES",
+  "@doseSaveChanges": {
+    "description": "Action that saves edits to a dose record."
+  },
+  "doseSkip": "Skip this dose",
+  "@doseSkip": {
+    "description": "Action that marks the current dose as skipped."
+  },
+  "doseHistorySystemLabel": "DOSE.HISTORY // 30.DAY",
+  "@doseHistorySystemLabel": {
+    "description": "System heading for the 30-day dose history."
+  },
+  "doseHistoryTitle": "Logged doses",
+  "@doseHistoryTitle": {
+    "description": "Title for completed and skipped dose history."
+  },
+  "doseHistoryBody": "Tap a record to correct its amount, actual time, injection site, notes, or status.",
+  "@doseHistoryBody": {
+    "description": "Instructions for editing a dose-history record."
+  },
+  "doseHistoryEmpty": "No logged doses in the last 30 days.",
+  "@doseHistoryEmpty": {
+    "description": "Empty state for the 30-day dose history."
+  },
+  "doseLogPrevious": "LOG PREVIOUS DOSE",
+  "@doseLogPrevious": {
+    "description": "Action that opens or submits the previous-dose form."
+  },
+  "doseHistorySkipped": "Skipped · {dateTime}",
+  "@doseHistorySkipped": {
+    "description": "Skipped dose summary with its recorded date and time.",
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "doseHistoryTaken": "{amount} {units} · {dateTime}",
+  "@doseHistoryTaken": {
+    "description": "Completed dose summary with amount, units, date, and time.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "units": {
+        "type": "String"
+      },
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "doseEditAction": "EDIT",
+  "@doseEditAction": {
+    "description": "Action label on a dose-history row."
+  },
+  "doseChoosePastTime": "Choose a past time to log.",
+  "@doseChoosePastTime": {
+    "description": "Validation error when a historical dose time is in the future."
+  },
+  "dosePreviousError": "Could not log previous dose. Try again.",
+  "@dosePreviousError": {
+    "description": "Error shown when saving a previous dose fails."
+  },
+  "doseLogPreviousSystemLabel": "LOG.PREVIOUS",
+  "@doseLogPreviousSystemLabel": {
+    "description": "System heading for manually logging a previous dose."
+  },
+  "doseNoPeptides": "No peptides available",
+  "@doseNoPeptides": {
+    "description": "Title when no peptide can be selected for a previous dose."
+  },
+  "doseNoPeptidesBody": "Add a peptide to an active protocol before logging history.",
+  "@doseNoPeptidesBody": {
+    "description": "Instructions when no peptide can be selected for a previous dose."
+  },
+  "doseCorrectHistory": "Correct dose history",
+  "@doseCorrectHistory": {
+    "description": "Title for manually adding a previous dose."
+  },
+  "dosePeptide": "PEPTIDE",
+  "@dosePeptide": {
+    "description": "Field label for peptide selection."
+  },
+  "doseDate": "DATE",
+  "@doseDate": {
+    "description": "Field label for the previous dose date."
+  },
+  "doseChooseDate": "Choose dose date",
+  "@doseChooseDate": {
+    "description": "Accessibility label for opening the dose date picker."
+  },
+  "doseSyringeUnitsEntry": "{amount} syringe units recorded for this entry.",
+  "@doseSyringeUnitsEntry": {
+    "description": "Recorded syringe-unit amount for a historical dose entry.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "doseHistoryDisclaimer": "Historical logs are personal tracking records only. They do not change medical guidance or dosing recommendations.",
+  "@doseHistoryDisclaimer": {
+    "description": "Safety disclaimer for manually entered dose history."
   }
 }

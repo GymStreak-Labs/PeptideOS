@@ -410,7 +410,7 @@
   "trackedLabel": "tracked",
   "turnOnReminders": "TURN ON REMINDERS",
   "unitConversionDisclaimer": "Unit conversion tool for reference only. Always verify with your healthcare provider.",
-  "unitsLabel": "units",
+  "unitsLabel": "Einheiten",
   "unitsToDraw": "Units to draw",
   "unlockPepMod": "UNLOCK PEPMOD",
   "usersLabel": "USERS",
@@ -428,7 +428,7 @@
   "sectionSupport": "SUPPORT",
   "sectionLegal": "RECHTLICHES",
   "sectionAbout": "ÜBER DIE APP",
-  "nameLabel": "NAME",
+  "nameLabel": "Name",
   "accountLabel": "Konto",
   "deleteAccount": "Konto löschen",
   "removeAccountData": "Konto und Daten entfernen",
@@ -452,10 +452,10 @@
   "disclaimerTitle": "Haftungsausschluss",
   "versionLabel": "Version",
   "signOutAction": "ABMELDEN",
-  "educationalTrackingDisclaimer": "Nur zur dokumentarischen Nutzung. Wende dich immer an qualifiziertes medizinisches Fachpersonal.",
+  "educationalTrackingDisclaimer": "Nur zur Aufzeichnung und Information. Keine medizinische Beratung.",
   "yourName": "Dein Name",
   "cancelLabel": "Abbrechen",
-  "saveLabel": "SPEICHERN",
+  "saveLabel": "Speichern",
   "dataCopied": "Daten in die Zwischenablage kopiert.",
   "clearDataTitle": "Alle Daten löschen?",
   "clearDataBody": "Dadurch werden alle Protokolle, Dosisprotokolle und Körperwerte gelöscht und das Onboarding neu gestartet. Dein Konto, dein Abo und die Peptidbibliothek bleiben erhalten. Dies kann nicht rückgängig gemacht werden.",
@@ -793,5 +793,83 @@
   "weekRange": "WOCHEN {start}–{end}",
   "weekToWeekPhases": "WOCHENWEISE PHASEN",
   "weekdayDose": "DOSIS {weekday}",
-  "weekdaySchedule": "ZEITPLAN {weekday}"
+  "weekdaySchedule": "ZEITPLAN {weekday}",
+  "doseDrawInvalid": "Die Entnahmemenge muss größer als null sein und im Flakon verfügbar sein.",
+  "doseGenericError": "Etwas ist schiefgelaufen. Versuche es erneut.",
+  "doseEditSystemLabel": "DOSIS.BEARBEITEN",
+  "doseLogSystemLabel": "DOSIS.PROTOKOLLIEREN",
+  "doseDraw": "ENTNAHME",
+  "doseAmount": "MENGE",
+  "doseUnits": "Einheiten",
+  "doseTime": "UHRZEIT",
+  "doseChooseTime": "Uhrzeit der Dosis auswählen",
+  "doseBlendSnapshot": "MISCHUNGSÜBERSICHT // PRO ENTNAHME",
+  "doseSyringeUnitsRecorded": "Für diese Dosis wurden {amount} Spritzeneinheiten erfasst.",
+  "@doseSyringeUnitsRecorded": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "doseInjectionSite": "INJEKTIONSSTELLE",
+  "doseLastSite": "LETZTE STELLE FÜR DIESES PEPTID · {site}",
+  "@doseLastSite": {
+    "placeholders": {
+      "site": {
+        "type": "String"
+      }
+    }
+  },
+  "doseNotes": "NOTIZEN",
+  "doseOptional": "Optional...",
+  "doseMarkPending": "AUSSTEHEND",
+  "doseSaveChanges": "SPEICHERN",
+  "doseSkip": "Diese Dosis überspringen",
+  "doseHistorySystemLabel": "DOSISVERLAUF // 30 TAGE",
+  "doseHistoryTitle": "Protokollierte Dosen",
+  "doseHistoryBody": "Tippe auf einen Eintrag, um Menge, tatsächliche Uhrzeit, Injektionsstelle, Notizen oder Status zu korrigieren.",
+  "doseHistoryEmpty": "In den letzten 30 Tagen wurden keine Dosen protokolliert.",
+  "doseLogPrevious": "FRÜHERE DOSIS",
+  "doseHistorySkipped": "Übersprungen · {dateTime}",
+  "@doseHistorySkipped": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "doseHistoryTaken": "{amount} {units} · {dateTime}",
+  "@doseHistoryTaken": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "units": {
+        "type": "String"
+      },
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "doseEditAction": "BEARBEITEN",
+  "doseChoosePastTime": "Wähle eine Uhrzeit in der Vergangenheit.",
+  "dosePreviousError": "Die frühere Dosis konnte nicht protokolliert werden. Versuche es erneut.",
+  "doseLogPreviousSystemLabel": "FRÜHERE.DOSIS",
+  "doseNoPeptides": "Keine Peptide verfügbar",
+  "doseNoPeptidesBody": "Füge einem aktiven Protokoll ein Peptid hinzu, bevor du einen früheren Eintrag erstellst.",
+  "doseCorrectHistory": "Dosisverlauf korrigieren",
+  "dosePeptide": "PEPTID",
+  "doseDate": "DATUM",
+  "doseChooseDate": "Datum der Dosis auswählen",
+  "doseSyringeUnitsEntry": "Für diesen Eintrag wurden {amount} Spritzeneinheiten erfasst.",
+  "@doseSyringeUnitsEntry": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "doseHistoryDisclaimer": "Frühere Einträge dienen nur der persönlichen Dokumentation. Sie ändern weder medizinische Hinweise noch Dosierungsempfehlungen."
 }

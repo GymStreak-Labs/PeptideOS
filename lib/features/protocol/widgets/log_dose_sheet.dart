@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/utils/decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/dose_log.dart';
 import '../../../models/protocol.dart';
 import '../providers/dose_log_provider.dart';
 import '../providers/protocol_provider.dart';
 import 'peptide_label_color.dart';
+import 'protocol_localizations.dart';
+
+String _localizedInjectionSite(AppLocalizations l10n, String key) =>
+    switch (key) {
+      'left-abdomen' => l10n.injectionSiteLeftAbdomen,
+      'right-abdomen' => l10n.injectionSiteRightAbdomen,
+      'left-thigh' => l10n.injectionSiteLeftThigh,
+      'right-thigh' => l10n.injectionSiteRightThigh,
+      'left-glute' => l10n.injectionSiteLeftGlute,
+      'right-glute' => l10n.injectionSiteRightGlute,
+      'left-triceps' => l10n.injectionSiteLeftTriceps,
+      'right-triceps' => l10n.injectionSiteRightTriceps,
+      _ => key,
+    };
 
 /// Bottom sheet that lets a user log / edit / skip a scheduled dose.
 class LogDoseSheet extends StatefulWidget {
@@ -27,6 +43,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   late TimeOfDay _time;
   late String _site;
   Future<DoseLog?>? _lastInjectionFuture;
+  bool _didLocalizeInitialAmount = false;
 
   @override
   void initState() {
@@ -47,6 +64,13 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    if (!_didLocalizeInitialAmount) {
+      _amountCtrl.text = _formatAmount(
+        context.protocolL10n,
+        widget.dose.amountTaken,
+      );
+      _didLocalizeInitialAmount = true;
+    }
     _lastInjectionFuture ??= context
         .read<DoseLogProvider>()
         .lastInjectionForPeptide(
@@ -70,9 +94,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
     );
     if (editedBlend != null && !editedBlend.isValid) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Draw must be greater than zero and within the vial.'),
-        ),
+        SnackBar(content: Text(context.protocolL10n.doseDrawInvalid)),
       );
       return;
     }
@@ -127,7 +149,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   void _showError() {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Something went wrong. Try again.')),
+      SnackBar(content: Text(context.protocolL10n.doseGenericError)),
     );
   }
 
@@ -187,7 +209,9 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(
-                    alreadyLogged ? 'EDIT.DOSE' : 'LOG.DOSE',
+                    alreadyLogged
+                        ? context.protocolL10n.doseEditSystemLabel
+                        : context.protocolL10n.doseLogSystemLabel,
                     style: AppTypography.systemLabel,
                   ),
                   const SizedBox(height: AppSpacing.sm),
@@ -213,36 +237,43 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                         flex: 2,
                         child: _LabeledField(
                           label: widget.dose.blendSnapshot != null
-                              ? 'DRAW'
-                              : 'AMOUNT',
+                              ? context.protocolL10n.doseDraw
+                              : context.protocolL10n.doseAmount,
                           suffix: widget.dose.blendSnapshot != null
-                              ? 'units'
+                              ? context.protocolL10n.doseUnits
                               : widget.dose.units,
-                          child: TextField(
-                            controller: _amountCtrl,
-                            onChanged: blendPreview == null
-                                ? null
-                                : (_) => setState(() {}),
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
-                            ),
-                            inputFormatters: const [decimalInputFormatter],
-                            style: AppTypography.heroSmall.copyWith(
-                              fontSize: 18,
-                            ),
-                            textAlignVertical: TextAlignVertical.center,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              focusedErrorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              isDense: true,
-                              filled: false,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: AppSpacing.md,
-                                vertical: 14,
+                          child: Semantics(
+                            label: widget.dose.blendSnapshot != null
+                                ? context.protocolL10n.doseDraw
+                                : context.protocolL10n.doseAmount,
+                            textField: true,
+                            child: TextField(
+                              controller: _amountCtrl,
+                              onChanged: blendPreview == null
+                                  ? null
+                                  : (_) => setState(() {}),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                    decimal: true,
+                                  ),
+                              inputFormatters: const [decimalInputFormatter],
+                              style: AppTypography.heroSmall.copyWith(
+                                fontSize: 18,
+                              ),
+                              textAlignVertical: TextAlignVertical.center,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                focusedErrorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                isDense: true,
+                                filled: false,
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: AppSpacing.md,
+                                  vertical: 14,
+                                ),
                               ),
                             ),
                           ),
@@ -252,34 +283,38 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                       Expanded(
                         flex: 3,
                         child: _LabeledField(
-                          label: 'TIME',
-                          child: InkWell(
-                            onTap: () async {
-                              final t = await showTimePicker(
-                                context: context,
-                                initialTime: _time,
-                                builder: (ctx, child) => Theme(
-                                  data: Theme.of(ctx).copyWith(
-                                    colorScheme: Theme.of(ctx).colorScheme
-                                        .copyWith(
-                                          primary: AppColors.primary,
-                                          surface: AppColors.surfaceContainer,
-                                        ),
+                          label: context.protocolL10n.doseTime,
+                          child: Semantics(
+                            button: true,
+                            label: context.protocolL10n.doseChooseTime,
+                            child: InkWell(
+                              onTap: () async {
+                                final t = await showTimePicker(
+                                  context: context,
+                                  initialTime: _time,
+                                  builder: (ctx, child) => Theme(
+                                    data: Theme.of(ctx).copyWith(
+                                      colorScheme: Theme.of(ctx).colorScheme
+                                          .copyWith(
+                                            primary: AppColors.primary,
+                                            surface: AppColors.surfaceContainer,
+                                          ),
+                                    ),
+                                    child: child ?? const SizedBox.shrink(),
                                   ),
-                                  child: child ?? const SizedBox.shrink(),
+                                );
+                                if (t != null) setState(() => _time = t);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppSpacing.md,
+                                  vertical: 14,
                                 ),
-                              );
-                              if (t != null) setState(() => _time = t);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppSpacing.md,
-                                vertical: 14,
-                              ),
-                              child: Text(
-                                _formatTime(_time),
-                                style: AppTypography.tabular.copyWith(
-                                  fontSize: 18,
+                                child: Text(
+                                  _formatTime(context, _time),
+                                  style: AppTypography.tabular.copyWith(
+                                    fontSize: 18,
+                                  ),
                                 ),
                               ),
                             ),
@@ -305,13 +340,13 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'BLEND SNAPSHOT // PER DRAW',
+                            context.protocolL10n.doseBlendSnapshot,
                             style: AppTypography.systemLabel,
                           ),
                           const SizedBox(height: AppSpacing.xs),
                           if (!blend.isValid)
                             Text(
-                              'Draw must be greater than zero and within the vial.',
+                              context.protocolL10n.doseDrawInvalid,
                               style: AppTypography.bodySmall.copyWith(
                                 color: AppColors.warning,
                               ),
@@ -329,7 +364,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                                       ),
                                     ),
                                     Text(
-                                      '${_formatAmount(blend.amountPerDraw(item))} ${item.unit}',
+                                      '${_formatAmount(context.protocolL10n, blend.amountPerDraw(item))} ${item.unit}',
                                       style: AppTypography.tabular.copyWith(
                                         fontSize: 12,
                                       ),
@@ -344,7 +379,12 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                   ],
                   if (widget.dose.syringeUnits > 0) ...[
                     Text(
-                      '${_formatAmount(widget.dose.syringeUnits)} syringe units recorded for this dose.',
+                      context.protocolL10n.doseSyringeUnitsRecorded(
+                        _formatAmount(
+                          context.protocolL10n,
+                          widget.dose.syringeUnits,
+                        ),
+                      ),
                       style: AppTypography.bodySmall.copyWith(
                         fontFamily: 'JetBrainsMono',
                         color: AppColors.textSecondary,
@@ -354,7 +394,10 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                   ],
 
                   // Injection site rotator
-                  Text('INJECTION.SITE', style: AppTypography.systemLabel),
+                  Text(
+                    context.protocolL10n.doseInjectionSite,
+                    style: AppTypography.systemLabel,
+                  ),
                   FutureBuilder<DoseLog?>(
                     future: _lastInjectionFuture,
                     builder: (context, snapshot) {
@@ -374,7 +417,12 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                             const SizedBox(width: AppSpacing.xs),
                             Flexible(
                               child: Text(
-                                'LAST SITE FOR THIS PEPTIDE · ${_siteLabel(lastInjection.injectionSite)}',
+                                context.protocolL10n.doseLastSite(
+                                  _siteLabel(
+                                    context.protocolL10n,
+                                    lastInjection.injectionSite,
+                                  ),
+                                ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: AppTypography.labelSmall.copyWith(
@@ -394,7 +442,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                     children: [
                       for (final s in kInjectionSites)
                         _SiteChip(
-                          label: s.label,
+                          label: _siteLabel(context.protocolL10n, s.key),
                           selected: _site == s.key,
                           onTap: () => setState(
                             () => _site = _site == s.key ? '' : s.key,
@@ -407,21 +455,25 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
 
                   // Notes
                   _LabeledField(
-                    label: 'NOTES',
-                    child: TextField(
-                      controller: _notesCtrl,
-                      maxLines: 2,
-                      style: AppTypography.bodyMedium,
-                      decoration: InputDecoration(
-                        hintText: 'Optional...',
-                        hintStyle: AppTypography.bodyMedium.copyWith(
-                          color: AppColors.textDisabled,
-                        ),
-                        border: InputBorder.none,
-                        isDense: true,
-                        filled: false,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.md,
+                    label: context.protocolL10n.doseNotes,
+                    child: Semantics(
+                      label: context.protocolL10n.doseNotes,
+                      textField: true,
+                      child: TextField(
+                        controller: _notesCtrl,
+                        maxLines: 2,
+                        style: AppTypography.bodyMedium,
+                        decoration: InputDecoration(
+                          hintText: context.protocolL10n.doseOptional,
+                          hintStyle: AppTypography.bodyMedium.copyWith(
+                            color: AppColors.textDisabled,
+                          ),
+                          border: InputBorder.none,
+                          isDense: true,
+                          filled: false,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.md,
+                          ),
                         ),
                       ),
                     ),
@@ -429,11 +481,16 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
 
                   const SizedBox(height: AppSpacing.xl),
                   if (alreadyLogged) ...[
-                    PrimaryButton(label: 'MARK AS PENDING', onPressed: _undo),
+                    PrimaryButton(
+                      label: context.protocolL10n.doseMarkPending,
+                      onPressed: _undo,
+                    ),
                     const SizedBox(height: AppSpacing.cardGap),
                   ],
                   PrimaryButton(
-                    label: alreadyLogged ? 'SAVE CHANGES' : 'LOG DOSE',
+                    label: alreadyLogged
+                        ? context.protocolL10n.doseSaveChanges
+                        : context.protocolL10n.protocolLogDose,
                     icon: Icons.check_rounded,
                     onPressed: _log,
                   ),
@@ -441,7 +498,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                   TextButton(
                     onPressed: _skip,
                     child: Text(
-                      'Skip this dose',
+                      context.protocolL10n.doseSkip,
                       style: AppTypography.labelMedium.copyWith(
                         color: AppColors.textTertiary,
                       ),
@@ -456,19 +513,20 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
     );
   }
 
-  String _formatTime(TimeOfDay t) {
-    return '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
+  String _formatTime(BuildContext context, TimeOfDay time) =>
+      MaterialLocalizations.of(context).formatTimeOfDay(
+        time,
+        alwaysUse24HourFormat: MediaQuery.alwaysUse24HourFormatOf(context),
+      );
+
+  String _formatAmount(AppLocalizations l10n, double value) {
+    final format = NumberFormat.decimalPattern(l10n.localeName)
+      ..maximumFractionDigits = 2;
+    return format.format(value);
   }
 
-  String _formatAmount(double d) =>
-      d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(2);
-
-  String _siteLabel(String key) {
-    for (final site in kInjectionSites) {
-      if (site.key == key) return site.label;
-    }
-    return key;
-  }
+  String _siteLabel(AppLocalizations l10n, String key) =>
+      _localizedInjectionSite(l10n, key);
 }
 
 /// Recent completed/skipped dose records. Tapping a row reuses
@@ -509,12 +567,18 @@ class DoseHistorySheet extends StatelessWidget {
             children: [
               _SheetHandle(),
               const SizedBox(height: AppSpacing.lg),
-              Text('DOSE.HISTORY // 30.DAY', style: AppTypography.systemLabel),
+              Text(
+                context.protocolL10n.doseHistorySystemLabel,
+                style: AppTypography.systemLabel,
+              ),
               const SizedBox(height: AppSpacing.sm),
-              Text('Logged doses', style: AppTypography.h2),
+              Text(
+                context.protocolL10n.doseHistoryTitle,
+                style: AppTypography.h2,
+              ),
               const SizedBox(height: AppSpacing.xs),
               Text(
-                'Tap a record to correct its amount, actual time, injection site, notes, or status.',
+                context.protocolL10n.doseHistoryBody,
                 style: AppTypography.bodySmall,
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -522,7 +586,7 @@ class DoseHistorySheet extends StatelessWidget {
                 child: logs.isEmpty
                     ? Center(
                         child: Text(
-                          'No logged doses in the last 30 days.',
+                          context.protocolL10n.doseHistoryEmpty,
                           style: AppTypography.bodyMedium,
                           textAlign: TextAlign.center,
                         ),
@@ -540,7 +604,7 @@ class DoseHistorySheet extends StatelessWidget {
               if (protocols.isNotEmpty) ...[
                 const SizedBox(height: AppSpacing.lg),
                 PrimaryButton(
-                  label: 'LOG PREVIOUS DOSE',
+                  label: context.protocolL10n.doseLogPrevious,
                   icon: Icons.add_rounded,
                   onPressed: () => _openPastDoseSheet(context),
                 ),
@@ -583,6 +647,7 @@ class _DoseHistoryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.protocolL10n;
     final recordedAt = dose.takenAt ?? dose.scheduledAt;
     final statusColor = dose.skipped
         ? AppColors.textTertiary
@@ -607,22 +672,28 @@ class _DoseHistoryRow extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   dose.skipped
-                      ? 'Skipped · ${_formatDateTime(recordedAt)}'
-                      : '${_formatAmount(dose.amountTaken)} ${dose.units} · ${_formatDateTime(recordedAt)}',
+                      ? l10n.doseHistorySkipped(
+                          _formatDateTime(context, recordedAt),
+                        )
+                      : l10n.doseHistoryTaken(
+                          _formatAmount(l10n, dose.amountTaken),
+                          dose.units,
+                          _formatDateTime(context, recordedAt),
+                        ),
                   style: AppTypography.bodySmall.copyWith(
                     fontFamily: 'JetBrainsMono',
                   ),
                 ),
                 if (dose.injectionSite.isNotEmpty)
                   Text(
-                    _siteLabel(dose.injectionSite),
+                    _localizedInjectionSite(l10n, dose.injectionSite),
                     style: AppTypography.bodySmall,
                   ),
               ],
             ),
           ),
           Text(
-            'EDIT',
+            l10n.doseEditAction,
             style: AppTypography.systemLabel.copyWith(
               color: AppColors.primary,
               fontSize: 9,
@@ -639,38 +710,20 @@ class _DoseHistoryRow extends StatelessWidget {
     );
   }
 
-  static String _formatAmount(double value) => value == value.roundToDouble()
-      ? value.toStringAsFixed(0)
-      : value.toStringAsFixed(2);
-
-  static String _formatDateTime(DateTime value) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    final hour = value.hour.toString().padLeft(2, '0');
-    final minute = value.minute.toString().padLeft(2, '0');
-    return '${months[value.month - 1]} ${value.day} · $hour:$minute';
+  static String _formatAmount(AppLocalizations l10n, double value) {
+    final format = NumberFormat.decimalPattern(l10n.localeName)
+      ..maximumFractionDigits = 2;
+    return format.format(value);
   }
 
-  static String _siteLabel(String key) => key
-      .split('-')
-      .map(
-        (part) => part.isEmpty
-            ? part
-            : '${part[0].toUpperCase()}${part.substring(1)}',
-      )
-      .join(' ');
+  static String _formatDateTime(BuildContext context, DateTime value) {
+    final material = MaterialLocalizations.of(context);
+    final time = material.formatTimeOfDay(
+      TimeOfDay.fromDateTime(value),
+      alwaysUse24HourFormat: MediaQuery.alwaysUse24HourFormatOf(context),
+    );
+    return '${material.formatShortDate(value)} · $time';
+  }
 }
 
 class LogPastDoseSheet extends StatefulWidget {
@@ -691,6 +744,7 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
   int _selectedIndex = 0;
   String _site = '';
   bool _saving = false;
+  bool _didLocalizeDefaults = false;
 
   _PastDoseTarget get _target => _targets[_selectedIndex];
 
@@ -711,7 +765,16 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
     _amountCtrl = TextEditingController();
     _notesCtrl = TextEditingController();
     _time = TimeOfDay(hour: now.hour, minute: now.minute);
-    if (_targets.isNotEmpty) _applyTargetDefaults();
+    if (_targets.isNotEmpty) _applyTargetDefaults(localeAware: false);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_targets.isNotEmpty && !_didLocalizeDefaults) {
+      _applyTargetDefaults();
+      _didLocalizeDefaults = true;
+    }
   }
 
   @override
@@ -721,7 +784,7 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
     super.dispose();
   }
 
-  void _applyTargetDefaults() {
+  void _applyTargetDefaults({bool localeAware = true}) {
     final schedule = _target.peptide.scheduleForDate(
       protocolStart: _target.protocol.startDate,
       date: _date,
@@ -731,7 +794,9 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
     final time =
         _firstScheduledTime(schedule?.scheduledTimes) ??
         _firstScheduledTime(_target.peptide.scheduledTimes);
-    _amountCtrl.text = _formatAmount(amount);
+    _amountCtrl.text = localeAware
+        ? _formatAmount(context.protocolL10n, amount)
+        : amount.toString();
     if (time != null) _time = _parseTime(time);
   }
 
@@ -798,9 +863,7 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
     );
     if (blendSnapshot != null && !blendSnapshot.isValid) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Draw must be greater than zero and within the vial.'),
-        ),
+        SnackBar(content: Text(context.protocolL10n.doseDrawInvalid)),
       );
       return;
     }
@@ -813,7 +876,7 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
     );
     if (loggedAt.isAfter(DateTime.now())) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Choose a past time to log.')),
+        SnackBar(content: Text(context.protocolL10n.doseChoosePastTime)),
       );
       return;
     }
@@ -839,9 +902,7 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Could not log previous dose. Try again.'),
-        ),
+        SnackBar(content: Text(context.protocolL10n.dosePreviousError)),
       );
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -882,12 +943,15 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
       children: [
         _SheetHandle(),
         const SizedBox(height: AppSpacing.lg),
-        Text('LOG.PREVIOUS', style: AppTypography.systemLabel),
+        Text(
+          context.protocolL10n.doseLogPreviousSystemLabel,
+          style: AppTypography.systemLabel,
+        ),
         const SizedBox(height: AppSpacing.sm),
-        Text('No peptides available', style: AppTypography.h2),
+        Text(context.protocolL10n.doseNoPeptides, style: AppTypography.h2),
         const SizedBox(height: AppSpacing.base),
         Text(
-          'Add a peptide to an active protocol before logging history.',
+          context.protocolL10n.doseNoPeptidesBody,
           style: AppTypography.bodyMedium,
           textAlign: TextAlign.center,
         ),
@@ -903,12 +967,18 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
         children: [
           _SheetHandle(),
           const SizedBox(height: AppSpacing.lg),
-          Text('LOG.PREVIOUS', style: AppTypography.systemLabel),
+          Text(
+            context.protocolL10n.doseLogPreviousSystemLabel,
+            style: AppTypography.systemLabel,
+          ),
           const SizedBox(height: AppSpacing.sm),
-          Text('Correct dose history', style: AppTypography.h2),
+          Text(
+            context.protocolL10n.doseCorrectHistory,
+            style: AppTypography.h2,
+          ),
           const SizedBox(height: AppSpacing.lg),
           _LabeledField(
-            label: 'PEPTIDE',
+            label: context.protocolL10n.dosePeptide,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
               child: DropdownButtonHideUnderline(
@@ -944,17 +1014,23 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
             children: [
               Expanded(
                 child: _LabeledField(
-                  label: 'DATE',
-                  child: InkWell(
-                    onTap: _pickDate,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.md,
-                        vertical: 14,
-                      ),
-                      child: Text(
-                        _formatDate(_date),
-                        style: AppTypography.tabular.copyWith(fontSize: 16),
+                  label: context.protocolL10n.doseDate,
+                  child: Semantics(
+                    button: true,
+                    label: context.protocolL10n.doseChooseDate,
+                    child: InkWell(
+                      onTap: _pickDate,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.md,
+                          vertical: 14,
+                        ),
+                        child: Text(
+                          MaterialLocalizations.of(
+                            context,
+                          ).formatShortDate(_date),
+                          style: AppTypography.tabular.copyWith(fontSize: 16),
+                        ),
                       ),
                     ),
                   ),
@@ -963,17 +1039,21 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
               const SizedBox(width: AppSpacing.cardGap),
               Expanded(
                 child: _LabeledField(
-                  label: 'TIME',
-                  child: InkWell(
-                    onTap: _pickTime,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.md,
-                        vertical: 14,
-                      ),
-                      child: Text(
-                        _formatTime(_time),
-                        style: AppTypography.tabular.copyWith(fontSize: 16),
+                  label: context.protocolL10n.doseTime,
+                  child: Semantics(
+                    button: true,
+                    label: context.protocolL10n.doseChooseTime,
+                    child: InkWell(
+                      onTap: _pickTime,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.md,
+                          vertical: 14,
+                        ),
+                        child: Text(
+                          _formatTime(context, _time),
+                          style: AppTypography.tabular.copyWith(fontSize: 16),
+                        ),
                       ),
                     ),
                   ),
@@ -983,28 +1063,32 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
           ),
           const SizedBox(height: AppSpacing.lg),
           _LabeledField(
-            label: 'AMOUNT',
+            label: context.protocolL10n.doseAmount,
             suffix: _units,
-            child: TextField(
-              controller: _amountCtrl,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              inputFormatters: const [decimalInputFormatter],
-              style: AppTypography.heroSmall.copyWith(fontSize: 18),
-              textAlignVertical: TextAlignVertical.center,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                errorBorder: InputBorder.none,
-                focusedErrorBorder: InputBorder.none,
-                disabledBorder: InputBorder.none,
-                isDense: true,
-                filled: false,
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md,
-                  vertical: 14,
+            child: Semantics(
+              label: context.protocolL10n.doseAmount,
+              textField: true,
+              child: TextField(
+                controller: _amountCtrl,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                inputFormatters: const [decimalInputFormatter],
+                style: AppTypography.heroSmall.copyWith(fontSize: 18),
+                textAlignVertical: TextAlignVertical.center,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  focusedErrorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  isDense: true,
+                  filled: false,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md,
+                    vertical: 14,
+                  ),
                 ),
               ),
             ),
@@ -1012,7 +1096,9 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
           if (_syringeUnits > 0) ...[
             const SizedBox(height: AppSpacing.sm),
             Text(
-              '${_formatAmount(_syringeUnits)} syringe units recorded for this entry.',
+              context.protocolL10n.doseSyringeUnitsEntry(
+                _formatAmount(context.protocolL10n, _syringeUnits),
+              ),
               style: AppTypography.bodySmall.copyWith(
                 fontFamily: 'JetBrainsMono',
                 color: AppColors.textSecondary,
@@ -1020,7 +1106,10 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
             ),
           ],
           const SizedBox(height: AppSpacing.lg),
-          Text('INJECTION.SITE', style: AppTypography.systemLabel),
+          Text(
+            context.protocolL10n.doseInjectionSite,
+            style: AppTypography.systemLabel,
+          ),
           const SizedBox(height: AppSpacing.sm),
           Wrap(
             spacing: AppSpacing.sm,
@@ -1028,7 +1117,7 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
             children: [
               for (final s in kInjectionSites)
                 _SiteChip(
-                  label: s.label,
+                  label: _localizedInjectionSite(context.protocolL10n, s.key),
                   selected: _site == s.key,
                   onTap: () =>
                       setState(() => _site = _site == s.key ? '' : s.key),
@@ -1037,33 +1126,37 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
           ),
           const SizedBox(height: AppSpacing.lg),
           _LabeledField(
-            label: 'NOTES',
-            child: TextField(
-              controller: _notesCtrl,
-              maxLines: 2,
-              style: AppTypography.bodyMedium,
-              decoration: InputDecoration(
-                hintText: 'Optional...',
-                hintStyle: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.textDisabled,
-                ),
-                border: InputBorder.none,
-                isDense: true,
-                filled: false,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md,
+            label: context.protocolL10n.doseNotes,
+            child: Semantics(
+              label: context.protocolL10n.doseNotes,
+              textField: true,
+              child: TextField(
+                controller: _notesCtrl,
+                maxLines: 2,
+                style: AppTypography.bodyMedium,
+                decoration: InputDecoration(
+                  hintText: context.protocolL10n.doseOptional,
+                  hintStyle: AppTypography.bodyMedium.copyWith(
+                    color: AppColors.textDisabled,
+                  ),
+                  border: InputBorder.none,
+                  isDense: true,
+                  filled: false,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md,
+                  ),
                 ),
               ),
             ),
           ),
           const SizedBox(height: AppSpacing.base),
           Text(
-            'Historical logs are personal tracking records only. They do not change medical guidance or dosing recommendations.',
+            context.protocolL10n.doseHistoryDisclaimer,
             style: AppTypography.disclaimer,
           ),
           const SizedBox(height: AppSpacing.xl),
           PrimaryButton(
-            label: 'LOG PREVIOUS DOSE',
+            label: context.protocolL10n.doseLogPrevious,
             icon: Icons.history_rounded,
             isLoading: _saving,
             onPressed: _canSave ? _save : null,
@@ -1086,29 +1179,17 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
     );
   }
 
-  String _formatAmount(double d) =>
-      d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(2);
-
-  String _formatDate(DateTime d) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return '${months[d.month - 1]} ${d.day}';
+  String _formatAmount(AppLocalizations l10n, double value) {
+    final format = NumberFormat.decimalPattern(l10n.localeName)
+      ..maximumFractionDigits = 2;
+    return format.format(value);
   }
 
-  String _formatTime(TimeOfDay t) =>
-      '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
+  String _formatTime(BuildContext context, TimeOfDay time) =>
+      MaterialLocalizations.of(context).formatTimeOfDay(
+        time,
+        alwaysUse24HourFormat: MediaQuery.alwaysUse24HourFormatOf(context),
+      );
 }
 
 class _PastDoseTarget {
@@ -1192,39 +1273,46 @@ class _SiteChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.selectionClick();
-        onTap();
-      },
-      child: AnimatedContainer(
-        duration: AppDurations.fast,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
-        ),
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primary.withValues(alpha: 0.15)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(
-            color: selected ? AppColors.primary : AppColors.border,
-            width: selected ? 1.5 : 1,
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: GestureDetector(
+        onTap: () {
+          HapticFeedback.selectionClick();
+          onTap();
+        },
+        child: AnimatedContainer(
+          duration: AppDurations.fast,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.sm,
           ),
-          boxShadow: selected
-              ? [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.2),
-                    blurRadius: 6,
-                  ),
-                ]
-              : null,
-        ),
-        child: Text(
-          label,
-          style: AppTypography.labelMedium.copyWith(
-            color: selected ? AppColors.primary : AppColors.textSecondary,
+          decoration: BoxDecoration(
+            color: selected
+                ? AppColors.primary.withValues(alpha: 0.15)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+              color: selected ? AppColors.primary : AppColors.border,
+              width: selected ? 1.5 : 1,
+            ),
+            boxShadow: selected
+                ? [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.2),
+                      blurRadius: 6,
+                    ),
+                  ]
+                : null,
+          ),
+          child: ExcludeSemantics(
+            child: Text(
+              label,
+              style: AppTypography.labelMedium.copyWith(
+                color: selected ? AppColors.primary : AppColors.textSecondary,
+              ),
+            ),
           ),
         ),
       ),
