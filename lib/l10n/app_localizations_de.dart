@@ -161,7 +161,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get iuSafety =>
-      'IE bleibt IE. PepMod rechnet IE nicht in mg/mcg oder zurück um.';
+      'IE bleibt IE. PepMod rechnet IE nicht in mg/mcg um oder zurück.';
 
   @override
   String get enterAmount => 'Menge eingeben';
@@ -263,4 +263,2258 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get frequencyAsNeeded => 'Bei Bedarf';
+
+  @override
+  String get tabProtocol => 'Protokoll';
+
+  @override
+  String get tabProgress => 'Fortschritt';
+
+  @override
+  String get tabLibrary => 'Bibliothek';
+
+  @override
+  String get tabYou => 'Du';
+
+  @override
+  String get continueLabel => 'WEITER';
+
+  @override
+  String get processingLabel => 'WIRD VERARBEITET…';
+
+  @override
+  String get authAppleFailed =>
+      'Apple-Anmeldung fehlgeschlagen. Bitte versuche es erneut.';
+
+  @override
+  String get authGoogleFailed =>
+      'Google-Anmeldung fehlgeschlagen. Bitte versuche es erneut.';
+
+  @override
+  String get authGenericError =>
+      'Etwas ist schiefgelaufen. Bitte versuche es erneut.';
+
+  @override
+  String get authUserNotFound =>
+      'Für diese E-Mail-Adresse wurde kein Konto gefunden.';
+
+  @override
+  String get authIncorrectCredentials =>
+      'E-Mail-Adresse oder Passwort ist falsch.';
+
+  @override
+  String get authAccountExists =>
+      'Für diese E-Mail-Adresse gibt es bereits ein Konto.';
+
+  @override
+  String get authWeakPassword =>
+      'Das Passwort ist zu schwach. Verwende mindestens 6 Zeichen.';
+
+  @override
+  String get authInvalidEmail => 'Ungültige E-Mail-Adresse.';
+
+  @override
+  String get authAppleUnavailable =>
+      'Die Anmeldung mit Apple ist für diese App nicht aktiviert.';
+
+  @override
+  String get authRequiredTitle => 'Speichere dein persönliches\nProtokoll';
+
+  @override
+  String get authRequiredBody =>
+      'Verknüpfe deinen Plan, Zeitplan, deine Dosisprotokolle und Erinnerungen mit deinem Konto, bevor das Protokoll freigeschaltet wird.';
+
+  @override
+  String get continueWithEmail => 'MIT E-MAIL FORTFAHREN';
+
+  @override
+  String get signInWithApple => 'MIT APPLE ANMELDEN';
+
+  @override
+  String get continueWithGoogle => 'MIT GOOGLE FORTFAHREN';
+
+  @override
+  String get authTermsDisclaimer =>
+      'Wenn du fortfährst, akzeptierst du unsere Nutzungsbedingungen und Datenschutzerklärung. PepMod ist ein Lernwerkzeug und keine medizinische Beratung.';
+
+  @override
+  String get signIn => 'Anmelden';
+
+  @override
+  String get createAccount => 'Konto erstellen';
+
+  @override
+  String get resetPassword => 'Passwort zurücksetzen';
+
+  @override
+  String get signInAction => 'ANMELDEN';
+
+  @override
+  String get createAccountAction => 'KONTO ERSTELLEN';
+
+  @override
+  String get sendResetLink => 'LINK SENDEN';
+
+  @override
+  String get passwordResetSent =>
+      'E-Mail zum Zurücksetzen gesendet. Prüfe deinen Posteingang.';
+
+  @override
+  String get enterEmail => 'Gib deine E-Mail-Adresse ein';
+
+  @override
+  String get enterValidEmail => 'Gib eine gültige E-Mail-Adresse ein';
+
+  @override
+  String get enterPassword => 'Gib ein Passwort ein';
+
+  @override
+  String get passwordMinLength => 'Mindestens 6 Zeichen';
+
+  @override
+  String get forgotPassword => 'Passwort vergessen?';
+
+  @override
+  String get alreadyHaveAccount => 'Du hast bereits ein Konto? Anmelden';
+
+  @override
+  String get backToSignIn => 'Zurück zur Anmeldung';
+
+  @override
+  String get emailLabel => 'E-Mail';
+
+  @override
+  String get passwordLabel => 'Passwort';
+
+  @override
+  String get showPassword => 'Passwort anzeigen';
+
+  @override
+  String get hidePassword => 'Passwort ausblenden';
+
+  @override
+  String get accountDeletedTitle => 'Konto gelöscht';
+
+  @override
+  String get accountDeletedBody =>
+      'Dein PepMod-Konto und deine gespeicherten App-Daten wurden entfernt.';
+
+  @override
+  String get subscriptionUnavailable =>
+      'Abos sind derzeit nicht verfügbar. Bitte versuche es erneut.';
+
+  @override
+  String get upgradeUnavailable =>
+      'Das Upgrade ist derzeit nicht verfügbar. Bitte versuche es später erneut.';
+
+  @override
+  String get noPurchasesToRestore =>
+      'Keine Käufe zum Wiederherstellen gefunden.';
+
+  @override
+  String get unlockFullProtocol => 'Schalte das vollständige Protokoll frei';
+
+  @override
+  String get premiumUnlimitedPeptides =>
+      'Unbegrenzt viele Peptide pro Protokoll';
+
+  @override
+  String get premiumMultipleProtocols => 'Mehrere aktive Protokolle';
+
+  @override
+  String get premiumCalculator => 'Rekonstitutionsrechner (alle Peptide)';
+
+  @override
+  String get premiumMetrics => 'Körperwerte und Diagramme verfolgen';
+
+  @override
+  String get upgradeNow => 'JETZT UPGRADEN';
+
+  @override
+  String get restorePurchases => 'Käufe wiederherstellen';
+
+  @override
+  String get notRightNow => 'Jetzt nicht';
+
+  @override
+  String get protocolWeeklyPlanner => 'Wochenplan';
+
+  @override
+  String get protocolDoseHistory => 'Dosisverlauf';
+
+  @override
+  String get protocolCreate => 'Protokoll erstellen';
+
+  @override
+  String get protocolManage => 'VERWALTEN';
+
+  @override
+  String get protocolYourProtocol => 'Dein Protokoll';
+
+  @override
+  String get protocolNoActive => 'Kein aktives Protokoll';
+
+  @override
+  String get protocolNoActiveBody =>
+      'Erstelle dein erstes Protokoll, um Dosen und Regelmäßigkeit zu erfassen.';
+
+  @override
+  String get protocolStartFirst => 'ERSTES PROTOKOLL STARTEN';
+
+  @override
+  String get protocolScheduleTodaySystemLabel => 'PLAN // HEUTE';
+
+  @override
+  String get protocolAdherenceTodaySystemLabel => 'ADHÄRENZ // HEUTE';
+
+  @override
+  String get protocolNoDosesScheduledToday => 'Heute keine Dosen geplant';
+
+  @override
+  String protocolDosesTaken(int taken, int total) {
+    return '$taken von $total Dosen erfasst';
+  }
+
+  @override
+  String get protocolNextDose => 'NÄCHSTE DOSIS';
+
+  @override
+  String protocolInTime(String duration) {
+    return 'In $duration';
+  }
+
+  @override
+  String protocolDurationHoursMinutes(int hours, int minutes) {
+    return '$hours Std. $minutes Min.';
+  }
+
+  @override
+  String protocolDurationMinutes(int minutes) {
+    return '$minutes Min.';
+  }
+
+  @override
+  String get protocolLogDose => 'DOSIS ERFASSEN';
+
+  @override
+  String get protocolNow => 'jetzt';
+
+  @override
+  String get protocolMissed => 'VERPASST';
+
+  @override
+  String get protocolSkipped => 'ÜBERSPRUNGEN';
+
+  @override
+  String get protocolNoDosesToday => 'Heute keine Dosen';
+
+  @override
+  String get protocolNoDosesTodayBody =>
+      'Für dein Protokoll sind heute keine Dosen geplant.';
+
+  @override
+  String get protocolFreeLimit =>
+      'Im kostenlosen Tarif ist nur ein Protokoll möglich. Mit Premium kannst du mehrere Stacks gleichzeitig nutzen.';
+
+  @override
+  String protocolSyringeUnitsSuffix(String amount) {
+    return ' · $amount Spritzeneinheiten';
+  }
+
+  @override
+  String get injectionSiteLeftAbdomen => 'Linker Bauch';
+
+  @override
+  String get injectionSiteRightAbdomen => 'Rechter Bauch';
+
+  @override
+  String get injectionSiteLeftThigh => 'Linker Oberschenkel';
+
+  @override
+  String get injectionSiteRightThigh => 'Rechter Oberschenkel';
+
+  @override
+  String get injectionSiteLeftGlute => 'Linke Gesäßhälfte';
+
+  @override
+  String get injectionSiteRightGlute => 'Rechte Gesäßhälfte';
+
+  @override
+  String get injectionSiteLeftTriceps => 'Linker Trizeps';
+
+  @override
+  String get injectionSiteRightTriceps => 'Rechter Trizeps';
+
+  @override
+  String get plannerToday => 'HEUTE';
+
+  @override
+  String get plannerBack => 'Zurück';
+
+  @override
+  String get plannerPreviousWeek => 'Vorherige Woche';
+
+  @override
+  String get plannerNextWeek => 'Nächste Woche';
+
+  @override
+  String plannerScheduledCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count geplante Dosen',
+      one: '$count geplante Dosis',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get plannerTrackingDisclaimer =>
+      'Nur zur Dokumentation. Dieser Kalender zeigt dein gespeichertes Protokoll und gibt keine Dosierungsempfehlung.';
+
+  @override
+  String get plannerWashoutPeriod => 'Pausenzeit';
+
+  @override
+  String plannerWashoutUntil(String date) {
+    return 'Pause bis $date';
+  }
+
+  @override
+  String get plannerNoScheduledDoses => 'Keine Dosen geplant';
+
+  @override
+  String get plannerNothingPlanned =>
+      'In deinen gespeicherten Protokollen ist nichts geplant.';
+
+  @override
+  String get activatePro => 'PRO AKTIVIEREN';
+
+  @override
+  String activateProPrice(String price) {
+    return 'PRO AKTIVIEREN — $price/Jahr';
+  }
+
+  @override
+  String get annualAccess => 'Jährlicher Zugang';
+
+  @override
+  String get annualLabel => 'Jährlich';
+
+  @override
+  String get averageRating => 'Ø BEWERTUNG';
+
+  @override
+  String get bacWaterLabel => 'BAC-WASSER';
+
+  @override
+  String get basedOnInputs => 'Basierend auf deinen Angaben //';
+
+  @override
+  String get bestValue => 'Bestes Angebot';
+
+  @override
+  String get birthDateInvalid =>
+      'Gib ein gültiges Geburtsdatum für ein Alter von 18 Jahren oder älter ein.';
+
+  @override
+  String get birthDateValid => 'Alter bestätigt';
+
+  @override
+  String calculatorDemoBody(String peptideName) {
+    return 'So funktioniert es mit $peptideName';
+  }
+
+  @override
+  String get calculatorDemoResult =>
+      'Das war\'s. Werte eingeben,\nexakte Spritzeneinheiten erhalten.';
+
+  @override
+  String get calculatorDemoTitle => 'Keine gruselige\nMathematik mehr.';
+
+  @override
+  String get confidenceCycleTiming => 'Zyklus-Timing';
+
+  @override
+  String get confidenceCycleTimingDetail =>
+      'Protokolltermine und Zeitfenster klar im Blick behalten';
+
+  @override
+  String get confidenceDoseMath => 'Dosis-Rechnung';
+
+  @override
+  String get confidenceDoseMathDetail =>
+      'Fläschchen, Wasser, Dosis und Aufziehmenge an einem Ort';
+
+  @override
+  String get confidenceLabel => 'SICHERHEIT';
+
+  @override
+  String get confidencePlainInfo => 'Informationen in einfacher Sprache';
+
+  @override
+  String get confidencePlainInfoDetail =>
+      'Lies Forschungsnotizen ohne Ablenkung';
+
+  @override
+  String get confidenceProgressSignals => 'Fortschrittssignale';
+
+  @override
+  String get confidenceProgressSignalsDetail =>
+      'Verfolge Adhärenz und Körperwerte im Zeitverlauf';
+
+  @override
+  String get confidenceSafetyFraming => 'Sicherheitshinweise';
+
+  @override
+  String get confidenceSafetyFramingDetail =>
+      'Behalte Hinweise und Haftungsausschlüsse im Blick';
+
+  @override
+  String get confidenceSiteRotation => 'Stellenrotation';
+
+  @override
+  String get confidenceSiteRotationDetail =>
+      'Behalte im Blick, wo jede Dosis erfasst wurde';
+
+  @override
+  String get connectingToStore => 'VERBINDUNG ZUM STORE...';
+
+  @override
+  String continueSelected(int count) {
+    return 'WEITER ($count)';
+  }
+
+  @override
+  String get customProtocol => 'Eigenes Protokoll';
+
+  @override
+  String get dateOfBirthLabel => 'GEBURTSDATUM';
+
+  @override
+  String get dayOne => 'TAG 1';
+
+  @override
+  String get dayShortLabel => 'TT';
+
+  @override
+  String get defaultConfidence => 'Dosisberechnung · Stellenrotation';
+
+  @override
+  String get defaultFrustration => 'Verpasste Dosen';
+
+  @override
+  String get defaultGoals => 'Regeneration · Langlebigkeit';
+
+  @override
+  String get doseLabel => 'DOSIS';
+
+  @override
+  String get dosesLogged => 'DOSEN ERFASST';
+
+  @override
+  String get dosesPerDay => 'DOSEN/TAG';
+
+  @override
+  String get drawVolumeLabel => 'ENTNAHMEVOLUMEN';
+
+  @override
+  String get durationLabel => 'DAUER';
+
+  @override
+  String get experienceAdvanced => 'Fortgeschritten';
+
+  @override
+  String get experienceAdvancedDetail =>
+      'Ich komme gut mit detaillierten Protokollen zurecht';
+
+  @override
+  String get experienceFirstTime => 'Erstmalig';
+
+  @override
+  String get experienceFirstTimeDetail => 'Ich bin neu beim Peptid-Tracking';
+
+  @override
+  String get experienceIntermediate => 'MITTEL';
+
+  @override
+  String get experienceLabel => 'ERFAHRUNG';
+
+  @override
+  String get experienceNovice => 'ANFÄNGER';
+
+  @override
+  String get experienceSome => 'Etwas Erfahrung';
+
+  @override
+  String get experienceSomeDetail =>
+      'Ich habe schon ein oder zwei Protokolle erfasst';
+
+  @override
+  String get experienceVeteran => 'SEHR ERFAHREN';
+
+  @override
+  String get featureDoseMathBody =>
+      'Behalte Fläschchengröße, Wassermenge, Dosis und aufzuziehende Einheiten neben dem Protokoll, das du gerade verfolgst.';
+
+  @override
+  String get featureDoseMathTitle => 'Dosis-Rechnung\nim Kontext';
+
+  @override
+  String get featureProtocolArcBody =>
+      'Sieh, wie geplante Dosen, erfasste Dosen, Adhärenz und Körperwerte zu einer Zeitleiste zusammenwachsen.';
+
+  @override
+  String get featureProtocolArcTitle => 'Protokollverlauf\nim Zeitverlauf';
+
+  @override
+  String get featureShowcaseTitle => 'Alles, was du brauchst.\nEine App.';
+
+  @override
+  String get featureSiteRotationBody =>
+      'Merke dir jede erfasste Stelle und behalte den Rotationsverlauf im Dosiseintrag.';
+
+  @override
+  String get featureSiteRotationTitle => 'Rotation der\nInjektionsstellen';
+
+  @override
+  String get firstNameExample => 'z. B. Alex';
+
+  @override
+  String get firstNameLabel => 'VORNAME';
+
+  @override
+  String get frustrationForgetting => 'Dosen vergessen';
+
+  @override
+  String get frustrationLabel => 'FRUSTRATION';
+
+  @override
+  String get frustrationMath => 'Fläschchen- und Spritzenrechnung';
+
+  @override
+  String get frustrationProgress => 'Erkennen, ob ich konsequent bin';
+
+  @override
+  String get frustrationSchedule => 'Den Zeitplan im Blick behalten';
+
+  @override
+  String get frustrationStacking => 'Mehrere Peptide gleichzeitig verwalten';
+
+  @override
+  String get frustrationTrust => 'Vertrauenswürdige Informationen finden';
+
+  @override
+  String get goalAntiAging => 'Gesundes Altern';
+
+  @override
+  String get goalAntiAgingDetail =>
+      'Auf Langlebigkeit ausgerichtete Aufzeichnungen ordnen';
+
+  @override
+  String get goalCognitive => 'Kognitive Unterstützung';
+
+  @override
+  String get goalCognitiveDetail =>
+      'Fokus und mentale Leistung im Blick behalten';
+
+  @override
+  String get goalImmune => 'Immununterstützung';
+
+  @override
+  String get goalImmuneDetail =>
+      'Auf das Immunsystem ausgerichtete Protokolle ordnen';
+
+  @override
+  String get goalMuscleGrowth => 'Muskelaufbau';
+
+  @override
+  String get goalMuscleGrowthDetail =>
+      'Trainings- und Wachstumsziele verfolgen';
+
+  @override
+  String get goalOther => 'Sonstiges';
+
+  @override
+  String get goalOtherDetail => 'Ein anderes Tracking-Ziel einrichten';
+
+  @override
+  String get goalRecovery => 'Regeneration';
+
+  @override
+  String get goalRecoveryDetail =>
+      'Regenerationsaufzeichnungen und Routinen unterstützen';
+
+  @override
+  String get goalSleep => 'Schlaf';
+
+  @override
+  String get goalSleepDetail => 'Schlafbezogene Ziele und Muster erfassen';
+
+  @override
+  String get goalWeightLoss => 'Gewichtsverlust';
+
+  @override
+  String get goalWeightLossDetail =>
+      'Stoffwechselziele und Fortschritt verfolgen';
+
+  @override
+  String get goalsLabel => 'ZIELE';
+
+  @override
+  String get iUnderstand => 'VERSTANDEN';
+
+  @override
+  String get lastThreeDaysAgo => 'Zuletzt: vor 3 Tagen';
+
+  @override
+  String get leftAbdomen => 'Linker Bauch';
+
+  @override
+  String get loveIt => 'SUPER';
+
+  @override
+  String get maybeLater => 'Vielleicht später';
+
+  @override
+  String get monthOne => 'MONAT 1';
+
+  @override
+  String get monthShortLabel => 'MM';
+
+  @override
+  String get monthTwo => 'MONAT 2';
+
+  @override
+  String moreCount(String shown, int count) {
+    return '$shown +$count weitere';
+  }
+
+  @override
+  String get needsWork => 'AUSBAUFÄHIG';
+
+  @override
+  String get notificationBody =>
+      'Erhalte dezente Erinnerungen, wenn ein geplantes Protokollfenster fällig ist. Keine Peptidnamen in den Mitteilungen — nur ein sanfter Hinweis.';
+
+  @override
+  String get notificationTitle => 'Dosiszeiten\nim Blick behalten.';
+
+  @override
+  String get nowLabel => 'jetzt';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get onboardingAgeConfirmed => 'ICH BIN 18 ODER ÄLTER';
+
+  @override
+  String get onboardingAgeRequirementBody =>
+      'Du musst mindestens 18 Jahre alt sein, um PepMod zu nutzen.';
+
+  @override
+  String get onboardingAgeRequirementTitle => 'Altersvoraussetzung';
+
+  @override
+  String get onboardingAgeVerificationBody =>
+      'PepMod ist für Erwachsene ab 18 Jahren vorgesehen.';
+
+  @override
+  String get onboardingAgeVerificationTitle => 'Bestätige zuerst\ndein Alter.';
+
+  @override
+  String get onboardingAheadBody =>
+      'Beantworte ein paar Fragen, und PepMod erstellt eine persönliche Tracking-Vorschau.';
+
+  @override
+  String get onboardingAheadTitle => 'Sieh dein Protokoll,\nbevor du startest.';
+
+  @override
+  String get onboardingBirthDateBody =>
+      'Damit bestätigst du, dass du die Altersanforderung erfüllst.';
+
+  @override
+  String get onboardingBirthDateTitle => 'Wann wurdest\ndu geboren?';
+
+  @override
+  String get onboardingConfidenceBody =>
+      'Wähle alles aus, was PepMod für dich klarer machen soll.';
+
+  @override
+  String get onboardingConfidenceTitle => 'Wobei möchtest du\nmehr Sicherheit?';
+
+  @override
+  String get onboardingConversionValueBody =>
+      'Rechne die Werte aus deinem Fläschchen und Plan in Volumen und Spritzeneinheiten um.';
+
+  @override
+  String get onboardingConversionValueTitle =>
+      'Fläschchenrechnung\neinfacher prüfen.';
+
+  @override
+  String get onboardingDisclaimerBody =>
+      'PepMod hilft dir, Aufzeichnungen, Erinnerungen und Einheitenumrechnungen zu organisieren. Es diagnostiziert nicht, verschreibt nichts und ersetzt keine qualifizierte medizinische Beratung.';
+
+  @override
+  String get onboardingDisclaimerTitle =>
+      'Für Klarheit gemacht.\nKeine Verschreibungen.';
+
+  @override
+  String get onboardingExperienceTitle => 'Wie viel Erfahrung\nhast du?';
+
+  @override
+  String get onboardingFrustrationBody => 'Wähle den größten Stolperstein.';
+
+  @override
+  String get onboardingFrustrationTitle => 'Was ist aktuell\nam schwierigsten?';
+
+  @override
+  String get onboardingGoalsTitle => 'Was sind deine\nwichtigsten Ziele?';
+
+  @override
+  String get onboardingGuidedStartBody =>
+      'Wir passen die Einrichtung an deine Ziele, deine Erfahrung und die Aufzeichnungen an, die du führen möchtest.';
+
+  @override
+  String get onboardingGuidedStartTitle =>
+      'Ein geführter Start,\nganz auf dich abgestimmt.';
+
+  @override
+  String get onboardingHookAnswer =>
+      'PepMod hält die Antwort direkt bei deinem Protokoll bereit.';
+
+  @override
+  String get onboardingHookQuestion => 'Wie viele Einheiten\nziehst du auf?';
+
+  @override
+  String get onboardingHookResearch => 'RECHERCHE-BIBLIOTHEK';
+
+  @override
+  String get onboardingHookSources => 'Quellenbelegte Informationen';
+
+  @override
+  String get onboardingHookVial => 'FLÄSCHCHEN + VERDÜNNUNG';
+
+  @override
+  String get onboardingNameBody =>
+      'Damit personalisieren wir dein PepMod-Erlebnis.';
+
+  @override
+  String get onboardingNameTitle => 'Wie dürfen wir\ndich nennen?';
+
+  @override
+  String get onboardingPeptideSelectBody =>
+      'Wähle die Peptide, die du nutzt oder im Blick behalten möchtest.';
+
+  @override
+  String get onboardingPeptideSelectTitle => 'Was möchtest du\nerfassen?';
+
+  @override
+  String get onboardingProgressValueBody =>
+      'Bringe Regelmäßigkeit, Dosisverlauf und Körperwerte in eine übersichtliche Aufzeichnung.';
+
+  @override
+  String get onboardingProgressValueTitle =>
+      'Sieh den gesamten Verlauf\nüber die Zeit.';
+
+  @override
+  String get onboardingProtocolValueBody =>
+      'Plane Zeitpläne, erfasse Dosen und behalte die Details zu jedem Protokoll.';
+
+  @override
+  String get onboardingProtocolValueTitle => 'Jedes Protokoll\nan einem Ort.';
+
+  @override
+  String get onboardingUnder18 => 'ICH BIN UNTER 18';
+
+  @override
+  String get openingPermission => 'BERECHTIGUNG WIRD GEÖFFNET...';
+
+  @override
+  String get paywallArcBody =>
+      'Sieh, was geplant war, was erfasst wurde und wo eine sauberere Aufzeichnung nötig ist.';
+
+  @override
+  String get paywallArcTitle => 'VERLAUF ÜBER ZEIT BEOBACHTEN';
+
+  @override
+  String get paywallBody =>
+      'Dosis-Rechnung, Stellenrotation, Erinnerungen und Protokollverlauf — alles in einer Aufzeichnung.';
+
+  @override
+  String get paywallDoseMathBody =>
+      'Halte Fläschchen, Wasser, Dosis und Aufziehmenge zusammen, damit jeder Eintrag leichter zu prüfen ist.';
+
+  @override
+  String get paywallDoseMathTitle => 'DIE DOSISRECHNUNG RICHTIG MACHEN';
+
+  @override
+  String get paywallPreviewDisclaimer =>
+      'Für Aufzeichnungen, Erinnerungen und Einheitenklarheit — keine medizinische Beratung.';
+
+  @override
+  String get paywallRotationBody =>
+      'Jede Stelle, jeder Zyklus und jede Erinnerung bleibt im Protokoll erhalten.';
+
+  @override
+  String get paywallRotationTitle =>
+      'VERLIERE NIE DEN ÜBERBLICK ÜBER DEINE ROTATION';
+
+  @override
+  String get paywallTitle => 'Alles für dein\nProtokoll.';
+
+  @override
+  String get paywallValueNote =>
+      'Eine verwirrende Fläschchenberechnung kann Zeit und Produkt kosten. PepMod hält die Berechnung direkt beim Eintrag, damit du deine Aufzeichnungen prüfen kannst, bevor du nach alten Notizen handelst.';
+
+  @override
+  String get peptideLabel => 'PEPTID';
+
+  @override
+  String get peptidesLabel => 'PEPTIDE';
+
+  @override
+  String get peptidesTracked => 'PEPTIDE\nERFASST';
+
+  @override
+  String get perWeek => '/Woche';
+
+  @override
+  String get perYear => '/Jahr';
+
+  @override
+  String get privacyLabel => 'Datenschutz';
+
+  @override
+  String processingGoals(int count) {
+    return 'ANALYSIERE $count ZIELE...';
+  }
+
+  @override
+  String processingPeptides(int count) {
+    return 'VERKNÜPFE $count PEPTID-EINTRÄGE...';
+  }
+
+  @override
+  String get processingProtocol => 'DEIN PROTOKOLL WIRD ERSTELLT...';
+
+  @override
+  String get processingSchedule => 'DEIN ZEITPLAN WIRD ORGANISIERT...';
+
+  @override
+  String get processingTitle => 'Dein Protokoll\nwird erstellt';
+
+  @override
+  String get progressLabel => 'Fortschritt';
+
+  @override
+  String get protocolClarity => 'Protokollklarheit';
+
+  @override
+  String get protocolIncludes => 'DEIN PROTOKOLL ENTHÄLT //';
+
+  @override
+  String get protocolPreviewTitle => 'Dein Protokoll\nist bereit.';
+
+  @override
+  String get protocolReady => 'PROTOKOLL BEREIT //';
+
+  @override
+  String get protocolReminderReady => 'Protokollerinnerung ist bereit';
+
+  @override
+  String get protocolReservedFor =>
+      'DEIN PERSÖNLICHES PROTOKOLL IST RESERVIERT FÜR';
+
+  @override
+  String get restorePurchase => 'Kauf wiederherstellen';
+
+  @override
+  String get resultsSummaryBody =>
+      'Wir bewahren Dosisprotokolle, Rekonstitutionsberechnungen und Trendaufzeichnungen zusammen auf, während deine Daten wachsen.';
+
+  @override
+  String get reviewGateBody =>
+      'Dein Feedback hilft uns, die Plattform für alle Biohacker zu verbessern.';
+
+  @override
+  String get reviewGateTitle => 'Gefällt dir PepMod\nbisher?';
+
+  @override
+  String roadmapBody(int count, String need) {
+    return 'Aufgebaut rund um $count erfasste Peptide und deinen Bedarf an $need.';
+  }
+
+  @override
+  String get roadmapDayOneBody =>
+      'Peptide, Dosisprotokolle, Stellenrotation und Erinnerungen sind bereit.';
+
+  @override
+  String get roadmapDayOneTitle => 'Dein erstes Protokoll ist geordnet';
+
+  @override
+  String get roadmapDisclaimer =>
+      'PepMod hält Aufzeichnungen und Erinnerungen organisiert. Es verschreibt oder diagnostiziert nicht und ersetzt keine ärztliche Beratung.';
+
+  @override
+  String get roadmapMonthOneBody =>
+      'Adhärenz, verpasste Dosen und Körperwerte beginnen, eine klarere Aufzeichnung zu bilden.';
+
+  @override
+  String get roadmapMonthOneTitle =>
+      'Dein Verlauf der Regelmäßigkeit nimmt Form an';
+
+  @override
+  String get roadmapMonthTwoBody =>
+      'Sieh, was du geplant hast, was passiert ist und wo deine Aufzeichnungen Aufmerksamkeit brauchen.';
+
+  @override
+  String get roadmapMonthTwoTitle =>
+      'Dein vollständiger Protokollverlauf ist sichtbar';
+
+  @override
+  String get roadmapTitle => 'Das erwartet\ndich als Nächstes.';
+
+  @override
+  String get roadmapWeekOneBody =>
+      'Verständliche Recherchen und Tracking-Notizen bleiben mit deinem Plan verknüpft.';
+
+  @override
+  String roadmapWeekOneTitle(String goal) {
+    return 'Deine Bibliothek füllt sich rund um $goal';
+  }
+
+  @override
+  String savePercent(int percent) {
+    return 'SPARE $percent%';
+  }
+
+  @override
+  String get saveRoadmap => 'DIESEN FAHRPLAN SPEICHERN';
+
+  @override
+  String get schedulePreview => 'ZEITPLAN-VORSCHAU';
+
+  @override
+  String get seeWhatsInside => 'ENTDECKE, WAS DABEI IST';
+
+  @override
+  String get selectAllThatApply => 'Wähle alles Zutreffende aus.';
+
+  @override
+  String get siteMap => 'Stellenübersicht';
+
+  @override
+  String get skipForNow => 'VORERST ÜBERSPRINGEN';
+
+  @override
+  String get socialProofBody =>
+      'Schließe dich Tausenden an, die echten Fortschritt erfassen.';
+
+  @override
+  String get socialProofTitle => 'Vertraut von\nBiohackern weltweit';
+
+  @override
+  String get specialOffer => 'SONDERANGEBOT';
+
+  @override
+  String get startFreeTrial => 'KOSTENLOS TESTEN';
+
+  @override
+  String get subscribeLabel => 'ABONNIEREN';
+
+  @override
+  String subscribePrice(String price) {
+    return 'ABONNIEREN — $price/Woche';
+  }
+
+  @override
+  String get subscribeToActivate =>
+      'Abonniere, um dein Protokoll zu aktivieren';
+
+  @override
+  String get subscriptionRenewalDisclaimer =>
+      'Das Abo verlängert sich automatisch, sofern es nicht mindestens 24 Stunden vor Ende des aktuellen Zeitraums gekündigt wird. Verwaltung unter Einstellungen > Apple-ID > Abonnements.';
+
+  @override
+  String syringeVolume(String volume) {
+    return '${volume}ml auf einer 1ml-Spritze';
+  }
+
+  @override
+  String get termsLabel => 'Bedingungen';
+
+  @override
+  String get testimonialOne =>
+      'Ich vergesse endlich keine Dosen mehr. Allein der Rekonstitutionsrechner hat mir Stunden Tabellenrechnerei erspart.';
+
+  @override
+  String get testimonialThree =>
+      'Der übersichtlichste Peptid-Tracker, den ich genutzt habe. Wirkt, als wäre er für ernsthafte Nutzer gemacht — weil er es ist.';
+
+  @override
+  String get testimonialTwo =>
+      'Die wöchentlichen Einblicke haben ein Timing-Problem aufgedeckt, das mir monatelang nicht aufgefallen war. Absolutes Highlight.';
+
+  @override
+  String get thirtyDayAdherence => '30-Tage-Adhärenz';
+
+  @override
+  String get threeDayFreeTrial => '3 TAGE KOSTENLOS TESTEN';
+
+  @override
+  String get timelineLabel => 'Zeitachse';
+
+  @override
+  String get trackedLabel => 'erfasst';
+
+  @override
+  String get turnOnReminders => 'ERINNERUNGEN AKTIVIEREN';
+
+  @override
+  String get unitConversionDisclaimer =>
+      'Nur ein Referenzwerkzeug zur Einheitenumrechnung. Prüfe die Angaben immer mit deinem medizinischen Fachpersonal.';
+
+  @override
+  String get unitsLabel => 'Einheiten';
+
+  @override
+  String get unitsToDraw => 'Aufzuziehende Einheiten';
+
+  @override
+  String get unlockPepMod => 'PEPMOD FREISCHALTEN';
+
+  @override
+  String get usersLabel => 'NUTZER';
+
+  @override
+  String get viewLabel => 'ANSICHT';
+
+  @override
+  String get weekDuration => 'WOCHEN-\nDAUER';
+
+  @override
+  String get weekOne => 'WOCHE 1';
+
+  @override
+  String get weeklyLabel => 'Wöchentlich';
+
+  @override
+  String weeksCount(int count) {
+    return '$count Wochen';
+  }
+
+  @override
+  String get yearLabel => 'JAHR';
+
+  @override
+  String get profileTitle => 'Du';
+
+  @override
+  String get signedIn => 'Angemeldet';
+
+  @override
+  String get sectionAccount => 'KONTO';
+
+  @override
+  String get sectionPreferences => 'EINSTELLUNGEN';
+
+  @override
+  String get sectionData => 'DATEN';
+
+  @override
+  String get sectionSupport => 'SUPPORT';
+
+  @override
+  String get sectionLegal => 'RECHTLICHES';
+
+  @override
+  String get sectionAbout => 'ÜBER DIE APP';
+
+  @override
+  String get nameLabel => 'Name';
+
+  @override
+  String get accountLabel => 'Konto';
+
+  @override
+  String get deleteAccount => 'Konto löschen';
+
+  @override
+  String get removeAccountData => 'Konto und Daten entfernen';
+
+  @override
+  String get metricLabel => 'Metrisch';
+
+  @override
+  String get imperialLabel => 'Imperial';
+
+  @override
+  String get notificationsLabel => 'Mitteilungen';
+
+  @override
+  String get onLabel => 'Ein';
+
+  @override
+  String get offLabel => 'Aus';
+
+  @override
+  String get myCompoundsProfile => 'Meine Wirkstoffe';
+
+  @override
+  String get savedVialPresets => 'Gespeicherte Fläschchenvorlagen';
+
+  @override
+  String get exportData => 'Daten exportieren';
+
+  @override
+  String get copyAsJson => 'Als JSON kopieren';
+
+  @override
+  String get clearAllData => 'Alle Daten löschen';
+
+  @override
+  String get clearingLabel => 'Wird gelöscht…';
+
+  @override
+  String get resetApp => 'App zurücksetzen';
+
+  @override
+  String get contactSupport => 'Support kontaktieren';
+
+  @override
+  String get chatWithUs => 'Mit uns chatten';
+
+  @override
+  String get termsOfService => 'Nutzungsbedingungen';
+
+  @override
+  String get privacyPolicy => 'Datenschutzerklärung';
+
+  @override
+  String get medicalDisclaimer => 'Medizinischer Hinweis';
+
+  @override
+  String get disclaimerTitle => 'Haftungsausschluss';
+
+  @override
+  String get versionLabel => 'Version';
+
+  @override
+  String get signOutAction => 'ABMELDEN';
+
+  @override
+  String get educationalTrackingDisclaimer =>
+      'Nur zur Aufzeichnung und Information. Keine medizinische Beratung.';
+
+  @override
+  String get yourName => 'Dein Name';
+
+  @override
+  String get cancelLabel => 'Abbrechen';
+
+  @override
+  String get saveLabel => 'Speichern';
+
+  @override
+  String get dataCopied => 'Daten in die Zwischenablage kopiert.';
+
+  @override
+  String get clearDataTitle => 'Alle Daten löschen?';
+
+  @override
+  String get clearDataBody =>
+      'Dadurch werden alle Protokolle, Dosisprotokolle und Körperwerte gelöscht und das Onboarding neu gestartet. Dein Konto, dein Abo und die Peptidbibliothek bleiben erhalten. Dies kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get clearLabel => 'Löschen';
+
+  @override
+  String get clearingDataTitle => 'Daten werden gelöscht…';
+
+  @override
+  String get clearingDataBody =>
+      'Lass PepMod geöffnet, während deine Aufzeichnungsdaten entfernt werden.';
+
+  @override
+  String get clearDataFailed =>
+      'Daten konnten nicht gelöscht werden. Prüfe deine Verbindung und versuche es erneut.';
+
+  @override
+  String get allDataCleared => 'Alle Daten wurden gelöscht.';
+
+  @override
+  String get deleteAccountTitle => 'Konto löschen?';
+
+  @override
+  String get deleteAccountBody =>
+      'Dadurch werden dein PepMod-Konto, deine Einstellungen, Protokolle, Dosisprotokolle und Körperwerte dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get deletingAccount => 'Konto wird gelöscht…';
+
+  @override
+  String get accountDeletionFailed =>
+      'Das Konto konnte nicht gelöscht werden. Bitte versuche es erneut.';
+
+  @override
+  String get confirmPassword => 'Passwort bestätigen';
+
+  @override
+  String get deleteLabel => 'Löschen';
+
+  @override
+  String get signOutTitle => 'Abmelden?';
+
+  @override
+  String get signOutBody =>
+      'Deine Protokolle bleiben gespeichert und werden bei der nächsten Anmeldung synchronisiert.';
+
+  @override
+  String get signOutLabel => 'Abmelden';
+
+  @override
+  String get signOutFailed =>
+      'Abmeldung fehlgeschlagen. Bitte versuche es erneut.';
+
+  @override
+  String get notificationsDisabledSystem =>
+      'Mitteilungen sind in den Systemeinstellungen deaktiviert.';
+
+  @override
+  String get planPro => 'PRO';
+
+  @override
+  String get planFree => 'KOSTENLOS';
+
+  @override
+  String get termsBody =>
+      'PepMod ist ausschließlich für Bildungs- und Aufzeichnungszwecke bestimmt. Es ist kein Medizinprodukt und bietet keine medizinische Beratung, Diagnose, Verschreibung oder Behandlungsempfehlung. Bei der Nutzung von PepMod bist du für deine eigenen Aufzeichnungen, Entscheidungen und die Rücksprache mit qualifiziertem medizinischem Fachpersonal selbst verantwortlich.\n\nAbos verlängern sich automatisch, sofern sie nicht vor dem Verlängerungszeitraum im App Store oder bei Google Play gekündigt werden. Erstattungen werden über den Store abgewickelt, in dem du gekauft hast.\n\nVollständige Bedingungen: https://appstorecopilot.com/legal/yzh32x5v/terms';
+
+  @override
+  String get privacyBody =>
+      'PepMod nutzt Firebase für Anmeldung und Cloud-Datenspeicherung, RevenueCat für Abos, AppRefer und Meta/Facebook App Events für Attribution sowie Firebase/Crashlytics für Analysen und Diagnosen. Wir verkaufen deine personenbezogenen Daten nicht. Du kannst dein Konto und gespeicherte App-Daten in der App löschen.\n\nVollständige Datenschutzerklärung: https://appstorecopilot.com/legal/yzh32x5v/privacy';
+
+  @override
+  String get medicalDisclaimerBody =>
+      'PepMod ist ein Wellness- und Aufzeichnungswerkzeug — KEIN Medizinprodukt. Nichts in dieser App stellt eine medizinische Beratung, Diagnose, Verschreibung oder Behandlungsempfehlung dar. Die Peptide in der Bibliothek dienen ausschließlich zu Informationszwecken. Sprich vor Beginn, Änderung oder Beendigung eines Programms immer mit qualifiziertem medizinischem Fachpersonal. Suche bei unerwünschten Wirkungen sofort medizinische Hilfe.';
+
+  @override
+  String get profileSystemLabel => 'SYS.USER // PROFIL';
+
+  @override
+  String get legalSystemLabel => 'SYS.RECHTLICHES';
+
+  @override
+  String get progressTitle => 'Fortschritt';
+
+  @override
+  String get progressSystemLabel => 'SYS.FORTSCHRITT // BIOMETRIE';
+
+  @override
+  String get doseHistoryTooltip => 'Dosisverlauf öffnen';
+
+  @override
+  String get logMeasurementTooltip => 'Messwert erfassen';
+
+  @override
+  String get thirtyDayLabel => '30 TAGE';
+
+  @override
+  String get adherenceLabel => 'Regelmäßigkeit';
+
+  @override
+  String get streakLabel => 'SERIE';
+
+  @override
+  String get daysLabel => 'Tage';
+
+  @override
+  String get totalLabel => 'GESAMT';
+
+  @override
+  String get dosesLabel => 'Dosen';
+
+  @override
+  String get protocolHistoryLabel => 'PROTOKOLL.VERLAUF';
+
+  @override
+  String get noProtocolsYet =>
+      'Noch keine Protokolle. Erstelle eines im Tab „Protokoll“.';
+
+  @override
+  String get adherenceChartLabel => 'ADHÄRENZ // 30 TAGE';
+
+  @override
+  String get thirtyDaysAgo => 'vor 30 Tagen';
+
+  @override
+  String get todayLabel => 'heute';
+
+  @override
+  String get noWeightData => 'Keine Gewichtsdaten';
+
+  @override
+  String get logFirstMeasurement =>
+      'Erfasse deinen ersten Messwert, um hier Trends zu sehen.';
+
+  @override
+  String get logMeasurementAction => 'ERFASSEN';
+
+  @override
+  String get weightTrendLabel => 'GEWICHT // TREND';
+
+  @override
+  String weightKgValue(String weight) {
+    return '$weight kg';
+  }
+
+  @override
+  String get statusActive => 'AKTIV';
+
+  @override
+  String get statusPaused => 'PAUSIERT';
+
+  @override
+  String get statusEnded => 'BEENDET';
+
+  @override
+  String protocolPeptideCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Peptide',
+      one: '1 Peptid',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get enterOneMetric => 'Gib mindestens einen Wert ein.';
+
+  @override
+  String get saveMetricFailed =>
+      'Speichern fehlgeschlagen. Bitte versuche es erneut.';
+
+  @override
+  String get newMeasurement => 'Neuer Messwert';
+
+  @override
+  String get weightLabel => 'GEWICHT';
+
+  @override
+  String get bodyFatLabel => 'KÖRPERFETT';
+
+  @override
+  String get measurementsCmLabel => 'MESSWERTE (cm)';
+
+  @override
+  String get waistLabel => 'TAILLE';
+
+  @override
+  String get chestLabel => 'BRUST';
+
+  @override
+  String get armLabel => 'ARM';
+
+  @override
+  String get saveAction => 'SPEICHERN';
+
+  @override
+  String get logMetricSystemLabel => 'MESSWERT.ERFASSEN';
+
+  @override
+  String get activeLastSevenDays => 'LETZTE 7 TAGE';
+
+  @override
+  String get activeAllTime => 'GESAMT';
+
+  @override
+  String get activeAdherence => 'Regelmäßigkeit';
+
+  @override
+  String get activeStarted => 'GESTARTET';
+
+  @override
+  String get activeEnded => 'BEENDET';
+
+  @override
+  String activeStackCount(int count) {
+    return 'STACK ($count)';
+  }
+
+  @override
+  String get activeEditProtocol => 'PROTOKOLL BEARBEITEN';
+
+  @override
+  String get activePauseProtocol => 'PAUSIEREN';
+
+  @override
+  String get activeEndProtocol => 'BEENDEN';
+
+  @override
+  String get activeResumeProtocol => 'FORTSETZEN';
+
+  @override
+  String get activeDeleteProtocol => 'PROTOKOLL LÖSCHEN';
+
+  @override
+  String get activeTrackingDisclaimer =>
+      'Nur zur Dokumentation. Sprich vor Änderungen mit qualifiziertem medizinischem Fachpersonal.';
+
+  @override
+  String get activeEndQuestion => 'Protokoll beenden?';
+
+  @override
+  String get activeEndBody =>
+      'Zukünftige Dosen werden entfernt. Bisherige Einträge bleiben im Verlauf. Dies kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get activeEndAction => 'BEENDEN';
+
+  @override
+  String get activeDeleteQuestion => 'Protokoll löschen?';
+
+  @override
+  String get activeDeleteBody =>
+      'Dadurch werden das Protokoll und alle Dosiseinträge dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get activeDeleteAction => 'LÖSCHEN';
+
+  @override
+  String get cancel => 'Abbrechen';
+
+  @override
+  String get activeStatusActive => 'AKTIV';
+
+  @override
+  String get activeStatusPaused => 'PAUSIERT';
+
+  @override
+  String get activeStatusEnded => 'BEENDET';
+
+  @override
+  String get activeNotesLabel => 'NOTIZEN // PROTOKOLL';
+
+  @override
+  String get activeChangeReminders => 'ÄNDERUNGSERINNERUNGEN';
+
+  @override
+  String get activeChangeRemindersBody =>
+      'Wenn Mitteilungen aktiv sind, plant PepMod für jeden bevorstehenden Phasenwechsel einen lokalen Hinweis um 09:00 Uhr.';
+
+  @override
+  String activePhaseAnchor(String date) {
+    return 'Wochenbereiche beginnen ab $date.';
+  }
+
+  @override
+  String activeWeek(int week) {
+    return 'WOCHE $week';
+  }
+
+  @override
+  String activeWeeks(int start, int end) {
+    return 'WOCHEN $start–$end';
+  }
+
+  @override
+  String get activePerDayAmounts => 'Mengen pro Tag';
+
+  @override
+  String get activeBaseAmount => 'Basismenge';
+
+  @override
+  String get activeCurrent => 'AKTUELL';
+
+  @override
+  String get activeBaseSchedule => 'Basisplan';
+
+  @override
+  String get activeCustomDays => 'Eigene Tage';
+
+  @override
+  String get activeContinuousTracking => 'Fortlaufende Erfassung';
+
+  @override
+  String get activeNoFixedCycle => 'Kein festes Zyklusfenster';
+
+  @override
+  String activeCycleProgress(int week, int total) {
+    return 'Woche $week von $total';
+  }
+
+  @override
+  String activeCycleEnds(String date) {
+    return 'Zyklus endet am $date';
+  }
+
+  @override
+  String activeRestProgress(int week, int total) {
+    return 'Pausenwoche $week von $total';
+  }
+
+  @override
+  String activeRestEnds(String date) {
+    return 'Pausenzeit endet am $date';
+  }
+
+  @override
+  String get activeCycleComplete => 'Zyklus abgeschlossen';
+
+  @override
+  String activeCompletedDate(String date) {
+    return 'Abgeschlossen am $date';
+  }
+
+  @override
+  String activeRestEnded(String date) {
+    return 'Pausenzeit endete am $date';
+  }
+
+  @override
+  String get activeNoHistory =>
+      'Noch keine pausierten oder beendeten Protokolle.';
+
+  @override
+  String activeCompoundsCount(int count) {
+    return '$count Wirkstoffe';
+  }
+
+  @override
+  String activeSyringeUnits(String amount) {
+    return '$amount Spritzeneinheiten';
+  }
+
+  @override
+  String activeCycleWeeks(int count) {
+    return '$count Wo. Zyklus';
+  }
+
+  @override
+  String activeRestWeeks(int count) {
+    return '$count Wo. Pause';
+  }
+
+  @override
+  String get activePerDraw => 'PRO ENTNAHME';
+
+  @override
+  String activeVialSummary(String volume) {
+    return '$volume mL Flakon · U-100';
+  }
+
+  @override
+  String get addCompound => 'WIRKSTOFF HINZUFÜGEN';
+
+  @override
+  String get addPhase => 'PHASE HINZUFÜGEN';
+
+  @override
+  String get addTime => 'Zeit hinzufügen';
+
+  @override
+  String get addToStack => 'ZUM STACK HINZUFÜGEN';
+
+  @override
+  String get amountRequired => 'Menge erforderlich';
+
+  @override
+  String get baseAmount => 'Basismenge';
+
+  @override
+  String get baseSchedule => 'Basiszeitplan';
+
+  @override
+  String get blendConfigBody =>
+      'Gib genau ein, was auf dem Vial steht. PepMod rechnet die Entnahme in eine Momentaufnahme je Verbindung um.';
+
+  @override
+  String get blendIncompleteError =>
+      'Vervollständige mindestens zwei Verbindungen, das Verdünnungsvolumen und die Entnahme.';
+
+  @override
+  String get blendNameHint => 'z. B. Regenerations-Blend';
+
+  @override
+  String get blendNameLabel => 'BLEND-NAME';
+
+  @override
+  String get blendSafetyDisclaimer =>
+      'Nur Einheitenumrechnung. PepMod empfiehlt keinen Blend, keine Dosis, Häufigkeit oder Rekonstitutionsmethode.';
+
+  @override
+  String get changeNoteHint => 'Dein eigener Kontext für diese Phase';
+
+  @override
+  String get changeNoteOptional => 'ÄNDERUNGSNOTIZ OPTIONAL';
+
+  @override
+  String colorOption(String hex) {
+    return 'Farboption $hex';
+  }
+
+  @override
+  String compoundNumber(int number) {
+    return 'VERBINDUNG $number';
+  }
+
+  @override
+  String compoundsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Verbindungen',
+      one: '1 Verbindung',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String copiedVialPreset(String amount, String unit) {
+    return '$amount $unit Vial-Voreinstellung · in dieses Protokoll kopiert';
+  }
+
+  @override
+  String get createProtocolAction => 'PROTOKOLL ERSTELLEN';
+
+  @override
+  String get createProtocolAddOneError => 'Füge mindestens ein Peptid hinzu.';
+
+  @override
+  String createProtocolBuildStep(int step, int total) {
+    return 'Protokoll erstellen · Schritt $step / $total';
+  }
+
+  @override
+  String get createProtocolDefaultName => 'Mein Protokoll';
+
+  @override
+  String createProtocolEditStep(int step, int total) {
+    return 'Protokoll bearbeiten · Schritt $step / $total';
+  }
+
+  @override
+  String get createProtocolFreeLimitReason =>
+      'Im kostenlosen Tarif ist nur ein Peptid pro Protokoll möglich. Führe ein Upgrade durch, um mehrere Verbindungen zu kombinieren.';
+
+  @override
+  String get createProtocolNameBody =>
+      'Gib ihm einen einprägsamen Namen — z. B. „Regenerations-Stack“ oder „Q2-Definition“.';
+
+  @override
+  String get createProtocolNameTitle => 'Benenne dein Protokoll';
+
+  @override
+  String get createProtocolNoPeptides => 'Noch keine Peptide';
+
+  @override
+  String get createProtocolPickHint =>
+      'Tippe auf +, um aus der Bibliothek auszuwählen';
+
+  @override
+  String get createProtocolReviewBody =>
+      'Prüfe die Protokolldetails. Du kannst sie jederzeit in der Verwaltungsansicht bearbeiten.';
+
+  @override
+  String get createProtocolSaveError =>
+      'Protokoll konnte nicht gespeichert werden. Versuche es erneut.';
+
+  @override
+  String get createProtocolStackBody =>
+      'Füge ein Peptid hinzu oder kombiniere mehrere Verbindungen. Konfiguriere Bezeichnung, Dosis, Häufigkeit und Zyklus.';
+
+  @override
+  String get createProtocolStackTitle => 'Erstelle deinen Stack';
+
+  @override
+  String get customBlend => 'Eigener Blend';
+
+  @override
+  String get customDays => 'Eigene Tage';
+
+  @override
+  String get customDaysDisclaimer =>
+      'Nur ausgewählte Wochentage werden geplant. Mengen sind vom Nutzer eingegebene Tracking-Werte und keine Dosierempfehlung.';
+
+  @override
+  String get customPeptide => 'Eigenes Peptid';
+
+  @override
+  String get cycleWeeksLabel => 'ZYKLUSWOCHEN';
+
+  @override
+  String get cycleWindowDisclaimer =>
+      'Zyklus- und Pausenfenster ordnen den Tracking-Verlauf. PepMod plant nach Ende des Zyklusfensters keine weiteren Dosen.';
+
+  @override
+  String get defaultAmountLabel => 'STANDARDMENGE';
+
+  @override
+  String get diluentVolumeLabel => 'VERDÜNNUNGSVOLUMEN';
+
+  @override
+  String get drawExceedsVialError =>
+      'Die Entnahme darf das Vial-Volumen nicht überschreiten.';
+
+  @override
+  String get drawLabel => 'ENTNAHME';
+
+  @override
+  String get drawPreviewLabel => 'ENTNAHMEVORSCHAU';
+
+  @override
+  String drawPreviewValue(String units, String volume) {
+    return '$units Einheiten = $volume ml';
+  }
+
+  @override
+  String editTime(String time) {
+    return 'Zeit $time bearbeiten';
+  }
+
+  @override
+  String get endWeekLabel => 'ENDWOCHE';
+
+  @override
+  String get enterPeptideName => 'Peptidnamen eingeben';
+
+  @override
+  String get frequencyLabel => 'HÄUFIGKEIT';
+
+  @override
+  String get labelColorBody =>
+      'Ordne diese Farbe dem Stift- oder Vial-Etikett zu, das du tatsächlich verwendest.';
+
+  @override
+  String get labelColorLabel => 'ETIKETTFARBE';
+
+  @override
+  String get manageSavedCompounds => 'Gespeicherte Verbindungen verwalten';
+
+  @override
+  String get nextLabel => 'WEITER';
+
+  @override
+  String get noneLabel => 'Keine';
+
+  @override
+  String get oneOffCompound => 'Einmalige Verbindung';
+
+  @override
+  String get oneOffCompoundBody =>
+      'Einmal verwenden, ohne eine Voreinstellung zu speichern';
+
+  @override
+  String get optionalLabel => 'Optional';
+
+  @override
+  String peptidesCount(int count) {
+    return 'PEPTIDE ($count)';
+  }
+
+  @override
+  String get perDayAmounts => 'Mengen je Tag';
+
+  @override
+  String phaseExtendsWarning(int weeks) {
+    return 'Eine Phase reicht über den $weeks-wöchigen Zyklus hinaus. Passe die Phase oder das Zyklusfenster an.';
+  }
+
+  @override
+  String get phaseNameHint => 'z. B. Tracking Woche 1';
+
+  @override
+  String get phaseNameLabel => 'PHASENNAME';
+
+  @override
+  String phaseNumber(int number) {
+    return 'Phase $number';
+  }
+
+  @override
+  String phaseOutsideCycleError(int weeks) {
+    return 'Dieser Protokollzyklus endet nach Woche $weeks. Die Phasenwochen müssen innerhalb dieses Fensters liegen.';
+  }
+
+  @override
+  String get phaseOverlapError =>
+      'Wochenbereiche von Phasen dürfen sich nicht überschneiden.';
+
+  @override
+  String get phaseOverrideBody =>
+      'Gib nur den Tracking-Zeitplan ein, den du bereits befolgen möchtest. PepMod empfiehlt keine Mengen.';
+
+  @override
+  String get phaseOverrideTitle => 'Wochenweise Anpassung';
+
+  @override
+  String get phasePreviewDisclaimer =>
+      'Nur eine Vorschau deiner Eingaben. PepMod empfiehlt keinen Zeitplan.';
+
+  @override
+  String get phasePreviewLabel => 'PHASENVORSCHAU';
+
+  @override
+  String get phaseReminderBody =>
+      'Wenn Protokollerinnerungen aktiviert sind, wird um 09:00 Uhr eine neutrale Erinnerung zum Phasenwechsel geplant.';
+
+  @override
+  String get phaseScheduleLabel => 'PHASENZEITPLAN';
+
+  @override
+  String get phaseSelectDayError =>
+      'Wähle mindestens einen Tag. PepMod wählt keinen Zeitplan für dich.';
+
+  @override
+  String get phasesBody =>
+      'Optionale Zeitfenster können Basismenge und Zeitplan überschreiben. Außerhalb davon gilt der Basiszeitplan.';
+
+  @override
+  String phasesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Phasen',
+      one: '1 Phase',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get phasesDisclaimer =>
+      'Wochen werden ab dem Startdatum des Protokolls gezählt. Gespeicherte Phasennotizen und Erinnerungen dienen nur dem Tracking.';
+
+  @override
+  String get preBlendedVial => 'Vorgemischtes Vial';
+
+  @override
+  String get preBlendedVialBody =>
+      'Ein Vial · eine Entnahme · mehrere Verbindungen';
+
+  @override
+  String get protocolNotesBody =>
+      'Speichere Kontext, der bei der Prüfung dieses Protokolls sichtbar sein soll.';
+
+  @override
+  String get protocolNotesHint =>
+      'z. B. Fragen, Tracking-Kontext oder ärztliche Notizen';
+
+  @override
+  String get protocolNotesLabel => 'Protokollnotizen';
+
+  @override
+  String get reminderTimesBody =>
+      'Jede ausgewählte Zeit erstellt an geplanten Tagen eine eigene Tracking-Zeile und Erinnerung.';
+
+  @override
+  String get reminderTimesLabel => 'ERINNERUNGSZEITEN';
+
+  @override
+  String get removeLabel => 'ENTFERNEN';
+
+  @override
+  String removePeptide(String name) {
+    return '$name entfernen';
+  }
+
+  @override
+  String get removePhase => 'Phase entfernen';
+
+  @override
+  String removeTime(String time) {
+    return 'Zeit $time entfernen';
+  }
+
+  @override
+  String get restWeeksLabel => 'PAUSENWOCHEN';
+
+  @override
+  String get reviewLabel => 'Prüfen';
+
+  @override
+  String get routeLabel => 'ANWENDUNGSART';
+
+  @override
+  String get saveBlend => 'BLEND SPEICHERN';
+
+  @override
+  String get saveChanges => 'ÄNDERUNGEN SPEICHERN';
+
+  @override
+  String get savePhase => 'PHASE SPEICHERN';
+
+  @override
+  String savedVialPreset(String amount, String unit) {
+    return '$amount $unit Vial · Gespeicherte Voreinstellung';
+  }
+
+  @override
+  String get scheduleLabel => 'ZEITPLAN';
+
+  @override
+  String get searchCompounds => 'Verbindungen suchen...';
+
+  @override
+  String get selectDayError =>
+      'Wähle mindestens einen Tag für dieses Peptid aus.';
+
+  @override
+  String selectOption(String option) {
+    return '$option auswählen';
+  }
+
+  @override
+  String get startDateLabel => 'STARTDATUM';
+
+  @override
+  String get startWeekLabel => 'STARTWOCHE';
+
+  @override
+  String syringeUnitsAmount(String amount) {
+    return '$amount Spritzeneinheiten';
+  }
+
+  @override
+  String get syringeUnitsDisclaimer =>
+      'Optionale, vom Nutzer eingegebene U-100-Spritzenmarkierungen nur fürs Tracking.';
+
+  @override
+  String get syringeUnitsHint => 'z. B. 12,5';
+
+  @override
+  String get syringeUnitsLabel => 'Spritzeneinheiten';
+
+  @override
+  String get syringeUnitsOptional => 'SPRITZENEINHEITEN OPTIONAL';
+
+  @override
+  String get trackedAmountLabel => 'ERFASSTE MENGE';
+
+  @override
+  String get u100TrackingDisclaimer =>
+      'Verwendet U-100-Spritzenmarkierungen (100 Einheiten = 1 ml). Die Werte sind vom Nutzer eingegebene Tracking-Daten.';
+
+  @override
+  String get unitLabel => 'EINHEIT';
+
+  @override
+  String get vialAmountHint => 'Vial-Menge';
+
+  @override
+  String get vialContentsLabel => 'VIAL-INHALT';
+
+  @override
+  String get vialLabelNameHint => 'Name vom Vial-Etikett';
+
+  @override
+  String weekNumber(int week) {
+    return 'WOCHE $week';
+  }
+
+  @override
+  String weekRange(int start, int end) {
+    return 'WOCHEN $start–$end';
+  }
+
+  @override
+  String get weekToWeekPhases => 'WOCHENWEISE PHASEN';
+
+  @override
+  String weekdayDose(String weekday) {
+    return 'DOSIS $weekday';
+  }
+
+  @override
+  String weekdaySchedule(String weekday) {
+    return 'ZEITPLAN $weekday';
+  }
+
+  @override
+  String get doseDrawInvalid =>
+      'Die Entnahmemenge muss größer als null sein und im Flakon verfügbar sein.';
+
+  @override
+  String get doseGenericError =>
+      'Etwas ist schiefgelaufen. Versuche es erneut.';
+
+  @override
+  String get doseEditSystemLabel => 'DOSIS.BEARBEITEN';
+
+  @override
+  String get doseLogSystemLabel => 'DOSIS.PROTOKOLLIEREN';
+
+  @override
+  String get doseDraw => 'ENTNAHME';
+
+  @override
+  String get doseAmount => 'MENGE';
+
+  @override
+  String get doseUnits => 'Einheiten';
+
+  @override
+  String get doseTime => 'UHRZEIT';
+
+  @override
+  String get doseChooseTime => 'Uhrzeit der Dosis auswählen';
+
+  @override
+  String get doseBlendSnapshot => 'MISCHUNGSÜBERSICHT // PRO ENTNAHME';
+
+  @override
+  String doseSyringeUnitsRecorded(String amount) {
+    return 'Für diese Dosis wurden $amount Spritzeneinheiten erfasst.';
+  }
+
+  @override
+  String get doseInjectionSite => 'INJEKTIONSSTELLE';
+
+  @override
+  String doseLastSite(String site) {
+    return 'LETZTE STELLE FÜR DIESES PEPTID · $site';
+  }
+
+  @override
+  String get doseNotes => 'NOTIZEN';
+
+  @override
+  String get doseOptional => 'Optional...';
+
+  @override
+  String get doseMarkPending => 'AUSSTEHEND';
+
+  @override
+  String get doseSaveChanges => 'SPEICHERN';
+
+  @override
+  String get doseSkip => 'Diese Dosis überspringen';
+
+  @override
+  String get doseHistorySystemLabel => 'DOSISVERLAUF // 30 TAGE';
+
+  @override
+  String get doseHistoryTitle => 'Protokollierte Dosen';
+
+  @override
+  String get doseHistoryBody =>
+      'Tippe auf einen Eintrag, um Menge, tatsächliche Uhrzeit, Injektionsstelle, Notizen oder Status zu korrigieren.';
+
+  @override
+  String get doseHistoryEmpty =>
+      'In den letzten 30 Tagen wurden keine Dosen protokolliert.';
+
+  @override
+  String get doseLogPrevious => 'FRÜHERE DOSIS';
+
+  @override
+  String doseHistorySkipped(String dateTime) {
+    return 'Übersprungen · $dateTime';
+  }
+
+  @override
+  String doseHistoryTaken(String amount, String units, String dateTime) {
+    return '$amount $units · $dateTime';
+  }
+
+  @override
+  String get doseEditAction => 'BEARBEITEN';
+
+  @override
+  String get doseChoosePastTime => 'Wähle eine Uhrzeit in der Vergangenheit.';
+
+  @override
+  String get dosePreviousError =>
+      'Die frühere Dosis konnte nicht protokolliert werden. Versuche es erneut.';
+
+  @override
+  String get doseLogPreviousSystemLabel => 'FRÜHERE.DOSIS';
+
+  @override
+  String get doseNoPeptides => 'Keine Peptide verfügbar';
+
+  @override
+  String get doseNoPeptidesBody =>
+      'Füge einem aktiven Protokoll ein Peptid hinzu, bevor du einen früheren Eintrag erstellst.';
+
+  @override
+  String get doseCorrectHistory => 'Dosisverlauf korrigieren';
+
+  @override
+  String get dosePeptide => 'PEPTID';
+
+  @override
+  String get doseDate => 'DATUM';
+
+  @override
+  String get doseChooseDate => 'Datum der Dosis auswählen';
+
+  @override
+  String doseSyringeUnitsEntry(String amount) {
+    return 'Für diesen Eintrag wurden $amount Spritzeneinheiten erfasst.';
+  }
+
+  @override
+  String get doseHistoryDisclaimer =>
+      'Frühere Einträge dienen nur der persönlichen Dokumentation. Sie ändern weder medizinische Hinweise noch Dosierungsempfehlungen.';
+
+  @override
+  String get notificationChannelName => 'Dosiserinnerungen';
+
+  @override
+  String get notificationChannelDescription =>
+      'Geplante Erinnerungen für Dosen in deinen aktiven Peptidprotokollen.';
+
+  @override
+  String get notificationDoseTitle => 'Zeit für deine Dosis';
+
+  @override
+  String get notificationDoseBody =>
+      'Deine geplante Protokollerinnerung ist bereit.';
+
+  @override
+  String get notificationCycleTitle => 'Protokoll-Checkpoint';
+
+  @override
+  String get notificationCycleBody =>
+      'Heute ist eine Erinnerung zum Zyklusfenster fällig. Prüfe deinen Tracking-Plan.';
+
+  @override
+  String get notificationRestTitle => 'Pausen-Checkpoint';
+
+  @override
+  String get notificationRestBody =>
+      'Heute ist eine Erinnerung zur Pausenphase fällig. Prüfe deinen Tracking-Plan.';
+
+  @override
+  String get notificationPhaseTitle => 'Phasen-Checkpoint';
+
+  @override
+  String get notificationPhaseBody =>
+      'Heute beginnt eine neue Tracking-Phase. Prüfe deinen gespeicherten Zeitplan.';
+
+  @override
+  String get personalLibrarySystemLabel => 'SYS.BIBLIOTHEK // PERSÖNLICH';
+
+  @override
+  String get customCompoundIntro =>
+      'Speichere selbst eingegebene Bezeichnungen und Fläschchengrößen. Vorlagen erleichtern nur die Aufzeichnung und sind keine Dosierungsempfehlung.';
+
+  @override
+  String get archivedHeading => 'ARCHIVIERT';
+
+  @override
+  String get activePresetsHeading => 'AKTIVE VORLAGEN';
+
+  @override
+  String get showActive => 'Aktive anzeigen';
+
+  @override
+  String get archivedAction => 'Archiviert';
+
+  @override
+  String get customCompoundsLoadFailed =>
+      'Deine Wirkstoffe konnten nicht geladen werden. Versuche es erneut.';
+
+  @override
+  String get libraryLoadFailed =>
+      'Die Peptidbibliothek konnte nicht geladen werden. Versuche es erneut.';
+
+  @override
+  String compoundVialSummary(String amount, String unit, String route) {
+    return '$amount $unit Fläschchen · $route';
+  }
+
+  @override
+  String get editPreset => 'Vorlage bearbeiten';
+
+  @override
+  String get restorePreset => 'Wiederherstellen';
+
+  @override
+  String get archivePreset => 'Archivieren';
+
+  @override
+  String get noArchivedPresets => 'Keine archivierten Vorlagen';
+
+  @override
+  String get noSavedCompounds => 'Keine gespeicherten Wirkstoffe';
+
+  @override
+  String get archivedPresetsHint =>
+      'Archivierte Vorlagen bleiben hier, bis du sie wiederherstellst.';
+
+  @override
+  String get createPresetHint =>
+      'Erstelle eine wiederverwendbare Vorlage mit Bezeichnung und Fläschchengröße.';
+
+  @override
+  String get presetCompoundSystemLabel => 'VORLAGE.WIRKSTOFF';
+
+  @override
+  String get newCompound => 'Neuer Wirkstoff';
+
+  @override
+  String get editCompound => 'Wirkstoff bearbeiten';
+
+  @override
+  String get ownVialDetailsHint =>
+      'Gib nur die Angaben ein, die auf deinem eigenen Fläschchen stehen.';
+
+  @override
+  String get compoundLabel => 'WIRKSTOFFBEZEICHNUNG';
+
+  @override
+  String get compoundNameExample => 'z. B. Mein Wirkstoff';
+
+  @override
+  String get vialUnitLabel => 'FLÄSCHCHENEINHEIT';
+
+  @override
+  String get trackingUnitLabel => 'AUFZEICHNUNGSEINHEIT';
+
+  @override
+  String get notesOptional => 'HINWEISE OPTIONAL';
+
+  @override
+  String get compoundNoteExample => 'Etikett- oder Lagerungshinweis';
+
+  @override
+  String get noDoseRecommendation =>
+      'Es wird keine Dosierungsempfehlung erstellt. Mengen für Protokolle gibst du immer separat ein.';
+
+  @override
+  String get saveCompoundFailed =>
+      'Die Vorlage konnte nicht gespeichert werden. Versuche es erneut.';
+
+  @override
+  String get routeTopical => 'Topisch';
+
+  @override
+  String get frequencyCustomDays => 'Benutzerdefinierte Tage';
+
+  @override
+  String savedCalculationLabel(
+    String vialAmount,
+    String vialUnit,
+    String diluentVolume,
+  ) {
+    return '$vialAmount $vialUnit + $diluentVolume ml';
+  }
+
+  @override
+  String savedCalculationDetail(
+    String desiredAmount,
+    String desiredUnit,
+    String capacity,
+  ) {
+    return '$desiredAmount $desiredUnit · $capacity E';
+  }
+
+  @override
+  String syringeOption(String volume, String capacity) {
+    return 'U-100 · $volume ml / $capacity Einheiten';
+  }
 }
