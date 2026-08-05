@@ -5,6 +5,7 @@ import '../../../core/services/analytics_service.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/services/auth_service.dart';
+import '../../../l10n/app_localizations.dart';
 import '../providers/auth_provider.dart';
 
 /// Email / password sign-in & account creation flow. Pushed from
@@ -76,17 +77,17 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
           await auth.sendPasswordResetEmail(email);
           if (mounted) {
             setState(() {
-              _info = 'Password reset email sent. Check your inbox.';
+              _info = AppLocalizations.of(context).passwordResetSent;
             });
           }
           break;
       }
     } on AuthException catch (e) {
       if (!mounted) return;
-      setState(() => _error = e.message);
+      setState(() => _error = _localizedAuthError(e));
     } catch (_) {
       if (!mounted) return;
-      setState(() => _error = 'Something went wrong. Please try again.');
+      setState(() => _error = AppLocalizations.of(context).authGenericError);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -96,6 +97,18 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
     if (!mounted) return;
     FocusManager.instance.primaryFocus?.unfocus();
     Navigator.of(context).popUntil((route) => route.isFirst);
+  }
+
+  String _localizedAuthError(AuthException error) {
+    final l10n = AppLocalizations.of(context);
+    return switch (error.code) {
+      'user-not-found' => l10n.authUserNotFound,
+      'wrong-password' || 'invalid-credential' => l10n.authIncorrectCredentials,
+      'email-already-in-use' => l10n.authAccountExists,
+      'weak-password' => l10n.authWeakPassword,
+      'invalid-email' => l10n.authInvalidEmail,
+      _ => l10n.authGenericError,
+    };
   }
 
   void _logSelected(String method) {
@@ -111,32 +124,34 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
   }
 
   String get _title {
+    final l10n = AppLocalizations.of(context);
     switch (_mode) {
       case _Mode.signIn:
-        return 'Sign in';
+        return l10n.signIn;
       case _Mode.createAccount:
-        return 'Create account';
+        return l10n.createAccount;
       case _Mode.forgotPassword:
-        return 'Reset password';
+        return l10n.resetPassword;
     }
   }
 
   String get _submitLabel {
+    final l10n = AppLocalizations.of(context);
     switch (_mode) {
       case _Mode.signIn:
-        return 'SIGN IN';
+        return l10n.signInAction;
       case _Mode.createAccount:
-        return 'CREATE ACCOUNT';
+        return l10n.createAccountAction;
       case _Mode.forgotPassword:
-        return 'SEND RESET LINK';
+        return l10n.sendResetLink;
     }
   }
 
   String? _validateEmail(String? v) {
     final value = v?.trim() ?? '';
-    if (value.isEmpty) return 'Enter your email';
+    if (value.isEmpty) return AppLocalizations.of(context).enterEmail;
     if (!value.contains('@') || !value.contains('.')) {
-      return 'Enter a valid email';
+      return AppLocalizations.of(context).enterValidEmail;
     }
     return null;
   }
@@ -144,19 +159,23 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
   String? _validatePassword(String? v) {
     if (_mode == _Mode.forgotPassword) return null;
     final value = v ?? '';
-    if (value.isEmpty) return 'Enter a password';
-    if (value.length < 6) return 'At least 6 characters';
+    if (value.isEmpty) return AppLocalizations.of(context).enterPassword;
+    if (value.length < 6) {
+      return AppLocalizations.of(context).passwordMinLength;
+    }
     return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(
+          tooltip: l10n.back,
           icon: const Icon(
             Icons.arrow_back_rounded,
             color: AppColors.textPrimary,
@@ -229,11 +248,11 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                   _LinkRow(
                     items: [
                       _LinkItem(
-                        label: 'Forgot password?',
+                        label: l10n.forgotPassword,
                         onTap: () => _setMode(_Mode.forgotPassword),
                       ),
                       _LinkItem(
-                        label: 'Create account',
+                        label: l10n.createAccount,
                         onTap: () => _setMode(_Mode.createAccount),
                       ),
                     ],
@@ -243,7 +262,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                     child: GestureDetector(
                       onTap: () => _setMode(_Mode.signIn),
                       child: Text(
-                        'Already have an account? Sign in',
+                        l10n.alreadyHaveAccount,
                         style: AppTypography.bodySmall.copyWith(
                           color: AppColors.primary,
                         ),
@@ -255,7 +274,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                     child: GestureDetector(
                       onTap: () => _setMode(_Mode.signIn),
                       child: Text(
-                        'Back to sign in',
+                        l10n.backToSignIn,
                         style: AppTypography.bodySmall.copyWith(
                           color: AppColors.primary,
                         ),
@@ -284,6 +303,7 @@ class _EmailField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return TextFormField(
       controller: controller,
       enabled: enabled,
@@ -294,7 +314,7 @@ class _EmailField extends StatelessWidget {
       style: AppTypography.bodyMedium.copyWith(color: AppColors.textPrimary),
       cursorColor: AppColors.primary,
       decoration: _inputDecoration(
-        label: 'Email',
+        label: l10n.emailLabel,
         icon: Icons.alternate_email_rounded,
       ),
       validator: validator,
@@ -324,6 +344,7 @@ class _PasswordFieldState extends State<_PasswordField> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return TextFormField(
       controller: widget.controller,
       enabled: widget.enabled,
@@ -335,10 +356,11 @@ class _PasswordFieldState extends State<_PasswordField> {
       cursorColor: AppColors.primary,
       decoration:
           _inputDecoration(
-            label: 'Password',
+            label: l10n.passwordLabel,
             icon: Icons.lock_outline_rounded,
           ).copyWith(
             suffixIcon: IconButton(
+              tooltip: _obscure ? l10n.showPassword : l10n.hidePassword,
               onPressed: () => setState(() => _obscure = !_obscure),
               icon: Icon(
                 _obscure
@@ -406,8 +428,10 @@ class _LinkRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      spacing: AppSpacing.md,
+      runSpacing: AppSpacing.sm,
       children: items
           .map(
             (i) => GestureDetector(

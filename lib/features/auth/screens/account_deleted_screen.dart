@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 class AccountDeletedScreen extends StatelessWidget {
   const AccountDeletedScreen({super.key, required this.onContinue});
@@ -10,6 +11,7 @@ class AccountDeletedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -49,13 +51,13 @@ class AccountDeletedScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.sm),
               Text(
-                'Account deleted',
+                l10n.accountDeletedTitle,
                 style: AppTypography.h1,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.sm),
               Text(
-                'Your PepMod account and saved app data have been removed.',
+                l10n.accountDeletedBody,
                 style: AppTypography.bodyMedium.copyWith(
                   color: AppColors.textSecondary,
                 ),
@@ -63,7 +65,7 @@ class AccountDeletedScreen extends StatelessWidget {
               ),
               const Spacer(),
               PrimaryButton(
-                label: 'CONTINUE',
+                label: l10n.continueLabel,
                 icon: Icons.arrow_forward_rounded,
                 onPressed: onContinue,
               ),

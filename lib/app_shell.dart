@@ -4,6 +4,7 @@ import 'features/library/screens/library_screen.dart';
 import 'features/profile/screens/profile_screen.dart';
 import 'features/progress/screens/progress_screen.dart';
 import 'features/protocol/screens/protocol_home_screen.dart';
+import 'l10n/app_localizations.dart';
 
 /// Main app shell with floating glass tab bar and tab content.
 class AppShell extends StatefulWidget {
@@ -16,29 +17,6 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _currentIndex = 0;
 
-  static const _tabs = [
-    GlassTabItem(
-      icon: Icons.medical_services_outlined,
-      activeIcon: Icons.medical_services_rounded,
-      label: 'Protocol',
-    ),
-    GlassTabItem(
-      icon: Icons.insights_outlined,
-      activeIcon: Icons.insights_rounded,
-      label: 'Progress',
-    ),
-    GlassTabItem(
-      icon: Icons.science_outlined,
-      activeIcon: Icons.science_rounded,
-      label: 'Library',
-    ),
-    GlassTabItem(
-      icon: Icons.person_outline_rounded,
-      activeIcon: Icons.person_rounded,
-      label: 'You',
-    ),
-  ];
-
   static const _screens = [
     ProtocolHomeScreen(),
     ProgressScreen(),
@@ -48,6 +26,29 @@ class _AppShellState extends State<AppShell> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final tabs = [
+      GlassTabItem(
+        icon: Icons.medical_services_outlined,
+        activeIcon: Icons.medical_services_rounded,
+        label: l10n.tabProtocol,
+      ),
+      GlassTabItem(
+        icon: Icons.insights_outlined,
+        activeIcon: Icons.insights_rounded,
+        label: l10n.tabProgress,
+      ),
+      GlassTabItem(
+        icon: Icons.science_outlined,
+        activeIcon: Icons.science_rounded,
+        label: l10n.tabLibrary,
+      ),
+      GlassTabItem(
+        icon: Icons.person_outline_rounded,
+        activeIcon: Icons.person_rounded,
+        label: l10n.tabYou,
+      ),
+    ];
     return Scaffold(
       body: Stack(
         children: [
@@ -62,7 +63,7 @@ class _AppShellState extends State<AppShell> {
 
           // ── Floating glass tab bar ─────────────────────────────────
           GlassTabBar(
-            items: _tabs,
+            items: tabs,
             currentIndex: _currentIndex,
             onTap: (index) => setState(() => _currentIndex = index),
           ),

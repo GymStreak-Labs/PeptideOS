@@ -496,6 +496,7 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
   }
 
   Future<void> _handleSubscribe(int selectedPlan) async {
+    final l10n = AppLocalizations.of(context);
     final sub = context.read<SubscriptionProvider>();
     final planId = 'onboarding_plan_$selectedPlan';
 
@@ -515,10 +516,7 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            sub.offeringsError ??
-                'Subscription plans are not available right now. Please try again.',
-          ),
+          content: Text(sub.offeringsError ?? l10n.subscriptionUnavailable),
         ),
       );
       return;
@@ -539,6 +537,7 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
   }
 
   Future<void> _handleRestore() async {
+    final l10n = AppLocalizations.of(context);
     final sub = context.read<SubscriptionProvider>();
     final result = await sub.restore();
     if (!mounted) return;
@@ -546,9 +545,7 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
       await widget.onComplete();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(result.error ?? 'No purchases found to restore.'),
-        ),
+        SnackBar(content: Text(result.error ?? l10n.noPurchasesToRestore)),
       );
     }
   }
