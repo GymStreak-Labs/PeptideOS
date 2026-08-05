@@ -23,6 +23,10 @@ class ProtocolProvider extends ChangeNotifier {
     bool notificationsEnabled = false,
   }) : _uid = uid,
        _notificationsEnabled = notificationsEnabled {
+    NotificationService.instance.setLocaleChangeHandler(
+      owner: this,
+      handler: _refreshNotificationSchedulesForLocale,
+    );
     _subscribe();
   }
 
@@ -31,6 +35,8 @@ class ProtocolProvider extends ChangeNotifier {
   final _uuid = const Uuid();
   String _uid;
   bool _notificationsEnabled;
+  bool _pendingLocaleNotificationRefresh = false;
+  Future<bool>? _localeNotificationRefresh;
   StreamSubscription<List<Protocol>>? _sub;
 
   /// How far ahead we pre-compute dose entries.
@@ -74,6 +80,10 @@ class ProtocolProvider extends ChangeNotifier {
             _protocols = items;
             _loading = false;
             notifyListeners();
+            if (_pendingLocaleNotificationRefresh ||
+                NotificationService.instance.needsLocaleRefresh) {
+              unawaited(_refreshNotificationSchedulesForLocale());
+            }
           },
           onError: (Object e, StackTrace st) {
             debugPrint('ProtocolProvider stream failed: $e');
@@ -263,6 +273,57 @@ class ProtocolProvider extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint('syncDoseReminders failed: $e');
+    }
+  }
+
+  Future<bool> _refreshNotificationSchedulesForLocale() async {
+    final activeRefresh = _localeNotificationRefresh;
+    if (activeRefresh != null) return activeRefresh;
+
+    final refresh = _performNotificationLocaleRefresh();
+    _localeNotificationRefresh = refresh;
+    try {
+      return await refresh;
+    } finally {
+      if (identical(_localeNotificationRefresh, refresh)) {
+        _localeNotificationRefresh = null;
+      }
+    }
+  }
+
+  Future<bool> _performNotificationLocaleRefresh() async {
+    if (!_notificationsEnabled || _uid.isEmpty) {
+      _pendingLocaleNotificationRefresh = false;
+      return true;
+    }
+    if (_loading) {
+      _pendingLocaleNotificationRefresh = true;
+      return false;
+    }
+
+    _pendingLocaleNotificationRefresh = false;
+    final granted = await NotificationService.instance.requestPermission();
+    if (!granted) {
+      await _cancelScheduledRemindersForActiveProtocols();
+      return true;
+    }
+    await syncDoseReminders(enabled: true);
+    return true;
+  }
+
+  Future<void> _cancelScheduledRemindersForActiveProtocols() async {
+    if (_uid.isEmpty) return;
+    final now = DateTime.now();
+    for (final protocol in active) {
+      final logs = await _doseLogRepo.fetchByProtocol(_uid, protocol.uuid);
+      for (final dose in logs.where(
+        (dose) => dose.isPending && dose.scheduledAt.isAfter(now),
+      )) {
+        await NotificationService.instance.cancelDoseReminder(dose.uuid);
+      }
+      await NotificationService.instance.cancelProtocolRemindersForProtocol(
+        protocol,
+      );
     }
   }
 
@@ -465,6 +526,7 @@ class ProtocolProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    NotificationService.instance.clearLocaleChangeHandler(this);
     _sub?.cancel();
     super.dispose();
   }

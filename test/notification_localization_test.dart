@@ -23,4 +23,52 @@ void main() {
       expect(copy.doseTitle, 'Time for your dose');
     },
   );
+
+  test('notification locale resolution preserves Brazilian Portuguese', () {
+    expect(
+      resolveNotificationLocale(const Locale('pt', 'BR')),
+      const Locale('pt', 'BR'),
+    );
+    expect(
+      resolveNotificationLocale(const Locale('pt', 'PT')),
+      const Locale('pt'),
+    );
+    expect(resolveNotificationLocale(const Locale('zh')), const Locale('en'));
+  });
+
+  test('scheduled notification locale detects stale and legacy requests', () {
+    expect(
+      scheduledNotificationLocaleNeedsRefresh(
+        scheduledLocaleTag: 'en',
+        currentLocale: const Locale('ja'),
+        hasPendingNotifications: true,
+      ),
+      isTrue,
+    );
+    expect(
+      scheduledNotificationLocaleNeedsRefresh(
+        scheduledLocaleTag: null,
+        currentLocale: const Locale('ja'),
+        hasPendingNotifications: true,
+      ),
+      isTrue,
+      reason: 'pre-upgrade pending reminders must be rebuilt once',
+    );
+    expect(
+      scheduledNotificationLocaleNeedsRefresh(
+        scheduledLocaleTag: 'ja',
+        currentLocale: const Locale('ja'),
+        hasPendingNotifications: true,
+      ),
+      isFalse,
+    );
+    expect(
+      scheduledNotificationLocaleNeedsRefresh(
+        scheduledLocaleTag: 'en',
+        currentLocale: const Locale('ja'),
+        hasPendingNotifications: false,
+      ),
+      isFalse,
+    );
+  });
 }
