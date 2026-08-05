@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/utils/decimal_input.dart';
+import '../../../core/utils/localized_decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/blend_vial.dart';
 import '../../../models/peptide.dart';
@@ -635,9 +636,6 @@ String _formatAmount(BuildContext context, double d) => NumberFormat(
   AppLocalizations.of(context).localeName,
 ).format(d);
 
-String _formatInitialAmount(double d) =>
-    NumberFormat(d == d.roundToDouble() ? '0' : '0.#').format(d);
-
 String _formatStoredTime(BuildContext context, String value) {
   final parts = value.split(':');
   final hour = parts.isNotEmpty ? int.tryParse(parts.first) : null;
@@ -1151,36 +1149,19 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
   late String _labelColorHex;
   late List<String> _times;
   late Set<int> _selectedWeekdays;
+  bool _initialNumbersLocalized = false;
 
   @override
   void initState() {
     super.initState();
     final blend = widget.initial.blendVial;
     _nameCtrl = TextEditingController(text: widget.initial.peptideName);
-    _diluentCtrl = TextEditingController(
-      text: _formatEditableAmount(blend?.diluentMl ?? 2),
-    );
-    _drawCtrl = TextEditingController(
-      text: _formatEditableAmount(
-        blend?.drawSyringeUnits ?? widget.initial.syringeUnits,
-      ),
-    );
-    _cycleWeeksCtrl = TextEditingController(
-      text: widget.initial.cycleWeeks > 0
-          ? widget.initial.cycleWeeks.toString()
-          : '',
-    );
-    _washoutWeeksCtrl = TextEditingController(
-      text: widget.initial.washoutWeeks > 0
-          ? widget.initial.washoutWeeks.toString()
-          : '',
-    );
+    _diluentCtrl = TextEditingController();
+    _drawCtrl = TextEditingController();
+    _cycleWeeksCtrl = TextEditingController();
+    _washoutWeeksCtrl = TextEditingController();
     final source = blend?.constituents ?? const <BlendConstituent>[];
-    if (source.length >= 2) {
-      _constituents.addAll(
-        source.map(_BlendConstituentControllers.fromConstituent),
-      );
-    } else {
+    if (source.length < 2) {
       _constituents
         ..add(_BlendConstituentControllers())
         ..add(_BlendConstituentControllers());
@@ -1197,6 +1178,48 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
     if (_frequency == kCustomWeekdayFrequency && _selectedWeekdays.isEmpty) {
       _selectedWeekdays.add(DateTime.now().weekday);
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_initialNumbersLocalized) return;
+    final localeName = AppLocalizations.of(context).localeName;
+    final blend = widget.initial.blendVial;
+    _diluentCtrl.text = formatLocalizedDecimalInput(
+      blend?.diluentMl ?? 2,
+      localeName: localeName,
+    );
+    _drawCtrl.text = formatLocalizedDecimalInput(
+      blend?.drawSyringeUnits ?? widget.initial.syringeUnits,
+      localeName: localeName,
+    );
+    if (widget.initial.cycleWeeks > 0) {
+      _cycleWeeksCtrl.text = formatLocalizedDecimalInput(
+        widget.initial.cycleWeeks.toDouble(),
+        localeName: localeName,
+        maximumFractionDigits: 0,
+      );
+    }
+    if (widget.initial.washoutWeeks > 0) {
+      _washoutWeeksCtrl.text = formatLocalizedDecimalInput(
+        widget.initial.washoutWeeks.toDouble(),
+        localeName: localeName,
+        maximumFractionDigits: 0,
+      );
+    }
+    final source = blend?.constituents ?? const <BlendConstituent>[];
+    if (source.length >= 2) {
+      _constituents.addAll(
+        source.map(
+          (constituent) => _BlendConstituentControllers.fromConstituent(
+            constituent,
+            localeName: localeName,
+          ),
+        ),
+      );
+    }
+    _initialNumbersLocalized = true;
   }
 
   @override
@@ -1671,11 +1694,6 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
       ),
     );
   }
-
-  static String _formatEditableAmount(double value) =>
-      value == value.roundToDouble()
-      ? value.toStringAsFixed(0)
-      : value.toStringAsFixed(2);
 }
 
 class _BlendConstituentControllers {
@@ -1687,13 +1705,15 @@ class _BlendConstituentControllers {
        amount = TextEditingController(text: amount);
 
   factory _BlendConstituentControllers.fromConstituent(
-    BlendConstituent constituent,
-  ) {
+    BlendConstituent constituent, {
+    required String localeName,
+  }) {
     return _BlendConstituentControllers(
       name: constituent.name,
-      amount: constituent.vialAmount == constituent.vialAmount.roundToDouble()
-          ? constituent.vialAmount.toStringAsFixed(0)
-          : constituent.vialAmount.toStringAsFixed(2),
+      amount: formatLocalizedDecimalInput(
+        constituent.vialAmount,
+        localeName: localeName,
+      ),
       unit: constituent.unit,
     );
   }
@@ -1915,6 +1935,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
   late List<String> _times;
   late Set<int> _selectedWeekdays;
   late List<ProtocolPhase> _phases;
+  bool _initialNumbersLocalized = false;
   bool get _isCustomPeptide =>
       widget.initial.peptideSlug == _customPeptideSlug ||
       widget.initial.peptideSlug.startsWith(_savedCompoundSlugPrefix);
@@ -1923,24 +1944,10 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
   void initState() {
     super.initState();
     _nameCtrl = TextEditingController(text: widget.initial.peptideName);
-    _doseCtrl = TextEditingController(
-      text: _formatInitialAmount(widget.initial.dosePerInjection),
-    );
-    _syringeUnitsCtrl = TextEditingController(
-      text: widget.initial.syringeUnits > 0
-          ? _formatInitialAmount(widget.initial.syringeUnits)
-          : '',
-    );
-    _cycleWeeksCtrl = TextEditingController(
-      text: widget.initial.cycleWeeks > 0
-          ? widget.initial.cycleWeeks.toString()
-          : '',
-    );
-    _washoutWeeksCtrl = TextEditingController(
-      text: widget.initial.washoutWeeks > 0
-          ? widget.initial.washoutWeeks.toString()
-          : '',
-    );
+    _doseCtrl = TextEditingController();
+    _syringeUnitsCtrl = TextEditingController();
+    _cycleWeeksCtrl = TextEditingController();
+    _washoutWeeksCtrl = TextEditingController();
     _unit = widget.initial.doseUnit;
     _frequency = widget.initial.frequency;
     _route = widget.initial.route;
@@ -1958,14 +1965,48 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
     if (_frequency == kCustomWeekdayFrequency && _selectedWeekdays.isEmpty) {
       _selectedWeekdays = {DateTime.now().weekday};
     }
-    for (final weekday in _selectedWeekdays) {
-      _ensureWeekdayController(weekday);
-    }
     _phases =
         widget.initial.phases
             .map((phase) => ProtocolPhase.fromMap(phase.toMap()))
             .toList()
           ..sort((a, b) => a.startWeek.compareTo(b.startWeek));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_initialNumbersLocalized) return;
+    final localeName = AppLocalizations.of(context).localeName;
+    _doseCtrl.text = formatLocalizedDecimalInput(
+      widget.initial.dosePerInjection,
+      localeName: localeName,
+      maximumFractionDigits: 1,
+    );
+    if (widget.initial.syringeUnits > 0) {
+      _syringeUnitsCtrl.text = formatLocalizedDecimalInput(
+        widget.initial.syringeUnits,
+        localeName: localeName,
+        maximumFractionDigits: 1,
+      );
+    }
+    if (widget.initial.cycleWeeks > 0) {
+      _cycleWeeksCtrl.text = formatLocalizedDecimalInput(
+        widget.initial.cycleWeeks.toDouble(),
+        localeName: localeName,
+        maximumFractionDigits: 0,
+      );
+    }
+    if (widget.initial.washoutWeeks > 0) {
+      _washoutWeeksCtrl.text = formatLocalizedDecimalInput(
+        widget.initial.washoutWeeks.toDouble(),
+        localeName: localeName,
+        maximumFractionDigits: 0,
+      );
+    }
+    for (final weekday in _selectedWeekdays) {
+      _ensureWeekdayController(weekday);
+    }
+    _initialNumbersLocalized = true;
   }
 
   @override
@@ -1991,7 +2032,11 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
       }
     }
     _weekdayDoseCtrls[weekday] = TextEditingController(
-      text: _formatInitialAmount(existing?.dosePerInjection ?? _parsedBaseDose),
+      text: formatLocalizedDecimalInput(
+        existing?.dosePerInjection ?? _parsedBaseDose,
+        localeName: AppLocalizations.of(context).localeName,
+        maximumFractionDigits: 1,
+      ),
     );
   }
 
@@ -2780,22 +2825,17 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
   late Set<int> _selectedWeekdays;
   final Map<int, TextEditingController> _weekdayDoseCtrls = {};
   final Map<int, List<String>> _weekdayTimes = {};
+  bool _initialNumbersLocalized = false;
 
   @override
   void initState() {
     super.initState();
     final phase = widget.initial;
     _nameCtrl = TextEditingController(text: phase.name);
-    _startWeekCtrl = TextEditingController(text: '${phase.startWeek}');
-    _endWeekCtrl = TextEditingController(text: '${phase.endWeek}');
-    _doseCtrl = TextEditingController(
-      text: _formatInitialAmount(phase.dosePerInjection ?? widget.fallbackDose),
-    );
-    _syringeCtrl = TextEditingController(
-      text: (phase.syringeUnits ?? 0) > 0
-          ? _formatInitialAmount(phase.syringeUnits!)
-          : '',
-    );
+    _startWeekCtrl = TextEditingController();
+    _endWeekCtrl = TextEditingController();
+    _doseCtrl = TextEditingController();
+    _syringeCtrl = TextEditingController();
     _noteCtrl = TextEditingController(text: phase.note);
     _unit = phase.doseUnit ?? widget.fallbackUnit;
     _frequency = phase.frequency ?? widget.fallbackFrequency;
@@ -2806,11 +2846,48 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
     );
     _selectedWeekdays = phase.weekdayDoses.map((dose) => dose.weekday).toSet();
     for (final dose in phase.weekdayDoses) {
-      _weekdayDoseCtrls[dose.weekday] = TextEditingController(
-        text: _formatInitialAmount(dose.dosePerInjection),
-      );
       _weekdayTimes[dose.weekday] = _normalizePhaseTimes(dose.scheduledTimes);
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_initialNumbersLocalized) return;
+    final localeName = AppLocalizations.of(context).localeName;
+    final phase = widget.initial;
+    _startWeekCtrl.text = formatLocalizedDecimalInput(
+      phase.startWeek.toDouble(),
+      localeName: localeName,
+      maximumFractionDigits: 0,
+    );
+    _endWeekCtrl.text = formatLocalizedDecimalInput(
+      phase.endWeek.toDouble(),
+      localeName: localeName,
+      maximumFractionDigits: 0,
+    );
+    _doseCtrl.text = formatLocalizedDecimalInput(
+      phase.dosePerInjection ?? widget.fallbackDose,
+      localeName: localeName,
+      maximumFractionDigits: 1,
+    );
+    if ((phase.syringeUnits ?? 0) > 0) {
+      _syringeCtrl.text = formatLocalizedDecimalInput(
+        phase.syringeUnits!,
+        localeName: localeName,
+        maximumFractionDigits: 1,
+      );
+    }
+    for (final dose in phase.weekdayDoses) {
+      _weekdayDoseCtrls[dose.weekday] = TextEditingController(
+        text: formatLocalizedDecimalInput(
+          dose.dosePerInjection,
+          localeName: localeName,
+          maximumFractionDigits: 1,
+        ),
+      );
+    }
+    _initialNumbersLocalized = true;
   }
 
   @override

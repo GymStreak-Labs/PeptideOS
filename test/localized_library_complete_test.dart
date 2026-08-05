@@ -74,6 +74,47 @@ void main() {
     expect(find.text('0,25 mg · 50 E'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('German saved compound editor prefills a decimal comma', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(600, 900);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    final compound = CustomCompound(
+      id: 'compound-1',
+      name: 'Testwirkstoff',
+      vialAmount: 12.5,
+      vialUnit: 'mg',
+      trackingUnit: 'mcg',
+      route: 'subcutaneous',
+      createdAt: DateTime.utc(2026, 8, 5),
+      updatedAt: DateTime.utc(2026, 8, 5),
+    );
+    final provider = CustomCompoundProvider(
+      _SingleCompoundStore(compound),
+      uid: 'u1',
+    );
+    addTearDown(provider.dispose);
+
+    await tester.pumpWidget(
+      ChangeNotifierProvider.value(
+        value: provider,
+        child: const _GermanHarness(home: CustomCompoundLibraryScreen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Testwirkstoff'));
+    await tester.pumpAndSettle();
+
+    final editableValues = tester
+        .widgetList<EditableText>(find.byType(EditableText))
+        .map((field) => field.controller.text);
+    expect(editableValues, contains('12,5'));
+    expect(editableValues, isNot(contains('12.5')));
+    expect(tester.takeException(), isNull);
+  });
 }
 
 Future<void> _useNarrowPhone(WidgetTester tester) async {
@@ -104,6 +145,18 @@ class _EmptyCompoundStore implements CustomCompoundStore {
   @override
   Stream<List<CustomCompound>> watchAll(String uid) =>
       Stream.value(const <CustomCompound>[]);
+
+  @override
+  Future<void> upsert(String uid, CustomCompound compound) async {}
+}
+
+class _SingleCompoundStore implements CustomCompoundStore {
+  _SingleCompoundStore(this.compound);
+
+  final CustomCompound compound;
+
+  @override
+  Stream<List<CustomCompound>> watchAll(String uid) => Stream.value([compound]);
 
   @override
   Future<void> upsert(String uid, CustomCompound compound) async {}

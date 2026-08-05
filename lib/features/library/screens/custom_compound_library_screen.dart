@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/utils/decimal_input.dart';
+import '../../../core/utils/localized_decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/custom_compound.dart';
@@ -338,19 +339,32 @@ class _CustomCompoundEditorState extends State<_CustomCompoundEditor> {
   late String _trackingUnit;
   late String _route;
   bool _saving = false;
+  bool _initialAmountLocalized = false;
 
   @override
   void initState() {
     super.initState();
     final initial = widget.initial;
     _name = TextEditingController(text: initial?.name ?? '');
-    _vialAmount = TextEditingController(
-      text: initial == null ? '' : _amount(initial.vialAmount),
-    );
+    _vialAmount = TextEditingController();
     _notes = TextEditingController(text: initial?.notes ?? '');
     _vialUnit = initial?.vialUnit ?? 'mg';
     _trackingUnit = initial?.trackingUnit ?? 'mcg';
     _route = initial?.route ?? 'subcutaneous';
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_initialAmountLocalized) return;
+    final initial = widget.initial;
+    if (initial != null) {
+      _vialAmount.text = formatLocalizedDecimalInput(
+        initial.vialAmount,
+        localeName: AppLocalizations.of(context).localeName,
+      );
+    }
+    _initialAmountLocalized = true;
   }
 
   @override
@@ -668,7 +682,3 @@ class _ChoiceChip extends StatelessWidget {
     );
   }
 }
-
-String _amount(double value) => value == value.roundToDouble()
-    ? value.toStringAsFixed(0)
-    : value.toStringAsFixed(2).replaceFirst(RegExp(r'0+$'), '');
