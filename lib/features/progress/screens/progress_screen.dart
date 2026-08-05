@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
@@ -8,6 +9,7 @@ import '../../../core/widgets/widgets.dart';
 import '../../../models/body_metric.dart';
 import '../../../models/dose_log.dart';
 import '../../../models/protocol.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../protocol/providers/dose_log_provider.dart';
 import '../../protocol/providers/protocol_provider.dart';
 import '../../protocol/screens/active_protocol_detail_screen.dart';
@@ -23,6 +25,12 @@ class ProgressScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final integerFormat = NumberFormat.decimalPattern(l10n.localeName);
+    final adherenceFormat = NumberFormat.decimalPercentPattern(
+      locale: l10n.localeName,
+      decimalDigits: 0,
+    );
     final doseProvider = context.watch<DoseLogProvider>();
     final metricProvider = context.watch<BodyMetricProvider>();
     final protocolProvider = context.watch<ProtocolProvider>();
@@ -53,22 +61,24 @@ class ProgressScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'SYS.PROGRESS // BIOMETRICS',
+                          l10n.progressSystemLabel,
                           style: AppTypography.systemLabel,
                         ),
                         const SizedBox(height: AppSpacing.sm),
-                        Text('Progress', style: AppTypography.h1),
+                        Text(l10n.progressTitle, style: AppTypography.h1),
                       ],
                     ),
                   ),
                   _HeaderIconButton(
                     icon: Icons.history_rounded,
+                    tooltip: l10n.doseHistoryTooltip,
                     onTap: () =>
                         _openDoseHistorySheet(context, protocolProvider.active),
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   _HeaderIconButton(
                     icon: Icons.add_rounded,
+                    tooltip: l10n.logMeasurementTooltip,
                     onTap: () => _openLogSheet(context),
                   ),
                 ],
@@ -86,28 +96,29 @@ class ProgressScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _StatTile(
-                      label: '30-DAY',
-                      value:
-                          '${doseProvider.adherence30dPct.toStringAsFixed(0)}%',
-                      hint: 'adherence',
+                      label: l10n.thirtyDayLabel,
+                      value: adherenceFormat.format(
+                        doseProvider.adherence30dPct / 100,
+                      ),
+                      hint: l10n.adherenceLabel,
                       color: AppColors.primary,
                     ),
                   ),
                   const SizedBox(width: AppSpacing.cardGap),
                   Expanded(
                     child: _StatTile(
-                      label: 'STREAK',
-                      value: '${doseProvider.currentStreak}',
-                      hint: 'days',
+                      label: l10n.streakLabel,
+                      value: integerFormat.format(doseProvider.currentStreak),
+                      hint: l10n.daysLabel,
                       color: AppColors.primary,
                     ),
                   ),
                   const SizedBox(width: AppSpacing.cardGap),
                   Expanded(
                     child: _StatTile(
-                      label: 'TOTAL',
-                      value: '${doseProvider.totalLogged}',
-                      hint: 'doses',
+                      label: l10n.totalLabel,
+                      value: integerFormat.format(doseProvider.totalLogged),
+                      hint: l10n.dosesLabel,
                       color: AppColors.primary,
                     ),
                   ),
@@ -152,7 +163,10 @@ class ProgressScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.screenHorizontal,
               ),
-              child: Text('PROTOCOL.HISTORY', style: AppTypography.systemLabel),
+              child: Text(
+                l10n.protocolHistoryLabel,
+                style: AppTypography.systemLabel,
+              ),
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.sm)),
@@ -167,7 +181,7 @@ class ProgressScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(AppSpacing.md),
                     child: Text(
-                      'No protocols yet. Create one from the Protocol tab.',
+                      l10n.noProtocolsYet,
                       style: AppTypography.bodySmall,
                     ),
                   ),
@@ -213,7 +227,7 @@ class ProgressScreen extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => const LogMetricSheet(),
+      builder: (sheetContext) => const LogMetricSheet(),
     );
   }
 
@@ -225,39 +239,56 @@ class ProgressScreen extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => DoseHistorySheet(protocols: protocols),
+      builder: (sheetContext) => DoseHistorySheet(protocols: protocols),
     );
   }
 }
 
 // ── Header button ─────────────────────────────────────────────────────────
 class _HeaderIconButton extends StatelessWidget {
-  const _HeaderIconButton({required this.icon, required this.onTap});
+  const _HeaderIconButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+  });
   final IconData icon;
+  final String tooltip;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        onTap();
-      },
-      child: Container(
-        width: 44,
-        height: 44,
-        decoration: BoxDecoration(
-          color: AppColors.primary.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
-          border: Border.all(color: AppColors.borderCyan),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.2),
-              blurRadius: 8,
+    return Semantics(
+      button: true,
+      label: tooltip,
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: () {
+          HapticFeedback.lightImpact();
+          onTap();
+        },
+        child: Tooltip(
+          message: tooltip,
+          child: Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
+              border: Border.all(color: AppColors.borderCyan),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.2),
+                  blurRadius: 8,
+                ),
+              ],
             ),
-          ],
+            child: Icon(
+              icon,
+              color: AppColors.primary,
+              size: AppSpacing.iconLarge,
+            ),
+          ),
         ),
-        child: Icon(icon, color: AppColors.primary, size: AppSpacing.iconLarge),
       ),
     );
   }
@@ -305,6 +336,7 @@ class _AdherenceChartCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final byDay = <int, _DayStat>{};
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -364,7 +396,7 @@ class _AdherenceChartCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'ADHERENCE // 30.DAY',
+                  l10n.adherenceChartLabel,
                   style: AppTypography.systemLabel,
                 ),
               ),
@@ -396,13 +428,13 @@ class _AdherenceChartCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '30d ago',
+                l10n.thirtyDaysAgo,
                 style: AppTypography.labelSmall.copyWith(
                   color: AppColors.textTertiary,
                 ),
               ),
               Text(
-                'today',
+                l10n.todayLabel,
                 style: AppTypography.labelSmall.copyWith(
                   color: AppColors.textTertiary,
                 ),
@@ -446,6 +478,7 @@ class _WeightChartCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final weighted = entries
         .where((e) => e.weightKg != null)
         .toList()
@@ -458,9 +491,9 @@ class _WeightChartCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.base),
           child: EmptyState(
             icon: Icons.monitor_weight_rounded,
-            title: 'No weight data',
-            description: 'Log your first measurement to see trends here.',
-            actionLabel: 'LOG MEASUREMENT',
+            title: l10n.noWeightData,
+            description: l10n.logFirstMeasurement,
+            actionLabel: l10n.logMeasurementAction,
             onAction: onLog,
           ),
         ),
@@ -488,13 +521,15 @@ class _WeightChartCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'WEIGHT // TREND',
+                  l10n.weightTrendLabel,
                   style: AppTypography.systemLabel,
                 ),
               ),
               if (latestKg != null)
                 Text(
-                  '${latestKg!.toStringAsFixed(1)} kg',
+                  l10n.weightKgValue(
+                    NumberFormat('#,##0.0', l10n.localeName).format(latestKg),
+                  ),
                   style: AppTypography.tabular.copyWith(fontSize: 15),
                 ),
             ],
@@ -560,20 +595,21 @@ class _ProtocolHistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     Color color;
     String label;
     switch (protocol.status) {
       case ProtocolStatus.active:
         color = AppColors.primary;
-        label = 'ACTIVE';
+        label = l10n.statusActive;
         break;
       case ProtocolStatus.paused:
         color = AppColors.danger;
-        label = 'PAUSED';
+        label = l10n.statusPaused;
         break;
       case ProtocolStatus.ended:
         color = AppColors.textTertiary;
-        label = 'ENDED';
+        label = l10n.statusEnded;
         break;
     }
 
@@ -604,8 +640,9 @@ class _ProtocolHistoryCard extends StatelessWidget {
               children: [
                 Text(protocol.name, style: AppTypography.labelLarge),
                 Text(
-                  '${protocol.peptides.length} peptides · ${_formatDate(protocol.startDate)}'
-                  '${protocol.endDate != null ? ' → ${_formatDate(protocol.endDate!)}' : ''}',
+                  '${l10n.protocolPeptideCount(protocol.peptides.length)} · '
+                  '${_formatDate(protocol.startDate, l10n.localeName)}'
+                  '${protocol.endDate != null ? ' → ${_formatDate(protocol.endDate!, l10n.localeName)}' : ''}',
                   style: AppTypography.bodySmall.copyWith(
                     fontFamily: 'JetBrainsMono',
                   ),
@@ -631,19 +668,6 @@ class _ProtocolHistoryCard extends StatelessWidget {
     );
   }
 
-  static const _months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-  String _formatDate(DateTime d) => '${_months[d.month - 1]} ${d.day}';
+  String _formatDate(DateTime date, String localeName) =>
+      DateFormat.MMMd(localeName).format(date);
 }

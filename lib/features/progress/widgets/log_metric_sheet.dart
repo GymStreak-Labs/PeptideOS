@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/utils/decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/body_metric.dart';
 import '../providers/body_metric_provider.dart';
 
@@ -36,51 +37,63 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
   }
 
   Future<void> _save() async {
+    final l10n = AppLocalizations.of(context);
     final weight = parseDecimalInput(_weightCtrl.text);
     final bf = parseDecimalInput(_bfCtrl.text);
     final waist = parseDecimalInput(_waistCtrl.text);
     final chest = parseDecimalInput(_chestCtrl.text);
     final arm = parseDecimalInput(_armCtrl.text);
 
-    if (weight == null && bf == null && waist == null && chest == null && arm == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Enter at least one value.')),
-      );
+    if (weight == null &&
+        bf == null &&
+        waist == null &&
+        chest == null &&
+        arm == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.enterOneMetric)));
       return;
     }
 
     setState(() => _saving = true);
     final measurements = <MeasurementEntry>[];
     if (waist != null) {
-      measurements.add(MeasurementEntry()
-        ..key = 'waist'
-        ..valueCm = waist);
+      measurements.add(
+        MeasurementEntry()
+          ..key = 'waist'
+          ..valueCm = waist,
+      );
     }
     if (chest != null) {
-      measurements.add(MeasurementEntry()
-        ..key = 'chest'
-        ..valueCm = chest);
+      measurements.add(
+        MeasurementEntry()
+          ..key = 'chest'
+          ..valueCm = chest,
+      );
     }
     if (arm != null) {
-      measurements.add(MeasurementEntry()
-        ..key = 'arm'
-        ..valueCm = arm);
+      measurements.add(
+        MeasurementEntry()
+          ..key = 'arm'
+          ..valueCm = arm,
+      );
     }
 
     try {
       await context.read<BodyMetricProvider>().logMetric(
-            weightKg: weight,
-            bodyFatPct: bf,
-            measurements: measurements,
-          );
+        weightKg: weight,
+        bodyFatPct: bf,
+        measurements: measurements,
+      );
       if (!mounted) return;
       HapticFeedback.mediumImpact();
       Navigator.of(context).pop();
-    } catch (_) {
+    } catch (error) {
+      debugPrint('Failed to save body metric: $error');
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to save. Try again.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.saveMetricFailed)));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -88,9 +101,11 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.surfaceContainer,
@@ -114,22 +129,26 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
                       height: AppSpacing.sheetHandleHeight,
                       decoration: BoxDecoration(
                         color: AppColors.border,
-                        borderRadius:
-                            BorderRadius.circular(AppSpacing.sheetHandleHeight),
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.sheetHandleHeight,
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(height: AppSpacing.lg),
-                  Text('LOG.METRIC', style: AppTypography.systemLabel),
+                  Text(
+                    l10n.logMetricSystemLabel,
+                    style: AppTypography.systemLabel,
+                  ),
                   const SizedBox(height: AppSpacing.sm),
-                  Text('New Measurement', style: AppTypography.h2),
+                  Text(l10n.newMeasurement, style: AppTypography.h2),
                   const SizedBox(height: AppSpacing.lg),
 
                   Row(
                     children: [
                       Expanded(
                         child: _Field(
-                          label: 'WEIGHT',
+                          label: l10n.weightLabel,
                           suffix: 'kg',
                           controller: _weightCtrl,
                         ),
@@ -137,7 +156,7 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
                       const SizedBox(width: AppSpacing.cardGap),
                       Expanded(
                         child: _Field(
-                          label: 'BODY FAT',
+                          label: l10n.bodyFatLabel,
                           suffix: '%',
                           controller: _bfCtrl,
                         ),
@@ -145,14 +164,16 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
                     ],
                   ),
                   const SizedBox(height: AppSpacing.lg),
-                  Text('MEASUREMENTS (cm)',
-                      style: AppTypography.systemLabel),
+                  Text(
+                    l10n.measurementsCmLabel,
+                    style: AppTypography.systemLabel,
+                  ),
                   const SizedBox(height: AppSpacing.sm),
                   Row(
                     children: [
                       Expanded(
                         child: _Field(
-                          label: 'WAIST',
+                          label: l10n.waistLabel,
                           suffix: 'cm',
                           controller: _waistCtrl,
                         ),
@@ -160,7 +181,7 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
                       const SizedBox(width: AppSpacing.cardGap),
                       Expanded(
                         child: _Field(
-                          label: 'CHEST',
+                          label: l10n.chestLabel,
                           suffix: 'cm',
                           controller: _chestCtrl,
                         ),
@@ -168,7 +189,7 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
                       const SizedBox(width: AppSpacing.cardGap),
                       Expanded(
                         child: _Field(
-                          label: 'ARM',
+                          label: l10n.armLabel,
                           suffix: 'cm',
                           controller: _armCtrl,
                         ),
@@ -177,7 +198,7 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
                   ),
                   const SizedBox(height: AppSpacing.xl),
                   PrimaryButton(
-                    label: 'SAVE',
+                    label: l10n.saveAction,
                     icon: Icons.check_rounded,
                     onPressed: _saving ? null : _save,
                     isLoading: _saving,
@@ -185,9 +206,12 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
                   const SizedBox(height: AppSpacing.sm),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: Text('Cancel',
-                        style: AppTypography.labelMedium
-                            .copyWith(color: AppColors.textTertiary)),
+                    child: Text(
+                      l10n.cancelLabel,
+                      style: AppTypography.labelMedium.copyWith(
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -233,8 +257,9 @@ class _Field extends StatelessWidget {
               Expanded(
                 child: TextField(
                   controller: controller,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   inputFormatters: const [decimalInputFormatter],
                   style: AppTypography.heroSmall.copyWith(fontSize: 17),
                   decoration: const InputDecoration(
@@ -250,8 +275,10 @@ class _Field extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: AppSpacing.md),
-                child: Text(suffix,
-                    style: AppTypography.unit.copyWith(fontSize: 13)),
+                child: Text(
+                  suffix,
+                  style: AppTypography.unit.copyWith(fontSize: 13),
+                ),
               ),
             ],
           ),

@@ -10,6 +10,7 @@ import '../../../core/services/support_service.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/services/auth_service.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/user_settings.dart';
 import '../../../services/notification_service.dart';
 import '../../auth/providers/auth_provider.dart';
@@ -26,13 +27,14 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final settingsProvider = context.watch<SettingsProvider>();
     final settings = settingsProvider.settings;
     final auth = context.watch<AuthProvider>();
     final user = auth.currentUser;
     final accountValue = user?.email?.isNotEmpty == true
         ? user!.email!
-        : 'Signed in';
+        : l10n.signedIn;
 
     return CustomScrollView(
       slivers: [
@@ -47,9 +49,9 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('SYS.USER // PROFILE', style: AppTypography.systemLabel),
+                Text(l10n.profileSystemLabel, style: AppTypography.systemLabel),
                 const SizedBox(height: AppSpacing.sm),
-                Text('You', style: AppTypography.h1),
+                Text(l10n.profileTitle, style: AppTypography.h1),
               ],
             ),
           ),
@@ -71,32 +73,34 @@ class ProfileScreen extends StatelessWidget {
         const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.xl)),
 
         // ── Account ───────────────────────────────────────────────────
-        _SectionHeader(label: 'ACCOUNT'),
+        _SectionHeader(label: l10n.sectionAccount),
         _Tile(
           icon: Icons.person_outline_rounded,
-          label: 'Name',
+          label: l10n.nameLabel,
           value: settings.name,
           onTap: () => _editName(context, settings.name),
         ),
         _Tile(
           icon: Icons.email_outlined,
-          label: 'Account',
+          label: l10n.accountLabel,
           value: accountValue,
         ),
         _Tile(
           icon: Icons.person_remove_alt_1_outlined,
-          label: 'Delete account',
-          value: 'Remove account and data',
+          label: l10n.deleteAccount,
+          value: l10n.removeAccountData,
           iconColor: AppColors.warning,
           onTap: () => _confirmDeleteAccount(context),
         ),
 
         // ── Preferences ────────────────────────────────────────────────
-        _SectionHeader(label: 'PREFERENCES'),
+        _SectionHeader(label: l10n.sectionPreferences),
         _Tile(
           icon: Icons.straighten_rounded,
-          label: 'Units',
-          value: settings.units == UnitSystem.metric ? 'Metric' : 'Imperial',
+          label: l10n.unitsLabel,
+          value: settings.units == UnitSystem.metric
+              ? l10n.metricLabel
+              : l10n.imperialLabel,
           onTap: () {
             settingsProvider.update(
               (s) => s.units = s.units == UnitSystem.metric
@@ -107,8 +111,8 @@ class ProfileScreen extends StatelessWidget {
         ),
         _Tile(
           icon: Icons.notifications_outlined,
-          label: 'Notifications',
-          value: settings.notificationsEnabled ? 'On' : 'Off',
+          label: l10n.notificationsLabel,
+          value: settings.notificationsEnabled ? l10n.onLabel : l10n.offLabel,
           trailing: Switch(
             value: settings.notificationsEnabled,
             activeThumbColor: AppColors.primary,
@@ -120,11 +124,11 @@ class ProfileScreen extends StatelessWidget {
         ),
 
         // ── Data ───────────────────────────────────────────────────────
-        _SectionHeader(label: 'DATA'),
+        _SectionHeader(label: l10n.sectionData),
         _Tile(
           icon: Icons.inventory_2_outlined,
-          label: 'My compounds',
-          value: 'Saved vial presets',
+          label: l10n.myCompoundsProfile,
+          value: l10n.savedVialPresets,
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => const CustomCompoundLibraryScreen(),
@@ -133,14 +137,14 @@ class ProfileScreen extends StatelessWidget {
         ),
         _Tile(
           icon: Icons.download_rounded,
-          label: 'Export data',
-          value: 'Copy as JSON',
+          label: l10n.exportData,
+          value: l10n.copyAsJson,
           onTap: () => _exportData(context),
         ),
         _Tile(
           icon: Icons.delete_outline_rounded,
-          label: 'Clear all data',
-          value: auth.isClearingAppData ? 'Clearing…' : 'Reset app',
+          label: l10n.clearAllData,
+          value: auth.isClearingAppData ? l10n.clearingLabel : l10n.resetApp,
           iconColor: AppColors.warning,
           onTap: auth.isClearingAppData
               ? null
@@ -148,37 +152,37 @@ class ProfileScreen extends StatelessWidget {
         ),
 
         // ── Support ────────────────────────────────────────────────────
-        _SectionHeader(label: 'SUPPORT'),
+        _SectionHeader(label: l10n.sectionSupport),
         _Tile(
           icon: Icons.support_agent_rounded,
-          label: 'Contact support',
-          value: 'Chat with us',
+          label: l10n.contactSupport,
+          value: l10n.chatWithUs,
           onTap: () => _openSupport(context),
         ),
 
         // ── Legal ──────────────────────────────────────────────────────
-        _SectionHeader(label: 'LEGAL'),
+        _SectionHeader(label: l10n.sectionLegal),
         _Tile(
           icon: Icons.gavel_rounded,
-          label: 'Terms of Service',
-          onTap: () => _showLegal(context, 'Terms of Service', _termsText),
+          label: l10n.termsOfService,
+          onTap: () => _showLegal(context, _LegalDocument.terms),
         ),
         _Tile(
           icon: Icons.privacy_tip_outlined,
-          label: 'Privacy Policy',
-          onTap: () => _showLegal(context, 'Privacy Policy', _privacyText),
+          label: l10n.privacyPolicy,
+          onTap: () => _showLegal(context, _LegalDocument.privacy),
         ),
         _Tile(
           icon: Icons.shield_outlined,
-          label: 'Medical disclaimer',
-          onTap: () => _showLegal(context, 'Disclaimer', _disclaimerText),
+          label: l10n.medicalDisclaimer,
+          onTap: () => _showLegal(context, _LegalDocument.disclaimer),
         ),
 
         // ── About ──────────────────────────────────────────────────────
-        _SectionHeader(label: 'ABOUT'),
+        _SectionHeader(label: l10n.sectionAbout),
         _Tile(
           icon: Icons.info_outline_rounded,
-          label: 'Version',
+          label: l10n.versionLabel,
           value: '1.0.0',
         ),
 
@@ -187,7 +191,7 @@ class ProfileScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
             child: PrimaryButton(
-              label: 'SIGN OUT',
+              label: l10n.signOutAction,
               icon: Icons.logout_rounded,
               isDestructive: true,
               onPressed: () => _signOut(context),
@@ -201,7 +205,7 @@ class ProfileScreen extends StatelessWidget {
               horizontal: AppSpacing.screenHorizontal,
             ),
             child: Text(
-              'Educational tracking only. Not medical advice.',
+              l10n.educationalTrackingDisclaimer,
               style: AppTypography.disclaimer,
               textAlign: TextAlign.center,
             ),
@@ -219,40 +223,43 @@ class ProfileScreen extends StatelessWidget {
     final controller = TextEditingController(text: current);
     final name = await showDialog<String>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surfaceContainer,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-          side: const BorderSide(color: AppColors.border),
-        ),
-        title: Text('Your name', style: AppTypography.h3),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          style: AppTypography.bodyLarge,
-          decoration: const InputDecoration(border: UnderlineInputBorder()),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(
-              'Cancel',
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.textTertiary,
+      builder: (ctx) {
+        final l10n = AppLocalizations.of(ctx);
+        return AlertDialog(
+          backgroundColor: AppColors.surfaceContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+            side: const BorderSide(color: AppColors.border),
+          ),
+          title: Text(l10n.yourName, style: AppTypography.h3),
+          content: TextField(
+            controller: controller,
+            autofocus: true,
+            style: AppTypography.bodyLarge,
+            decoration: const InputDecoration(border: UnderlineInputBorder()),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Text(
+                l10n.cancelLabel,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.textTertiary,
+                ),
               ),
             ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
-            child: Text(
-              'Save',
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.primary,
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
+              child: Text(
+                l10n.saveLabel,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.primary,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
     controller.dispose();
     if (!context.mounted) return;
@@ -340,46 +347,46 @@ class ProfileScreen extends StatelessWidget {
     await Clipboard.setData(ClipboardData(text: json));
     if (!context.mounted) return;
     HapticFeedback.mediumImpact();
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Data copied to clipboard.')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context).dataCopied)),
+    );
   }
 
   Future<void> _confirmClearData(BuildContext context) async {
     final ok = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surfaceContainer,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-          side: const BorderSide(color: AppColors.border),
-        ),
-        title: Text('Clear all data?', style: AppTypography.h3),
-        content: Text(
-          'This deletes all protocols, dose logs, and body metrics, then restarts onboarding. Your account, subscription, and peptide library are preserved. This cannot be undone.',
-          style: AppTypography.bodyMedium,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(
-              'Cancel',
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.textTertiary,
+      builder: (ctx) {
+        final l10n = AppLocalizations.of(ctx);
+        return AlertDialog(
+          backgroundColor: AppColors.surfaceContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+            side: const BorderSide(color: AppColors.border),
+          ),
+          title: Text(l10n.clearDataTitle, style: AppTypography.h3),
+          content: Text(l10n.clearDataBody, style: AppTypography.bodyMedium),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(
+                l10n.cancelLabel,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.textTertiary,
+                ),
               ),
             ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(
-              'Clear',
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.warning,
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(
+                l10n.clearLabel,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.warning,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
     if (ok != true) return;
     if (!context.mounted) return;
@@ -390,36 +397,39 @@ class ProfileScreen extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         useRootNavigator: true,
-        builder: (_) => PopScope(
-          canPop: false,
-          child: AlertDialog(
-            backgroundColor: AppColors.surfaceContainer,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-              side: const BorderSide(color: AppColors.border),
-            ),
-            title: Text('Clearing data…', style: AppTypography.h3),
-            content: Row(
-              children: [
-                const SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.primary,
+        builder: (dialogContext) {
+          final l10n = AppLocalizations.of(dialogContext);
+          return PopScope(
+            canPop: false,
+            child: AlertDialog(
+              backgroundColor: AppColors.surfaceContainer,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                side: const BorderSide(color: AppColors.border),
+              ),
+              title: Text(l10n.clearingDataTitle, style: AppTypography.h3),
+              content: Row(
+                children: [
+                  const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppColors.primary,
+                    ),
                   ),
-                ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Text(
-                    'Keep PepMod open while your tracking data is removed.',
-                    style: AppTypography.bodyMedium,
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Text(
+                      l10n.clearingDataBody,
+                      style: AppTypography.bodyMedium,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
 
@@ -434,60 +444,62 @@ class ProfileScreen extends StatelessWidget {
       debugPrint('Clear app data failed: $e');
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Could not clear data. Check your connection and retry.',
-          ),
-        ),
+        SnackBar(content: Text(AppLocalizations.of(context).clearDataFailed)),
       );
       return;
     }
     closeProgress();
     if (!context.mounted) return;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('All data cleared.')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context).allDataCleared)),
+    );
   }
 
   Future<void> _confirmDeleteAccount(BuildContext context) async {
     final auth = context.read<AuthProvider>();
+    final accountDeletionFailedMessage = AppLocalizations.of(
+      context,
+    ).accountDeletionFailed;
     final usesPassword = auth.authService.currentUserUsesPasswordProvider;
     final ok = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surfaceContainer,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-          side: const BorderSide(color: AppColors.border),
-        ),
-        title: Text('Delete account?', style: AppTypography.h3),
-        content: Text(
-          'This permanently deletes your PepMod account, settings, protocols, dose logs, and body metrics. This cannot be undone.',
-          style: AppTypography.bodyMedium.copyWith(
-            color: AppColors.textSecondary,
+      builder: (ctx) {
+        final l10n = AppLocalizations.of(ctx);
+        return AlertDialog(
+          backgroundColor: AppColors.surfaceContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+            side: const BorderSide(color: AppColors.border),
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(
-              'Cancel',
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.textTertiary,
-              ),
+          title: Text(l10n.deleteAccountTitle, style: AppTypography.h3),
+          content: Text(
+            l10n.deleteAccountBody,
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
             ),
           ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(
-              'Delete account',
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.warning,
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(
+                l10n.cancelLabel,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.textTertiary,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(
+                l10n.deleteAccount,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.warning,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
     if (ok != true || !context.mounted) return;
 
@@ -500,32 +512,35 @@ class ProfileScreen extends StatelessWidget {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surfaceContainer,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-          side: const BorderSide(color: AppColors.border),
-        ),
-        content: Row(
-          children: [
-            const SizedBox(
-              width: 22,
-              height: 22,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: AppColors.warning,
+      builder: (ctx) {
+        final l10n = AppLocalizations.of(ctx);
+        return AlertDialog(
+          backgroundColor: AppColors.surfaceContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+            side: const BorderSide(color: AppColors.border),
+          ),
+          content: Row(
+            children: [
+              const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.warning,
+                ),
               ),
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Text(
-                'Deleting account...',
-                style: AppTypography.bodyMedium,
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Text(
+                  l10n.deletingAccount,
+                  style: AppTypography.bodyMedium,
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
     final rootNavigator = Navigator.of(context, rootNavigator: true);
     final messenger = ScaffoldMessenger.of(context);
@@ -534,12 +549,16 @@ class ProfileScreen extends StatelessWidget {
       await auth.deleteAccount(password: password);
       if (rootNavigator.canPop()) rootNavigator.pop();
     } on AuthException catch (e) {
-      if (rootNavigator.canPop()) rootNavigator.pop();
-      messenger.showSnackBar(SnackBar(content: Text(e.message)));
-    } catch (e) {
+      debugPrint('Account deletion auth failure (${e.code}): ${e.message}');
       if (rootNavigator.canPop()) rootNavigator.pop();
       messenger.showSnackBar(
-        SnackBar(content: Text('Account deletion failed: $e')),
+        SnackBar(content: Text(accountDeletionFailedMessage)),
+      );
+    } catch (e) {
+      debugPrint('Account deletion failed: $e');
+      if (rootNavigator.canPop()) rootNavigator.pop();
+      messenger.showSnackBar(
+        SnackBar(content: Text(accountDeletionFailedMessage)),
       );
     }
   }
@@ -548,45 +567,48 @@ class ProfileScreen extends StatelessWidget {
     final controller = TextEditingController();
     final password = await showDialog<String>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surfaceContainer,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-          side: const BorderSide(color: AppColors.border),
-        ),
-        title: Text('Confirm password', style: AppTypography.h3),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          obscureText: true,
-          style: AppTypography.bodyLarge,
-          decoration: const InputDecoration(
-            labelText: 'Password',
-            border: UnderlineInputBorder(),
+      builder: (ctx) {
+        final l10n = AppLocalizations.of(ctx);
+        return AlertDialog(
+          backgroundColor: AppColors.surfaceContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+            side: const BorderSide(color: AppColors.border),
           ),
-          onSubmitted: (value) => Navigator.of(ctx).pop(value.trim()),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(
-              'Cancel',
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.textTertiary,
+          title: Text(l10n.confirmPassword, style: AppTypography.h3),
+          content: TextField(
+            controller: controller,
+            autofocus: true,
+            obscureText: true,
+            style: AppTypography.bodyLarge,
+            decoration: InputDecoration(
+              labelText: l10n.passwordLabel,
+              border: const UnderlineInputBorder(),
+            ),
+            onSubmitted: (value) => Navigator.of(ctx).pop(value.trim()),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Text(
+                l10n.cancelLabel,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.textTertiary,
+                ),
               ),
             ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
-            child: Text(
-              'Delete',
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.warning,
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
+              child: Text(
+                l10n.deleteLabel,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.warning,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
     controller.dispose();
     return password;
@@ -595,55 +617,70 @@ class ProfileScreen extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
     final ok = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surfaceContainer,
-        title: Text('Sign out?', style: AppTypography.h3),
-        content: Text(
-          'Your protocols stay saved and sync back when you sign in again.',
-          style: AppTypography.bodyMedium.copyWith(
-            color: AppColors.textSecondary,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(
-              'Cancel',
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.textTertiary,
-              ),
+      builder: (ctx) {
+        final l10n = AppLocalizations.of(ctx);
+        return AlertDialog(
+          backgroundColor: AppColors.surfaceContainer,
+          title: Text(l10n.signOutTitle, style: AppTypography.h3),
+          content: Text(
+            l10n.signOutBody,
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
             ),
           ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(
-              'Sign out',
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.warning,
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(
+                l10n.cancelLabel,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.textTertiary,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(
+                l10n.signOutLabel,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.warning,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
     if (ok != true) return;
     if (!context.mounted) return;
     try {
       await context.read<AuthProvider>().signOut();
     } catch (e) {
+      debugPrint('Sign out failed: $e');
       if (!context.mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Sign out failed: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context).signOutFailed)),
+      );
     }
   }
 
-  void _showLegal(BuildContext context, String title, String body) {
+  void _showLegal(BuildContext context, _LegalDocument document) {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => _LegalSheet(title: title, body: body),
+      builder: (sheetContext) {
+        final l10n = AppLocalizations.of(sheetContext);
+        final (title, body) = switch (document) {
+          _LegalDocument.terms => (l10n.termsOfService, l10n.termsBody),
+          _LegalDocument.privacy => (l10n.privacyPolicy, l10n.privacyBody),
+          _LegalDocument.disclaimer => (
+            l10n.disclaimerTitle,
+            l10n.medicalDisclaimerBody,
+          ),
+        };
+        return _LegalSheet(title: title, body: body);
+      },
     );
   }
 
@@ -660,6 +697,9 @@ class ProfileScreen extends StatelessWidget {
     final settingsProvider = context.read<SettingsProvider>();
     final protocols = context.read<ProtocolProvider>();
     final messenger = ScaffoldMessenger.of(context);
+    final notificationsDisabledMessage = AppLocalizations.of(
+      context,
+    ).notificationsDisabledSystem;
 
     if (!enabled) {
       await settingsProvider.update((s) => s.notificationsEnabled = false);
@@ -673,9 +713,7 @@ class ProfileScreen extends StatelessWidget {
     if (!granted) {
       await settingsProvider.update((s) => s.notificationsEnabled = false);
       messenger.showSnackBar(
-        const SnackBar(
-          content: Text('Notifications are disabled in system settings.'),
-        ),
+        SnackBar(content: Text(notificationsDisabledMessage)),
       );
       return;
     }
@@ -693,6 +731,7 @@ class _AvatarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final isPro =
         settings.subscriptionState == 'pro' ||
         settings.subscriptionState == 'active';
@@ -745,7 +784,7 @@ class _AvatarCard extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    isPro ? 'PRO' : 'FREE',
+                    isPro ? l10n.planPro : l10n.planFree,
                     style: AppTypography.systemLabel.copyWith(
                       color: isPro ? AppColors.primary : AppColors.textTertiary,
                       fontSize: 9,
@@ -864,6 +903,7 @@ class _LegalSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return FractionallySizedBox(
       heightFactor: 0.75,
       child: Container(
@@ -894,7 +934,7 @@ class _LegalSheet extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: AppSpacing.lg),
-                Text('SYS.LEGAL', style: AppTypography.systemLabel),
+                Text(l10n.legalSystemLabel, style: AppTypography.systemLabel),
                 const SizedBox(height: AppSpacing.sm),
                 Text(title, style: AppTypography.h2),
                 const SizedBox(height: AppSpacing.lg),
@@ -912,20 +952,4 @@ class _LegalSheet extends StatelessWidget {
   }
 }
 
-const _termsText =
-    'PepMod is provided for educational and tracking purposes only. It is not a medical device and does not provide medical advice, diagnosis, prescriptions, or treatment recommendations. '
-    'By using PepMod, you are responsible for your own records, decisions, and consultation with qualified healthcare professionals.\n\n'
-    'Subscriptions renew automatically unless cancelled through the App Store or Google Play before the renewal period. Refunds are handled by the store where you purchased.\n\n'
-    'Full Terms: https://appstorecopilot.com/legal/yzh32x5v/terms';
-
-const _privacyText =
-    'PepMod uses Firebase for authentication and cloud data storage, RevenueCat for subscriptions, AppRefer and Meta/Facebook App Events for attribution, and Firebase/Crashlytics for analytics and diagnostics. '
-    'We do not sell your personal information. You can delete your account and saved app data from within the app.\n\n'
-    'Full Privacy Policy: https://appstorecopilot.com/legal/yzh32x5v/privacy';
-
-const _disclaimerText =
-    'PepMod is a wellness and tracking tool — NOT a medical device. '
-    'Nothing in this app constitutes medical advice, diagnosis, prescription, or treatment recommendation. '
-    'Peptides described in the library are for educational purposes only. '
-    'Always consult a qualified healthcare provider before starting, changing, or stopping any regimen. '
-    'If you experience any adverse effects, seek medical attention immediately.';
+enum _LegalDocument { terms, privacy, disclaimer }
