@@ -15,8 +15,18 @@ const _targetPaths = <String>[
 
 void main(List<String> arguments) {
   final checkOnly = arguments.contains('--check');
-  final source = _readArb(_sourcePath);
+  final sourceFile = File(_sourcePath);
+  final originalSource = sourceFile.readAsStringSync();
+  final source = _withCompleteSourceMetadata(_readArb(_sourcePath));
+  final encodedSource =
+      '${const JsonEncoder.withIndent('  ').convert(source)}\n';
   var staleFiles = 0;
+
+  if (encodedSource != originalSource) {
+    staleFiles += 1;
+    if (!checkOnly) sourceFile.writeAsStringSync(encodedSource);
+    stdout.writeln('${checkOnly ? 'STALE' : 'UPDATED'} $_sourcePath');
+  }
 
   for (final path in _targetPaths) {
     final target = _readArb(path);
@@ -31,6 +41,20 @@ void main(List<String> arguments) {
   }
 
   if (checkOnly && staleFiles > 0) exitCode = 1;
+}
+
+Map<String, dynamic> _withCompleteSourceMetadata(Map<String, dynamic> source) {
+  final updated = Map<String, dynamic>.from(source);
+  for (final key in source.keys.where((key) => !key.startsWith('@'))) {
+    final metadata = source['@$key'] as Map<String, dynamic>?;
+    if (metadata?['description'] != null) continue;
+    updated['@$key'] = <String, dynamic>{
+      if (metadata?['placeholders'] != null)
+        'placeholders': metadata!['placeholders'],
+      'description': 'Customer-facing app copy for $key.',
+    };
+  }
+  return updated;
 }
 
 Map<String, dynamic> _withSourceMetadata(

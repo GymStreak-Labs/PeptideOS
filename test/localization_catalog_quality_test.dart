@@ -18,6 +18,16 @@ void main() {
   final source = _readJson('lib/l10n/app_en.arb');
   final sourceKeys = _messageKeys(source);
 
+  test('English source has translator context for every message', () {
+    for (final key in sourceKeys) {
+      expect(
+        _metadata(source, key)['description'],
+        isNotEmpty,
+        reason: 'lib/l10n/app_en.arb:$key is missing source context',
+      );
+    }
+  });
+
   for (final path in _targetArbs) {
     test('$path matches source keys, metadata, and placeholders', () {
       final target = _readJson(path);
