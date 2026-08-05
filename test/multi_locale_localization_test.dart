@@ -44,17 +44,49 @@ void main() {
   });
 
   test('generated delegate exposes every requested locale', () {
+    final english = lookupAppLocalizations(const Locale('en'));
     for (final locale in _newLocales) {
+      final localized = lookupAppLocalizations(locale);
       expect(
         AppLocalizations.supportedLocales.contains(locale),
         isTrue,
         reason: '${locale.toLanguageTag()} is missing from generated locales',
       );
       expect(
-        lookupAppLocalizations(locale).libraryTitle,
-        isNot('Library'),
+        localized.libraryTitle,
+        isNot(english.libraryTitle),
         reason: '${locale.toLanguageTag()} fell back to English',
       );
+      final representativeSurfaces = <(String, String, String)>[
+        ('auth', localized.authRequiredTitle, english.authRequiredTitle),
+        ('paywall', localized.paywallTitle, english.paywallTitle),
+        ('protocol', localized.protocolCreate, english.protocolCreate),
+        ('progress', localized.progressTitle, english.progressTitle),
+        ('profile', localized.profileTitle, english.profileTitle),
+        ('library', localized.addCompound, english.addCompound),
+        (
+          'notifications',
+          localized.notificationDoseTitle,
+          english.notificationDoseTitle,
+        ),
+        (
+          'purchase errors',
+          localized.subscriptionErrorNetwork,
+          english.subscriptionErrorNetwork,
+        ),
+        (
+          'reference content',
+          localized.peptideContentBpc157Description,
+          english.peptideContentBpc157Description,
+        ),
+      ];
+      for (final (surface, value, englishValue) in representativeSurfaces) {
+        expect(
+          value,
+          isNot(englishValue),
+          reason: '${locale.toLanguageTag()} has English fallback on $surface',
+        );
+      }
     }
   });
 
