@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../l10n/app_localizations.dart';
@@ -29,6 +31,8 @@ class CalculatorDemoPage extends StatelessWidget {
     const drawMl = doseMcg / concentration; // 0.1
     const syringeUnits = drawMl * 100; // 10
     const fillFraction = syringeUnits / 100; // 0.1
+    String number(double value, String pattern) =>
+        NumberFormat(pattern, l10n.localeName).format(value);
 
     return SafeArea(
       child: Padding(
@@ -82,17 +86,17 @@ class CalculatorDemoPage extends StatelessWidget {
                           // Input summary
                           _DemoInput(
                             label: l10n.peptideLabel,
-                            value: '${peptideMg.toInt()}mg $peptideName',
+                            value: '${number(peptideMg, '0')}mg $peptideName',
                           ),
                           const SizedBox(height: AppSpacing.sm),
                           _DemoInput(
                             label: l10n.bacWaterLabel,
-                            value: '${waterMl.toInt()}ml',
+                            value: '${number(waterMl, '0')}ml',
                           ),
                           const SizedBox(height: AppSpacing.sm),
                           _DemoInput(
                             label: l10n.doseLabel,
-                            value: '${doseMcg.toInt()}mcg',
+                            value: '${number(doseMcg, '0')}mcg',
                           ),
 
                           const SizedBox(height: AppSpacing.lg),
@@ -108,7 +112,7 @@ class CalculatorDemoPage extends StatelessWidget {
                             textBaseline: TextBaseline.alphabetic,
                             children: [
                               Text(
-                                syringeUnits.toStringAsFixed(1),
+                                number(syringeUnits, '0.0'),
                                 style: AppTypography.heroMedium.copyWith(
                                   color: AppColors.primary,
                                 ),
@@ -119,7 +123,7 @@ class CalculatorDemoPage extends StatelessWidget {
                           ),
                           const SizedBox(height: AppSpacing.xs),
                           Text(
-                            l10n.syringeVolume(drawMl.toStringAsFixed(3)),
+                            l10n.syringeVolume(number(drawMl, '0.000')),
                             style: AppTypography.bodySmall,
                           ),
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
@@ -404,7 +405,10 @@ class _TodayHeroCard extends StatelessWidget {
                   textBaseline: TextBaseline.alphabetic,
                   children: [
                     Text(
-                      total == 0 ? '0' : adherencePct.toStringAsFixed(0),
+                      NumberFormat(
+                        '0',
+                        context.protocolL10n.localeName,
+                      ).format(total == 0 ? 0 : adherencePct),
                       style: AppTypography.heroLarge.copyWith(
                         color: AppColors.primary,
                       ),
@@ -475,7 +479,10 @@ class _NextDoseCard extends StatelessWidget {
                 style: AppTypography.systemLabel,
               ),
               const Spacer(),
-              Text(_formatTime(dose.scheduledAt), style: AppTypography.tabular),
+              Text(
+                TimeOfDay.fromDateTime(dose.scheduledAt).format(context),
+                style: AppTypography.tabular,
+              ),
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
@@ -484,9 +491,7 @@ class _NextDoseCard extends StatelessWidget {
             textBaseline: TextBaseline.alphabetic,
             children: [
               Text(
-                dose.amountTaken.toStringAsFixed(
-                  dose.amountTaken == dose.amountTaken.roundToDouble() ? 0 : 1,
-                ),
+                _localizedAmount(context, dose.amountTaken),
                 style: AppTypography.heroLarge.copyWith(
                   color: AppColors.primary,
                 ),
@@ -531,12 +536,6 @@ class _NextDoseCard extends StatelessWidget {
     return '${d.inMinutes}m';
   }
 
-  String _formatTime(DateTime d) {
-    final h = d.hour.toString().padLeft(2, '0');
-    final m = d.minute.toString().padLeft(2, '0');
-    return '$h:$m';
-  }
-
   String _siteLabel(BuildContext context, String key) => switch (key) {
     'left-abdomen' => context.protocolL10n.injectionSiteLeftAbdomen,
     'right-abdomen' => context.protocolL10n.injectionSiteRightAbdomen,
@@ -552,12 +551,9 @@ class _NextDoseCard extends StatelessWidget {
   String _syringeLabel(BuildContext context, double value) {
     if (value <= 0) return '';
     return context.protocolL10n.protocolSyringeUnitsSuffix(
-      _formatAmount(value),
+      _localizedAmount(context, value),
     );
   }
-
-  String _formatAmount(double d) =>
-      d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(1);
 }
 
 // ── Dose card for today's list ──────────────────────────────────────────────
@@ -647,7 +643,7 @@ class _DoseCard extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  '${_formatAmount(dose.amountTaken)} ${dose.units}'
+                  '${_localizedAmount(context, dose.amountTaken)} ${dose.units}'
                   '${_syringeLabel(context, dose.syringeUnits)}'
                   '${dose.injectionSite.isEmpty ? '' : ' · ${_siteLabel(context, dose.injectionSite)}'}',
                   style: AppTypography.bodySmall.copyWith(
@@ -660,7 +656,10 @@ class _DoseCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(_formatTime(dose.scheduledAt), style: AppTypography.tabular),
+              Text(
+                TimeOfDay.fromDateTime(dose.scheduledAt).format(context),
+                style: AppTypography.tabular,
+              ),
               if (isMissed && !taken && !skipped)
                 Text(
                   context.protocolL10n.protocolMissed,
@@ -684,15 +683,6 @@ class _DoseCard extends StatelessWidget {
     );
   }
 
-  String _formatAmount(double d) =>
-      d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(1);
-
-  String _formatTime(DateTime d) {
-    final h = d.hour.toString().padLeft(2, '0');
-    final m = d.minute.toString().padLeft(2, '0');
-    return '$h:$m';
-  }
-
   String _siteLabel(BuildContext context, String key) => switch (key) {
     'left-abdomen' => context.protocolL10n.injectionSiteLeftAbdomen,
     'right-abdomen' => context.protocolL10n.injectionSiteRightAbdomen,
@@ -708,10 +698,15 @@ class _DoseCard extends StatelessWidget {
   String _syringeLabel(BuildContext context, double value) {
     if (value <= 0) return '';
     return context.protocolL10n.protocolSyringeUnitsSuffix(
-      _formatAmount(value),
+      _localizedAmount(context, value),
     );
   }
 }
+
+String _localizedAmount(BuildContext context, double value) => NumberFormat(
+  value == value.roundToDouble() ? '0' : '0.#',
+  context.protocolL10n.localeName,
+).format(value);
 
 // ── Empty today state ───────────────────────────────────────────────────────
 class _EmptyTodayCard extends StatelessWidget {

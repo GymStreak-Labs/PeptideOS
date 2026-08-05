@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
@@ -410,7 +411,7 @@ class _PlannedDoseCard extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
-                  '${_amount(item.schedule.dosePerInjection)} ${item.schedule.doseUnit}${item.schedule.syringeUnits > 0 ? ' · ${_amount(item.schedule.syringeUnits)} units' : ''}',
+                  '${_amount(context, item.schedule.dosePerInjection)} ${item.schedule.doseUnit}${item.schedule.syringeUnits > 0 ? ' · ${_amount(context, item.schedule.syringeUnits)} ${context.protocolL10n.unitsLabel}' : ''}',
                   style: AppTypography.bodyMedium.copyWith(
                     color: AppColors.textPrimary,
                   ),
@@ -582,12 +583,10 @@ DateTime _mondayOf(DateTime value) =>
 bool _sameDay(DateTime a, DateTime b) =>
     a.year == b.year && a.month == b.month && a.day == b.day;
 
-String _amount(double value) => value == value.roundToDouble()
-    ? value.toInt().toString()
-    : value
-          .toStringAsFixed(2)
-          .replaceFirst(RegExp(r'0+$'), '')
-          .replaceFirst(RegExp(r'\.$'), '');
+String _amount(BuildContext context, double value) => NumberFormat(
+  value == value.roundToDouble() ? '0' : '0.##',
+  context.protocolL10n.localeName,
+).format(value);
 
 String _weekRangeLabel(BuildContext context, DateTime monday) {
   final sunday = monday.add(const Duration(days: 6));

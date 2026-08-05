@@ -344,6 +344,7 @@ class _InlineReconstitutionCalculatorState
   late final TextEditingController _peptideMg;
   late final TextEditingController _waterMl;
   late final TextEditingController _doseMcg;
+  bool _didLocalizeInitialValues = false;
 
   @override
   void initState() {
@@ -355,6 +356,17 @@ class _InlineReconstitutionCalculatorState
           ? widget.initialDoseMcg.toStringAsFixed(0)
           : widget.initialDoseMcg.toStringAsFixed(1),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didLocalizeInitialValues) return;
+    final locale = AppLocalizations.of(context).localeName;
+    _peptideMg.text = NumberFormat('0.##', locale).format(5);
+    _waterMl.text = NumberFormat('0.##', locale).format(2);
+    _doseMcg.text = NumberFormat('0.#', locale).format(widget.initialDoseMcg);
+    _didLocalizeInitialValues = true;
   }
 
   @override
