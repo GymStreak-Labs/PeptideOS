@@ -427,6 +427,9 @@ class _AppRootState extends State<_AppRoot> {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           await OnboardingDraftService.replayAfterAuth(
             email: auth.currentUser?.email ?? '',
+            defaultProtocolName: AppLocalizations.of(
+              context,
+            ).createProtocolDefaultName,
             settings: context.read<SettingsProvider>(),
             protocols: context.read<ProtocolProvider>(),
             doseLogs: context.read<DoseLogProvider>(),
