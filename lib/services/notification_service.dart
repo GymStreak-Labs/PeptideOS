@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -26,11 +28,14 @@ typedef NotificationCopy = ({
   String phaseBody,
 });
 
+typedef NotificationLocaleChangeHandler = Future<bool> Function();
+
+const _scheduledNotificationLocaleKey = 'pepmod_scheduled_notification_locale';
+
 @visibleForTesting
-Future<NotificationCopy> loadNotificationCopy(Locale locale) async {
+Locale resolveNotificationLocale(Locale locale) {
   final supported = AppLocalizations.supportedLocales;
-  final resolved =
-      supported
+  return supported
           .where(
             (candidate) =>
                 candidate.languageCode == locale.languageCode &&
@@ -41,6 +46,25 @@ Future<NotificationCopy> loadNotificationCopy(Locale locale) async {
           .where((candidate) => candidate.languageCode == locale.languageCode)
           .firstOrNull ??
       const Locale('en');
+}
+
+@visibleForTesting
+String notificationLocaleTag(Locale locale) => locale.countryCode == null
+    ? locale.languageCode
+    : '${locale.languageCode}-${locale.countryCode}';
+
+@visibleForTesting
+bool scheduledNotificationLocaleNeedsRefresh({
+  required String? scheduledLocaleTag,
+  required Locale currentLocale,
+  required bool hasPendingNotifications,
+}) =>
+    hasPendingNotifications &&
+    scheduledLocaleTag != notificationLocaleTag(currentLocale);
+
+@visibleForTesting
+Future<NotificationCopy> loadNotificationCopy(Locale locale) async {
+  final resolved = resolveNotificationLocale(locale);
   final l10n = await AppLocalizations.delegate.load(resolved);
   return (
     channelName: l10n.notificationChannelName,
@@ -62,7 +86,7 @@ Future<NotificationCopy> loadNotificationCopy(Locale locale) async {
 /// - On iOS, requests permission lazily (on first dose schedule), not upfront.
 /// - Uses a stable 31-bit integer derived from the DoseLog UUID as the OS
 ///   notification ID so cancel-by-id works.
-class NotificationService {
+class NotificationService with WidgetsBindingObserver {
   NotificationService._();
 
   static final NotificationService instance = NotificationService._();
@@ -76,13 +100,43 @@ class NotificationService {
   bool _permissionRequested = false;
   bool? _permissionGranted;
   NotificationCopy? _copy;
+  Locale? _currentLocale;
+  String? _scheduledLocaleTag;
+  bool _localeRefreshPending = false;
+  NotificationLocaleChangeHandler? _localeChangeHandler;
+  Object? _localeChangeHandlerOwner;
+  Future<void>? _localeRefresh;
+  bool _localeRefreshQueued = false;
+  bool _observingLocales = false;
   bool get isInitialized => _initialized;
+  bool get needsLocaleRefresh => _localeRefreshPending;
+
+  void setLocaleChangeHandler({
+    required Object owner,
+    required NotificationLocaleChangeHandler handler,
+  }) {
+    _localeChangeHandlerOwner = owner;
+    _localeChangeHandler = handler;
+  }
+
+  void clearLocaleChangeHandler(Object owner) {
+    if (!identical(_localeChangeHandlerOwner, owner)) return;
+    _localeChangeHandlerOwner = null;
+    _localeChangeHandler = null;
+  }
 
   Future<void> initialize() async {
     if (_initialized) return;
-    _copy ??= await loadNotificationCopy(
+    final currentLocale = resolveNotificationLocale(
       WidgetsBinding.instance.platformDispatcher.locale,
     );
+    _currentLocale = currentLocale;
+    _copy = await loadNotificationCopy(currentLocale);
+    await _loadScheduledLocaleTag();
+    if (!_observingLocales) {
+      WidgetsBinding.instance.addObserver(this);
+      _observingLocales = true;
+    }
     try {
       tz_data.initializeTimeZones();
       final localName = await FlutterTimezone.getLocalTimezone();
@@ -103,8 +157,102 @@ class NotificationService {
         const InitializationSettings(android: androidInit, iOS: iosInit),
       );
       _initialized = true;
+      await _refreshSchedulesIfNeeded();
     } catch (e) {
       debugPrint('NotificationService: plugin init failed: $e');
+    }
+  }
+
+  @override
+  void didChangeLocales(List<Locale>? locales) {
+    final locale = locales?.firstOrNull;
+    if (locale == null) return;
+    unawaited(refreshForLocale(locale));
+  }
+
+  @visibleForTesting
+  Future<void> refreshForLocale(Locale locale) async {
+    final resolved = resolveNotificationLocale(locale);
+    if (_currentLocale == resolved) return;
+    _currentLocale = resolved;
+    _copy = await loadNotificationCopy(resolved);
+    await _refreshSchedulesIfNeeded(force: true);
+  }
+
+  Future<void> _refreshSchedulesIfNeeded({bool force = false}) async {
+    final activeRefresh = _localeRefresh;
+    if (activeRefresh != null) {
+      if (force) _localeRefreshQueued = true;
+      return activeRefresh;
+    }
+
+    var runForce = force;
+    do {
+      _localeRefreshQueued = false;
+      final refresh = _performLocaleRefreshIfNeeded(force: runForce);
+      _localeRefresh = refresh;
+      try {
+        await refresh;
+      } finally {
+        if (identical(_localeRefresh, refresh)) _localeRefresh = null;
+      }
+      runForce = _localeRefreshQueued;
+    } while (runForce);
+  }
+
+  Future<void> _performLocaleRefreshIfNeeded({required bool force}) async {
+    final locale = _currentLocale;
+    final handler = _localeChangeHandler;
+    if (locale == null || handler == null || !_initialized) return;
+
+    var hasPendingNotifications = false;
+    try {
+      hasPendingNotifications =
+          (await _plugin.pendingNotificationRequests()).isNotEmpty;
+    } catch (e) {
+      debugPrint('NotificationService: pending request lookup failed: $e');
+    }
+
+    final needsRefresh =
+        force ||
+        scheduledNotificationLocaleNeedsRefresh(
+          scheduledLocaleTag: _scheduledLocaleTag,
+          currentLocale: locale,
+          hasPendingNotifications: hasPendingNotifications,
+        );
+    if (!needsRefresh) return;
+
+    _localeRefreshPending = true;
+    try {
+      final completed = await handler();
+      if (!completed) return;
+      _localeRefreshPending = false;
+    } catch (e) {
+      debugPrint('NotificationService: locale reschedule failed: $e');
+    }
+  }
+
+  Future<void> _loadScheduledLocaleTag() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      _scheduledLocaleTag = prefs.getString(_scheduledNotificationLocaleKey);
+    } catch (e) {
+      debugPrint('NotificationService: locale state load failed: $e');
+    }
+  }
+
+  Future<void> _recordScheduledLocale() async {
+    final locale = _currentLocale;
+    if (locale == null) return;
+    final tag = notificationLocaleTag(locale);
+    if (_scheduledLocaleTag == tag) return;
+    _scheduledLocaleTag = tag;
+    _localeRefreshPending = false;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_scheduledNotificationLocaleKey, tag);
+    } catch (e) {
+      debugPrint('NotificationService: locale state save failed: $e');
     }
   }
 
@@ -171,6 +319,7 @@ class NotificationService {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
       );
+      await _recordScheduledLocale();
     } on PlatformException catch (e) {
       debugPrint('NotificationService: schedule failed: ${e.code}');
     } catch (e) {
@@ -225,6 +374,7 @@ class NotificationService {
             UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.dateAndTime,
       );
+      await _recordScheduledLocale();
     } catch (e) {
       debugPrint('NotificationService: protocol reminder failed: $e');
     }
@@ -287,6 +437,14 @@ class NotificationService {
     }
     try {
       await _plugin.cancelAll();
+      _scheduledLocaleTag = null;
+      _localeRefreshPending = false;
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove(_scheduledNotificationLocaleKey);
+      } catch (e) {
+        debugPrint('NotificationService: locale state clear failed: $e');
+      }
     } catch (e) {
       debugPrint('NotificationService: cancelAll failed: $e');
       if (strict) rethrow;
