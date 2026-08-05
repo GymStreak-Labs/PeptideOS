@@ -388,6 +388,38 @@ class AppLocalizationsKo extends AppLocalizations {
   String get noPurchasesToRestore => '복원할 구매 내역이 없습니다.';
 
   @override
+  String get subscriptionErrorServiceUnavailable =>
+      '일시적으로 구매가 불가능합니다. 잠시 후 다시 시도해 주세요.';
+
+  @override
+  String get subscriptionErrorPlansUnavailable =>
+      '구독 요금제를 로드할 수 없습니다. 연결을 확인하고 다시 시도하세요.';
+
+  @override
+  String get subscriptionErrorPurchaseCancelled => '구매가 취소되었습니다.';
+
+  @override
+  String get subscriptionErrorPurchaseNotAllowed => '이 기기에서는 구매가 허용되지 않습니다.';
+
+  @override
+  String get subscriptionErrorPurchaseInvalid =>
+      '구매를 완료할 수 없습니다. 계정을 확인하고 다시 시도해 주세요.';
+
+  @override
+  String get subscriptionErrorProductUnavailable =>
+      '지금은 이 구독을 사용할 수 없습니다. 다른 요금제를 선택하거나 나중에 다시 시도하세요.';
+
+  @override
+  String get subscriptionErrorNetwork => '오프라인 상태입니다. 연결을 확인하고 다시 시도하세요.';
+
+  @override
+  String get subscriptionErrorPurchaseFailed => '구매에 실패했습니다. 다시 시도해 주세요.';
+
+  @override
+  String get subscriptionErrorRestoreFailed =>
+      '구매를 복원할 수 없습니다. 연결을 확인하고 다시 시도하세요.';
+
+  @override
   String get unlockFullProtocol => '전체 프로토콜 잠금 해제';
 
   @override
@@ -2406,4 +2438,526 @@ class AppLocalizationsKo extends AppLocalizations {
   String syringeOption(String volume, String capacity) {
     return 'U-100 · $volume mL / $capacity단위';
   }
+
+  @override
+  String get peptideContentHcgDescription =>
+      '인간 융모막 성선 자극 호르몬(HCG)은 규제된 임상 환경에서 사용되며 펩타이드 프로토콜과 함께 자주 논의되는 당단백질 호르몬입니다. 이 항목은 사용자가 입력한 일정에 대한 중립 추적 참조로 제공됩니다.';
+
+  @override
+  String get peptideContentHcgTypicalDose => '사용자가 입력한 IU';
+
+  @override
+  String get peptideContentHcgHalfLife => '~24~36시간';
+
+  @override
+  String get peptideContentHcgNotes =>
+      '많은 지역에서 처방이 필요한 의약품입니다. 자격을 갖춘 의료 전문가가 이미 안내한 내용만 기록하세요. PepMod는 HCG 투여량을 안내하지 않습니다.';
+
+  @override
+  String get peptideContentBpc157Description =>
+      'BPC-157(신체 보호 화합물 157)은 위액에서 발견되는 단백질에서 추출한 15개 아미노산 합성 펩타이드입니다. 연조직 및 내장 내막 복구에서의 역할에 대해 동물 모델에서 연구되었습니다. 인간의 임상 데이터는 여전히 제한적입니다.';
+
+  @override
+  String get peptideContentBpc157TypicalDose => '250~500mcg';
+
+  @override
+  String get peptideContentBpc157HalfLife => '~4시간';
+
+  @override
+  String get peptideContentBpc157Notes =>
+      '정균수로 재구성한 뒤 냉장 보관하는 방식이 일반적으로 설명됩니다. 동물 연구의 힘줄·인대 프로토콜에서는 TB-500과의 병용이 자주 언급됩니다.';
+
+  @override
+  String get peptideContentTb500Description =>
+      'TB-500은 자연 발생 단백질인 티모신 베타-4의 합성 단편입니다. 동물 연구에서 세포 이동과 조직 재생에서의 역할이 조사되었습니다. 이는 연구자 및 수의학 환경에서 오프라벨로 널리 사용됩니다.';
+
+  @override
+  String get peptideContentTb500TypicalDose => '매주 2~5mg 로딩 후 2mg 유지';
+
+  @override
+  String get peptideContentTb500HalfLife => '~2일';
+
+  @override
+  String get peptideContentTb500Notes =>
+      '연조직 프로토콜을 위해 BPC-157과 종종 쌍을 이룹니다. 긴 반감기로 인해 매주 2회 분할 투여하는 것이 일반적입니다.';
+
+  @override
+  String get peptideContentGhkCuDescription =>
+      'GHK-Cu(구리 펩티드)는 인간 혈장에 존재하는 자연 발생 구리 결합 트리펩티드입니다. 이는 피부 리모델링 및 모낭 신호 전달을 위한 국소 화장품 응용 분야에서 연구되었습니다.';
+
+  @override
+  String get peptideContentGhkCuTypicalDose => '1~2mg';
+
+  @override
+  String get peptideContentGhkCuHalfLife => '~1시간';
+
+  @override
+  String get peptideContentGhkCuNotes =>
+      '또한 스킨케어 제형에 국소적으로 사용됩니다. 피하 투여량은 일반적으로 국소 농도보다 낮습니다.';
+
+  @override
+  String get peptideContentEpitalonDescription =>
+      '에피탈론은 송과선에서 추출된 펩타이드인 에피탈라민의 합성 테트라펩타이드 유사체입니다. 러시아 연구에서는 텔로머라제 활동과 일주기 조절에 미치는 영향을 조사했습니다.';
+
+  @override
+  String get peptideContentEpitalonTypicalDose => '주기일당 5~10mg';
+
+  @override
+  String get peptideContentEpitalonHalfLife => '~30분';
+
+  @override
+  String get peptideContentEpitalonNotes =>
+      '러시아의 장수 연구에서는 짧은 주기(예: 10~20일 사용 후 수개월 휴지)로 시행한 사례가 있습니다.';
+
+  @override
+  String get peptideContentSemaglutideDescription =>
+      '세마글루티드는 원래 제2형 당뇨병을 위해 개발된 GLP-1 수용체 작용제이며 나중에 Ozempic 및 Wegovy라는 브랜드 이름으로 만성 체중 관리용으로 승인되었습니다. 위 배출 속도를 늦추고 식욕 신호를 조절합니다.';
+
+  @override
+  String get peptideContentSemaglutideTypicalDose => '매주 0.25~2.4mg(적정)';
+
+  @override
+  String get peptideContentSemaglutideHalfLife => '~7일';
+
+  @override
+  String get peptideContentSemaglutideNotes =>
+      '많은 국가에서 처방이 필요한 의약품입니다. 위장관 부작용을 고려해 낮은 용량에서 시작하고 4주 간격으로 증량하는 방식이 사용됩니다.';
+
+  @override
+  String get peptideContentTirzepatideDescription =>
+      'Tirzepatide는 제2형 당뇨병(Mounjaro) 및 비만(Zepbound)에 대해 승인된 이중 GIP/GLP-1 수용체 작용제입니다. 임상 시험에서는 단일 작용제 GLP-1보다 체중 감소 효과가 더 큰 것으로 나타났습니다.';
+
+  @override
+  String get peptideContentTirzepatideTypicalDose => '매주 2.5~15mg(적정)';
+
+  @override
+  String get peptideContentTirzepatideHalfLife => '~5일';
+
+  @override
+  String get peptideContentTirzepatideNotes =>
+      '많은 국가에서 처방이 필요한 의약품입니다. 일반적인 증량 간격은 4주이며, 승인된 용법은 주 1회 피하 투여입니다.';
+
+  @override
+  String get peptideContentRetatrutideDescription =>
+      'Retatrutide는 GIP, GLP-1 및 글루카곤 수용체를 표적으로 하는 연구용 삼중 작용제입니다. 2상 임상시험에서는 기존 GLP-1 기반 치료법을 능가하는 체중 감소 효과가 보고됐다.';
+
+  @override
+  String get peptideContentRetatrutideTypicalDose => '시험 용량 매주 1~12mg';
+
+  @override
+  String get peptideContentRetatrutideHalfLife => '~6일';
+
+  @override
+  String get peptideContentRetatrutideNotes =>
+      '아직 조사 중입니다. 이 글을 쓰는 시점에는 FDA의 승인을 받지 않았습니다. 임상 시험 이외의 용도는 엄격히 연구용으로만 사용됩니다.';
+
+  @override
+  String get peptideContentIpamorelinDescription =>
+      'Ipamorelin은 펜타펩타이드 그렐린 모방 및 선택적 성장 호르몬 분비촉진제입니다. 코티솔이나 프로락틴에 최소한의 영향을 미치면서 박동성 GH 방출을 자극하는 능력이 조사되었습니다.';
+
+  @override
+  String get peptideContentIpamorelinTypicalDose => '주사당 200~300mcg';
+
+  @override
+  String get peptideContentIpamorelinHalfLife => '~2시간';
+
+  @override
+  String get peptideContentIpamorelinNotes =>
+      '시너지 효과가 있는 GH 펄스를 위해 일반적으로 CJC-1295(DAC 없음)와 스택됩니다. 일반적인 타이밍: 잠자리에 들기 전 및/또는 공복에 운동하기 전.';
+
+  @override
+  String get peptideContentCjc1295DacDescription =>
+      'CJC-1295는 합성 GHRH 유사체입니다. DAC(Drug Affinity Complex) 변종은 혈청 알부민에 결합하여 반감기를 연장하고 별개의 펄스가 아닌 지속적인 GH 수준을 생성합니다.';
+
+  @override
+  String get peptideContentCjc1295DacTypicalDose => '매주 1~2mg';
+
+  @override
+  String get peptideContentCjc1295DacHalfLife => '~8일';
+
+  @override
+  String get peptideContentCjc1295DacNotes =>
+      '지속형으로, 연구 프로토콜에서는 주 1~2회 사례가 언급됩니다. 급격한 펄스보다 기저 GH/IGF-1 수치를 지속적으로 높이는 것으로 설명됩니다.';
+
+  @override
+  String get peptideContentCjc1295NoDacDescription =>
+      'DAC가 없는 CJC-1295(Mod-GRF(1-29)라고도 함)는 반감기가 짧은 GHRH 아날로그입니다. 이는 일반적으로 자연적인 박동성 GH 방출을 유발하기 위해 Ipamorelin과 같은 GHRP와 결합됩니다.';
+
+  @override
+  String get peptideContentCjc1295NoDacTypicalDose => '주사당 100mcg';
+
+  @override
+  String get peptideContentCjc1295NoDacHalfLife => '~30분';
+
+  @override
+  String get peptideContentCjc1295NoDacNotes =>
+      '단기 작용형으로, GH 펄스와 관련해 GHRP(Ipamorelin, GHRP-2, GHRP-6)와의 병용이 연구 커뮤니티에서 언급됩니다. 공복에 하루 1~3회 사용한 사례도 있습니다.';
+
+  @override
+  String get peptideContentTesamorelinDescription =>
+      '테사모렐린은 HIV 관련 지방이영양증(상표명 Egrifta)에서 과도한 복부 내장 지방을 감소시키는 데 승인된 안정화된 GHRH 유사체입니다. 인지 노화 맥락에서도 연구되었습니다.';
+
+  @override
+  String get peptideContentTesamorelinTypicalDose => '매일 1~2mg';
+
+  @override
+  String get peptideContentTesamorelinHalfLife => '~30분';
+
+  @override
+  String get peptideContentTesamorelinNotes =>
+      '처방약. 내장 지방 조직 감소에 대해 주로 연구되었습니다. 1일 1회 피하주사합니다.';
+
+  @override
+  String get peptideContentMotsCDescription =>
+      'MOTS-c는 MT-RNR1 유전자 내에 코딩된 미토콘드리아 유래 펩타이드입니다. 연구에서는 대사 항상성, 인슐린 민감성 및 운동 생리학에서의 역할을 조사했습니다.';
+
+  @override
+  String get peptideContentMotsCTypicalDose => '5~10mg, 주당 2~3회';
+
+  @override
+  String get peptideContentMotsCHalfLife => '~90분';
+
+  @override
+  String get peptideContentMotsCNotes =>
+      '아직 연구가 진행 중입니다. 일부 사용자는 자가 실험 기록에서 향상된 운동 회복 및 대사 지표를 보고합니다.';
+
+  @override
+  String get peptideContentCerebrolysinDescription =>
+      '세레브로리신은 돼지의 뇌조직에서 추출한 저분자량 펩타이드와 아미노산의 혼합물이다. 여러 유럽 및 아시아 국가에서 신경퇴행성 및 뇌졸중 회복 적응증으로 처방됩니다.';
+
+  @override
+  String get peptideContentCerebrolysinTypicalDose => '5~30ml 앰플(임상 설정)';
+
+  @override
+  String get peptideContentCerebrolysinHalfLife => '가변(혼합물)';
+
+  @override
+  String get peptideContentCerebrolysinNotes =>
+      '일반적으로 임상 감독 하에 과정으로 시행됩니다. 미국에서는 사용할 수 없습니다. 허혈성 뇌졸중과 알츠하이머병에 대한 연구.';
+
+  @override
+  String get peptideContentSelankDescription =>
+      'Selank는 면역조절 펩타이드 tuftsin의 유사체로 러시아에서 개발된 합성 헵타펩타이드입니다. 벤조디아제핀의 진정이나 의존 없이 항불안 효과에 대해 연구되었습니다.';
+
+  @override
+  String get peptideContentSelankTypicalDose => '비강 내 250~500mcg';
+
+  @override
+  String get peptideContentSelankHalfLife => '~몇 분(전신)';
+
+  @override
+  String get peptideContentSelankNotes =>
+      '가장 일반적으로 비강 내로 투여됩니다. 러시아 연구는 불안과 관심에 중점을 두고 있습니다. 반감기는 짧지만 보고된 효과는 몇 시간 동안 지속됩니다.';
+
+  @override
+  String get peptideContentSemaxDescription =>
+      'Semax는 ACTH(4-10) 단편에서 유래한 합성 헵타펩타이드입니다. 러시아 연구에서는 특히 뇌졸중 회복 프로토콜과 관련해 인지 기능 및 신경 보호 효과를 조사했습니다.';
+
+  @override
+  String get peptideContentSemaxTypicalDose => '비강 내 250~1000mcg';
+
+  @override
+  String get peptideContentSemaxHalfLife => '~30분';
+
+  @override
+  String get peptideContentSemaxNotes =>
+      '비강내 투여가 전형적이다. 허혈성 뇌졸중에 대해 러시아에서 승인되었습니다. 보완적인 효과를 위해 종종 Selank와 함께 순환됩니다.';
+
+  @override
+  String get peptideContentMelanotanIiDescription =>
+      'Melanotan II는 알파-멜라닌 세포 자극 호르몬(α-MSH)의 합성 유사체입니다. 이는 원래 잠재적인 햇빛 없는 태닝제로 개발되었으며 식욕 및 성욕 효과와도 관련이 있습니다.';
+
+  @override
+  String get peptideContentMelanotanIiTypicalDose => '250~1000mcg 로딩 후 유지 관리';
+
+  @override
+  String get peptideContentMelanotanIiHalfLife => '~1시간';
+
+  @override
+  String get peptideContentMelanotanIiNotes =>
+      '의료용으로 승인되지 않았습니다. 일반적으로 보고된 부작용으로는 메스꺼움과 기존 점의 어두워짐 등이 있습니다. 새로운 점이나 변화하는 점은 피부과 전문의의 평가를 받아야 합니다.';
+
+  @override
+  String get peptideContentPt141Description =>
+      '브레멜라노타이드(Bremelanotide)로도 알려지고 바이리시(Vyleesi)로 판매되는 PT-141은 폐경 전 여성의 성욕 저하 장애에 대해 FDA가 승인한 멜라노코르틴 수용체 작용제입니다. 이는 중추신경계 경로에 작용합니다.';
+
+  @override
+  String get peptideContentPt141TypicalDose => '필요에 따라 1.25~1.75mg';
+
+  @override
+  String get peptideContentPt141HalfLife => '~2시간';
+
+  @override
+  String get peptideContentPt141Notes =>
+      '일부 시장에서는 처방 의약품입니다. 정기 일정이 아니라 필요 시 사용하는 방식으로 승인되었습니다. 흔한 부작용으로 메스꺼움과 일시적인 혈압 상승이 보고됩니다.';
+
+  @override
+  String get peptideContentDsipDescription =>
+      '델타 수면 유도 펩타이드(DSIP)는 1970년대 토끼 뇌에서 분리된 노나펩타이드입니다. 수면 조절, 통증 조절 및 스트레스 반응에서의 가능성을 연구했지만, 작용 기전은 아직 명확하지 않습니다.';
+
+  @override
+  String get peptideContentDsipTypicalDose => '잠자리에 들기 전 100~500mcg';
+
+  @override
+  String get peptideContentDsipHalfLife => '~7분';
+
+  @override
+  String get peptideContentDsipNotes =>
+      '일반적으로 잠자리에 들기 전에 투여합니다. 혈장 반감기는 짧지만 보고된 효과는 반감기보다 오래 지속될 수 있습니다. 증거 기반은 여전히 ​​제한적입니다.';
+
+  @override
+  String get peptideContentThymosinAlpha1Description =>
+      '티모신 알파-1(Thymosin Alpha-1)은 원래 흉선 조직에서 분리된 28개 아미노산 펩타이드입니다. 이 제품은 B형 및 C형 간염에 대한 보조 면역 조절 치료제(상표명 Zadaxin)로 여러 국가에서 승인되었습니다.';
+
+  @override
+  String get peptideContentThymosinAlpha1TypicalDose => '1.6mg을 주 2회';
+
+  @override
+  String get peptideContentThymosinAlpha1HalfLife => '~2시간';
+
+  @override
+  String get peptideContentThymosinAlpha1Notes =>
+      '면역 조절 프로토콜의 일부로 여러 국제 시장에서 사용됩니다. 일반적으로 주 2회 투여됩니다. 다양한 적응증에 대한 연구가 계속되고 있습니다.';
+
+  @override
+  String get peptideContentNadPlusDescription =>
+      'NAD+(니코틴아미드 아데닌 디뉴클레오티드)는 세포 에너지 대사와 DNA 복구에 핵심적인 보조효소입니다. 주사 가능한 NAD+ 및 그 전구체(NR, NMN)는 미토콘드리아 건강 및 노화와 관련하여 연구됩니다.';
+
+  @override
+  String get peptideContentNadPlusTypicalDose => '세션당 100~500mg IV 또는 SubQ';
+
+  @override
+  String get peptideContentNadPlusHalfLife => '~90분';
+
+  @override
+  String get peptideContentNadPlusNotes =>
+      '엄밀히는 펩타이드가 아닌 조효소지만 장수 관련 프로토콜과 함께 다뤄지기도 합니다. 홍조와 불편감과의 관련성 때문에 느린 주입 방식이 언급됩니다.';
+
+  @override
+  String get peptideContentSermorelinDescription =>
+      'Sermorelin은 성장 호르몬 방출 호르몬(GHRH)의 합성 유사체입니다. 이는 성장 호르몬 보유를 위한 진단제로 임상적으로 사용되어 왔으며 웰니스 환경에서 GH축 지지 펩타이드로 흔히 논의됩니다.';
+
+  @override
+  String get peptideContentSermorelinTypicalDose => '잠자리에 들기 전 100~300mcg';
+
+  @override
+  String get peptideContentSermorelinHalfLife => '~10~20분';
+
+  @override
+  String get peptideContentSermorelinNotes =>
+      '둘 다 GHRH 경로에 작용하기 때문에 CJC-1295 no-DAC와 종종 비교됩니다. 짧은 반감기로 인해 비임상 프로토콜에서는 저녁 투여가 일반적입니다.';
+
+  @override
+  String get peptideContentAod9604Description =>
+      'AOD-9604는 176-191 영역에서 파생된 인간 성장 호르몬의 변형된 단편입니다. 대사 및 지방 분해 신호 전달에 대해 조사되었지만 공개된 인간 증거는 제한적이고 혼합되어 있습니다.';
+
+  @override
+  String get peptideContentAod9604TypicalDose => '매일 250~500mcg';
+
+  @override
+  String get peptideContentAod9604HalfLife => '~30분';
+
+  @override
+  String get peptideContentAod9604Notes =>
+      '일부 논의에서는 HGH 단편 176-191이라고도 합니다. 승인된 체중 감량 의약품이 아니며, 기록 시에도 중립적인 표현을 사용하고 결과를 보장해서는 안 됩니다.';
+
+  @override
+  String get peptideContentKpvDescription =>
+      'KPV는 알파-멜라닌 세포 자극 호르몬에서 유래된 짧은 삼중펩티드 서열(리신-프롤린-발린)입니다. 이는 면역 및 장 장벽 신호 전달에 대한 연구 맥락에서 논의됩니다.';
+
+  @override
+  String get peptideContentKpvTypicalDose => '매일 250~500mcg';
+
+  @override
+  String get peptideContentKpvHalfLife => '잘 확립되지 않음';
+
+  @override
+  String get peptideContentKpvNotes =>
+      '장 건강 및 국소 사용 관련 논의에서 BPC-157과의 비공식 병용 사례가 언급됩니다. 인체 용량에 관한 근거는 제한적입니다.';
+
+  @override
+  String get peptideContentSs31Description =>
+      'Elamipretide로도 알려진 SS-31은 카디오리핀 및 미토콘드리아 막 기능과의 상호 작용에 대해 연구된 미토콘드리아 표적 테트라펩타이드입니다. 임상 연구는 희귀한 미토콘드리아 및 심장 질환에 중점을 두었습니다.';
+
+  @override
+  String get peptideContentSs31TypicalDose => '시험 프로토콜은 다양합니다.';
+
+  @override
+  String get peptideContentSs31HalfLife => '~4시간';
+
+  @override
+  String get peptideContentSs31Notes =>
+      '다양한 맥락에서 조사합니다. 지역사회 프로토콜은 임상 시험 공식과 다른 경우가 많으며 연구 전용으로 취급되어야 합니다.';
+
+  @override
+  String get peptideContentLl37Description =>
+      'LL-37은 선천적 면역 신호 전달에 관여하는 인간 카텔리시딘 항균 펩타이드입니다. 숙주 방어 및 조직 반응 경로에 대해서는 연구 커뮤니티에서 논의되지만 안전 고려 사항이 중요합니다.';
+
+  @override
+  String get peptideContentLl37TypicalDose => '연구 프로토콜은 다양합니다.';
+
+  @override
+  String get peptideContentLl37HalfLife => '잘 확립되지 않음';
+
+  @override
+  String get peptideContentLl37Notes =>
+      '통제된 연구 환경 밖에서의 사용은 매우 실험적입니다. 항균 펩타이드는 면역 신호에 영향을 줄 수 있으므로 신중한 교육적 설명이 중요합니다.';
+
+  @override
+  String get peptideContentDihexaDescription =>
+      '디헥사는 간세포 성장 인자/c-Met 신호 전달 및 시냅스 생성 활성에 대해 전임상 연구를 거친 경구 활성 안지오텐신 IV 유래 펩타이드 유사체입니다. 인체에 대한 안전성 및 효능 데이터는 확립되어 있지 않습니다.';
+
+  @override
+  String get peptideContentDihexaTypicalDose => '연구 전용; 프로토콜은 다양함';
+
+  @override
+  String get peptideContentDihexaHalfLife => '잘 확립되지 않음';
+
+  @override
+  String get peptideContentDihexaNotes =>
+      '인지 기능 관련 커뮤니티에서 자주 논의되지만 매우 실험적입니다. 권장 프로토콜이 아닌 연구 화합물 참고 정보로 다룹니다.';
+
+  @override
+  String get peptideContentGhrp2Description =>
+      'GHRP-2는 그렐린 수용체 작용제 역할을 하는 합성 성장 호르몬 방출 펩타이드입니다. GH 분비, 식욕 신호 전달 및 내분비 테스트에 대해 연구되었습니다.';
+
+  @override
+  String get peptideContentGhrp2TypicalDose => '주사당 100~300mcg';
+
+  @override
+  String get peptideContentGhrp2HalfLife => '~20~30분';
+
+  @override
+  String get peptideContentGhrp2Notes =>
+      '종종 CJC-1295 no-DAC 또는 Sermorelin과 같은 GHRH 유사체와 쌍을 이룹니다. 이는 Ipamorelin보다 식욕, 코티솔 및 프로락틴에 더 많은 영향을 미칠 수 있습니다.';
+
+  @override
+  String get peptideContentGhrp6Description =>
+      'GHRP-6는 성장 호르몬 방출 및 식욕 신호 전달에 대해 연구된 합성 헥사펩타이드 및 그렐린 수용체 작용제입니다. 이는 GHRP 계열의 오래된 펩타이드 중 하나입니다.';
+
+  @override
+  String get peptideContentGhrp6TypicalDose => '주사당 100~300mcg';
+
+  @override
+  String get peptideContentGhrp6HalfLife => '~20~30분';
+
+  @override
+  String get peptideContentGhrp6Notes =>
+      '커뮤니티 사용은 종종 식욕 자극을 강조합니다. 식욕 효과가 원치 않는 경우 Ipamorelin과 같은 보다 선택적인 옵션이 일반적으로 선호됩니다.';
+
+  @override
+  String get peptideContentHexarelinDescription =>
+      '헥사렐린은 GH 방출 및 심혈관 연구 신호에 대해 연구된 합성 성장 호르몬 분비촉진제이자 그렐린 수용체 작용제입니다. 이는 일반적으로 가장 강력한 GHRP 중 하나로 간주됩니다.';
+
+  @override
+  String get peptideContentHexarelinTypicalDose => '주사당 100~200mcg';
+
+  @override
+  String get peptideContentHexarelinHalfLife => '~70분';
+
+  @override
+  String get peptideContentHexarelinNotes =>
+      '종종 연구 커뮤니티에서 논의된 효능 및 탈감작 문제로 인해 Ipamorelin보다 더 보수적으로 순환됩니다.';
+
+  @override
+  String get peptideContentIgf1Lr3Description =>
+      'IGF-1 LR3은 결합 단백질 친화력을 감소시키고 활성을 확장시키는 아미노산 치환을 포함하는 변형된 인슐린 유사 성장 인자-1 유사체입니다. 이는 주로 고급 성능 및 세포 성장 연구 맥락에서 논의됩니다.';
+
+  @override
+  String get peptideContentIgf1Lr3TypicalDose => '연구 프로토콜에서는 매일 20-50mcg';
+
+  @override
+  String get peptideContentIgf1Lr3HalfLife => '~20~30시간';
+
+  @override
+  String get peptideContentIgf1Lr3Notes =>
+      '고위험 연구 화합물. 잠재적인 포도당 및 조직 성장 신호 문제로 인해 의료 감독이 특히 중요합니다.';
+
+  @override
+  String get peptideContentIgf1DesDescription =>
+      'IGF-1 DES는 처음 세 개의 아미노산이 없는 더 짧은 IGF-1 유사체입니다. 이는 국소 조직 신호 연구에서 단기 작용 IGF 변종으로 논의됩니다.';
+
+  @override
+  String get peptideContentIgf1DesTypicalDose => '연구 프로토콜에서는 20-50mcg';
+
+  @override
+  String get peptideContentIgf1DesHalfLife => '~20~30분';
+
+  @override
+  String get peptideContentIgf1DesNotes =>
+      '고도로 실험적인 연구 화합물입니다. 인체 안전성 자료와 적절한 모니터링 근거가 제한적이므로 일반적인 프로토콜은 제시되지 않습니다.';
+
+  @override
+  String get peptideContentPegMgfDescription =>
+      'PEG-MGF는 IGF-1 스플라이스 변형 펩타이드인 메카노 성장 인자의 페길화된 변형입니다. 페길화는 변형되지 않은 MGF에 비해 순환 시간을 연장하기 위한 것입니다.';
+
+  @override
+  String get peptideContentPegMgfTypicalDose => '연구 프로토콜에서 매주 100-300mcg';
+
+  @override
+  String get peptideContentPegMgfHalfLife => '페길화에 의해 확장됨';
+
+  @override
+  String get peptideContentPegMgfNotes =>
+      '성능 포럼에서는 흔히 볼 수 있지만 승인된 치료법은 아닙니다. 보수적인 추적 기본값을 사용하여 고급 연구 항목으로 취급합니다.';
+
+  @override
+  String get peptideContentMk677Description =>
+      'Ibutamoren으로도 알려진 MK-677은 경구 활성 그렐린 수용체 작용제이자 성장 호르몬 분비촉진제입니다. 펩타이드는 아니지만 흔히 GH축 펩타이드와 함께 논의됩니다.';
+
+  @override
+  String get peptideContentMk677TypicalDose => '매일 10~25mg';
+
+  @override
+  String get peptideContentMk677HalfLife => '~24시간';
+
+  @override
+  String get peptideContentMk677Notes =>
+      '펩타이드가 아닌 관련 화합물입니다. 커뮤니티 토론에서는 종종 식욕, 수분 보유, 수면 및 혈당 모니터링 고려 사항을 언급합니다.';
+
+  @override
+  String get peptideContentFiveAmino1mqDescription =>
+      '5-Amino-1MQ는 대사 및 신체 구성 커뮤니티에서 논의되는 소분자 NNMT 억제제입니다. 펩타이드는 아니지만 펩타이드 인접 장수 및 체지방 감소 스택에 자주 등장합니다.';
+
+  @override
+  String get peptideContentFiveAmino1mqTypicalDose => '매일 25~100mg';
+
+  @override
+  String get peptideContentFiveAmino1mqHalfLife => '잘 확립되지 않음';
+
+  @override
+  String get peptideContentFiveAmino1mqNotes =>
+      '펩타이드가 아닌 관련 화합물입니다. 인체 근거가 제한적이며 지방 감소나 인슐린 민감성 결과를 보장하지 않습니다.';
+
+  @override
+  String get peptideContentTesofensineDescription =>
+      '테소펜신은 비만 및 신경퇴행성 질환에 대해 연구된 경구용 모노아민 재흡수 억제제입니다. 펩타이드는 아니지만 GLP-1 화합물 근처의 체중 관리 커뮤니티에서 자주 논의되는 물질입니다.';
+
+  @override
+  String get peptideContentTesofensineTypicalDose => '연구에서 매일 0.25~0.5mg';
+
+  @override
+  String get peptideContentTesofensineHalfLife => '~9일';
+
+  @override
+  String get peptideContentTesofensineNotes =>
+      '펩타이드가 아닌 관련 화합물입니다. 신경전달물질 경로에 영향을 줄 수 있어 혈압, 심박수 및 약물 상호작용 검토가 중요합니다.';
+
+  @override
+  String get peptideContentRu58841Description =>
+      'RU-58841은 모낭 상황에서 안드로겐 수용체 신호 전달에 대해 연구된 국소 비스테로이드성 항안드로겐입니다. 펩타이드는 아니지만, 펩타이드 인접 미학 커뮤니티에서 종종 논의되는 내용입니다.';
+
+  @override
+  String get peptideContentRu58841TypicalDose => '비공식 프로토콜에서 매일 국소 25-50 mg';
+
+  @override
+  String get peptideContentRu58841HalfLife => '잘 확립되지 않음';
+
+  @override
+  String get peptideContentRu58841Notes =>
+      '펩타이드가 아니며 승인된 의약품도 아닌 관련 화합물입니다. 품질 관리와 전신 노출 가능성이 자주 논의됩니다.';
+
+  @override
+  String get peptideContentEducationalDisclaimer =>
+      '교육 목적의 참고 정보이며 의학적 조언이 아닙니다. 연구용 펩타이드는 많은 지역에서 인체 사용 승인을 받지 않았습니다. 반드시 자격을 갖춘 의료 전문가와 상담하세요.';
 }

@@ -4124,528 +4124,659 @@
     "sourceDescription": "U-100 syringe capacity option."
   },
   "@libraryTitle": {
+    "description": "Customer-facing app copy for libraryTitle.",
     "sourceString": "Library",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for libraryTitle."
   },
   "@librarySystemLabel": {
+    "description": "Customer-facing app copy for librarySystemLabel.",
     "sourceString": "SYS.DATABASE // COMPOUNDS",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for librarySystemLabel."
   },
   "@myCompounds": {
+    "description": "Customer-facing app copy for myCompounds.",
     "sourceString": "My compounds",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for myCompounds."
   },
   "@unitConverter": {
+    "description": "Customer-facing app copy for unitConverter.",
     "sourceString": "Unit converter",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for unitConverter."
   },
   "@openUnitConverter": {
+    "description": "Customer-facing app copy for openUnitConverter.",
     "sourceString": "Open unit converter",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for openUnitConverter."
   },
   "@converterCardTitle": {
+    "description": "Customer-facing app copy for converterCardTitle.",
     "sourceString": "UNIT CONVERTER",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for converterCardTitle."
   },
   "@converterCardSubtitle": {
+    "description": "Customer-facing app copy for converterCardSubtitle.",
     "sourceString": "Convert vial math now",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for converterCardSubtitle."
   },
   "@converterCardHint": {
+    "description": "Customer-facing app copy for converterCardHint.",
     "sourceString": "For reconstitution, tap any peptide below.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for converterCardHint."
   },
   "@searchPeptides": {
+    "description": "Customer-facing app copy for searchPeptides.",
     "sourceString": "Search peptides...",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for searchPeptides."
   },
   "@categoryAll": {
+    "description": "Customer-facing app copy for categoryAll.",
     "sourceString": "All",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for categoryAll."
   },
   "@categoryHealing": {
+    "description": "Customer-facing app copy for categoryHealing.",
     "sourceString": "Healing",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for categoryHealing."
   },
   "@categoryGrowthHormone": {
+    "description": "Customer-facing app copy for categoryGrowthHormone.",
     "sourceString": "Growth Hormone",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for categoryGrowthHormone."
   },
   "@categoryCognitive": {
+    "description": "Customer-facing app copy for categoryCognitive.",
     "sourceString": "Cognitive",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for categoryCognitive."
   },
   "@categoryMetabolic": {
+    "description": "Customer-facing app copy for categoryMetabolic.",
     "sourceString": "Metabolic",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for categoryMetabolic."
   },
   "@categoryAesthetic": {
+    "description": "Customer-facing app copy for categoryAesthetic.",
     "sourceString": "Aesthetic",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for categoryAesthetic."
   },
   "@categoryLongevity": {
+    "description": "Customer-facing app copy for categoryLongevity.",
     "sourceString": "Longevity",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for categoryLongevity."
   },
   "@categoryOther": {
+    "description": "Customer-facing app copy for categoryOther.",
     "sourceString": "Other",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for categoryOther."
   },
   "@libraryUnavailable": {
+    "description": "Customer-facing app copy for libraryUnavailable.",
     "sourceString": "Library unavailable",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for libraryUnavailable."
   },
   "@retry": {
+    "description": "Customer-facing app copy for retry.",
     "sourceString": "RETRY",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for retry."
   },
   "@noPeptidesFound": {
+    "description": "Customer-facing app copy for noPeptidesFound.",
     "sourceString": "No peptides found",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for noPeptidesFound."
   },
   "@tryDifferentSearch": {
+    "description": "Customer-facing app copy for tryDifferentSearch.",
     "sourceString": "Try a different search term or clear the filter.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for tryDifferentSearch."
   },
   "@calculationSaved": {
+    "description": "Customer-facing app copy for calculationSaved.",
     "sourceString": "Calculation saved to this account.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for calculationSaved."
   },
   "@converterIntro": {
+    "description": "Customer-facing app copy for converterIntro.",
     "sourceString": "Enter values from your own vial, diluent, and plan. PepMod converts those values into volume and U-100 syringe units.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for converterIntro."
   },
   "@vialAndDiluent": {
+    "description": "Customer-facing app copy for vialAndDiluent.",
     "sourceString": "Vial + diluent",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for vialAndDiluent."
   },
   "@iuSourceCaption": {
+    "description": "Customer-facing app copy for iuSourceCaption.",
     "sourceString": "Source: IU on your vial and mL of diluent added.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for iuSourceCaption."
   },
   "@massSourceCaption": {
+    "description": "Customer-facing app copy for massSourceCaption.",
     "sourceString": "Source: labels on your vial and diluent.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for massSourceCaption."
   },
   "@vialAmount": {
+    "description": "Customer-facing app copy for vialAmount.",
     "sourceString": "VIAL AMOUNT",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for vialAmount."
   },
   "@amountPrintedOnVial": {
+    "description": "Customer-facing app copy for amountPrintedOnVial.",
     "sourceString": "Amount printed on vial",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for amountPrintedOnVial."
   },
   "@diluent": {
+    "description": "Customer-facing app copy for diluent.",
     "sourceString": "DILUENT",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for diluent."
   },
   "@volumeAdded": {
+    "description": "Customer-facing app copy for volumeAdded.",
     "sourceString": "Volume you added",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for volumeAdded."
   },
   "@amountToConvert": {
+    "description": "Customer-facing app copy for amountToConvert.",
     "sourceString": "Amount to convert",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for amountToConvert."
   },
   "@iuAmountCaption": {
+    "description": "Customer-facing app copy for iuAmountCaption.",
     "sourceString": "Enter an IU amount you were already given.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for iuAmountCaption."
   },
   "@massAmountCaption": {
+    "description": "Customer-facing app copy for massAmountCaption.",
     "sourceString": "Source: an amount you were already given.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for massAmountCaption."
   },
   "@yourSyringe": {
+    "description": "Customer-facing app copy for yourSyringe.",
     "sourceString": "Your syringe",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for yourSyringe."
   },
   "@syringeCaption": {
+    "description": "Customer-facing app copy for syringeCaption.",
     "sourceString": "Select the capacity printed on the barrel.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for syringeCaption."
   },
   "@educationalConverterDisclaimer": {
+    "description": "Customer-facing app copy for educationalConverterDisclaimer.",
     "sourceString": "Educational unit-conversion tool only. PepMod does not recommend an amount or frequency. Recheck the source labels and confirm your calculation with a qualified healthcare professional before use.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for educationalConverterDisclaimer."
   },
   "@back": {
+    "description": "Customer-facing app copy for back.",
     "sourceString": "Back",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for back."
   },
   "@vialWorkspace": {
+    "description": "Customer-facing app copy for vialWorkspace.",
     "sourceString": "Vial workspace",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for vialWorkspace."
   },
   "@conversionSystemLabel": {
+    "description": "Customer-facing app copy for conversionSystemLabel.",
     "sourceString": "UTIL.CONVERSION",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for conversionSystemLabel."
   },
   "@measurementModeSystemLabel": {
+    "description": "Customer-facing app copy for measurementModeSystemLabel.",
     "sourceString": "MEASUREMENT.MODE",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for measurementModeSystemLabel."
   },
   "@conversionResultSystemLabel": {
+    "description": "Customer-facing app copy for conversionResultSystemLabel.",
     "sourceString": "CONVERSION.RESULT",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for conversionResultSystemLabel."
   },
   "@savedVialsSystemLabel": {
+    "description": "Customer-facing app copy for savedVialsSystemLabel.",
     "sourceString": "SAVED.VIALS",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for savedVialsSystemLabel."
   },
   "@clear": {
+    "description": "Customer-facing app copy for clear.",
     "sourceString": "CLEAR",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for clear."
   },
   "@conversionOnly": {
+    "description": "Customer-facing app copy for conversionOnly.",
     "sourceString": "Conversion only — this workspace never chooses an amount or schedule.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for conversionOnly."
   },
   "@sameUnitFamily": {
+    "description": "Customer-facing app copy for sameUnitFamily.",
     "sourceString": "Use the same unit family printed on the vial.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for sameUnitFamily."
   },
   "@mass": {
+    "description": "Customer-facing app copy for mass.",
     "sourceString": "Mass",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for mass."
   },
   "@iuOnly": {
+    "description": "Customer-facing app copy for iuOnly.",
     "sourceString": "IU only",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for iuOnly."
   },
   "@iuSafety": {
+    "description": "Customer-facing app copy for iuSafety.",
     "sourceString": "IU stays IU. PepMod does not convert IU to or from mg/mcg.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for iuSafety."
   },
   "@enterAmount": {
+    "description": "Customer-facing app copy for enterAmount.",
     "sourceString": "Enter amount",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for enterAmount."
   },
   "@drawTo": {
+    "description": "Customer-facing app copy for drawTo.",
     "sourceString": "DRAW TO",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for drawTo."
   },
   "@units": {
+    "description": "Customer-facing app copy for units.",
     "sourceString": "units",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for units."
   },
   "@concentration": {
+    "description": "Customer-facing app copy for concentration.",
     "sourceString": "CONCENTRATION",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for concentration."
   },
   "@syringeCapacity": {
+    "description": "Customer-facing app copy for syringeCapacity.",
     "sourceString": "SYRINGE CAPACITY",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for syringeCapacity."
   },
   "@capacityWarning": {
+    "description": "Customer-facing app copy for capacityWarning.",
     "sourceString": "The converted volume is larger than this syringe capacity. Choose the correct syringe or recheck your entries.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for capacityWarning."
   },
   "@savePreset": {
+    "description": "Customer-facing app copy for savePreset.",
     "sourceString": "SAVE PRESET",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for savePreset."
   },
   "@savedVialsHint": {
+    "description": "Customer-facing app copy for savedVialsHint.",
     "sourceString": "Tap a saved calculation to reuse its inputs.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for savedVialsHint."
   },
   "@removeSavedCalculation": {
+    "description": "Customer-facing app copy for removeSavedCalculation.",
     "sourceString": "Remove saved calculation",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for removeSavedCalculation."
   },
   "@errorPositiveNumbers": {
+    "description": "Customer-facing app copy for errorPositiveNumbers.",
     "sourceString": "Enter a number greater than zero in every field.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for errorPositiveNumbers."
   },
   "@errorAmountAboveVial": {
+    "description": "Customer-facing app copy for errorAmountAboveVial.",
     "sourceString": "Desired amount is greater than the amount entered for this vial.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for errorAmountAboveVial."
   },
   "@errorConversion": {
+    "description": "Customer-facing app copy for errorConversion.",
     "sourceString": "These values could not be converted. Recheck each entry.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for errorConversion."
   },
   "@halfLife": {
+    "description": "Customer-facing app copy for halfLife.",
     "sourceString": "Half-life",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for halfLife."
   },
   "@weekCycle": {
+    "description": "Customer-facing app copy for weekCycle.",
     "sourceString": "wk cycle",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for weekCycle."
   },
   "@typicalDose": {
+    "description": "Customer-facing app copy for typicalDose.",
     "sourceString": "TYPICAL DOSE",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for typicalDose."
   },
   "@notes": {
+    "description": "Customer-facing app copy for notes.",
     "sourceString": "NOTES",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for notes."
   },
   "@commonStack": {
+    "description": "Customer-facing app copy for commonStack.",
     "sourceString": "COMMON.STACK",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for commonStack."
   },
   "@reconstitutionTool": {
+    "description": "Customer-facing app copy for reconstitutionTool.",
     "sourceString": "UTIL.RECONSTITUTION",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for reconstitutionTool."
   },
   "@compoundSystemLabel": {
+    "description": "Customer-facing app copy for compoundSystemLabel.",
     "sourceString": "DB.COMPOUND",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for compoundSystemLabel."
   },
   "@addToProtocol": {
+    "description": "Customer-facing app copy for addToProtocol.",
     "sourceString": "ADD TO PROTOCOL",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for addToProtocol."
   },
   "@vialShort": {
+    "description": "Customer-facing app copy for vialShort.",
     "sourceString": "VIAL (mg)",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for vialShort."
   },
   "@bacShort": {
+    "description": "Customer-facing app copy for bacShort.",
     "sourceString": "BAC (mL)",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for bacShort."
   },
   "@doseShort": {
+    "description": "Customer-facing app copy for doseShort.",
     "sourceString": "DOSE (mcg)",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for doseShort."
   },
   "@routeSubcutaneous": {
+    "description": "Customer-facing app copy for routeSubcutaneous.",
     "sourceString": "Subcutaneous",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for routeSubcutaneous."
   },
   "@routeIntramuscular": {
+    "description": "Customer-facing app copy for routeIntramuscular.",
     "sourceString": "Intramuscular",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for routeIntramuscular."
   },
   "@routeOral": {
+    "description": "Customer-facing app copy for routeOral.",
     "sourceString": "Oral",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for routeOral."
   },
   "@routeNasal": {
+    "description": "Customer-facing app copy for routeNasal.",
     "sourceString": "Nasal",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for routeNasal."
   },
   "@frequencyDaily": {
+    "description": "Customer-facing app copy for frequencyDaily.",
     "sourceString": "Daily",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for frequencyDaily."
   },
   "@frequencyEveryOtherDay": {
+    "description": "Customer-facing app copy for frequencyEveryOtherDay.",
     "sourceString": "Every other day",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for frequencyEveryOtherDay."
   },
   "@frequencyTwiceWeekly": {
+    "description": "Customer-facing app copy for frequencyTwiceWeekly.",
     "sourceString": "2x per week",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for frequencyTwiceWeekly."
   },
   "@frequencyWeekly": {
+    "description": "Customer-facing app copy for frequencyWeekly.",
     "sourceString": "Weekly",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for frequencyWeekly."
   },
   "@frequencyAsNeeded": {
+    "description": "Customer-facing app copy for frequencyAsNeeded.",
     "sourceString": "As needed",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for frequencyAsNeeded."
   },
   "@tabProtocol": {
+    "description": "Customer-facing app copy for tabProtocol.",
     "sourceString": "Protocol",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for tabProtocol."
   },
   "@tabProgress": {
+    "description": "Customer-facing app copy for tabProgress.",
     "sourceString": "Progress",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for tabProgress."
   },
   "@tabLibrary": {
+    "description": "Customer-facing app copy for tabLibrary.",
     "sourceString": "Library",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for tabLibrary."
   },
   "@tabYou": {
+    "description": "Customer-facing app copy for tabYou.",
     "sourceString": "You",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for tabYou."
   },
   "@processingLabel": {
+    "description": "Customer-facing app copy for processingLabel.",
     "sourceString": "PROCESSING…",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for processingLabel."
   },
   "@authAppleFailed": {
+    "description": "Customer-facing app copy for authAppleFailed.",
     "sourceString": "Apple sign-in failed. Please try again.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for authAppleFailed."
   },
   "@authGoogleFailed": {
+    "description": "Customer-facing app copy for authGoogleFailed.",
     "sourceString": "Google sign-in failed. Please try again.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for authGoogleFailed."
   },
   "@authGenericError": {
+    "description": "Customer-facing app copy for authGenericError.",
     "sourceString": "Something went wrong. Please try again.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for authGenericError."
   },
   "@authUserNotFound": {
+    "description": "Customer-facing app copy for authUserNotFound.",
     "sourceString": "No user found with this email address.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for authUserNotFound."
   },
   "@authIncorrectCredentials": {
+    "description": "Customer-facing app copy for authIncorrectCredentials.",
     "sourceString": "Incorrect email or password.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for authIncorrectCredentials."
   },
   "@authAccountExists": {
+    "description": "Customer-facing app copy for authAccountExists.",
     "sourceString": "An account already exists with this email.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for authAccountExists."
   },
   "@authWeakPassword": {
+    "description": "Customer-facing app copy for authWeakPassword.",
     "sourceString": "Password is too weak. Use at least 6 characters.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for authWeakPassword."
   },
   "@authInvalidEmail": {
+    "description": "Customer-facing app copy for authInvalidEmail.",
     "sourceString": "Invalid email address.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for authInvalidEmail."
   },
   "@authAppleUnavailable": {
+    "description": "Customer-facing app copy for authAppleUnavailable.",
     "sourceString": "Sign in with Apple is not enabled for this app.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for authAppleUnavailable."
   },
   "@authRequiredTitle": {
+    "description": "Customer-facing app copy for authRequiredTitle.",
     "sourceString": "Save your personalised\nprotocol",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for authRequiredTitle."
   },
   "@authRequiredBody": {
+    "description": "Customer-facing app copy for authRequiredBody.",
     "sourceString": "Keep your roadmap, schedule, dose logs, and reminders attached to your account before the protocol unlocks.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for authRequiredBody."
   },
   "@continueWithEmail": {
+    "description": "Customer-facing app copy for continueWithEmail.",
     "sourceString": "CONTINUE WITH EMAIL",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for continueWithEmail."
   },
   "@signInWithApple": {
+    "description": "Customer-facing app copy for signInWithApple.",
     "sourceString": "SIGN IN WITH APPLE",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for signInWithApple."
   },
   "@continueWithGoogle": {
+    "description": "Customer-facing app copy for continueWithGoogle.",
     "sourceString": "CONTINUE WITH GOOGLE",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for continueWithGoogle."
   },
   "@authTermsDisclaimer": {
+    "description": "Customer-facing app copy for authTermsDisclaimer.",
     "sourceString": "By continuing you accept our Terms and Privacy Policy. PepMod is an educational tool — not medical advice.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for authTermsDisclaimer."
   },
   "@signIn": {
+    "description": "Customer-facing app copy for signIn.",
     "sourceString": "Sign in",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for signIn."
   },
   "@createAccount": {
+    "description": "Customer-facing app copy for createAccount.",
     "sourceString": "Create account",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for createAccount."
   },
   "@resetPassword": {
+    "description": "Customer-facing app copy for resetPassword.",
     "sourceString": "Reset password",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for resetPassword."
   },
   "@signInAction": {
+    "description": "Customer-facing app copy for signInAction.",
     "sourceString": "SIGN IN",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for signInAction."
   },
   "@createAccountAction": {
+    "description": "Customer-facing app copy for createAccountAction.",
     "sourceString": "CREATE ACCOUNT",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for createAccountAction."
   },
   "@sendResetLink": {
+    "description": "Customer-facing app copy for sendResetLink.",
     "sourceString": "SEND RESET LINK",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for sendResetLink."
   },
   "@passwordResetSent": {
+    "description": "Customer-facing app copy for passwordResetSent.",
     "sourceString": "Password reset email sent. Check your inbox.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for passwordResetSent."
   },
   "@enterEmail": {
+    "description": "Customer-facing app copy for enterEmail.",
     "sourceString": "Enter your email",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for enterEmail."
   },
   "@enterValidEmail": {
+    "description": "Customer-facing app copy for enterValidEmail.",
     "sourceString": "Enter a valid email",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for enterValidEmail."
   },
   "@enterPassword": {
+    "description": "Customer-facing app copy for enterPassword.",
     "sourceString": "Enter a password",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for enterPassword."
   },
   "@passwordMinLength": {
+    "description": "Customer-facing app copy for passwordMinLength.",
     "sourceString": "At least 6 characters",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for passwordMinLength."
   },
   "@forgotPassword": {
+    "description": "Customer-facing app copy for forgotPassword.",
     "sourceString": "Forgot password?",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for forgotPassword."
   },
   "@alreadyHaveAccount": {
+    "description": "Customer-facing app copy for alreadyHaveAccount.",
     "sourceString": "Already have an account? Sign in",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for alreadyHaveAccount."
   },
   "@backToSignIn": {
+    "description": "Customer-facing app copy for backToSignIn.",
     "sourceString": "Back to sign in",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for backToSignIn."
   },
   "@emailLabel": {
+    "description": "Customer-facing app copy for emailLabel.",
     "sourceString": "Email",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for emailLabel."
   },
   "@passwordLabel": {
+    "description": "Customer-facing app copy for passwordLabel.",
     "sourceString": "Password",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for passwordLabel."
   },
   "@showPassword": {
+    "description": "Customer-facing app copy for showPassword.",
     "sourceString": "Show password",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for showPassword."
   },
   "@hidePassword": {
+    "description": "Customer-facing app copy for hidePassword.",
     "sourceString": "Hide password",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for hidePassword."
   },
   "@accountDeletedTitle": {
+    "description": "Customer-facing app copy for accountDeletedTitle.",
     "sourceString": "Account deleted",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for accountDeletedTitle."
   },
   "@accountDeletedBody": {
+    "description": "Customer-facing app copy for accountDeletedBody.",
     "sourceString": "Your PepMod account and saved app data have been removed.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for accountDeletedBody."
   },
   "@subscriptionUnavailable": {
+    "description": "Customer-facing app copy for subscriptionUnavailable.",
     "sourceString": "Subscription plans are not available right now. Please try again.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for subscriptionUnavailable."
   },
   "@upgradeUnavailable": {
+    "description": "Customer-facing app copy for upgradeUnavailable.",
     "sourceString": "Upgrade is not available right now. Please try again later.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for upgradeUnavailable."
   },
   "@noPurchasesToRestore": {
+    "description": "Customer-facing app copy for noPurchasesToRestore.",
     "sourceString": "No purchases found to restore.",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for noPurchasesToRestore."
   },
   "@unlockFullProtocol": {
+    "description": "Customer-facing app copy for unlockFullProtocol.",
     "sourceString": "Unlock the full protocol",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for unlockFullProtocol."
   },
   "@premiumUnlimitedPeptides": {
+    "description": "Customer-facing app copy for premiumUnlimitedPeptides.",
     "sourceString": "Unlimited peptides per protocol",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for premiumUnlimitedPeptides."
   },
   "@premiumMultipleProtocols": {
+    "description": "Customer-facing app copy for premiumMultipleProtocols.",
     "sourceString": "Multiple active protocols",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for premiumMultipleProtocols."
   },
   "@premiumCalculator": {
+    "description": "Customer-facing app copy for premiumCalculator.",
     "sourceString": "Reconstitution calculator (all peptides)",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for premiumCalculator."
   },
   "@premiumMetrics": {
+    "description": "Customer-facing app copy for premiumMetrics.",
     "sourceString": "Body metric tracking + charts",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for premiumMetrics."
   },
   "@upgradeNow": {
+    "description": "Customer-facing app copy for upgradeNow.",
     "sourceString": "UPGRADE NOW",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for upgradeNow."
   },
   "@restorePurchases": {
+    "description": "Customer-facing app copy for restorePurchases.",
     "sourceString": "Restore purchases",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for restorePurchases."
   },
   "@notRightNow": {
+    "description": "Customer-facing app copy for notRightNow.",
     "sourceString": "Not right now",
-    "sourceDescription": null
+    "sourceDescription": "Customer-facing app copy for notRightNow."
   },
   "@protocolScheduleTodaySystemLabel": {
     "description": "System-style label above today's dose schedule.",
@@ -4682,746 +4813,895 @@
   },
   "peptideContentHcgDescription": "La gonadotrophine chorionique humaine (HCG) est une hormone glycoprotéique utilisée dans des cadres cliniques réglementés et fréquemment évoquée aux côtés des protocoles de peptides. Cette fiche est fournie à titre de référence neutre de suivi pour les calendriers saisis par l'utilisateur.",
   "@peptideContentHcgDescription": {
+    "description": "Educational reference description for HCG.",
     "sourceString": "Human chorionic gonadotropin (HCG) is a glycoprotein hormone used in regulated clinical settings and frequently discussed alongside peptide protocols. This entry is provided as a neutral tracking reference for user-entered schedules.",
     "sourceDescription": "Educational reference description for HCG."
   },
   "peptideContentHcgTypicalDose": "UI saisies par l'utilisateur",
   "@peptideContentHcgTypicalDose": {
+    "description": "Reference amount text for HCG; this is not a dosing recommendation.",
     "sourceString": "User-entered IU",
     "sourceDescription": "Reference amount text for HCG; this is not a dosing recommendation."
   },
   "peptideContentHcgHalfLife": "~24-36 heures",
   "@peptideContentHcgHalfLife": {
+    "description": "Educational half-life reference for HCG.",
     "sourceString": "~24-36 hours",
     "sourceDescription": "Educational half-life reference for HCG."
   },
   "peptideContentHcgNotes": "Soumis à prescription dans de nombreuses juridictions. Ne consignez que ce qui a déjà été indiqué par un professionnel de santé qualifié ; PepMod ne fournit aucune recommandation posologique concernant l’HCG.",
   "@peptideContentHcgNotes": {
+    "description": "Neutral educational notes for HCG; preserve non-prescriptive framing.",
     "sourceString": "Prescription-only in many jurisdictions. Track only what has already been directed by a qualified healthcare professional; PepMod does not provide HCG dosing guidance.",
     "sourceDescription": "Neutral educational notes for HCG; preserve non-prescriptive framing."
   },
   "peptideContentBpc157Description": "Le BPC-157 (Body Protection Compound 157) est un peptide synthétique de 15 acides aminés dérivé d'une protéine présente dans le suc gastrique. Il a été étudié dans des modèles animaux pour son rôle dans la réparation des tissus mous et de la muqueuse intestinale. Les données cliniques chez l'humain restent limitées.",
   "@peptideContentBpc157Description": {
+    "description": "Educational reference description for BPC-157.",
     "sourceString": "BPC-157 (Body Protection Compound 157) is a 15-amino-acid synthetic peptide derived from a protein found in gastric juice. It has been studied in animal models for its role in soft-tissue and gut-lining repair. Human clinical data remains limited.",
     "sourceDescription": "Educational reference description for BPC-157."
   },
   "peptideContentBpc157TypicalDose": "250 à 500 µg",
   "@peptideContentBpc157TypicalDose": {
+    "description": "Reference amount text for BPC-157; this is not a dosing recommendation.",
     "sourceString": "250–500 mcg",
     "sourceDescription": "Reference amount text for BPC-157; this is not a dosing recommendation."
   },
   "peptideContentBpc157HalfLife": "~4 heures",
   "@peptideContentBpc157HalfLife": {
+    "description": "Educational half-life reference for BPC-157.",
     "sourceString": "~4 hours",
     "sourceDescription": "Educational half-life reference for BPC-157."
   },
   "peptideContentBpc157Notes": "Reconstituer avec de l'eau bactériostatique et conserver au réfrigérateur. Souvent associé au TB-500 dans les protocoles de récupération des tendons et ligaments étudiés chez l'animal.",
   "@peptideContentBpc157Notes": {
+    "description": "Neutral educational notes for BPC-157; preserve non-prescriptive framing.",
     "sourceString": "Reconstitute with bacteriostatic water and store refrigerated. Commonly stacked with TB-500 for tendon and ligament recovery protocols in animal studies.",
     "sourceDescription": "Neutral educational notes for BPC-157; preserve non-prescriptive framing."
   },
   "peptideContentTb500Description": "Le TB-500 est un fragment synthétique de la protéine naturelle thymosine bêta-4. Dans des études animales, il a été examiné pour son rôle dans la migration cellulaire et la régénération tissulaire. Il est largement utilisé hors indication par des chercheurs et en contexte vétérinaire.",
   "@peptideContentTb500Description": {
+    "description": "Educational reference description for TB-500.",
     "sourceString": "TB-500 is a synthetic fragment of the naturally occurring protein thymosin beta-4. In animal studies it has been investigated for roles in cellular migration and tissue regeneration. It is widely used off-label by researchers and in veterinary settings.",
     "sourceDescription": "Educational reference description for TB-500."
   },
   "peptideContentTb500TypicalDose": "2–5 mg par semaine en phase de charge, puis 2 mg en entretien",
   "@peptideContentTb500TypicalDose": {
+    "description": "Reference amount text for TB-500; this is not a dosing recommendation.",
     "sourceString": "2–5 mg weekly loading, then 2 mg maintenance",
     "sourceDescription": "Reference amount text for TB-500; this is not a dosing recommendation."
   },
   "peptideContentTb500HalfLife": "~2 jours",
   "@peptideContentTb500HalfLife": {
+    "description": "Educational half-life reference for TB-500.",
     "sourceString": "~2 days",
     "sourceDescription": "Educational half-life reference for TB-500."
   },
   "peptideContentTb500Notes": "Souvent associé au BPC-157 dans les protocoles ciblant les tissus mous. Une répartition de la dose deux fois par semaine est courante en raison de la longue demi-vie.",
   "@peptideContentTb500Notes": {
+    "description": "Neutral educational notes for TB-500; preserve non-prescriptive framing.",
     "sourceString": "Often paired with BPC-157 for soft-tissue protocols. Split dosing twice weekly is common due to long half-life.",
     "sourceDescription": "Neutral educational notes for TB-500; preserve non-prescriptive framing."
   },
   "peptideContentGhkCuDescription": "Le GHK-Cu (peptide de cuivre) est un tripeptide naturel liant le cuivre, présent dans le plasma humain. Il a été étudié dans des applications cosmétiques topiques pour le remodelage cutané et la signalisation des follicules pileux.",
   "@peptideContentGhkCuDescription": {
+    "description": "Educational reference description for GHK-Cu.",
     "sourceString": "GHK-Cu (Copper Peptide) is a naturally occurring copper-binding tripeptide present in human plasma. It has been studied in topical cosmetic applications for skin remodelling and hair-follicle signalling.",
     "sourceDescription": "Educational reference description for GHK-Cu."
   },
   "peptideContentGhkCuTypicalDose": "1 à 2 mg",
   "@peptideContentGhkCuTypicalDose": {
+    "description": "Reference amount text for GHK-Cu; this is not a dosing recommendation.",
     "sourceString": "1–2 mg",
     "sourceDescription": "Reference amount text for GHK-Cu; this is not a dosing recommendation."
   },
   "peptideContentGhkCuHalfLife": "~1 heure",
   "@peptideContentGhkCuHalfLife": {
+    "description": "Educational half-life reference for GHK-Cu.",
     "sourceString": "~1 hour",
     "sourceDescription": "Educational half-life reference for GHK-Cu."
   },
   "peptideContentGhkCuNotes": "Également utilisé par voie topique dans des formulations de soins de la peau. Les doses sous-cutanées sont généralement inférieures aux concentrations topiques.",
   "@peptideContentGhkCuNotes": {
+    "description": "Neutral educational notes for GHK-Cu; preserve non-prescriptive framing.",
     "sourceString": "Also used topically in skincare formulations. Subcutaneous dosing is typically lower than topical concentrations.",
     "sourceDescription": "Neutral educational notes for GHK-Cu; preserve non-prescriptive framing."
   },
   "peptideContentEpitalonDescription": "Epitalon est un tétrapeptide synthétique analogue de l’épithalamine, un peptide extrait de la glande pinéale. Des recherches russes ont exploré ses effets sur l’activité de la télomérase et la régulation circadienne.",
   "@peptideContentEpitalonDescription": {
+    "description": "Educational reference description for Epitalon.",
     "sourceString": "Epitalon is a synthetic tetrapeptide analogue of epithalamin, a peptide extracted from the pineal gland. Russian research has explored its effects on telomerase activity and circadian regulation.",
     "sourceDescription": "Educational reference description for Epitalon."
   },
   "peptideContentEpitalonTypicalDose": "5–10 mg par jour de cycle",
   "@peptideContentEpitalonTypicalDose": {
+    "description": "Reference amount text for Epitalon; this is not a dosing recommendation.",
     "sourceString": "5–10 mg per cycle day",
     "sourceDescription": "Reference amount text for Epitalon; this is not a dosing recommendation."
   },
   "peptideContentEpitalonHalfLife": "~30 minutes",
   "@peptideContentEpitalonHalfLife": {
+    "description": "Educational half-life reference for Epitalon.",
     "sourceString": "~30 minutes",
     "sourceDescription": "Educational half-life reference for Epitalon."
   },
   "peptideContentEpitalonNotes": "Généralement utilisé en courts cycles pulsés (par exemple 10 à 20 jours d'utilisation, puis plusieurs mois d'arrêt), sur la base de protocoles de recherche russes sur la longévité.",
   "@peptideContentEpitalonNotes": {
+    "description": "Neutral educational notes for Epitalon; preserve non-prescriptive framing.",
     "sourceString": "Typically run in short pulsed cycles (e.g., 10–20 days on, months off) based on Russian longevity research protocols.",
     "sourceDescription": "Neutral educational notes for Epitalon; preserve non-prescriptive framing."
   },
   "peptideContentSemaglutideDescription": "Semaglutide est un agoniste des récepteurs GLP-1 initialement développé pour le diabète de type 2, puis approuvé pour la gestion chronique du poids sous les noms de marque Ozempic et Wegovy. Il ralentit la vidange gastrique et module la signalisation de l’appétit.",
   "@peptideContentSemaglutideDescription": {
+    "description": "Educational reference description for Semaglutide.",
     "sourceString": "Semaglutide is a GLP-1 receptor agonist originally developed for type 2 diabetes and later approved for chronic weight management under brand names Ozempic and Wegovy. It slows gastric emptying and modulates appetite signalling.",
     "sourceDescription": "Educational reference description for Semaglutide."
   },
   "peptideContentSemaglutideTypicalDose": "0,25–2,4 mg par semaine (titration progressive)",
   "@peptideContentSemaglutideTypicalDose": {
+    "description": "Reference amount text for Semaglutide; this is not a dosing recommendation.",
     "sourceString": "0.25–2.4 mg weekly (titrated)",
     "sourceDescription": "Reference amount text for Semaglutide; this is not a dosing recommendation."
   },
   "peptideContentSemaglutideHalfLife": "~7 jours",
   "@peptideContentSemaglutideHalfLife": {
+    "description": "Educational half-life reference for Semaglutide.",
     "sourceString": "~7 days",
     "sourceDescription": "Educational half-life reference for Semaglutide."
   },
   "peptideContentSemaglutideNotes": "Soumis à prescription dans la plupart des pays. Le schéma de titration débute à faible dose et augmente toutes les 4 semaines afin de limiter les effets secondaires gastro-intestinaux.",
   "@peptideContentSemaglutideNotes": {
+    "description": "Neutral educational notes for Semaglutide; preserve non-prescriptive framing.",
     "sourceString": "Prescription only in most countries. Titration schedule starts low and increases every 4 weeks to manage GI side effects.",
     "sourceDescription": "Neutral educational notes for Semaglutide; preserve non-prescriptive framing."
   },
   "peptideContentTirzepatideDescription": "Tirzepatide est un double agoniste des récepteurs GIP/GLP-1 approuvé pour le diabète de type 2 (Mounjaro) et l’obésité (Zepbound). Les essais cliniques ont montré des réductions de poids plus importantes qu’avec les agonistes simples du GLP-1.",
   "@peptideContentTirzepatideDescription": {
+    "description": "Educational reference description for Tirzepatide.",
     "sourceString": "Tirzepatide is a dual GIP/GLP-1 receptor agonist approved for type 2 diabetes (Mounjaro) and obesity (Zepbound). Clinical trials have shown it to produce larger weight reductions than single-agonist GLP-1s.",
     "sourceDescription": "Educational reference description for Tirzepatide."
   },
   "peptideContentTirzepatideTypicalDose": "2,5–15 mg par semaine (titration progressive)",
   "@peptideContentTirzepatideTypicalDose": {
+    "description": "Reference amount text for Tirzepatide; this is not a dosing recommendation.",
     "sourceString": "2.5–15 mg weekly (titrated)",
     "sourceDescription": "Reference amount text for Tirzepatide; this is not a dosing recommendation."
   },
   "peptideContentTirzepatideHalfLife": "~5 jours",
   "@peptideContentTirzepatideHalfLife": {
+    "description": "Educational half-life reference for Tirzepatide.",
     "sourceString": "~5 days",
     "sourceDescription": "Educational half-life reference for Tirzepatide."
   },
   "peptideContentTirzepatideNotes": "Soumis à prescription dans la plupart des pays. La titration standard se fait par paliers de 4 semaines. Injecté par voie sous-cutanée une fois par semaine.",
   "@peptideContentTirzepatideNotes": {
+    "description": "Neutral educational notes for Tirzepatide; preserve non-prescriptive framing.",
     "sourceString": "Prescription only in most countries. Standard titration is 4-week increments. Injected subcutaneously once weekly.",
     "sourceDescription": "Neutral educational notes for Tirzepatide; preserve non-prescriptive framing."
   },
   "peptideContentRetatrutideDescription": "Retatrutide est un triple agoniste expérimental ciblant les récepteurs GIP, GLP-1 et du glucagon. Les essais de phase 2 ont rapporté des réductions de poids supérieures à celles des thérapies existantes à base de GLP-1.",
   "@peptideContentRetatrutideDescription": {
+    "description": "Educational reference description for Retatrutide.",
     "sourceString": "Retatrutide is an investigational triple agonist targeting GIP, GLP-1, and glucagon receptors. Phase 2 trials reported weight reductions exceeding those of existing GLP-1-based therapies.",
     "sourceDescription": "Educational reference description for Retatrutide."
   },
   "peptideContentRetatrutideTypicalDose": "Doses d'essai de 1 à 12 mg par semaine",
   "@peptideContentRetatrutideTypicalDose": {
+    "description": "Reference amount text for Retatrutide; this is not a dosing recommendation.",
     "sourceString": "Trial doses 1–12 mg weekly",
     "sourceDescription": "Reference amount text for Retatrutide; this is not a dosing recommendation."
   },
   "peptideContentRetatrutideHalfLife": "~6 jours",
   "@peptideContentRetatrutideHalfLife": {
+    "description": "Educational half-life reference for Retatrutide.",
     "sourceString": "~6 days",
     "sourceDescription": "Educational half-life reference for Retatrutide."
   },
   "peptideContentRetatrutideNotes": "Toujours en phase expérimentale — non approuvé par la FDA au moment de la rédaction. Toute utilisation en dehors d'un essai clinique relève strictement de la recherche.",
   "@peptideContentRetatrutideNotes": {
+    "description": "Neutral educational notes for Retatrutide; preserve non-prescriptive framing.",
     "sourceString": "Still investigational — not FDA approved at time of writing. Any use outside a clinical trial is strictly research-only.",
     "sourceDescription": "Neutral educational notes for Retatrutide; preserve non-prescriptive framing."
   },
   "peptideContentIpamorelinDescription": "Ipamorelin est un pentapeptide mimétique de la ghréline et un sécrétagogue sélectif de l’hormone de croissance. Il a été étudié pour sa capacité à stimuler une libération pulsatile de GH avec un effet minimal sur le cortisol ou la prolactine.",
   "@peptideContentIpamorelinDescription": {
+    "description": "Educational reference description for Ipamorelin.",
     "sourceString": "Ipamorelin is a pentapeptide ghrelin-mimetic and selective growth-hormone secretagogue. It has been investigated for its ability to stimulate a pulsatile GH release with minimal effect on cortisol or prolactin.",
     "sourceDescription": "Educational reference description for Ipamorelin."
   },
   "peptideContentIpamorelinTypicalDose": "200–300 mcg par injection",
   "@peptideContentIpamorelinTypicalDose": {
+    "description": "Reference amount text for Ipamorelin; this is not a dosing recommendation.",
     "sourceString": "200–300 mcg per injection",
     "sourceDescription": "Reference amount text for Ipamorelin; this is not a dosing recommendation."
   },
   "peptideContentIpamorelinHalfLife": "~2 heures",
   "@peptideContentIpamorelinHalfLife": {
+    "description": "Educational half-life reference for Ipamorelin.",
     "sourceString": "~2 hours",
     "sourceDescription": "Educational half-life reference for Ipamorelin."
   },
   "peptideContentIpamorelinNotes": "Souvent associé au CJC-1295 (sans DAC) pour un pic de GH synergique. Le moment d’utilisation généralement rapporté est avant le coucher et/ou avant l’entraînement, à jeun.",
   "@peptideContentIpamorelinNotes": {
+    "description": "Neutral educational notes for Ipamorelin; preserve non-prescriptive framing.",
     "sourceString": "Commonly stacked with CJC-1295 (no DAC) for a synergistic GH pulse. Typical timing: before bed and/or pre-workout on an empty stomach.",
     "sourceDescription": "Neutral educational notes for Ipamorelin; preserve non-prescriptive framing."
   },
   "peptideContentCjc1295DacDescription": "Le CJC-1295 est un analogue synthétique de la GHRH. La variante DAC (Drug Affinity Complex) se lie à l'albumine sérique, prolongeant sa demi-vie et produisant des taux de GH soutenus plutôt que des pics ponctuels.",
   "@peptideContentCjc1295DacDescription": {
+    "description": "Educational reference description for CJC-1295 (with DAC).",
     "sourceString": "CJC-1295 is a synthetic GHRH analogue. The DAC (Drug Affinity Complex) variant binds to serum albumin, extending its half-life and producing sustained GH levels rather than discrete pulses.",
     "sourceDescription": "Educational reference description for CJC-1295 (with DAC)."
   },
   "peptideContentCjc1295DacTypicalDose": "1–2 mg par semaine",
   "@peptideContentCjc1295DacTypicalDose": {
+    "description": "Reference amount text for CJC-1295 (with DAC); this is not a dosing recommendation.",
     "sourceString": "1–2 mg weekly",
     "sourceDescription": "Reference amount text for CJC-1295 (with DAC); this is not a dosing recommendation."
   },
   "peptideContentCjc1295DacHalfLife": "~8 jours",
   "@peptideContentCjc1295DacHalfLife": {
+    "description": "Educational half-life reference for CJC-1295 (with DAC).",
     "sourceString": "~8 days",
     "sourceDescription": "Educational half-life reference for CJC-1295 (with DAC)."
   },
   "peptideContentCjc1295DacNotes": "Action prolongée — généralement dosé une à deux fois par semaine. Élève le niveau de base de GH/IGF-1 plutôt que de produire des pics marqués.",
   "@peptideContentCjc1295DacNotes": {
+    "description": "Neutral educational notes for CJC-1295 (with DAC); preserve non-prescriptive framing.",
     "sourceString": "Long-acting — typically dosed once or twice per week. Elevates baseline GH/IGF-1 rather than producing sharp pulses.",
     "sourceDescription": "Neutral educational notes for CJC-1295 (with DAC); preserve non-prescriptive framing."
   },
   "peptideContentCjc1295NoDacDescription": "Le CJC-1295 sans DAC — également connu sous le nom de Mod-GRF(1-29) — est un analogue de la GHRH à demi-vie courte. Il est généralement associé à un GHRP tel que l'Ipamoréline pour déclencher une libération pulsatile naturelle de GH.",
   "@peptideContentCjc1295NoDacDescription": {
+    "description": "Educational reference description for CJC-1295 (no DAC).",
     "sourceString": "CJC-1295 without DAC — also known as Mod-GRF(1-29) — is a GHRH analogue with a short half-life. It is typically combined with a GHRP such as Ipamorelin to trigger natural pulsatile GH release.",
     "sourceDescription": "Educational reference description for CJC-1295 (no DAC)."
   },
   "peptideContentCjc1295NoDacTypicalDose": "100 mcg par injection",
   "@peptideContentCjc1295NoDacTypicalDose": {
+    "description": "Reference amount text for CJC-1295 (no DAC); this is not a dosing recommendation.",
     "sourceString": "100 mcg per injection",
     "sourceDescription": "Reference amount text for CJC-1295 (no DAC); this is not a dosing recommendation."
   },
   "peptideContentCjc1295NoDacHalfLife": "~30 minutes",
   "@peptideContentCjc1295NoDacHalfLife": {
+    "description": "Educational half-life reference for CJC-1295 (no DAC).",
     "sourceString": "~30 minutes",
     "sourceDescription": "Educational half-life reference for CJC-1295 (no DAC)."
   },
   "peptideContentCjc1295NoDacNotes": "Action courte — à associer à un GHRP (Ipamoréline, GHRP-2, GHRP-6) pour amplifier les pics de GH. Généralement dosé 1 à 3 fois par jour, à jeun.",
   "@peptideContentCjc1295NoDacNotes": {
+    "description": "Neutral educational notes for CJC-1295 (no DAC); preserve non-prescriptive framing.",
     "sourceString": "Short acting — stack with a GHRP (Ipamorelin, GHRP-2, GHRP-6) to amplify GH pulses. Usually dosed 1–3x per day on an empty stomach.",
     "sourceDescription": "Neutral educational notes for CJC-1295 (no DAC); preserve non-prescriptive framing."
   },
   "peptideContentTesamorelinDescription": "Tesamorelin est un analogue stabilisé de la GHRH approuvé pour réduire l’excès de graisse viscérale abdominale dans la lipodystrophie associée au VIH (nom commercial Egrifta). Il a également été étudié dans des contextes de vieillissement cognitif.",
   "@peptideContentTesamorelinDescription": {
+    "description": "Educational reference description for Tesamorelin.",
     "sourceString": "Tesamorelin is a stabilised GHRH analogue approved to reduce excess abdominal visceral fat in HIV-associated lipodystrophy (brand name Egrifta). It has also been studied in cognitive ageing contexts.",
     "sourceDescription": "Educational reference description for Tesamorelin."
   },
   "peptideContentTesamorelinTypicalDose": "1–2 mg par jour",
   "@peptideContentTesamorelinTypicalDose": {
+    "description": "Reference amount text for Tesamorelin; this is not a dosing recommendation.",
     "sourceString": "1–2 mg daily",
     "sourceDescription": "Reference amount text for Tesamorelin; this is not a dosing recommendation."
   },
   "peptideContentTesamorelinHalfLife": "~30 minutes",
   "@peptideContentTesamorelinHalfLife": {
+    "description": "Educational half-life reference for Tesamorelin.",
     "sourceString": "~30 minutes",
     "sourceDescription": "Educational half-life reference for Tesamorelin."
   },
   "peptideContentTesamorelinNotes": "Médicament sur ordonnance. Principalement étudié pour la réduction du tissu adipeux viscéral. Administré une fois par jour par voie sous-cutanée.",
   "@peptideContentTesamorelinNotes": {
+    "description": "Neutral educational notes for Tesamorelin; preserve non-prescriptive framing.",
     "sourceString": "Prescription medication. Primarily studied for visceral adipose tissue reduction. Administered once daily subcutaneously.",
     "sourceDescription": "Neutral educational notes for Tesamorelin; preserve non-prescriptive framing."
   },
   "peptideContentMotsCDescription": "Le MOTS-c est un peptide d'origine mitochondriale codé dans le gène MT-RNR1. La recherche a étudié son rôle dans l'homéostasie métabolique, la sensibilité à l'insuline et la physiologie de l'exercice.",
   "@peptideContentMotsCDescription": {
+    "description": "Educational reference description for MOTS-c.",
     "sourceString": "MOTS-c is a mitochondrial-derived peptide encoded within the MT-RNR1 gene. Research has investigated its role in metabolic homeostasis, insulin sensitivity, and exercise physiology.",
     "sourceDescription": "Educational reference description for MOTS-c."
   },
   "peptideContentMotsCTypicalDose": "5–10 mg 2 à 3x par semaine",
   "@peptideContentMotsCTypicalDose": {
+    "description": "Reference amount text for MOTS-c; this is not a dosing recommendation.",
     "sourceString": "5–10 mg 2–3x per week",
     "sourceDescription": "Reference amount text for MOTS-c; this is not a dosing recommendation."
   },
   "peptideContentMotsCHalfLife": "~90 minutes",
   "@peptideContentMotsCHalfLife": {
+    "description": "Educational half-life reference for MOTS-c.",
     "sourceString": "~90 minutes",
     "sourceDescription": "Educational half-life reference for MOTS-c."
   },
   "peptideContentMotsCNotes": "Recherche encore émergente. Certains utilisateurs rapportent une amélioration de la récupération à l'effort et des marqueurs métaboliques dans des journaux d'auto-expérimentation.",
   "@peptideContentMotsCNotes": {
+    "description": "Neutral educational notes for MOTS-c; preserve non-prescriptive framing.",
     "sourceString": "Research still emerging. Some users report improved exercise recovery and metabolic markers in self-experiment logs.",
     "sourceDescription": "Neutral educational notes for MOTS-c; preserve non-prescriptive framing."
   },
   "peptideContentCerebrolysinDescription": "Cerebrolysin est un mélange de peptides et d’acides aminés de faible poids moléculaire dérivés de tissu cérébral porcin. Il est prescrit dans plusieurs pays européens et asiatiques pour des indications neurodégénératives et de récupération après un AVC.",
   "@peptideContentCerebrolysinDescription": {
+    "description": "Educational reference description for Cerebrolysin.",
     "sourceString": "Cerebrolysin is a mixture of low-molecular-weight peptides and amino acids derived from porcine brain tissue. It is prescribed in several European and Asian countries for neurodegenerative and stroke-recovery indications.",
     "sourceDescription": "Educational reference description for Cerebrolysin."
   },
   "peptideContentCerebrolysinTypicalDose": "Ampoules de 5–30 ml (cadre clinique)",
   "@peptideContentCerebrolysinTypicalDose": {
+    "description": "Reference amount text for Cerebrolysin; this is not a dosing recommendation.",
     "sourceString": "5–30 ml ampoules (clinical setting)",
     "sourceDescription": "Reference amount text for Cerebrolysin; this is not a dosing recommendation."
   },
   "peptideContentCerebrolysinHalfLife": "Variable (mélange)",
   "@peptideContentCerebrolysinHalfLife": {
+    "description": "Educational half-life reference for Cerebrolysin.",
     "sourceString": "Variable (mixture)",
     "sourceDescription": "Educational half-life reference for Cerebrolysin."
   },
   "peptideContentCerebrolysinNotes": "Généralement administré en cure sous supervision clinique. Non disponible aux États-Unis. Recherche sur l'AVC ischémique et la maladie d'Alzheimer.",
   "@peptideContentCerebrolysinNotes": {
+    "description": "Neutral educational notes for Cerebrolysin; preserve non-prescriptive framing.",
     "sourceString": "Typically administered as a course under clinical supervision. Not available in the US. Research in ischemic stroke and Alzheimer's disease.",
     "sourceDescription": "Neutral educational notes for Cerebrolysin; preserve non-prescriptive framing."
   },
   "peptideContentSelankDescription": "Le Selank est un heptapeptide synthétique développé en Russie comme analogue du peptide immunomodulateur tuftsine. Il a été étudié pour ses effets anxiolytiques sans la sédation ni la dépendance associées aux benzodiazépines.",
   "@peptideContentSelankDescription": {
+    "description": "Educational reference description for Selank.",
     "sourceString": "Selank is a synthetic heptapeptide developed in Russia as an analogue of the immunomodulatory peptide tuftsin. It has been studied for anxiolytic effects without the sedation or dependence of benzodiazepines.",
     "sourceDescription": "Educational reference description for Selank."
   },
   "peptideContentSelankTypicalDose": "250–500 mcg par voie intranasale",
   "@peptideContentSelankTypicalDose": {
+    "description": "Reference amount text for Selank; this is not a dosing recommendation.",
     "sourceString": "250–500 mcg intranasally",
     "sourceDescription": "Reference amount text for Selank; this is not a dosing recommendation."
   },
   "peptideContentSelankHalfLife": "~quelques minutes (systémique)",
   "@peptideContentSelankHalfLife": {
+    "description": "Educational half-life reference for Selank.",
     "sourceString": "~few minutes (systemic)",
     "sourceDescription": "Educational half-life reference for Selank."
   },
   "peptideContentSelankNotes": "Le plus souvent administré par voie intranasale. La recherche russe se concentre sur l'anxiété et l'attention. Demi-vie courte mais effets rapportés durant plusieurs heures.",
   "@peptideContentSelankNotes": {
+    "description": "Neutral educational notes for Selank; preserve non-prescriptive framing.",
     "sourceString": "Most commonly administered intranasally. Russian research focuses on anxiety and attention. Short half-life but reported effects last several hours.",
     "sourceDescription": "Neutral educational notes for Selank; preserve non-prescriptive framing."
   },
   "peptideContentSemaxDescription": "Le Semax est un heptapeptide synthétique dérivé d'un fragment de l'ACTH (4–10). La recherche russe a étudié ses effets nootropiques et neuroprotecteurs, en particulier dans des protocoles de récupération post-AVC.",
   "@peptideContentSemaxDescription": {
+    "description": "Educational reference description for Semax.",
     "sourceString": "Semax is a synthetic heptapeptide derived from a fragment of ACTH (4–10). Russian research has investigated its nootropic and neuroprotective effects, particularly in stroke recovery protocols.",
     "sourceDescription": "Educational reference description for Semax."
   },
   "peptideContentSemaxTypicalDose": "250–1000 mcg par voie intranasale",
   "@peptideContentSemaxTypicalDose": {
+    "description": "Reference amount text for Semax; this is not a dosing recommendation.",
     "sourceString": "250–1000 mcg intranasally",
     "sourceDescription": "Reference amount text for Semax; this is not a dosing recommendation."
   },
   "peptideContentSemaxHalfLife": "~30 minutes",
   "@peptideContentSemaxHalfLife": {
+    "description": "Educational half-life reference for Semax.",
     "sourceString": "~30 minutes",
     "sourceDescription": "Educational half-life reference for Semax."
   },
   "peptideContentSemaxNotes": "L'administration intranasale est typique. Approuvé en Russie pour l'AVC ischémique. Souvent cyclé avec le Selank pour des effets complémentaires.",
   "@peptideContentSemaxNotes": {
+    "description": "Neutral educational notes for Semax; preserve non-prescriptive framing.",
     "sourceString": "Intranasal administration is typical. Approved in Russia for ischaemic stroke. Often cycled with Selank for complementary effects.",
     "sourceDescription": "Neutral educational notes for Semax; preserve non-prescriptive framing."
   },
   "peptideContentMelanotanIiDescription": "Le Melanotan II est un analogue synthétique de l'hormone alpha-mélanotrope (α-MSH). Il a été initialement développé comme agent de bronzage sans exposition solaire et a également été associé à des effets sur l'appétit et la libido.",
   "@peptideContentMelanotanIiDescription": {
+    "description": "Educational reference description for Melanotan II.",
     "sourceString": "Melanotan II is a synthetic analogue of the alpha-melanocyte-stimulating hormone (α-MSH). It was originally developed as a potential sunless tanning agent and has also been associated with appetite and libido effects.",
     "sourceDescription": "Educational reference description for Melanotan II."
   },
   "peptideContentMelanotanIiTypicalDose": "250–1000 mcg en charge, puis entretien",
   "@peptideContentMelanotanIiTypicalDose": {
+    "description": "Reference amount text for Melanotan II; this is not a dosing recommendation.",
     "sourceString": "250–1000 mcg loading, then maintenance",
     "sourceDescription": "Reference amount text for Melanotan II; this is not a dosing recommendation."
   },
   "peptideContentMelanotanIiHalfLife": "~1 heure",
   "@peptideContentMelanotanIiHalfLife": {
+    "description": "Educational half-life reference for Melanotan II.",
     "sourceString": "~1 hour",
     "sourceDescription": "Educational half-life reference for Melanotan II."
   },
   "peptideContentMelanotanIiNotes": "Non approuvé pour un usage médical. Les effets secondaires courants rapportés incluent des nausées et un assombrissement des grains de beauté existants. Tout grain de beauté nouveau ou évolutif doit être évalué par un dermatologue.",
   "@peptideContentMelanotanIiNotes": {
+    "description": "Neutral educational notes for Melanotan II; preserve non-prescriptive framing.",
     "sourceString": "Not approved for any medical use. Common reported side effects include nausea and darkening of existing moles. Any new or changing mole should be evaluated by a dermatologist.",
     "sourceDescription": "Neutral educational notes for Melanotan II; preserve non-prescriptive framing."
   },
   "peptideContentPt141Description": "PT-141, également connu sous le nom de Bremelanotide et commercialisé sous le nom de Vyleesi, est un agoniste des récepteurs à la mélanocortine approuvé par la FDA pour le trouble du désir sexuel hypoactif chez les femmes préménopausées. Il agit sur des voies du système nerveux central.",
   "@peptideContentPt141Description": {
+    "description": "Educational reference description for PT-141 (Bremelanotide).",
     "sourceString": "PT-141, also known as Bremelanotide and marketed as Vyleesi, is a melanocortin receptor agonist approved by the FDA for hypoactive sexual desire disorder in premenopausal women. It acts on central nervous system pathways.",
     "sourceDescription": "Educational reference description for PT-141 (Bremelanotide)."
   },
   "peptideContentPt141TypicalDose": "1,25–1,75 mg au besoin",
   "@peptideContentPt141TypicalDose": {
+    "description": "Reference amount text for PT-141 (Bremelanotide); this is not a dosing recommendation.",
     "sourceString": "1.25–1.75 mg as needed",
     "sourceDescription": "Reference amount text for PT-141 (Bremelanotide); this is not a dosing recommendation."
   },
   "peptideContentPt141HalfLife": "~2 heures",
   "@peptideContentPt141HalfLife": {
+    "description": "Educational half-life reference for PT-141 (Bremelanotide).",
     "sourceString": "~2 hours",
     "sourceDescription": "Educational half-life reference for PT-141 (Bremelanotide)."
   },
   "peptideContentPt141Notes": "Médicament sur ordonnance sur certains marchés. Pris au besoin plutôt que selon un calendrier fixe. Les effets secondaires courants incluent des nausées et des hausses transitoires de la tension artérielle.",
   "@peptideContentPt141Notes": {
+    "description": "Neutral educational notes for PT-141 (Bremelanotide); preserve non-prescriptive framing.",
     "sourceString": "Prescription medication in some markets. Taken as needed rather than on a fixed schedule. Common side effects include nausea and transient blood pressure increases.",
     "sourceDescription": "Neutral educational notes for PT-141 (Bremelanotide); preserve non-prescriptive framing."
   },
   "peptideContentDsipDescription": "Le peptide inducteur du sommeil delta (DSIP) est un nonapeptide isolé du cerveau de lapin dans les années 1970. Il a été étudié pour ses rôles possibles dans la régulation du sommeil, la modulation de la douleur et la réponse au stress, bien que ses mécanismes restent mal compris.",
   "@peptideContentDsipDescription": {
+    "description": "Educational reference description for DSIP.",
     "sourceString": "Delta Sleep-Inducing Peptide (DSIP) is a nonapeptide isolated from rabbit brain in the 1970s. It has been studied for possible roles in sleep regulation, pain modulation, and stress response, though mechanisms remain unclear.",
     "sourceDescription": "Educational reference description for DSIP."
   },
   "peptideContentDsipTypicalDose": "100–500 mcg avant le coucher",
   "@peptideContentDsipTypicalDose": {
+    "description": "Reference amount text for DSIP; this is not a dosing recommendation.",
     "sourceString": "100–500 mcg before bed",
     "sourceDescription": "Reference amount text for DSIP; this is not a dosing recommendation."
   },
   "peptideContentDsipHalfLife": "~7 minutes",
   "@peptideContentDsipHalfLife": {
+    "description": "Educational half-life reference for DSIP.",
     "sourceString": "~7 minutes",
     "sourceDescription": "Educational half-life reference for DSIP."
   },
   "peptideContentDsipNotes": "Généralement administré avant le coucher. Demi-vie plasmatique courte mais les effets rapportés peuvent durer plus longtemps. La base de données probantes reste limitée.",
   "@peptideContentDsipNotes": {
+    "description": "Neutral educational notes for DSIP; preserve non-prescriptive framing.",
     "sourceString": "Typically administered before bed. Short plasma half-life but reported effects may outlast it. Evidence base remains limited.",
     "sourceDescription": "Neutral educational notes for DSIP; preserve non-prescriptive framing."
   },
   "peptideContentThymosinAlpha1Description": "La Thymosin Alpha-1 est un peptide de 28 acides aminés initialement isolé du tissu thymique. Elle a été approuvée dans plusieurs pays comme thérapie immunomodulatrice d'appoint (nom commercial Zadaxin) pour les hépatites B et C.",
   "@peptideContentThymosinAlpha1Description": {
+    "description": "Educational reference description for Thymosin Alpha-1.",
     "sourceString": "Thymosin Alpha-1 is a 28-amino-acid peptide originally isolated from thymus tissue. It has been approved in multiple countries as an adjunct immune-modulating therapy (brand name Zadaxin) for hepatitis B and C.",
     "sourceDescription": "Educational reference description for Thymosin Alpha-1."
   },
   "peptideContentThymosinAlpha1TypicalDose": "1,6 mg deux fois par semaine",
   "@peptideContentThymosinAlpha1TypicalDose": {
+    "description": "Reference amount text for Thymosin Alpha-1; this is not a dosing recommendation.",
     "sourceString": "1.6 mg twice weekly",
     "sourceDescription": "Reference amount text for Thymosin Alpha-1; this is not a dosing recommendation."
   },
   "peptideContentThymosinAlpha1HalfLife": "~2 heures",
   "@peptideContentThymosinAlpha1HalfLife": {
+    "description": "Educational half-life reference for Thymosin Alpha-1.",
     "sourceString": "~2 hours",
     "sourceDescription": "Educational half-life reference for Thymosin Alpha-1."
   },
   "peptideContentThymosinAlpha1Notes": "Utilisée sur plusieurs marchés internationaux dans le cadre de protocoles d'immunomodulation. Généralement administrée deux fois par semaine. La recherche se poursuit dans diverses indications.",
   "@peptideContentThymosinAlpha1Notes": {
+    "description": "Neutral educational notes for Thymosin Alpha-1; preserve non-prescriptive framing.",
     "sourceString": "Used in several international markets as part of immune-modulation protocols. Typically administered twice weekly. Research continues in various indications.",
     "sourceDescription": "Neutral educational notes for Thymosin Alpha-1; preserve non-prescriptive framing."
   },
   "peptideContentNadPlusDescription": "Le NAD+ (nicotinamide adénine dinucléotide) est une coenzyme centrale du métabolisme énergétique cellulaire et de la réparation de l'ADN. Le NAD+ injectable et ses précurseurs (NR, NMN) sont étudiés dans le contexte de la santé mitochondriale et du vieillissement.",
   "@peptideContentNadPlusDescription": {
+    "description": "Educational reference description for NAD+.",
     "sourceString": "NAD+ (nicotinamide adenine dinucleotide) is a coenzyme central to cellular energy metabolism and DNA repair. Injectable NAD+ and its precursors (NR, NMN) are studied in the context of mitochondrial health and ageing.",
     "sourceDescription": "Educational reference description for NAD+."
   },
   "peptideContentNadPlusTypicalDose": "100–500 mg IV ou sous-cutané par séance",
   "@peptideContentNadPlusTypicalDose": {
+    "description": "Reference amount text for NAD+; this is not a dosing recommendation.",
     "sourceString": "100–500 mg IV or SubQ per session",
     "sourceDescription": "Reference amount text for NAD+; this is not a dosing recommendation."
   },
   "peptideContentNadPlusHalfLife": "~90 minutes",
   "@peptideContentNadPlusHalfLife": {
+    "description": "Educational half-life reference for NAD+.",
     "sourceString": "~90 minutes",
     "sourceDescription": "Educational half-life reference for NAD+."
   },
   "peptideContentNadPlusNotes": "Techniquement une coenzyme plutôt qu'un peptide, mais couramment regroupé avec les protocoles de longévité. Une perfusion lente est recommandée pour minimiser les bouffées de chaleur et l'inconfort.",
   "@peptideContentNadPlusNotes": {
+    "description": "Neutral educational notes for NAD+; preserve non-prescriptive framing.",
     "sourceString": "Technically a coenzyme rather than a peptide, but commonly grouped with longevity protocols. Slow infusion is recommended to minimise flushing and discomfort.",
     "sourceDescription": "Neutral educational notes for NAD+; preserve non-prescriptive framing."
   },
   "peptideContentSermorelinDescription": "Sermorelin est un analogue synthétique de l’hormone de libération de l’hormone de croissance (GHRH). Il a été utilisé en clinique comme agent diagnostique de la réserve en hormone de croissance et est couramment évoqué dans les milieux du bien-être comme peptide de soutien de l’axe GH.",
   "@peptideContentSermorelinDescription": {
+    "description": "Educational reference description for Sermorelin.",
     "sourceString": "Sermorelin is a synthetic analogue of growth hormone-releasing hormone (GHRH). It has been used clinically as a diagnostic agent for growth-hormone reserve and is commonly discussed in wellness settings as a GH-axis support peptide.",
     "sourceDescription": "Educational reference description for Sermorelin."
   },
   "peptideContentSermorelinTypicalDose": "100–300 mcg avant le coucher",
   "@peptideContentSermorelinTypicalDose": {
+    "description": "Reference amount text for Sermorelin; this is not a dosing recommendation.",
     "sourceString": "100–300 mcg before bed",
     "sourceDescription": "Reference amount text for Sermorelin; this is not a dosing recommendation."
   },
   "peptideContentSermorelinHalfLife": "~10 à 20 minutes",
   "@peptideContentSermorelinHalfLife": {
+    "description": "Educational half-life reference for Sermorelin.",
     "sourceString": "~10–20 minutes",
     "sourceDescription": "Educational half-life reference for Sermorelin."
   },
   "peptideContentSermorelinNotes": "Souvent comparé au CJC-1295 sans DAC car les deux agissent sur la voie de la GHRH. Sa courte demi-vie explique que les prises en soirée soient courantes dans les protocoles non cliniques.",
   "@peptideContentSermorelinNotes": {
+    "description": "Neutral educational notes for Sermorelin; preserve non-prescriptive framing.",
     "sourceString": "Often compared with CJC-1295 no-DAC because both act on the GHRH pathway. Short half-life makes evening dosing common in non-clinical protocols.",
     "sourceDescription": "Neutral educational notes for Sermorelin; preserve non-prescriptive framing."
   },
   "peptideContentAod9604Description": "L'AOD-9604 est un fragment modifié de l'hormone de croissance humaine, dérivé de la région 176–191. Il a été étudié pour la signalisation métabolique et lipolytique, mais les données humaines publiées restent limitées et contrastées.",
   "@peptideContentAod9604Description": {
+    "description": "Educational reference description for AOD-9604.",
     "sourceString": "AOD-9604 is a modified fragment of human growth hormone, derived from the 176–191 region. It has been investigated for metabolic and lipolysis signalling, but published human evidence is limited and mixed.",
     "sourceDescription": "Educational reference description for AOD-9604."
   },
   "peptideContentAod9604TypicalDose": "250–500 mcg par jour",
   "@peptideContentAod9604TypicalDose": {
+    "description": "Reference amount text for AOD-9604; this is not a dosing recommendation.",
     "sourceString": "250–500 mcg daily",
     "sourceDescription": "Reference amount text for AOD-9604; this is not a dosing recommendation."
   },
   "peptideContentAod9604HalfLife": "~30 minutes",
   "@peptideContentAod9604HalfLife": {
+    "description": "Educational half-life reference for AOD-9604.",
     "sourceString": "~30 minutes",
     "sourceDescription": "Educational half-life reference for AOD-9604."
   },
   "peptideContentAod9604Notes": "Également appelé fragment HGH 176–191 dans certaines discussions. Ce n'est pas un médicament amaigrissant approuvé ; utiliser un langage de suivi neutre et éviter toute garantie de résultat.",
   "@peptideContentAod9604Notes": {
+    "description": "Neutral educational notes for AOD-9604; preserve non-prescriptive framing.",
     "sourceString": "Also called HGH fragment 176–191 in some discussions. Not an approved weight-loss drug; use neutral tracking language and avoid outcome guarantees.",
     "sourceDescription": "Neutral educational notes for AOD-9604; preserve non-prescriptive framing."
   },
   "peptideContentKpvDescription": "Le KPV est une courte séquence tripeptidique (lysine-proline-valine) dérivée de l'hormone alpha-mélanotrope. Il est évoqué dans des contextes de recherche pour la signalisation immunitaire et de la barrière intestinale.",
   "@peptideContentKpvDescription": {
+    "description": "Educational reference description for KPV.",
     "sourceString": "KPV is a short tripeptide sequence (lysine-proline-valine) derived from alpha-melanocyte-stimulating hormone. It is discussed in research contexts for immune and gut-barrier signalling.",
     "sourceDescription": "Educational reference description for KPV."
   },
   "peptideContentKpvTypicalDose": "250–500 mcg par jour",
   "@peptideContentKpvTypicalDose": {
+    "description": "Reference amount text for KPV; this is not a dosing recommendation.",
     "sourceString": "250–500 mcg daily",
     "sourceDescription": "Reference amount text for KPV; this is not a dosing recommendation."
   },
   "peptideContentKpvHalfLife": "Pas bien établie",
   "@peptideContentKpvHalfLife": {
+    "description": "Educational half-life reference for KPV.",
     "sourceString": "Not well established",
     "sourceDescription": "Educational half-life reference for KPV."
   },
   "peptideContentKpvNotes": "Apparaît dans les discussions sur la santé intestinale et l'usage topique, y compris dans des protocoles informels combinés au BPC-157. Les données de dosage humain sont limitées, les protocoles doivent donc rester prudents.",
   "@peptideContentKpvNotes": {
+    "description": "Neutral educational notes for KPV; preserve non-prescriptive framing.",
     "sourceString": "Appears in gut-health and topical discussions, including informal stacks with BPC-157. Human dosing evidence is limited, so protocols should be conservative.",
     "sourceDescription": "Neutral educational notes for KPV; preserve non-prescriptive framing."
   },
   "peptideContentSs31Description": "Le SS-31, également connu sous le nom d'Elamipretide, est un tétrapeptide ciblant les mitochondries, étudié pour ses interactions avec la cardiolipine et la fonction membranaire mitochondriale. La recherche clinique s'est concentrée sur des affections mitochondriales et cardiaques rares.",
   "@peptideContentSs31Description": {
+    "description": "Educational reference description for SS-31 (Elamipretide).",
     "sourceString": "SS-31, also known as Elamipretide, is a mitochondria-targeted tetrapeptide studied for interactions with cardiolipin and mitochondrial membrane function. Clinical research has focused on rare mitochondrial and cardiac conditions.",
     "sourceDescription": "Educational reference description for SS-31 (Elamipretide)."
   },
   "peptideContentSs31TypicalDose": "Les protocoles d'essai varient",
   "@peptideContentSs31TypicalDose": {
+    "description": "Reference amount text for SS-31 (Elamipretide); this is not a dosing recommendation.",
     "sourceString": "Trial protocols vary",
     "sourceDescription": "Reference amount text for SS-31 (Elamipretide); this is not a dosing recommendation."
   },
   "peptideContentSs31HalfLife": "~4 heures",
   "@peptideContentSs31HalfLife": {
+    "description": "Educational half-life reference for SS-31 (Elamipretide).",
     "sourceString": "~4 hours",
     "sourceDescription": "Educational half-life reference for SS-31 (Elamipretide)."
   },
   "peptideContentSs31Notes": "Expérimental dans de nombreux contextes. Les protocoles communautaires diffèrent souvent des formulations des essais cliniques et doivent être considérés comme réservés à la recherche.",
   "@peptideContentSs31Notes": {
+    "description": "Neutral educational notes for SS-31 (Elamipretide); preserve non-prescriptive framing.",
     "sourceString": "Investigational in many contexts. Community protocols often differ from clinical-trial formulations and should be treated as research-only.",
     "sourceDescription": "Neutral educational notes for SS-31 (Elamipretide); preserve non-prescriptive framing."
   },
   "peptideContentLl37Description": "Le LL-37 est un peptide antimicrobien humain de la famille des cathélicidines impliqué dans la signalisation immunitaire innée. Il est évoqué dans les communautés de recherche pour les voies de défense de l'hôte et de réponse tissulaire, mais les considérations de sécurité sont importantes.",
   "@peptideContentLl37Description": {
+    "description": "Educational reference description for LL-37.",
     "sourceString": "LL-37 is a human cathelicidin antimicrobial peptide involved in innate immune signalling. It is discussed in research communities for host-defense and tissue-response pathways, but safety considerations are significant.",
     "sourceDescription": "Educational reference description for LL-37."
   },
   "peptideContentLl37TypicalDose": "Les protocoles de recherche varient",
   "@peptideContentLl37TypicalDose": {
+    "description": "Reference amount text for LL-37; this is not a dosing recommendation.",
     "sourceString": "Research protocols vary",
     "sourceDescription": "Reference amount text for LL-37; this is not a dosing recommendation."
   },
   "peptideContentLl37HalfLife": "Pas bien établie",
   "@peptideContentLl37HalfLife": {
+    "description": "Educational half-life reference for LL-37.",
     "sourceString": "Not well established",
     "sourceDescription": "Educational half-life reference for LL-37."
   },
   "peptideContentLl37Notes": "Hautement expérimental en dehors de la recherche contrôlée. Comme les peptides antimicrobiens peuvent affecter la signalisation immunitaire, un cadrage éducatif prudent est important.",
   "@peptideContentLl37Notes": {
+    "description": "Neutral educational notes for LL-37; preserve non-prescriptive framing.",
     "sourceString": "Highly experimental outside controlled research. Because antimicrobial peptides can affect immune signalling, conservative educational framing is important.",
     "sourceDescription": "Neutral educational notes for LL-37; preserve non-prescriptive framing."
   },
   "peptideContentDihexaDescription": "Le Dihexa est un analogue peptidique dérivé de l'angiotensine IV, actif par voie orale, étudié en préclinique pour la signalisation du facteur de croissance des hépatocytes/c-Met et l'activité synaptogénique. Les données humaines de sécurité et d'efficacité ne sont pas établies.",
   "@peptideContentDihexaDescription": {
+    "description": "Educational reference description for Dihexa.",
     "sourceString": "Dihexa is an orally active angiotensin IV-derived peptide analogue studied preclinically for hepatocyte growth factor/c-Met signalling and synaptogenic activity. Human safety and efficacy data are not established.",
     "sourceDescription": "Educational reference description for Dihexa."
   },
   "peptideContentDihexaTypicalDose": "Réservé à la recherche ; les protocoles varient",
   "@peptideContentDihexaTypicalDose": {
+    "description": "Reference amount text for Dihexa; this is not a dosing recommendation.",
     "sourceString": "Research-only; protocols vary",
     "sourceDescription": "Reference amount text for Dihexa; this is not a dosing recommendation."
   },
   "peptideContentDihexaHalfLife": "Pas bien établie",
   "@peptideContentDihexaHalfLife": {
+    "description": "Educational half-life reference for Dihexa.",
     "sourceString": "Not well established",
     "sourceDescription": "Educational half-life reference for Dihexa."
   },
   "peptideContentDihexaNotes": "Populaire dans les discussions nootropiques mais très expérimental. À considérer comme une entrée de composé de recherche plutôt qu'un protocole suggéré.",
   "@peptideContentDihexaNotes": {
+    "description": "Neutral educational notes for Dihexa; preserve non-prescriptive framing.",
     "sourceString": "Popular in nootropic discussions but very experimental. Treat as a research compound entry rather than a suggested protocol.",
     "sourceDescription": "Neutral educational notes for Dihexa; preserve non-prescriptive framing."
   },
   "peptideContentGhrp2Description": "Le GHRP-2 est un peptide de libération de l'hormone de croissance synthétique agissant comme agoniste du récepteur de la ghréline. Il a été étudié pour la sécrétion de GH, la signalisation de l'appétit et les tests endocriniens.",
   "@peptideContentGhrp2Description": {
+    "description": "Educational reference description for GHRP-2.",
     "sourceString": "GHRP-2 is a synthetic growth hormone-releasing peptide that acts as a ghrelin receptor agonist. It has been studied for GH secretion, appetite signalling, and endocrine testing.",
     "sourceDescription": "Educational reference description for GHRP-2."
   },
   "peptideContentGhrp2TypicalDose": "100–300 mcg par injection",
   "@peptideContentGhrp2TypicalDose": {
+    "description": "Reference amount text for GHRP-2; this is not a dosing recommendation.",
     "sourceString": "100–300 mcg per injection",
     "sourceDescription": "Reference amount text for GHRP-2; this is not a dosing recommendation."
   },
   "peptideContentGhrp2HalfLife": "~20 à 30 minutes",
   "@peptideContentGhrp2HalfLife": {
+    "description": "Educational half-life reference for GHRP-2.",
     "sourceString": "~20–30 minutes",
     "sourceDescription": "Educational half-life reference for GHRP-2."
   },
   "peptideContentGhrp2Notes": "Souvent associé à un analogue de la GHRH tel que le CJC-1295 sans DAC ou la Sermoréline. Il peut affecter davantage l'appétit, le cortisol et la prolactine que l'Ipamoréline.",
   "@peptideContentGhrp2Notes": {
+    "description": "Neutral educational notes for GHRP-2; preserve non-prescriptive framing.",
     "sourceString": "Often paired with a GHRH analogue such as CJC-1295 no-DAC or Sermorelin. It may affect appetite, cortisol, and prolactin more than Ipamorelin.",
     "sourceDescription": "Neutral educational notes for GHRP-2; preserve non-prescriptive framing."
   },
   "peptideContentGhrp6Description": "Le GHRP-6 est un hexapeptide synthétique et agoniste du récepteur de la ghréline étudié pour la libération d'hormone de croissance et la signalisation de l'appétit. C'est l'un des plus anciens peptides de la famille des GHRP.",
   "@peptideContentGhrp6Description": {
+    "description": "Educational reference description for GHRP-6.",
     "sourceString": "GHRP-6 is a synthetic hexapeptide and ghrelin receptor agonist studied for growth-hormone release and appetite signalling. It is one of the older peptides in the GHRP family.",
     "sourceDescription": "Educational reference description for GHRP-6."
   },
   "peptideContentGhrp6TypicalDose": "100–300 mcg par injection",
   "@peptideContentGhrp6TypicalDose": {
+    "description": "Reference amount text for GHRP-6; this is not a dosing recommendation.",
     "sourceString": "100–300 mcg per injection",
     "sourceDescription": "Reference amount text for GHRP-6; this is not a dosing recommendation."
   },
   "peptideContentGhrp6HalfLife": "~20 à 30 minutes",
   "@peptideContentGhrp6HalfLife": {
+    "description": "Educational half-life reference for GHRP-6.",
     "sourceString": "~20–30 minutes",
     "sourceDescription": "Educational half-life reference for GHRP-6."
   },
   "peptideContentGhrp6Notes": "L'usage communautaire met souvent l'accent sur la stimulation de l'appétit. Des options plus sélectives comme l'Ipamoréline sont généralement préférées lorsque les effets sur l'appétit ne sont pas souhaités.",
   "@peptideContentGhrp6Notes": {
+    "description": "Neutral educational notes for GHRP-6; preserve non-prescriptive framing.",
     "sourceString": "Community use often emphasises appetite stimulation. More selective options such as Ipamorelin are commonly preferred when appetite effects are unwanted.",
     "sourceDescription": "Neutral educational notes for GHRP-6; preserve non-prescriptive framing."
   },
   "peptideContentHexarelinDescription": "Hexarelin est un sécrétagogue synthétique de l’hormone de croissance et un agoniste du récepteur de la ghréline étudié pour la libération de GH et les signaux cardiovasculaires en recherche. Il est généralement considéré comme l’un des GHRP les plus puissants.",
   "@peptideContentHexarelinDescription": {
+    "description": "Educational reference description for Hexarelin.",
     "sourceString": "Hexarelin is a synthetic growth hormone secretagogue and ghrelin receptor agonist studied for GH release and cardiovascular research signals. It is generally considered one of the more potent GHRPs.",
     "sourceDescription": "Educational reference description for Hexarelin."
   },
   "peptideContentHexarelinTypicalDose": "100–200 mcg par injection",
   "@peptideContentHexarelinTypicalDose": {
+    "description": "Reference amount text for Hexarelin; this is not a dosing recommendation.",
     "sourceString": "100–200 mcg per injection",
     "sourceDescription": "Reference amount text for Hexarelin; this is not a dosing recommendation."
   },
   "peptideContentHexarelinHalfLife": "~70 minutes",
   "@peptideContentHexarelinHalfLife": {
+    "description": "Educational half-life reference for Hexarelin.",
     "sourceString": "~70 minutes",
     "sourceDescription": "Educational half-life reference for Hexarelin."
   },
   "peptideContentHexarelinNotes": "Souvent cyclé de manière plus prudente que l'Ipamoréline en raison de sa puissance et des préoccupations de désensibilisation évoquées dans les communautés de recherche.",
   "@peptideContentHexarelinNotes": {
+    "description": "Neutral educational notes for Hexarelin; preserve non-prescriptive framing.",
     "sourceString": "Often cycled more conservatively than Ipamorelin due to potency and desensitisation concerns discussed in research communities.",
     "sourceDescription": "Neutral educational notes for Hexarelin; preserve non-prescriptive framing."
   },
   "peptideContentIgf1Lr3Description": "L'IGF-1 LR3 est un analogue modifié du facteur de croissance insulinique de type 1, avec des substitutions d'acides aminés qui réduisent l'affinité pour les protéines de liaison et prolongent l'activité. Il est surtout évoqué dans des contextes de recherche avancée sur la performance et la croissance cellulaire.",
   "@peptideContentIgf1Lr3Description": {
+    "description": "Educational reference description for IGF-1 LR3.",
     "sourceString": "IGF-1 LR3 is a modified insulin-like growth factor-1 analogue with amino-acid substitutions that reduce binding-protein affinity and extend activity. It is discussed mostly in advanced performance and cell-growth research contexts.",
     "sourceDescription": "Educational reference description for IGF-1 LR3."
   },
   "peptideContentIgf1Lr3TypicalDose": "20–50 mcg par jour dans les protocoles de recherche",
   "@peptideContentIgf1Lr3TypicalDose": {
+    "description": "Reference amount text for IGF-1 LR3; this is not a dosing recommendation.",
     "sourceString": "20–50 mcg daily in research protocols",
     "sourceDescription": "Reference amount text for IGF-1 LR3; this is not a dosing recommendation."
   },
   "peptideContentIgf1Lr3HalfLife": "~20–30 heures",
   "@peptideContentIgf1Lr3HalfLife": {
+    "description": "Educational half-life reference for IGF-1 LR3.",
     "sourceString": "~20–30 hours",
     "sourceDescription": "Educational half-life reference for IGF-1 LR3."
   },
   "peptideContentIgf1Lr3Notes": "Composé de recherche à risque plus élevé. Les préoccupations potentielles liées à la glycémie et à la signalisation de croissance tissulaire rendent la supervision médicale particulièrement importante.",
   "@peptideContentIgf1Lr3Notes": {
+    "description": "Neutral educational notes for IGF-1 LR3; preserve non-prescriptive framing.",
     "sourceString": "Higher-risk research compound. Potential glucose and tissue-growth signalling concerns make medical supervision especially important.",
     "sourceDescription": "Neutral educational notes for IGF-1 LR3; preserve non-prescriptive framing."
   },
   "peptideContentIgf1DesDescription": "L'IGF-1 DES est un analogue de l'IGF-1 plus court, dépourvu des trois premiers acides aminés. Il est évoqué comme variante d'IGF à action plus courte dans la recherche sur la signalisation tissulaire locale.",
   "@peptideContentIgf1DesDescription": {
+    "description": "Educational reference description for IGF-1 DES.",
     "sourceString": "IGF-1 DES is a shorter IGF-1 analogue missing the first three amino acids. It is discussed as a shorter-acting IGF variant in local tissue-signalling research.",
     "sourceDescription": "Educational reference description for IGF-1 DES."
   },
   "peptideContentIgf1DesTypicalDose": "20–50 mcg dans les protocoles de recherche",
   "@peptideContentIgf1DesTypicalDose": {
+    "description": "Reference amount text for IGF-1 DES; this is not a dosing recommendation.",
     "sourceString": "20–50 mcg in research protocols",
     "sourceDescription": "Reference amount text for IGF-1 DES; this is not a dosing recommendation."
   },
   "peptideContentIgf1DesHalfLife": "~20 à 30 minutes",
   "@peptideContentIgf1DesHalfLife": {
+    "description": "Educational half-life reference for IGF-1 DES.",
     "sourceString": "~20–30 minutes",
     "sourceDescription": "Educational half-life reference for IGF-1 DES."
   },
   "peptideContentIgf1DesNotes": "Très avancé et expérimental. Éviter les suggestions de protocole générales car les données de sécurité humaine et la surveillance appropriée restent limitées.",
   "@peptideContentIgf1DesNotes": {
+    "description": "Neutral educational notes for IGF-1 DES; preserve non-prescriptive framing.",
     "sourceString": "Very advanced and experimental. Avoid broad protocol suggestions because human safety data and appropriate monitoring are limited.",
     "sourceDescription": "Neutral educational notes for IGF-1 DES; preserve non-prescriptive framing."
   },
   "peptideContentPegMgfDescription": "Le PEG-MGF est une variante pégylée du facteur de croissance mécanique, un peptide variant d'épissage de l'IGF-1. La pégylation vise à prolonger le temps de circulation par rapport au MGF non modifié.",
   "@peptideContentPegMgfDescription": {
+    "description": "Educational reference description for PEG-MGF.",
     "sourceString": "PEG-MGF is a pegylated variant of mechano growth factor, an IGF-1 splice-variant peptide. The pegylation is intended to extend circulation time compared with unmodified MGF.",
     "sourceDescription": "Educational reference description for PEG-MGF."
   },
   "peptideContentPegMgfTypicalDose": "100–300 mcg par semaine dans les protocoles de recherche",
   "@peptideContentPegMgfTypicalDose": {
+    "description": "Reference amount text for PEG-MGF; this is not a dosing recommendation.",
     "sourceString": "100–300 mcg weekly in research protocols",
     "sourceDescription": "Reference amount text for PEG-MGF; this is not a dosing recommendation."
   },
   "peptideContentPegMgfHalfLife": "Prolongée par la PEGylation",
   "@peptideContentPegMgfHalfLife": {
+    "description": "Educational half-life reference for PEG-MGF.",
     "sourceString": "Extended by PEGylation",
     "sourceDescription": "Educational half-life reference for PEG-MGF."
   },
   "peptideContentPegMgfNotes": "Courant dans les forums de performance mais non approuvé comme thérapie. À considérer comme une entrée de recherche avancée avec des paramètres de suivi prudents par défaut.",
   "@peptideContentPegMgfNotes": {
+    "description": "Neutral educational notes for PEG-MGF; preserve non-prescriptive framing.",
     "sourceString": "Common in performance forums but not an approved therapy. Treat as an advanced research entry with conservative tracking defaults.",
     "sourceDescription": "Neutral educational notes for PEG-MGF; preserve non-prescriptive framing."
   },
   "peptideContentMk677Description": "Le MK-677, également connu sous le nom d'Ibutaморен, est un agoniste du récepteur de la ghréline actif par voie orale et sécrétagogue de l'hormone de croissance. Ce n'est pas un peptide, mais il est couramment évoqué aux côtés des peptides de l'axe GH.",
   "@peptideContentMk677Description": {
+    "description": "Educational reference description for MK-677 (Ibutamoren).",
     "sourceString": "MK-677, also known as Ibutamoren, is an orally active ghrelin receptor agonist and growth-hormone secretagogue. It is not a peptide, but it is commonly discussed alongside GH-axis peptides.",
     "sourceDescription": "Educational reference description for MK-677 (Ibutamoren)."
   },
   "peptideContentMk677TypicalDose": "10–25 mg par jour",
   "@peptideContentMk677TypicalDose": {
+    "description": "Reference amount text for MK-677 (Ibutamoren); this is not a dosing recommendation.",
     "sourceString": "10–25 mg daily",
     "sourceDescription": "Reference amount text for MK-677 (Ibutamoren); this is not a dosing recommendation."
   },
   "peptideContentMk677HalfLife": "~24 heures",
   "@peptideContentMk677HalfLife": {
+    "description": "Educational half-life reference for MK-677 (Ibutamoren).",
     "sourceString": "~24 hours",
     "sourceDescription": "Educational half-life reference for MK-677 (Ibutamoren)."
   },
   "peptideContentMk677Notes": "Composé apparenté, pas un peptide. Les discussions communautaires mentionnent souvent l'appétit, la rétention d'eau, le sommeil et le suivi de la glycémie.",
   "@peptideContentMk677Notes": {
+    "description": "Neutral educational notes for MK-677 (Ibutamoren); preserve non-prescriptive framing.",
     "sourceString": "Related compound, not a peptide. Community discussions often mention appetite, water retention, sleep, and glucose-monitoring considerations.",
     "sourceDescription": "Neutral educational notes for MK-677 (Ibutamoren); preserve non-prescriptive framing."
   },
   "peptideContentFiveAmino1mqDescription": "Le 5-Amino-1MQ est une petite molécule inhibitrice de la NNMT évoquée dans les communautés métaboliques et de composition corporelle. Ce n'est pas un peptide, mais il apparaît souvent dans des protocoles de longévité et de perte de graisse proches des peptides.",
   "@peptideContentFiveAmino1mqDescription": {
+    "description": "Educational reference description for 5-Amino-1MQ.",
     "sourceString": "5-Amino-1MQ is a small-molecule NNMT inhibitor discussed in metabolic and body-composition communities. It is not a peptide, but it often appears in peptide-adjacent longevity and fat-loss stacks.",
     "sourceDescription": "Educational reference description for 5-Amino-1MQ."
   },
   "peptideContentFiveAmino1mqTypicalDose": "25–100 mg par jour",
   "@peptideContentFiveAmino1mqTypicalDose": {
+    "description": "Reference amount text for 5-Amino-1MQ; this is not a dosing recommendation.",
     "sourceString": "25–100 mg daily",
     "sourceDescription": "Reference amount text for 5-Amino-1MQ; this is not a dosing recommendation."
   },
   "peptideContentFiveAmino1mqHalfLife": "Pas bien établie",
   "@peptideContentFiveAmino1mqHalfLife": {
+    "description": "Educational half-life reference for 5-Amino-1MQ.",
     "sourceString": "Not well established",
     "sourceDescription": "Educational half-life reference for 5-Amino-1MQ."
   },
   "peptideContentFiveAmino1mqNotes": "Composé apparenté, pas un peptide. Les données humaines sont limitées ; éviter les affirmations sur les résultats de perte de graisse ou de sensibilité à l'insuline.",
   "@peptideContentFiveAmino1mqNotes": {
+    "description": "Neutral educational notes for 5-Amino-1MQ; preserve non-prescriptive framing.",
     "sourceString": "Related compound, not a peptide. Human evidence is limited; avoid claims about fat loss or insulin sensitivity outcomes.",
     "sourceDescription": "Neutral educational notes for 5-Amino-1MQ; preserve non-prescriptive framing."
   },
   "peptideContentTesofensineDescription": "La Tesofensine est un inhibiteur oral de recapture des monoamines étudié pour l'obésité et les affections neurodégénératives. Ce n'est pas un peptide, mais elle est fréquemment évoquée dans les communautés de gestion du poids à proximité des composés GLP-1.",
   "@peptideContentTesofensineDescription": {
+    "description": "Educational reference description for Tesofensine.",
     "sourceString": "Tesofensine is an oral monoamine reuptake inhibitor investigated for obesity and neurodegenerative conditions. It is not a peptide, but it is frequently discussed in weight-management communities near GLP-1 compounds.",
     "sourceDescription": "Educational reference description for Tesofensine."
   },
   "peptideContentTesofensineTypicalDose": "0,25–0,5 mg par jour dans les études",
   "@peptideContentTesofensineTypicalDose": {
+    "description": "Reference amount text for Tesofensine; this is not a dosing recommendation.",
     "sourceString": "0.25–0.5 mg daily in studies",
     "sourceDescription": "Reference amount text for Tesofensine; this is not a dosing recommendation."
   },
   "peptideContentTesofensineHalfLife": "~9 jours",
   "@peptideContentTesofensineHalfLife": {
+    "description": "Educational half-life reference for Tesofensine.",
     "sourceString": "~9 days",
     "sourceDescription": "Educational half-life reference for Tesofensine."
   },
   "peptideContentTesofensineNotes": "Composé apparenté, pas un peptide. Comme il affecte les voies des neurotransmetteurs, la tension artérielle et la fréquence cardiaque, le dépistage des interactions est important.",
   "@peptideContentTesofensineNotes": {
+    "description": "Neutral educational notes for Tesofensine; preserve non-prescriptive framing.",
     "sourceString": "Related compound, not a peptide. Because it affects neurotransmitter pathways, blood pressure, heart rate, and interaction screening matter.",
     "sourceDescription": "Neutral educational notes for Tesofensine; preserve non-prescriptive framing."
   },
   "peptideContentRu58841Description": "Le RU-58841 est un antiandrogène topique non stéroïdien étudié pour la signalisation des récepteurs aux androgènes dans le contexte des follicules pileux. Ce n'est pas un peptide, mais il est souvent évoqué dans les communautés esthétiques proches des peptides.",
   "@peptideContentRu58841Description": {
+    "description": "Educational reference description for RU-58841.",
     "sourceString": "RU-58841 is a topical nonsteroidal antiandrogen researched for androgen-receptor signalling in hair-follicle contexts. It is not a peptide, but it is often discussed in peptide-adjacent aesthetic communities.",
     "sourceDescription": "Educational reference description for RU-58841."
   },
   "peptideContentRu58841TypicalDose": "Topique 25–50 mg par jour dans des protocoles informels",
   "@peptideContentRu58841TypicalDose": {
+    "description": "Reference amount text for RU-58841; this is not a dosing recommendation.",
     "sourceString": "Topical 25–50 mg daily in informal protocols",
     "sourceDescription": "Reference amount text for RU-58841; this is not a dosing recommendation."
   },
   "peptideContentRu58841HalfLife": "Pas bien établie",
   "@peptideContentRu58841HalfLife": {
+    "description": "Educational half-life reference for RU-58841.",
     "sourceString": "Not well established",
     "sourceDescription": "Educational half-life reference for RU-58841."
   },
   "peptideContentRu58841Notes": "Composé apparenté, pas un peptide et non un médicament approuvé. Les préoccupations relatives au contrôle qualité et à l'exposition systémique sont des sujets de discussion courants.",
   "@peptideContentRu58841Notes": {
+    "description": "Neutral educational notes for RU-58841; preserve non-prescriptive framing.",
     "sourceString": "Related compound, not a peptide and not an approved medication. Quality-control and systemic exposure concerns are common discussion points.",
     "sourceDescription": "Neutral educational notes for RU-58841; preserve non-prescriptive framing."
   },
   "peptideContentEducationalDisclaimer": "À titre éducatif uniquement. Ceci ne constitue pas un avis médical. Les peptides de recherche ne sont pas approuvés pour un usage humain dans la plupart des juridictions — consultez toujours un professionnel de santé qualifié.",
   "@peptideContentEducationalDisclaimer": {
+    "description": "Safety disclaimer shown below every bundled peptide reference. Preserve educational-only, non-medical-advice wording.",
     "sourceString": "For educational reference only. Not medical advice. Research peptides are not approved for human use in most jurisdictions — always consult a qualified healthcare provider.",
     "sourceDescription": "Safety disclaimer shown below every bundled peptide reference. Preserve educational-only, non-medical-advice wording."
   }

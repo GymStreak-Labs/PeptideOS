@@ -3543,5 +3543,398 @@
   "peptideContentEducationalDisclaimer": "For educational reference only. Not medical advice. Research peptides are not approved for human use in most jurisdictions — always consult a qualified healthcare provider.",
   "@peptideContentEducationalDisclaimer": {
     "description": "Safety disclaimer shown below every bundled peptide reference. Preserve educational-only, non-medical-advice wording."
+  },
+  "@libraryTitle": {
+    "description": "Customer-facing app copy for libraryTitle."
+  },
+  "@librarySystemLabel": {
+    "description": "Customer-facing app copy for librarySystemLabel."
+  },
+  "@myCompounds": {
+    "description": "Customer-facing app copy for myCompounds."
+  },
+  "@unitConverter": {
+    "description": "Customer-facing app copy for unitConverter."
+  },
+  "@openUnitConverter": {
+    "description": "Customer-facing app copy for openUnitConverter."
+  },
+  "@converterCardTitle": {
+    "description": "Customer-facing app copy for converterCardTitle."
+  },
+  "@converterCardSubtitle": {
+    "description": "Customer-facing app copy for converterCardSubtitle."
+  },
+  "@converterCardHint": {
+    "description": "Customer-facing app copy for converterCardHint."
+  },
+  "@searchPeptides": {
+    "description": "Customer-facing app copy for searchPeptides."
+  },
+  "@categoryAll": {
+    "description": "Customer-facing app copy for categoryAll."
+  },
+  "@categoryHealing": {
+    "description": "Customer-facing app copy for categoryHealing."
+  },
+  "@categoryGrowthHormone": {
+    "description": "Customer-facing app copy for categoryGrowthHormone."
+  },
+  "@categoryCognitive": {
+    "description": "Customer-facing app copy for categoryCognitive."
+  },
+  "@categoryMetabolic": {
+    "description": "Customer-facing app copy for categoryMetabolic."
+  },
+  "@categoryAesthetic": {
+    "description": "Customer-facing app copy for categoryAesthetic."
+  },
+  "@categoryLongevity": {
+    "description": "Customer-facing app copy for categoryLongevity."
+  },
+  "@categoryOther": {
+    "description": "Customer-facing app copy for categoryOther."
+  },
+  "@libraryUnavailable": {
+    "description": "Customer-facing app copy for libraryUnavailable."
+  },
+  "@retry": {
+    "description": "Customer-facing app copy for retry."
+  },
+  "@noPeptidesFound": {
+    "description": "Customer-facing app copy for noPeptidesFound."
+  },
+  "@tryDifferentSearch": {
+    "description": "Customer-facing app copy for tryDifferentSearch."
+  },
+  "@calculationSaved": {
+    "description": "Customer-facing app copy for calculationSaved."
+  },
+  "@converterIntro": {
+    "description": "Customer-facing app copy for converterIntro."
+  },
+  "@vialAndDiluent": {
+    "description": "Customer-facing app copy for vialAndDiluent."
+  },
+  "@iuSourceCaption": {
+    "description": "Customer-facing app copy for iuSourceCaption."
+  },
+  "@massSourceCaption": {
+    "description": "Customer-facing app copy for massSourceCaption."
+  },
+  "@vialAmount": {
+    "description": "Customer-facing app copy for vialAmount."
+  },
+  "@amountPrintedOnVial": {
+    "description": "Customer-facing app copy for amountPrintedOnVial."
+  },
+  "@diluent": {
+    "description": "Customer-facing app copy for diluent."
+  },
+  "@volumeAdded": {
+    "description": "Customer-facing app copy for volumeAdded."
+  },
+  "@amountToConvert": {
+    "description": "Customer-facing app copy for amountToConvert."
+  },
+  "@iuAmountCaption": {
+    "description": "Customer-facing app copy for iuAmountCaption."
+  },
+  "@massAmountCaption": {
+    "description": "Customer-facing app copy for massAmountCaption."
+  },
+  "@yourSyringe": {
+    "description": "Customer-facing app copy for yourSyringe."
+  },
+  "@syringeCaption": {
+    "description": "Customer-facing app copy for syringeCaption."
+  },
+  "@educationalConverterDisclaimer": {
+    "description": "Customer-facing app copy for educationalConverterDisclaimer."
+  },
+  "@back": {
+    "description": "Customer-facing app copy for back."
+  },
+  "@vialWorkspace": {
+    "description": "Customer-facing app copy for vialWorkspace."
+  },
+  "@conversionSystemLabel": {
+    "description": "Customer-facing app copy for conversionSystemLabel."
+  },
+  "@measurementModeSystemLabel": {
+    "description": "Customer-facing app copy for measurementModeSystemLabel."
+  },
+  "@conversionResultSystemLabel": {
+    "description": "Customer-facing app copy for conversionResultSystemLabel."
+  },
+  "@savedVialsSystemLabel": {
+    "description": "Customer-facing app copy for savedVialsSystemLabel."
+  },
+  "@clear": {
+    "description": "Customer-facing app copy for clear."
+  },
+  "@conversionOnly": {
+    "description": "Customer-facing app copy for conversionOnly."
+  },
+  "@sameUnitFamily": {
+    "description": "Customer-facing app copy for sameUnitFamily."
+  },
+  "@mass": {
+    "description": "Customer-facing app copy for mass."
+  },
+  "@iuOnly": {
+    "description": "Customer-facing app copy for iuOnly."
+  },
+  "@iuSafety": {
+    "description": "Customer-facing app copy for iuSafety."
+  },
+  "@enterAmount": {
+    "description": "Customer-facing app copy for enterAmount."
+  },
+  "@drawTo": {
+    "description": "Customer-facing app copy for drawTo."
+  },
+  "@units": {
+    "description": "Customer-facing app copy for units."
+  },
+  "@concentration": {
+    "description": "Customer-facing app copy for concentration."
+  },
+  "@syringeCapacity": {
+    "description": "Customer-facing app copy for syringeCapacity."
+  },
+  "@capacityWarning": {
+    "description": "Customer-facing app copy for capacityWarning."
+  },
+  "@savePreset": {
+    "description": "Customer-facing app copy for savePreset."
+  },
+  "@savedVialsHint": {
+    "description": "Customer-facing app copy for savedVialsHint."
+  },
+  "@removeSavedCalculation": {
+    "description": "Customer-facing app copy for removeSavedCalculation."
+  },
+  "@errorPositiveNumbers": {
+    "description": "Customer-facing app copy for errorPositiveNumbers."
+  },
+  "@errorAmountAboveVial": {
+    "description": "Customer-facing app copy for errorAmountAboveVial."
+  },
+  "@errorConversion": {
+    "description": "Customer-facing app copy for errorConversion."
+  },
+  "@halfLife": {
+    "description": "Customer-facing app copy for halfLife."
+  },
+  "@weekCycle": {
+    "description": "Customer-facing app copy for weekCycle."
+  },
+  "@typicalDose": {
+    "description": "Customer-facing app copy for typicalDose."
+  },
+  "@notes": {
+    "description": "Customer-facing app copy for notes."
+  },
+  "@commonStack": {
+    "description": "Customer-facing app copy for commonStack."
+  },
+  "@reconstitutionTool": {
+    "description": "Customer-facing app copy for reconstitutionTool."
+  },
+  "@compoundSystemLabel": {
+    "description": "Customer-facing app copy for compoundSystemLabel."
+  },
+  "@addToProtocol": {
+    "description": "Customer-facing app copy for addToProtocol."
+  },
+  "@vialShort": {
+    "description": "Customer-facing app copy for vialShort."
+  },
+  "@bacShort": {
+    "description": "Customer-facing app copy for bacShort."
+  },
+  "@doseShort": {
+    "description": "Customer-facing app copy for doseShort."
+  },
+  "@routeSubcutaneous": {
+    "description": "Customer-facing app copy for routeSubcutaneous."
+  },
+  "@routeIntramuscular": {
+    "description": "Customer-facing app copy for routeIntramuscular."
+  },
+  "@routeOral": {
+    "description": "Customer-facing app copy for routeOral."
+  },
+  "@routeNasal": {
+    "description": "Customer-facing app copy for routeNasal."
+  },
+  "@frequencyDaily": {
+    "description": "Customer-facing app copy for frequencyDaily."
+  },
+  "@frequencyEveryOtherDay": {
+    "description": "Customer-facing app copy for frequencyEveryOtherDay."
+  },
+  "@frequencyTwiceWeekly": {
+    "description": "Customer-facing app copy for frequencyTwiceWeekly."
+  },
+  "@frequencyWeekly": {
+    "description": "Customer-facing app copy for frequencyWeekly."
+  },
+  "@frequencyAsNeeded": {
+    "description": "Customer-facing app copy for frequencyAsNeeded."
+  },
+  "@tabProtocol": {
+    "description": "Customer-facing app copy for tabProtocol."
+  },
+  "@tabProgress": {
+    "description": "Customer-facing app copy for tabProgress."
+  },
+  "@tabLibrary": {
+    "description": "Customer-facing app copy for tabLibrary."
+  },
+  "@tabYou": {
+    "description": "Customer-facing app copy for tabYou."
+  },
+  "@processingLabel": {
+    "description": "Customer-facing app copy for processingLabel."
+  },
+  "@authAppleFailed": {
+    "description": "Customer-facing app copy for authAppleFailed."
+  },
+  "@authGoogleFailed": {
+    "description": "Customer-facing app copy for authGoogleFailed."
+  },
+  "@authGenericError": {
+    "description": "Customer-facing app copy for authGenericError."
+  },
+  "@authUserNotFound": {
+    "description": "Customer-facing app copy for authUserNotFound."
+  },
+  "@authIncorrectCredentials": {
+    "description": "Customer-facing app copy for authIncorrectCredentials."
+  },
+  "@authAccountExists": {
+    "description": "Customer-facing app copy for authAccountExists."
+  },
+  "@authWeakPassword": {
+    "description": "Customer-facing app copy for authWeakPassword."
+  },
+  "@authInvalidEmail": {
+    "description": "Customer-facing app copy for authInvalidEmail."
+  },
+  "@authAppleUnavailable": {
+    "description": "Customer-facing app copy for authAppleUnavailable."
+  },
+  "@authRequiredTitle": {
+    "description": "Customer-facing app copy for authRequiredTitle."
+  },
+  "@authRequiredBody": {
+    "description": "Customer-facing app copy for authRequiredBody."
+  },
+  "@continueWithEmail": {
+    "description": "Customer-facing app copy for continueWithEmail."
+  },
+  "@signInWithApple": {
+    "description": "Customer-facing app copy for signInWithApple."
+  },
+  "@continueWithGoogle": {
+    "description": "Customer-facing app copy for continueWithGoogle."
+  },
+  "@authTermsDisclaimer": {
+    "description": "Customer-facing app copy for authTermsDisclaimer."
+  },
+  "@signIn": {
+    "description": "Customer-facing app copy for signIn."
+  },
+  "@createAccount": {
+    "description": "Customer-facing app copy for createAccount."
+  },
+  "@resetPassword": {
+    "description": "Customer-facing app copy for resetPassword."
+  },
+  "@signInAction": {
+    "description": "Customer-facing app copy for signInAction."
+  },
+  "@createAccountAction": {
+    "description": "Customer-facing app copy for createAccountAction."
+  },
+  "@sendResetLink": {
+    "description": "Customer-facing app copy for sendResetLink."
+  },
+  "@passwordResetSent": {
+    "description": "Customer-facing app copy for passwordResetSent."
+  },
+  "@enterEmail": {
+    "description": "Customer-facing app copy for enterEmail."
+  },
+  "@enterValidEmail": {
+    "description": "Customer-facing app copy for enterValidEmail."
+  },
+  "@enterPassword": {
+    "description": "Customer-facing app copy for enterPassword."
+  },
+  "@passwordMinLength": {
+    "description": "Customer-facing app copy for passwordMinLength."
+  },
+  "@forgotPassword": {
+    "description": "Customer-facing app copy for forgotPassword."
+  },
+  "@alreadyHaveAccount": {
+    "description": "Customer-facing app copy for alreadyHaveAccount."
+  },
+  "@backToSignIn": {
+    "description": "Customer-facing app copy for backToSignIn."
+  },
+  "@emailLabel": {
+    "description": "Customer-facing app copy for emailLabel."
+  },
+  "@passwordLabel": {
+    "description": "Customer-facing app copy for passwordLabel."
+  },
+  "@showPassword": {
+    "description": "Customer-facing app copy for showPassword."
+  },
+  "@hidePassword": {
+    "description": "Customer-facing app copy for hidePassword."
+  },
+  "@accountDeletedTitle": {
+    "description": "Customer-facing app copy for accountDeletedTitle."
+  },
+  "@accountDeletedBody": {
+    "description": "Customer-facing app copy for accountDeletedBody."
+  },
+  "@subscriptionUnavailable": {
+    "description": "Customer-facing app copy for subscriptionUnavailable."
+  },
+  "@upgradeUnavailable": {
+    "description": "Customer-facing app copy for upgradeUnavailable."
+  },
+  "@noPurchasesToRestore": {
+    "description": "Customer-facing app copy for noPurchasesToRestore."
+  },
+  "@unlockFullProtocol": {
+    "description": "Customer-facing app copy for unlockFullProtocol."
+  },
+  "@premiumUnlimitedPeptides": {
+    "description": "Customer-facing app copy for premiumUnlimitedPeptides."
+  },
+  "@premiumMultipleProtocols": {
+    "description": "Customer-facing app copy for premiumMultipleProtocols."
+  },
+  "@premiumCalculator": {
+    "description": "Customer-facing app copy for premiumCalculator."
+  },
+  "@premiumMetrics": {
+    "description": "Customer-facing app copy for premiumMetrics."
+  },
+  "@upgradeNow": {
+    "description": "Customer-facing app copy for upgradeNow."
+  },
+  "@restorePurchases": {
+    "description": "Customer-facing app copy for restorePurchases."
+  },
+  "@notRightNow": {
+    "description": "Customer-facing app copy for notRightNow."
   }
 }

@@ -111,505 +111,505 @@ abstract class AppLocalizations {
     Locale('pt', 'BR'),
   ];
 
-  /// No description provided for @libraryTitle.
+  /// Customer-facing app copy for libraryTitle.
   ///
   /// In en, this message translates to:
   /// **'Library'**
   String get libraryTitle;
 
-  /// No description provided for @librarySystemLabel.
+  /// Customer-facing app copy for librarySystemLabel.
   ///
   /// In en, this message translates to:
   /// **'SYS.DATABASE // COMPOUNDS'**
   String get librarySystemLabel;
 
-  /// No description provided for @myCompounds.
+  /// Customer-facing app copy for myCompounds.
   ///
   /// In en, this message translates to:
   /// **'My compounds'**
   String get myCompounds;
 
-  /// No description provided for @unitConverter.
+  /// Customer-facing app copy for unitConverter.
   ///
   /// In en, this message translates to:
   /// **'Unit converter'**
   String get unitConverter;
 
-  /// No description provided for @openUnitConverter.
+  /// Customer-facing app copy for openUnitConverter.
   ///
   /// In en, this message translates to:
   /// **'Open unit converter'**
   String get openUnitConverter;
 
-  /// No description provided for @converterCardTitle.
+  /// Customer-facing app copy for converterCardTitle.
   ///
   /// In en, this message translates to:
   /// **'UNIT CONVERTER'**
   String get converterCardTitle;
 
-  /// No description provided for @converterCardSubtitle.
+  /// Customer-facing app copy for converterCardSubtitle.
   ///
   /// In en, this message translates to:
   /// **'Convert vial math now'**
   String get converterCardSubtitle;
 
-  /// No description provided for @converterCardHint.
+  /// Customer-facing app copy for converterCardHint.
   ///
   /// In en, this message translates to:
   /// **'For reconstitution, tap any peptide below.'**
   String get converterCardHint;
 
-  /// No description provided for @searchPeptides.
+  /// Customer-facing app copy for searchPeptides.
   ///
   /// In en, this message translates to:
   /// **'Search peptides...'**
   String get searchPeptides;
 
-  /// No description provided for @categoryAll.
+  /// Customer-facing app copy for categoryAll.
   ///
   /// In en, this message translates to:
   /// **'All'**
   String get categoryAll;
 
-  /// No description provided for @categoryHealing.
+  /// Customer-facing app copy for categoryHealing.
   ///
   /// In en, this message translates to:
   /// **'Healing'**
   String get categoryHealing;
 
-  /// No description provided for @categoryGrowthHormone.
+  /// Customer-facing app copy for categoryGrowthHormone.
   ///
   /// In en, this message translates to:
   /// **'Growth Hormone'**
   String get categoryGrowthHormone;
 
-  /// No description provided for @categoryCognitive.
+  /// Customer-facing app copy for categoryCognitive.
   ///
   /// In en, this message translates to:
   /// **'Cognitive'**
   String get categoryCognitive;
 
-  /// No description provided for @categoryMetabolic.
+  /// Customer-facing app copy for categoryMetabolic.
   ///
   /// In en, this message translates to:
   /// **'Metabolic'**
   String get categoryMetabolic;
 
-  /// No description provided for @categoryAesthetic.
+  /// Customer-facing app copy for categoryAesthetic.
   ///
   /// In en, this message translates to:
   /// **'Aesthetic'**
   String get categoryAesthetic;
 
-  /// No description provided for @categoryLongevity.
+  /// Customer-facing app copy for categoryLongevity.
   ///
   /// In en, this message translates to:
   /// **'Longevity'**
   String get categoryLongevity;
 
-  /// No description provided for @categoryOther.
+  /// Customer-facing app copy for categoryOther.
   ///
   /// In en, this message translates to:
   /// **'Other'**
   String get categoryOther;
 
-  /// No description provided for @libraryUnavailable.
+  /// Customer-facing app copy for libraryUnavailable.
   ///
   /// In en, this message translates to:
   /// **'Library unavailable'**
   String get libraryUnavailable;
 
-  /// No description provided for @retry.
+  /// Customer-facing app copy for retry.
   ///
   /// In en, this message translates to:
   /// **'RETRY'**
   String get retry;
 
-  /// No description provided for @noPeptidesFound.
+  /// Customer-facing app copy for noPeptidesFound.
   ///
   /// In en, this message translates to:
   /// **'No peptides found'**
   String get noPeptidesFound;
 
-  /// No description provided for @tryDifferentSearch.
+  /// Customer-facing app copy for tryDifferentSearch.
   ///
   /// In en, this message translates to:
   /// **'Try a different search term or clear the filter.'**
   String get tryDifferentSearch;
 
-  /// No description provided for @calculationSaved.
+  /// Customer-facing app copy for calculationSaved.
   ///
   /// In en, this message translates to:
   /// **'Calculation saved to this account.'**
   String get calculationSaved;
 
-  /// No description provided for @converterIntro.
+  /// Customer-facing app copy for converterIntro.
   ///
   /// In en, this message translates to:
   /// **'Enter values from your own vial, diluent, and plan. PepMod converts those values into volume and U-100 syringe units.'**
   String get converterIntro;
 
-  /// No description provided for @vialAndDiluent.
+  /// Customer-facing app copy for vialAndDiluent.
   ///
   /// In en, this message translates to:
   /// **'Vial + diluent'**
   String get vialAndDiluent;
 
-  /// No description provided for @iuSourceCaption.
+  /// Customer-facing app copy for iuSourceCaption.
   ///
   /// In en, this message translates to:
   /// **'Source: IU on your vial and mL of diluent added.'**
   String get iuSourceCaption;
 
-  /// No description provided for @massSourceCaption.
+  /// Customer-facing app copy for massSourceCaption.
   ///
   /// In en, this message translates to:
   /// **'Source: labels on your vial and diluent.'**
   String get massSourceCaption;
 
-  /// No description provided for @vialAmount.
+  /// Customer-facing app copy for vialAmount.
   ///
   /// In en, this message translates to:
   /// **'VIAL AMOUNT'**
   String get vialAmount;
 
-  /// No description provided for @amountPrintedOnVial.
+  /// Customer-facing app copy for amountPrintedOnVial.
   ///
   /// In en, this message translates to:
   /// **'Amount printed on vial'**
   String get amountPrintedOnVial;
 
-  /// No description provided for @diluent.
+  /// Customer-facing app copy for diluent.
   ///
   /// In en, this message translates to:
   /// **'DILUENT'**
   String get diluent;
 
-  /// No description provided for @volumeAdded.
+  /// Customer-facing app copy for volumeAdded.
   ///
   /// In en, this message translates to:
   /// **'Volume you added'**
   String get volumeAdded;
 
-  /// No description provided for @amountToConvert.
+  /// Customer-facing app copy for amountToConvert.
   ///
   /// In en, this message translates to:
   /// **'Amount to convert'**
   String get amountToConvert;
 
-  /// No description provided for @iuAmountCaption.
+  /// Customer-facing app copy for iuAmountCaption.
   ///
   /// In en, this message translates to:
   /// **'Enter an IU amount you were already given.'**
   String get iuAmountCaption;
 
-  /// No description provided for @massAmountCaption.
+  /// Customer-facing app copy for massAmountCaption.
   ///
   /// In en, this message translates to:
   /// **'Source: an amount you were already given.'**
   String get massAmountCaption;
 
-  /// No description provided for @yourSyringe.
+  /// Customer-facing app copy for yourSyringe.
   ///
   /// In en, this message translates to:
   /// **'Your syringe'**
   String get yourSyringe;
 
-  /// No description provided for @syringeCaption.
+  /// Customer-facing app copy for syringeCaption.
   ///
   /// In en, this message translates to:
   /// **'Select the capacity printed on the barrel.'**
   String get syringeCaption;
 
-  /// No description provided for @educationalConverterDisclaimer.
+  /// Customer-facing app copy for educationalConverterDisclaimer.
   ///
   /// In en, this message translates to:
   /// **'Educational unit-conversion tool only. PepMod does not recommend an amount or frequency. Recheck the source labels and confirm your calculation with a qualified healthcare professional before use.'**
   String get educationalConverterDisclaimer;
 
-  /// No description provided for @back.
+  /// Customer-facing app copy for back.
   ///
   /// In en, this message translates to:
   /// **'Back'**
   String get back;
 
-  /// No description provided for @vialWorkspace.
+  /// Customer-facing app copy for vialWorkspace.
   ///
   /// In en, this message translates to:
   /// **'Vial workspace'**
   String get vialWorkspace;
 
-  /// No description provided for @conversionSystemLabel.
+  /// Customer-facing app copy for conversionSystemLabel.
   ///
   /// In en, this message translates to:
   /// **'UTIL.CONVERSION'**
   String get conversionSystemLabel;
 
-  /// No description provided for @measurementModeSystemLabel.
+  /// Customer-facing app copy for measurementModeSystemLabel.
   ///
   /// In en, this message translates to:
   /// **'MEASUREMENT.MODE'**
   String get measurementModeSystemLabel;
 
-  /// No description provided for @conversionResultSystemLabel.
+  /// Customer-facing app copy for conversionResultSystemLabel.
   ///
   /// In en, this message translates to:
   /// **'CONVERSION.RESULT'**
   String get conversionResultSystemLabel;
 
-  /// No description provided for @savedVialsSystemLabel.
+  /// Customer-facing app copy for savedVialsSystemLabel.
   ///
   /// In en, this message translates to:
   /// **'SAVED.VIALS'**
   String get savedVialsSystemLabel;
 
-  /// No description provided for @clear.
+  /// Customer-facing app copy for clear.
   ///
   /// In en, this message translates to:
   /// **'CLEAR'**
   String get clear;
 
-  /// No description provided for @conversionOnly.
+  /// Customer-facing app copy for conversionOnly.
   ///
   /// In en, this message translates to:
   /// **'Conversion only — this workspace never chooses an amount or schedule.'**
   String get conversionOnly;
 
-  /// No description provided for @sameUnitFamily.
+  /// Customer-facing app copy for sameUnitFamily.
   ///
   /// In en, this message translates to:
   /// **'Use the same unit family printed on the vial.'**
   String get sameUnitFamily;
 
-  /// No description provided for @mass.
+  /// Customer-facing app copy for mass.
   ///
   /// In en, this message translates to:
   /// **'Mass'**
   String get mass;
 
-  /// No description provided for @iuOnly.
+  /// Customer-facing app copy for iuOnly.
   ///
   /// In en, this message translates to:
   /// **'IU only'**
   String get iuOnly;
 
-  /// No description provided for @iuSafety.
+  /// Customer-facing app copy for iuSafety.
   ///
   /// In en, this message translates to:
   /// **'IU stays IU. PepMod does not convert IU to or from mg/mcg.'**
   String get iuSafety;
 
-  /// No description provided for @enterAmount.
+  /// Customer-facing app copy for enterAmount.
   ///
   /// In en, this message translates to:
   /// **'Enter amount'**
   String get enterAmount;
 
-  /// No description provided for @drawTo.
+  /// Customer-facing app copy for drawTo.
   ///
   /// In en, this message translates to:
   /// **'DRAW TO'**
   String get drawTo;
 
-  /// No description provided for @units.
+  /// Customer-facing app copy for units.
   ///
   /// In en, this message translates to:
   /// **'units'**
   String get units;
 
-  /// No description provided for @concentration.
+  /// Customer-facing app copy for concentration.
   ///
   /// In en, this message translates to:
   /// **'CONCENTRATION'**
   String get concentration;
 
-  /// No description provided for @syringeCapacity.
+  /// Customer-facing app copy for syringeCapacity.
   ///
   /// In en, this message translates to:
   /// **'SYRINGE CAPACITY'**
   String get syringeCapacity;
 
-  /// No description provided for @capacityWarning.
+  /// Customer-facing app copy for capacityWarning.
   ///
   /// In en, this message translates to:
   /// **'The converted volume is larger than this syringe capacity. Choose the correct syringe or recheck your entries.'**
   String get capacityWarning;
 
-  /// No description provided for @savePreset.
+  /// Customer-facing app copy for savePreset.
   ///
   /// In en, this message translates to:
   /// **'SAVE PRESET'**
   String get savePreset;
 
-  /// No description provided for @savedVialsHint.
+  /// Customer-facing app copy for savedVialsHint.
   ///
   /// In en, this message translates to:
   /// **'Tap a saved calculation to reuse its inputs.'**
   String get savedVialsHint;
 
-  /// No description provided for @removeSavedCalculation.
+  /// Customer-facing app copy for removeSavedCalculation.
   ///
   /// In en, this message translates to:
   /// **'Remove saved calculation'**
   String get removeSavedCalculation;
 
-  /// No description provided for @errorPositiveNumbers.
+  /// Customer-facing app copy for errorPositiveNumbers.
   ///
   /// In en, this message translates to:
   /// **'Enter a number greater than zero in every field.'**
   String get errorPositiveNumbers;
 
-  /// No description provided for @errorAmountAboveVial.
+  /// Customer-facing app copy for errorAmountAboveVial.
   ///
   /// In en, this message translates to:
   /// **'Desired amount is greater than the amount entered for this vial.'**
   String get errorAmountAboveVial;
 
-  /// No description provided for @errorConversion.
+  /// Customer-facing app copy for errorConversion.
   ///
   /// In en, this message translates to:
   /// **'These values could not be converted. Recheck each entry.'**
   String get errorConversion;
 
-  /// No description provided for @halfLife.
+  /// Customer-facing app copy for halfLife.
   ///
   /// In en, this message translates to:
   /// **'Half-life'**
   String get halfLife;
 
-  /// No description provided for @weekCycle.
+  /// Customer-facing app copy for weekCycle.
   ///
   /// In en, this message translates to:
   /// **'wk cycle'**
   String get weekCycle;
 
-  /// No description provided for @typicalDose.
+  /// Customer-facing app copy for typicalDose.
   ///
   /// In en, this message translates to:
   /// **'TYPICAL DOSE'**
   String get typicalDose;
 
-  /// No description provided for @notes.
+  /// Customer-facing app copy for notes.
   ///
   /// In en, this message translates to:
   /// **'NOTES'**
   String get notes;
 
-  /// No description provided for @commonStack.
+  /// Customer-facing app copy for commonStack.
   ///
   /// In en, this message translates to:
   /// **'COMMON.STACK'**
   String get commonStack;
 
-  /// No description provided for @reconstitutionTool.
+  /// Customer-facing app copy for reconstitutionTool.
   ///
   /// In en, this message translates to:
   /// **'UTIL.RECONSTITUTION'**
   String get reconstitutionTool;
 
-  /// No description provided for @compoundSystemLabel.
+  /// Customer-facing app copy for compoundSystemLabel.
   ///
   /// In en, this message translates to:
   /// **'DB.COMPOUND'**
   String get compoundSystemLabel;
 
-  /// No description provided for @addToProtocol.
+  /// Customer-facing app copy for addToProtocol.
   ///
   /// In en, this message translates to:
   /// **'ADD TO PROTOCOL'**
   String get addToProtocol;
 
-  /// No description provided for @vialShort.
+  /// Customer-facing app copy for vialShort.
   ///
   /// In en, this message translates to:
   /// **'VIAL (mg)'**
   String get vialShort;
 
-  /// No description provided for @bacShort.
+  /// Customer-facing app copy for bacShort.
   ///
   /// In en, this message translates to:
   /// **'BAC (mL)'**
   String get bacShort;
 
-  /// No description provided for @doseShort.
+  /// Customer-facing app copy for doseShort.
   ///
   /// In en, this message translates to:
   /// **'DOSE (mcg)'**
   String get doseShort;
 
-  /// No description provided for @routeSubcutaneous.
+  /// Customer-facing app copy for routeSubcutaneous.
   ///
   /// In en, this message translates to:
   /// **'Subcutaneous'**
   String get routeSubcutaneous;
 
-  /// No description provided for @routeIntramuscular.
+  /// Customer-facing app copy for routeIntramuscular.
   ///
   /// In en, this message translates to:
   /// **'Intramuscular'**
   String get routeIntramuscular;
 
-  /// No description provided for @routeOral.
+  /// Customer-facing app copy for routeOral.
   ///
   /// In en, this message translates to:
   /// **'Oral'**
   String get routeOral;
 
-  /// No description provided for @routeNasal.
+  /// Customer-facing app copy for routeNasal.
   ///
   /// In en, this message translates to:
   /// **'Nasal'**
   String get routeNasal;
 
-  /// No description provided for @frequencyDaily.
+  /// Customer-facing app copy for frequencyDaily.
   ///
   /// In en, this message translates to:
   /// **'Daily'**
   String get frequencyDaily;
 
-  /// No description provided for @frequencyEveryOtherDay.
+  /// Customer-facing app copy for frequencyEveryOtherDay.
   ///
   /// In en, this message translates to:
   /// **'Every other day'**
   String get frequencyEveryOtherDay;
 
-  /// No description provided for @frequencyTwiceWeekly.
+  /// Customer-facing app copy for frequencyTwiceWeekly.
   ///
   /// In en, this message translates to:
   /// **'2x per week'**
   String get frequencyTwiceWeekly;
 
-  /// No description provided for @frequencyWeekly.
+  /// Customer-facing app copy for frequencyWeekly.
   ///
   /// In en, this message translates to:
   /// **'Weekly'**
   String get frequencyWeekly;
 
-  /// No description provided for @frequencyAsNeeded.
+  /// Customer-facing app copy for frequencyAsNeeded.
   ///
   /// In en, this message translates to:
   /// **'As needed'**
   String get frequencyAsNeeded;
 
-  /// No description provided for @tabProtocol.
+  /// Customer-facing app copy for tabProtocol.
   ///
   /// In en, this message translates to:
   /// **'Protocol'**
   String get tabProtocol;
 
-  /// No description provided for @tabProgress.
+  /// Customer-facing app copy for tabProgress.
   ///
   /// In en, this message translates to:
   /// **'Progress'**
   String get tabProgress;
 
-  /// No description provided for @tabLibrary.
+  /// Customer-facing app copy for tabLibrary.
   ///
   /// In en, this message translates to:
   /// **'Library'**
   String get tabLibrary;
 
-  /// No description provided for @tabYou.
+  /// Customer-facing app copy for tabYou.
   ///
   /// In en, this message translates to:
   /// **'You'**
@@ -621,283 +621,337 @@ abstract class AppLocalizations {
   /// **'CONTINUE'**
   String get continueLabel;
 
-  /// No description provided for @processingLabel.
+  /// Customer-facing app copy for processingLabel.
   ///
   /// In en, this message translates to:
   /// **'PROCESSING…'**
   String get processingLabel;
 
-  /// No description provided for @authAppleFailed.
+  /// Customer-facing app copy for authAppleFailed.
   ///
   /// In en, this message translates to:
   /// **'Apple sign-in failed. Please try again.'**
   String get authAppleFailed;
 
-  /// No description provided for @authGoogleFailed.
+  /// Customer-facing app copy for authGoogleFailed.
   ///
   /// In en, this message translates to:
   /// **'Google sign-in failed. Please try again.'**
   String get authGoogleFailed;
 
-  /// No description provided for @authGenericError.
+  /// Customer-facing app copy for authGenericError.
   ///
   /// In en, this message translates to:
   /// **'Something went wrong. Please try again.'**
   String get authGenericError;
 
-  /// No description provided for @authUserNotFound.
+  /// Customer-facing app copy for authUserNotFound.
   ///
   /// In en, this message translates to:
   /// **'No user found with this email address.'**
   String get authUserNotFound;
 
-  /// No description provided for @authIncorrectCredentials.
+  /// Customer-facing app copy for authIncorrectCredentials.
   ///
   /// In en, this message translates to:
   /// **'Incorrect email or password.'**
   String get authIncorrectCredentials;
 
-  /// No description provided for @authAccountExists.
+  /// Customer-facing app copy for authAccountExists.
   ///
   /// In en, this message translates to:
   /// **'An account already exists with this email.'**
   String get authAccountExists;
 
-  /// No description provided for @authWeakPassword.
+  /// Customer-facing app copy for authWeakPassword.
   ///
   /// In en, this message translates to:
   /// **'Password is too weak. Use at least 6 characters.'**
   String get authWeakPassword;
 
-  /// No description provided for @authInvalidEmail.
+  /// Customer-facing app copy for authInvalidEmail.
   ///
   /// In en, this message translates to:
   /// **'Invalid email address.'**
   String get authInvalidEmail;
 
-  /// No description provided for @authAppleUnavailable.
+  /// Customer-facing app copy for authAppleUnavailable.
   ///
   /// In en, this message translates to:
   /// **'Sign in with Apple is not enabled for this app.'**
   String get authAppleUnavailable;
 
-  /// No description provided for @authRequiredTitle.
+  /// Customer-facing app copy for authRequiredTitle.
   ///
   /// In en, this message translates to:
   /// **'Save your personalised\nprotocol'**
   String get authRequiredTitle;
 
-  /// No description provided for @authRequiredBody.
+  /// Customer-facing app copy for authRequiredBody.
   ///
   /// In en, this message translates to:
   /// **'Keep your roadmap, schedule, dose logs, and reminders attached to your account before the protocol unlocks.'**
   String get authRequiredBody;
 
-  /// No description provided for @continueWithEmail.
+  /// Customer-facing app copy for continueWithEmail.
   ///
   /// In en, this message translates to:
   /// **'CONTINUE WITH EMAIL'**
   String get continueWithEmail;
 
-  /// No description provided for @signInWithApple.
+  /// Customer-facing app copy for signInWithApple.
   ///
   /// In en, this message translates to:
   /// **'SIGN IN WITH APPLE'**
   String get signInWithApple;
 
-  /// No description provided for @continueWithGoogle.
+  /// Customer-facing app copy for continueWithGoogle.
   ///
   /// In en, this message translates to:
   /// **'CONTINUE WITH GOOGLE'**
   String get continueWithGoogle;
 
-  /// No description provided for @authTermsDisclaimer.
+  /// Customer-facing app copy for authTermsDisclaimer.
   ///
   /// In en, this message translates to:
   /// **'By continuing you accept our Terms and Privacy Policy. PepMod is an educational tool — not medical advice.'**
   String get authTermsDisclaimer;
 
-  /// No description provided for @signIn.
+  /// Customer-facing app copy for signIn.
   ///
   /// In en, this message translates to:
   /// **'Sign in'**
   String get signIn;
 
-  /// No description provided for @createAccount.
+  /// Customer-facing app copy for createAccount.
   ///
   /// In en, this message translates to:
   /// **'Create account'**
   String get createAccount;
 
-  /// No description provided for @resetPassword.
+  /// Customer-facing app copy for resetPassword.
   ///
   /// In en, this message translates to:
   /// **'Reset password'**
   String get resetPassword;
 
-  /// No description provided for @signInAction.
+  /// Customer-facing app copy for signInAction.
   ///
   /// In en, this message translates to:
   /// **'SIGN IN'**
   String get signInAction;
 
-  /// No description provided for @createAccountAction.
+  /// Customer-facing app copy for createAccountAction.
   ///
   /// In en, this message translates to:
   /// **'CREATE ACCOUNT'**
   String get createAccountAction;
 
-  /// No description provided for @sendResetLink.
+  /// Customer-facing app copy for sendResetLink.
   ///
   /// In en, this message translates to:
   /// **'SEND RESET LINK'**
   String get sendResetLink;
 
-  /// No description provided for @passwordResetSent.
+  /// Customer-facing app copy for passwordResetSent.
   ///
   /// In en, this message translates to:
   /// **'Password reset email sent. Check your inbox.'**
   String get passwordResetSent;
 
-  /// No description provided for @enterEmail.
+  /// Customer-facing app copy for enterEmail.
   ///
   /// In en, this message translates to:
   /// **'Enter your email'**
   String get enterEmail;
 
-  /// No description provided for @enterValidEmail.
+  /// Customer-facing app copy for enterValidEmail.
   ///
   /// In en, this message translates to:
   /// **'Enter a valid email'**
   String get enterValidEmail;
 
-  /// No description provided for @enterPassword.
+  /// Customer-facing app copy for enterPassword.
   ///
   /// In en, this message translates to:
   /// **'Enter a password'**
   String get enterPassword;
 
-  /// No description provided for @passwordMinLength.
+  /// Customer-facing app copy for passwordMinLength.
   ///
   /// In en, this message translates to:
   /// **'At least 6 characters'**
   String get passwordMinLength;
 
-  /// No description provided for @forgotPassword.
+  /// Customer-facing app copy for forgotPassword.
   ///
   /// In en, this message translates to:
   /// **'Forgot password?'**
   String get forgotPassword;
 
-  /// No description provided for @alreadyHaveAccount.
+  /// Customer-facing app copy for alreadyHaveAccount.
   ///
   /// In en, this message translates to:
   /// **'Already have an account? Sign in'**
   String get alreadyHaveAccount;
 
-  /// No description provided for @backToSignIn.
+  /// Customer-facing app copy for backToSignIn.
   ///
   /// In en, this message translates to:
   /// **'Back to sign in'**
   String get backToSignIn;
 
-  /// No description provided for @emailLabel.
+  /// Customer-facing app copy for emailLabel.
   ///
   /// In en, this message translates to:
   /// **'Email'**
   String get emailLabel;
 
-  /// No description provided for @passwordLabel.
+  /// Customer-facing app copy for passwordLabel.
   ///
   /// In en, this message translates to:
   /// **'Password'**
   String get passwordLabel;
 
-  /// No description provided for @showPassword.
+  /// Customer-facing app copy for showPassword.
   ///
   /// In en, this message translates to:
   /// **'Show password'**
   String get showPassword;
 
-  /// No description provided for @hidePassword.
+  /// Customer-facing app copy for hidePassword.
   ///
   /// In en, this message translates to:
   /// **'Hide password'**
   String get hidePassword;
 
-  /// No description provided for @accountDeletedTitle.
+  /// Customer-facing app copy for accountDeletedTitle.
   ///
   /// In en, this message translates to:
   /// **'Account deleted'**
   String get accountDeletedTitle;
 
-  /// No description provided for @accountDeletedBody.
+  /// Customer-facing app copy for accountDeletedBody.
   ///
   /// In en, this message translates to:
   /// **'Your PepMod account and saved app data have been removed.'**
   String get accountDeletedBody;
 
-  /// No description provided for @subscriptionUnavailable.
+  /// Customer-facing app copy for subscriptionUnavailable.
   ///
   /// In en, this message translates to:
   /// **'Subscription plans are not available right now. Please try again.'**
   String get subscriptionUnavailable;
 
-  /// No description provided for @upgradeUnavailable.
+  /// Customer-facing app copy for upgradeUnavailable.
   ///
   /// In en, this message translates to:
   /// **'Upgrade is not available right now. Please try again later.'**
   String get upgradeUnavailable;
 
-  /// No description provided for @noPurchasesToRestore.
+  /// Customer-facing app copy for noPurchasesToRestore.
   ///
   /// In en, this message translates to:
   /// **'No purchases found to restore.'**
   String get noPurchasesToRestore;
 
-  /// No description provided for @unlockFullProtocol.
+  /// Shown when the subscription SDK is not ready or configured.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchases are temporarily unavailable. Please try again shortly.'**
+  String get subscriptionErrorServiceUnavailable;
+
+  /// Shown when available subscription plans cannot be loaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription plans could not be loaded. Check your connection and try again.'**
+  String get subscriptionErrorPlansUnavailable;
+
+  /// Shown when a customer cancels the store purchase flow. Normally suppressed by paywall UI.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase cancelled.'**
+  String get subscriptionErrorPurchaseCancelled;
+
+  /// Shown when device or account restrictions prevent purchases.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchases are not allowed on this device.'**
+  String get subscriptionErrorPurchaseNotAllowed;
+
+  /// Shown when the app store rejects a purchase as invalid.
+  ///
+  /// In en, this message translates to:
+  /// **'The purchase could not be completed. Please check your account and try again.'**
+  String get subscriptionErrorPurchaseInvalid;
+
+  /// Shown when the selected store subscription product is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This subscription is not available right now. Please choose another plan or try again later.'**
+  String get subscriptionErrorProductUnavailable;
+
+  /// Shown when a subscription purchase fails because of network connectivity.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re offline. Check your connection and try again.'**
+  String get subscriptionErrorNetwork;
+
+  /// Generic purchase failure shown when no more specific customer-safe cause is available.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase failed. Please try again.'**
+  String get subscriptionErrorPurchaseFailed;
+
+  /// Shown when restoring previous purchases fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchases could not be restored. Check your connection and try again.'**
+  String get subscriptionErrorRestoreFailed;
+
+  /// Customer-facing app copy for unlockFullProtocol.
   ///
   /// In en, this message translates to:
   /// **'Unlock the full protocol'**
   String get unlockFullProtocol;
 
-  /// No description provided for @premiumUnlimitedPeptides.
+  /// Customer-facing app copy for premiumUnlimitedPeptides.
   ///
   /// In en, this message translates to:
   /// **'Unlimited peptides per protocol'**
   String get premiumUnlimitedPeptides;
 
-  /// No description provided for @premiumMultipleProtocols.
+  /// Customer-facing app copy for premiumMultipleProtocols.
   ///
   /// In en, this message translates to:
   /// **'Multiple active protocols'**
   String get premiumMultipleProtocols;
 
-  /// No description provided for @premiumCalculator.
+  /// Customer-facing app copy for premiumCalculator.
   ///
   /// In en, this message translates to:
   /// **'Reconstitution calculator (all peptides)'**
   String get premiumCalculator;
 
-  /// No description provided for @premiumMetrics.
+  /// Customer-facing app copy for premiumMetrics.
   ///
   /// In en, this message translates to:
   /// **'Body metric tracking + charts'**
   String get premiumMetrics;
 
-  /// No description provided for @upgradeNow.
+  /// Customer-facing app copy for upgradeNow.
   ///
   /// In en, this message translates to:
   /// **'UPGRADE NOW'**
   String get upgradeNow;
 
-  /// No description provided for @restorePurchases.
+  /// Customer-facing app copy for restorePurchases.
   ///
   /// In en, this message translates to:
   /// **'Restore purchases'**
   String get restorePurchases;
 
-  /// No description provided for @notRightNow.
+  /// Customer-facing app copy for notRightNow.
   ///
   /// In en, this message translates to:
   /// **'Not right now'**
@@ -4474,6 +4528,900 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'U-100 · {volume} mL / {capacity} unit'**
   String syringeOption(String volume, String capacity);
+
+  /// Educational reference description for HCG.
+  ///
+  /// In en, this message translates to:
+  /// **'Human chorionic gonadotropin (HCG) is a glycoprotein hormone used in regulated clinical settings and frequently discussed alongside peptide protocols. This entry is provided as a neutral tracking reference for user-entered schedules.'**
+  String get peptideContentHcgDescription;
+
+  /// Reference amount text for HCG; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'User-entered IU'**
+  String get peptideContentHcgTypicalDose;
+
+  /// Educational half-life reference for HCG.
+  ///
+  /// In en, this message translates to:
+  /// **'~24-36 hours'**
+  String get peptideContentHcgHalfLife;
+
+  /// Neutral educational notes for HCG; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Prescription-only in many jurisdictions. Track only what has already been directed by a qualified healthcare professional; PepMod does not provide HCG dosing guidance.'**
+  String get peptideContentHcgNotes;
+
+  /// Educational reference description for BPC-157.
+  ///
+  /// In en, this message translates to:
+  /// **'BPC-157 (Body Protection Compound 157) is a 15-amino-acid synthetic peptide derived from a protein found in gastric juice. It has been studied in animal models for its role in soft-tissue and gut-lining repair. Human clinical data remains limited.'**
+  String get peptideContentBpc157Description;
+
+  /// Reference amount text for BPC-157; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'250–500 mcg'**
+  String get peptideContentBpc157TypicalDose;
+
+  /// Educational half-life reference for BPC-157.
+  ///
+  /// In en, this message translates to:
+  /// **'~4 hours'**
+  String get peptideContentBpc157HalfLife;
+
+  /// Neutral educational notes for BPC-157; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconstitute with bacteriostatic water and store refrigerated. Commonly stacked with TB-500 for tendon and ligament recovery protocols in animal studies.'**
+  String get peptideContentBpc157Notes;
+
+  /// Educational reference description for TB-500.
+  ///
+  /// In en, this message translates to:
+  /// **'TB-500 is a synthetic fragment of the naturally occurring protein thymosin beta-4. In animal studies it has been investigated for roles in cellular migration and tissue regeneration. It is widely used off-label by researchers and in veterinary settings.'**
+  String get peptideContentTb500Description;
+
+  /// Reference amount text for TB-500; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'2–5 mg weekly loading, then 2 mg maintenance'**
+  String get peptideContentTb500TypicalDose;
+
+  /// Educational half-life reference for TB-500.
+  ///
+  /// In en, this message translates to:
+  /// **'~2 days'**
+  String get peptideContentTb500HalfLife;
+
+  /// Neutral educational notes for TB-500; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Often paired with BPC-157 for soft-tissue protocols. Split dosing twice weekly is common due to long half-life.'**
+  String get peptideContentTb500Notes;
+
+  /// Educational reference description for GHK-Cu.
+  ///
+  /// In en, this message translates to:
+  /// **'GHK-Cu (Copper Peptide) is a naturally occurring copper-binding tripeptide present in human plasma. It has been studied in topical cosmetic applications for skin remodelling and hair-follicle signalling.'**
+  String get peptideContentGhkCuDescription;
+
+  /// Reference amount text for GHK-Cu; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'1–2 mg'**
+  String get peptideContentGhkCuTypicalDose;
+
+  /// Educational half-life reference for GHK-Cu.
+  ///
+  /// In en, this message translates to:
+  /// **'~1 hour'**
+  String get peptideContentGhkCuHalfLife;
+
+  /// Neutral educational notes for GHK-Cu; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Also used topically in skincare formulations. Subcutaneous dosing is typically lower than topical concentrations.'**
+  String get peptideContentGhkCuNotes;
+
+  /// Educational reference description for Epitalon.
+  ///
+  /// In en, this message translates to:
+  /// **'Epitalon is a synthetic tetrapeptide analogue of epithalamin, a peptide extracted from the pineal gland. Russian research has explored its effects on telomerase activity and circadian regulation.'**
+  String get peptideContentEpitalonDescription;
+
+  /// Reference amount text for Epitalon; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'5–10 mg per cycle day'**
+  String get peptideContentEpitalonTypicalDose;
+
+  /// Educational half-life reference for Epitalon.
+  ///
+  /// In en, this message translates to:
+  /// **'~30 minutes'**
+  String get peptideContentEpitalonHalfLife;
+
+  /// Neutral educational notes for Epitalon; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Typically run in short pulsed cycles (e.g., 10–20 days on, months off) based on Russian longevity research protocols.'**
+  String get peptideContentEpitalonNotes;
+
+  /// Educational reference description for Semaglutide.
+  ///
+  /// In en, this message translates to:
+  /// **'Semaglutide is a GLP-1 receptor agonist originally developed for type 2 diabetes and later approved for chronic weight management under brand names Ozempic and Wegovy. It slows gastric emptying and modulates appetite signalling.'**
+  String get peptideContentSemaglutideDescription;
+
+  /// Reference amount text for Semaglutide; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'0.25–2.4 mg weekly (titrated)'**
+  String get peptideContentSemaglutideTypicalDose;
+
+  /// Educational half-life reference for Semaglutide.
+  ///
+  /// In en, this message translates to:
+  /// **'~7 days'**
+  String get peptideContentSemaglutideHalfLife;
+
+  /// Neutral educational notes for Semaglutide; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Prescription only in most countries. Titration schedule starts low and increases every 4 weeks to manage GI side effects.'**
+  String get peptideContentSemaglutideNotes;
+
+  /// Educational reference description for Tirzepatide.
+  ///
+  /// In en, this message translates to:
+  /// **'Tirzepatide is a dual GIP/GLP-1 receptor agonist approved for type 2 diabetes (Mounjaro) and obesity (Zepbound). Clinical trials have shown it to produce larger weight reductions than single-agonist GLP-1s.'**
+  String get peptideContentTirzepatideDescription;
+
+  /// Reference amount text for Tirzepatide; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'2.5–15 mg weekly (titrated)'**
+  String get peptideContentTirzepatideTypicalDose;
+
+  /// Educational half-life reference for Tirzepatide.
+  ///
+  /// In en, this message translates to:
+  /// **'~5 days'**
+  String get peptideContentTirzepatideHalfLife;
+
+  /// Neutral educational notes for Tirzepatide; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Prescription only in most countries. Standard titration is 4-week increments. Injected subcutaneously once weekly.'**
+  String get peptideContentTirzepatideNotes;
+
+  /// Educational reference description for Retatrutide.
+  ///
+  /// In en, this message translates to:
+  /// **'Retatrutide is an investigational triple agonist targeting GIP, GLP-1, and glucagon receptors. Phase 2 trials reported weight reductions exceeding those of existing GLP-1-based therapies.'**
+  String get peptideContentRetatrutideDescription;
+
+  /// Reference amount text for Retatrutide; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'Trial doses 1–12 mg weekly'**
+  String get peptideContentRetatrutideTypicalDose;
+
+  /// Educational half-life reference for Retatrutide.
+  ///
+  /// In en, this message translates to:
+  /// **'~6 days'**
+  String get peptideContentRetatrutideHalfLife;
+
+  /// Neutral educational notes for Retatrutide; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Still investigational — not FDA approved at time of writing. Any use outside a clinical trial is strictly research-only.'**
+  String get peptideContentRetatrutideNotes;
+
+  /// Educational reference description for Ipamorelin.
+  ///
+  /// In en, this message translates to:
+  /// **'Ipamorelin is a pentapeptide ghrelin-mimetic and selective growth-hormone secretagogue. It has been investigated for its ability to stimulate a pulsatile GH release with minimal effect on cortisol or prolactin.'**
+  String get peptideContentIpamorelinDescription;
+
+  /// Reference amount text for Ipamorelin; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'200–300 mcg per injection'**
+  String get peptideContentIpamorelinTypicalDose;
+
+  /// Educational half-life reference for Ipamorelin.
+  ///
+  /// In en, this message translates to:
+  /// **'~2 hours'**
+  String get peptideContentIpamorelinHalfLife;
+
+  /// Neutral educational notes for Ipamorelin; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Commonly stacked with CJC-1295 (no DAC) for a synergistic GH pulse. Typical timing: before bed and/or pre-workout on an empty stomach.'**
+  String get peptideContentIpamorelinNotes;
+
+  /// Educational reference description for CJC-1295 (with DAC).
+  ///
+  /// In en, this message translates to:
+  /// **'CJC-1295 is a synthetic GHRH analogue. The DAC (Drug Affinity Complex) variant binds to serum albumin, extending its half-life and producing sustained GH levels rather than discrete pulses.'**
+  String get peptideContentCjc1295DacDescription;
+
+  /// Reference amount text for CJC-1295 (with DAC); this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'1–2 mg weekly'**
+  String get peptideContentCjc1295DacTypicalDose;
+
+  /// Educational half-life reference for CJC-1295 (with DAC).
+  ///
+  /// In en, this message translates to:
+  /// **'~8 days'**
+  String get peptideContentCjc1295DacHalfLife;
+
+  /// Neutral educational notes for CJC-1295 (with DAC); preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Long-acting — typically dosed once or twice per week. Elevates baseline GH/IGF-1 rather than producing sharp pulses.'**
+  String get peptideContentCjc1295DacNotes;
+
+  /// Educational reference description for CJC-1295 (no DAC).
+  ///
+  /// In en, this message translates to:
+  /// **'CJC-1295 without DAC — also known as Mod-GRF(1-29) — is a GHRH analogue with a short half-life. It is typically combined with a GHRP such as Ipamorelin to trigger natural pulsatile GH release.'**
+  String get peptideContentCjc1295NoDacDescription;
+
+  /// Reference amount text for CJC-1295 (no DAC); this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'100 mcg per injection'**
+  String get peptideContentCjc1295NoDacTypicalDose;
+
+  /// Educational half-life reference for CJC-1295 (no DAC).
+  ///
+  /// In en, this message translates to:
+  /// **'~30 minutes'**
+  String get peptideContentCjc1295NoDacHalfLife;
+
+  /// Neutral educational notes for CJC-1295 (no DAC); preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Short acting — stack with a GHRP (Ipamorelin, GHRP-2, GHRP-6) to amplify GH pulses. Usually dosed 1–3x per day on an empty stomach.'**
+  String get peptideContentCjc1295NoDacNotes;
+
+  /// Educational reference description for Tesamorelin.
+  ///
+  /// In en, this message translates to:
+  /// **'Tesamorelin is a stabilised GHRH analogue approved to reduce excess abdominal visceral fat in HIV-associated lipodystrophy (brand name Egrifta). It has also been studied in cognitive ageing contexts.'**
+  String get peptideContentTesamorelinDescription;
+
+  /// Reference amount text for Tesamorelin; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'1–2 mg daily'**
+  String get peptideContentTesamorelinTypicalDose;
+
+  /// Educational half-life reference for Tesamorelin.
+  ///
+  /// In en, this message translates to:
+  /// **'~30 minutes'**
+  String get peptideContentTesamorelinHalfLife;
+
+  /// Neutral educational notes for Tesamorelin; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Prescription medication. Primarily studied for visceral adipose tissue reduction. Administered once daily subcutaneously.'**
+  String get peptideContentTesamorelinNotes;
+
+  /// Educational reference description for MOTS-c.
+  ///
+  /// In en, this message translates to:
+  /// **'MOTS-c is a mitochondrial-derived peptide encoded within the MT-RNR1 gene. Research has investigated its role in metabolic homeostasis, insulin sensitivity, and exercise physiology.'**
+  String get peptideContentMotsCDescription;
+
+  /// Reference amount text for MOTS-c; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'5–10 mg 2–3x per week'**
+  String get peptideContentMotsCTypicalDose;
+
+  /// Educational half-life reference for MOTS-c.
+  ///
+  /// In en, this message translates to:
+  /// **'~90 minutes'**
+  String get peptideContentMotsCHalfLife;
+
+  /// Neutral educational notes for MOTS-c; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Research still emerging. Some users report improved exercise recovery and metabolic markers in self-experiment logs.'**
+  String get peptideContentMotsCNotes;
+
+  /// Educational reference description for Cerebrolysin.
+  ///
+  /// In en, this message translates to:
+  /// **'Cerebrolysin is a mixture of low-molecular-weight peptides and amino acids derived from porcine brain tissue. It is prescribed in several European and Asian countries for neurodegenerative and stroke-recovery indications.'**
+  String get peptideContentCerebrolysinDescription;
+
+  /// Reference amount text for Cerebrolysin; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'5–30 ml ampoules (clinical setting)'**
+  String get peptideContentCerebrolysinTypicalDose;
+
+  /// Educational half-life reference for Cerebrolysin.
+  ///
+  /// In en, this message translates to:
+  /// **'Variable (mixture)'**
+  String get peptideContentCerebrolysinHalfLife;
+
+  /// Neutral educational notes for Cerebrolysin; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Typically administered as a course under clinical supervision. Not available in the US. Research in ischemic stroke and Alzheimer\'s disease.'**
+  String get peptideContentCerebrolysinNotes;
+
+  /// Educational reference description for Selank.
+  ///
+  /// In en, this message translates to:
+  /// **'Selank is a synthetic heptapeptide developed in Russia as an analogue of the immunomodulatory peptide tuftsin. It has been studied for anxiolytic effects without the sedation or dependence of benzodiazepines.'**
+  String get peptideContentSelankDescription;
+
+  /// Reference amount text for Selank; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'250–500 mcg intranasally'**
+  String get peptideContentSelankTypicalDose;
+
+  /// Educational half-life reference for Selank.
+  ///
+  /// In en, this message translates to:
+  /// **'~few minutes (systemic)'**
+  String get peptideContentSelankHalfLife;
+
+  /// Neutral educational notes for Selank; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Most commonly administered intranasally. Russian research focuses on anxiety and attention. Short half-life but reported effects last several hours.'**
+  String get peptideContentSelankNotes;
+
+  /// Educational reference description for Semax.
+  ///
+  /// In en, this message translates to:
+  /// **'Semax is a synthetic heptapeptide derived from a fragment of ACTH (4–10). Russian research has investigated its nootropic and neuroprotective effects, particularly in stroke recovery protocols.'**
+  String get peptideContentSemaxDescription;
+
+  /// Reference amount text for Semax; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'250–1000 mcg intranasally'**
+  String get peptideContentSemaxTypicalDose;
+
+  /// Educational half-life reference for Semax.
+  ///
+  /// In en, this message translates to:
+  /// **'~30 minutes'**
+  String get peptideContentSemaxHalfLife;
+
+  /// Neutral educational notes for Semax; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Intranasal administration is typical. Approved in Russia for ischaemic stroke. Often cycled with Selank for complementary effects.'**
+  String get peptideContentSemaxNotes;
+
+  /// Educational reference description for Melanotan II.
+  ///
+  /// In en, this message translates to:
+  /// **'Melanotan II is a synthetic analogue of the alpha-melanocyte-stimulating hormone (α-MSH). It was originally developed as a potential sunless tanning agent and has also been associated with appetite and libido effects.'**
+  String get peptideContentMelanotanIiDescription;
+
+  /// Reference amount text for Melanotan II; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'250–1000 mcg loading, then maintenance'**
+  String get peptideContentMelanotanIiTypicalDose;
+
+  /// Educational half-life reference for Melanotan II.
+  ///
+  /// In en, this message translates to:
+  /// **'~1 hour'**
+  String get peptideContentMelanotanIiHalfLife;
+
+  /// Neutral educational notes for Melanotan II; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Not approved for any medical use. Common reported side effects include nausea and darkening of existing moles. Any new or changing mole should be evaluated by a dermatologist.'**
+  String get peptideContentMelanotanIiNotes;
+
+  /// Educational reference description for PT-141 (Bremelanotide).
+  ///
+  /// In en, this message translates to:
+  /// **'PT-141, also known as Bremelanotide and marketed as Vyleesi, is a melanocortin receptor agonist approved by the FDA for hypoactive sexual desire disorder in premenopausal women. It acts on central nervous system pathways.'**
+  String get peptideContentPt141Description;
+
+  /// Reference amount text for PT-141 (Bremelanotide); this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'1.25–1.75 mg as needed'**
+  String get peptideContentPt141TypicalDose;
+
+  /// Educational half-life reference for PT-141 (Bremelanotide).
+  ///
+  /// In en, this message translates to:
+  /// **'~2 hours'**
+  String get peptideContentPt141HalfLife;
+
+  /// Neutral educational notes for PT-141 (Bremelanotide); preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Prescription medication in some markets. Taken as needed rather than on a fixed schedule. Common side effects include nausea and transient blood pressure increases.'**
+  String get peptideContentPt141Notes;
+
+  /// Educational reference description for DSIP.
+  ///
+  /// In en, this message translates to:
+  /// **'Delta Sleep-Inducing Peptide (DSIP) is a nonapeptide isolated from rabbit brain in the 1970s. It has been studied for possible roles in sleep regulation, pain modulation, and stress response, though mechanisms remain unclear.'**
+  String get peptideContentDsipDescription;
+
+  /// Reference amount text for DSIP; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'100–500 mcg before bed'**
+  String get peptideContentDsipTypicalDose;
+
+  /// Educational half-life reference for DSIP.
+  ///
+  /// In en, this message translates to:
+  /// **'~7 minutes'**
+  String get peptideContentDsipHalfLife;
+
+  /// Neutral educational notes for DSIP; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Typically administered before bed. Short plasma half-life but reported effects may outlast it. Evidence base remains limited.'**
+  String get peptideContentDsipNotes;
+
+  /// Educational reference description for Thymosin Alpha-1.
+  ///
+  /// In en, this message translates to:
+  /// **'Thymosin Alpha-1 is a 28-amino-acid peptide originally isolated from thymus tissue. It has been approved in multiple countries as an adjunct immune-modulating therapy (brand name Zadaxin) for hepatitis B and C.'**
+  String get peptideContentThymosinAlpha1Description;
+
+  /// Reference amount text for Thymosin Alpha-1; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'1.6 mg twice weekly'**
+  String get peptideContentThymosinAlpha1TypicalDose;
+
+  /// Educational half-life reference for Thymosin Alpha-1.
+  ///
+  /// In en, this message translates to:
+  /// **'~2 hours'**
+  String get peptideContentThymosinAlpha1HalfLife;
+
+  /// Neutral educational notes for Thymosin Alpha-1; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Used in several international markets as part of immune-modulation protocols. Typically administered twice weekly. Research continues in various indications.'**
+  String get peptideContentThymosinAlpha1Notes;
+
+  /// Educational reference description for NAD+.
+  ///
+  /// In en, this message translates to:
+  /// **'NAD+ (nicotinamide adenine dinucleotide) is a coenzyme central to cellular energy metabolism and DNA repair. Injectable NAD+ and its precursors (NR, NMN) are studied in the context of mitochondrial health and ageing.'**
+  String get peptideContentNadPlusDescription;
+
+  /// Reference amount text for NAD+; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'100–500 mg IV or SubQ per session'**
+  String get peptideContentNadPlusTypicalDose;
+
+  /// Educational half-life reference for NAD+.
+  ///
+  /// In en, this message translates to:
+  /// **'~90 minutes'**
+  String get peptideContentNadPlusHalfLife;
+
+  /// Neutral educational notes for NAD+; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Technically a coenzyme rather than a peptide, but commonly grouped with longevity protocols. Slow infusion is recommended to minimise flushing and discomfort.'**
+  String get peptideContentNadPlusNotes;
+
+  /// Educational reference description for Sermorelin.
+  ///
+  /// In en, this message translates to:
+  /// **'Sermorelin is a synthetic analogue of growth hormone-releasing hormone (GHRH). It has been used clinically as a diagnostic agent for growth-hormone reserve and is commonly discussed in wellness settings as a GH-axis support peptide.'**
+  String get peptideContentSermorelinDescription;
+
+  /// Reference amount text for Sermorelin; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'100–300 mcg before bed'**
+  String get peptideContentSermorelinTypicalDose;
+
+  /// Educational half-life reference for Sermorelin.
+  ///
+  /// In en, this message translates to:
+  /// **'~10–20 minutes'**
+  String get peptideContentSermorelinHalfLife;
+
+  /// Neutral educational notes for Sermorelin; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Often compared with CJC-1295 no-DAC because both act on the GHRH pathway. Short half-life makes evening dosing common in non-clinical protocols.'**
+  String get peptideContentSermorelinNotes;
+
+  /// Educational reference description for AOD-9604.
+  ///
+  /// In en, this message translates to:
+  /// **'AOD-9604 is a modified fragment of human growth hormone, derived from the 176–191 region. It has been investigated for metabolic and lipolysis signalling, but published human evidence is limited and mixed.'**
+  String get peptideContentAod9604Description;
+
+  /// Reference amount text for AOD-9604; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'250–500 mcg daily'**
+  String get peptideContentAod9604TypicalDose;
+
+  /// Educational half-life reference for AOD-9604.
+  ///
+  /// In en, this message translates to:
+  /// **'~30 minutes'**
+  String get peptideContentAod9604HalfLife;
+
+  /// Neutral educational notes for AOD-9604; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Also called HGH fragment 176–191 in some discussions. Not an approved weight-loss drug; use neutral tracking language and avoid outcome guarantees.'**
+  String get peptideContentAod9604Notes;
+
+  /// Educational reference description for KPV.
+  ///
+  /// In en, this message translates to:
+  /// **'KPV is a short tripeptide sequence (lysine-proline-valine) derived from alpha-melanocyte-stimulating hormone. It is discussed in research contexts for immune and gut-barrier signalling.'**
+  String get peptideContentKpvDescription;
+
+  /// Reference amount text for KPV; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'250–500 mcg daily'**
+  String get peptideContentKpvTypicalDose;
+
+  /// Educational half-life reference for KPV.
+  ///
+  /// In en, this message translates to:
+  /// **'Not well established'**
+  String get peptideContentKpvHalfLife;
+
+  /// Neutral educational notes for KPV; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Appears in gut-health and topical discussions, including informal stacks with BPC-157. Human dosing evidence is limited, so protocols should be conservative.'**
+  String get peptideContentKpvNotes;
+
+  /// Educational reference description for SS-31 (Elamipretide).
+  ///
+  /// In en, this message translates to:
+  /// **'SS-31, also known as Elamipretide, is a mitochondria-targeted tetrapeptide studied for interactions with cardiolipin and mitochondrial membrane function. Clinical research has focused on rare mitochondrial and cardiac conditions.'**
+  String get peptideContentSs31Description;
+
+  /// Reference amount text for SS-31 (Elamipretide); this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'Trial protocols vary'**
+  String get peptideContentSs31TypicalDose;
+
+  /// Educational half-life reference for SS-31 (Elamipretide).
+  ///
+  /// In en, this message translates to:
+  /// **'~4 hours'**
+  String get peptideContentSs31HalfLife;
+
+  /// Neutral educational notes for SS-31 (Elamipretide); preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Investigational in many contexts. Community protocols often differ from clinical-trial formulations and should be treated as research-only.'**
+  String get peptideContentSs31Notes;
+
+  /// Educational reference description for LL-37.
+  ///
+  /// In en, this message translates to:
+  /// **'LL-37 is a human cathelicidin antimicrobial peptide involved in innate immune signalling. It is discussed in research communities for host-defense and tissue-response pathways, but safety considerations are significant.'**
+  String get peptideContentLl37Description;
+
+  /// Reference amount text for LL-37; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'Research protocols vary'**
+  String get peptideContentLl37TypicalDose;
+
+  /// Educational half-life reference for LL-37.
+  ///
+  /// In en, this message translates to:
+  /// **'Not well established'**
+  String get peptideContentLl37HalfLife;
+
+  /// Neutral educational notes for LL-37; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Highly experimental outside controlled research. Because antimicrobial peptides can affect immune signalling, conservative educational framing is important.'**
+  String get peptideContentLl37Notes;
+
+  /// Educational reference description for Dihexa.
+  ///
+  /// In en, this message translates to:
+  /// **'Dihexa is an orally active angiotensin IV-derived peptide analogue studied preclinically for hepatocyte growth factor/c-Met signalling and synaptogenic activity. Human safety and efficacy data are not established.'**
+  String get peptideContentDihexaDescription;
+
+  /// Reference amount text for Dihexa; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'Research-only; protocols vary'**
+  String get peptideContentDihexaTypicalDose;
+
+  /// Educational half-life reference for Dihexa.
+  ///
+  /// In en, this message translates to:
+  /// **'Not well established'**
+  String get peptideContentDihexaHalfLife;
+
+  /// Neutral educational notes for Dihexa; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular in nootropic discussions but very experimental. Treat as a research compound entry rather than a suggested protocol.'**
+  String get peptideContentDihexaNotes;
+
+  /// Educational reference description for GHRP-2.
+  ///
+  /// In en, this message translates to:
+  /// **'GHRP-2 is a synthetic growth hormone-releasing peptide that acts as a ghrelin receptor agonist. It has been studied for GH secretion, appetite signalling, and endocrine testing.'**
+  String get peptideContentGhrp2Description;
+
+  /// Reference amount text for GHRP-2; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'100–300 mcg per injection'**
+  String get peptideContentGhrp2TypicalDose;
+
+  /// Educational half-life reference for GHRP-2.
+  ///
+  /// In en, this message translates to:
+  /// **'~20–30 minutes'**
+  String get peptideContentGhrp2HalfLife;
+
+  /// Neutral educational notes for GHRP-2; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Often paired with a GHRH analogue such as CJC-1295 no-DAC or Sermorelin. It may affect appetite, cortisol, and prolactin more than Ipamorelin.'**
+  String get peptideContentGhrp2Notes;
+
+  /// Educational reference description for GHRP-6.
+  ///
+  /// In en, this message translates to:
+  /// **'GHRP-6 is a synthetic hexapeptide and ghrelin receptor agonist studied for growth-hormone release and appetite signalling. It is one of the older peptides in the GHRP family.'**
+  String get peptideContentGhrp6Description;
+
+  /// Reference amount text for GHRP-6; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'100–300 mcg per injection'**
+  String get peptideContentGhrp6TypicalDose;
+
+  /// Educational half-life reference for GHRP-6.
+  ///
+  /// In en, this message translates to:
+  /// **'~20–30 minutes'**
+  String get peptideContentGhrp6HalfLife;
+
+  /// Neutral educational notes for GHRP-6; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Community use often emphasises appetite stimulation. More selective options such as Ipamorelin are commonly preferred when appetite effects are unwanted.'**
+  String get peptideContentGhrp6Notes;
+
+  /// Educational reference description for Hexarelin.
+  ///
+  /// In en, this message translates to:
+  /// **'Hexarelin is a synthetic growth hormone secretagogue and ghrelin receptor agonist studied for GH release and cardiovascular research signals. It is generally considered one of the more potent GHRPs.'**
+  String get peptideContentHexarelinDescription;
+
+  /// Reference amount text for Hexarelin; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'100–200 mcg per injection'**
+  String get peptideContentHexarelinTypicalDose;
+
+  /// Educational half-life reference for Hexarelin.
+  ///
+  /// In en, this message translates to:
+  /// **'~70 minutes'**
+  String get peptideContentHexarelinHalfLife;
+
+  /// Neutral educational notes for Hexarelin; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Often cycled more conservatively than Ipamorelin due to potency and desensitisation concerns discussed in research communities.'**
+  String get peptideContentHexarelinNotes;
+
+  /// Educational reference description for IGF-1 LR3.
+  ///
+  /// In en, this message translates to:
+  /// **'IGF-1 LR3 is a modified insulin-like growth factor-1 analogue with amino-acid substitutions that reduce binding-protein affinity and extend activity. It is discussed mostly in advanced performance and cell-growth research contexts.'**
+  String get peptideContentIgf1Lr3Description;
+
+  /// Reference amount text for IGF-1 LR3; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'20–50 mcg daily in research protocols'**
+  String get peptideContentIgf1Lr3TypicalDose;
+
+  /// Educational half-life reference for IGF-1 LR3.
+  ///
+  /// In en, this message translates to:
+  /// **'~20–30 hours'**
+  String get peptideContentIgf1Lr3HalfLife;
+
+  /// Neutral educational notes for IGF-1 LR3; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Higher-risk research compound. Potential glucose and tissue-growth signalling concerns make medical supervision especially important.'**
+  String get peptideContentIgf1Lr3Notes;
+
+  /// Educational reference description for IGF-1 DES.
+  ///
+  /// In en, this message translates to:
+  /// **'IGF-1 DES is a shorter IGF-1 analogue missing the first three amino acids. It is discussed as a shorter-acting IGF variant in local tissue-signalling research.'**
+  String get peptideContentIgf1DesDescription;
+
+  /// Reference amount text for IGF-1 DES; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'20–50 mcg in research protocols'**
+  String get peptideContentIgf1DesTypicalDose;
+
+  /// Educational half-life reference for IGF-1 DES.
+  ///
+  /// In en, this message translates to:
+  /// **'~20–30 minutes'**
+  String get peptideContentIgf1DesHalfLife;
+
+  /// Neutral educational notes for IGF-1 DES; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Very advanced and experimental. Avoid broad protocol suggestions because human safety data and appropriate monitoring are limited.'**
+  String get peptideContentIgf1DesNotes;
+
+  /// Educational reference description for PEG-MGF.
+  ///
+  /// In en, this message translates to:
+  /// **'PEG-MGF is a pegylated variant of mechano growth factor, an IGF-1 splice-variant peptide. The pegylation is intended to extend circulation time compared with unmodified MGF.'**
+  String get peptideContentPegMgfDescription;
+
+  /// Reference amount text for PEG-MGF; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'100–300 mcg weekly in research protocols'**
+  String get peptideContentPegMgfTypicalDose;
+
+  /// Educational half-life reference for PEG-MGF.
+  ///
+  /// In en, this message translates to:
+  /// **'Extended by PEGylation'**
+  String get peptideContentPegMgfHalfLife;
+
+  /// Neutral educational notes for PEG-MGF; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Common in performance forums but not an approved therapy. Treat as an advanced research entry with conservative tracking defaults.'**
+  String get peptideContentPegMgfNotes;
+
+  /// Educational reference description for MK-677 (Ibutamoren).
+  ///
+  /// In en, this message translates to:
+  /// **'MK-677, also known as Ibutamoren, is an orally active ghrelin receptor agonist and growth-hormone secretagogue. It is not a peptide, but it is commonly discussed alongside GH-axis peptides.'**
+  String get peptideContentMk677Description;
+
+  /// Reference amount text for MK-677 (Ibutamoren); this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'10–25 mg daily'**
+  String get peptideContentMk677TypicalDose;
+
+  /// Educational half-life reference for MK-677 (Ibutamoren).
+  ///
+  /// In en, this message translates to:
+  /// **'~24 hours'**
+  String get peptideContentMk677HalfLife;
+
+  /// Neutral educational notes for MK-677 (Ibutamoren); preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Related compound, not a peptide. Community discussions often mention appetite, water retention, sleep, and glucose-monitoring considerations.'**
+  String get peptideContentMk677Notes;
+
+  /// Educational reference description for 5-Amino-1MQ.
+  ///
+  /// In en, this message translates to:
+  /// **'5-Amino-1MQ is a small-molecule NNMT inhibitor discussed in metabolic and body-composition communities. It is not a peptide, but it often appears in peptide-adjacent longevity and fat-loss stacks.'**
+  String get peptideContentFiveAmino1mqDescription;
+
+  /// Reference amount text for 5-Amino-1MQ; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'25–100 mg daily'**
+  String get peptideContentFiveAmino1mqTypicalDose;
+
+  /// Educational half-life reference for 5-Amino-1MQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Not well established'**
+  String get peptideContentFiveAmino1mqHalfLife;
+
+  /// Neutral educational notes for 5-Amino-1MQ; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Related compound, not a peptide. Human evidence is limited; avoid claims about fat loss or insulin sensitivity outcomes.'**
+  String get peptideContentFiveAmino1mqNotes;
+
+  /// Educational reference description for Tesofensine.
+  ///
+  /// In en, this message translates to:
+  /// **'Tesofensine is an oral monoamine reuptake inhibitor investigated for obesity and neurodegenerative conditions. It is not a peptide, but it is frequently discussed in weight-management communities near GLP-1 compounds.'**
+  String get peptideContentTesofensineDescription;
+
+  /// Reference amount text for Tesofensine; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'0.25–0.5 mg daily in studies'**
+  String get peptideContentTesofensineTypicalDose;
+
+  /// Educational half-life reference for Tesofensine.
+  ///
+  /// In en, this message translates to:
+  /// **'~9 days'**
+  String get peptideContentTesofensineHalfLife;
+
+  /// Neutral educational notes for Tesofensine; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Related compound, not a peptide. Because it affects neurotransmitter pathways, blood pressure, heart rate, and interaction screening matter.'**
+  String get peptideContentTesofensineNotes;
+
+  /// Educational reference description for RU-58841.
+  ///
+  /// In en, this message translates to:
+  /// **'RU-58841 is a topical nonsteroidal antiandrogen researched for androgen-receptor signalling in hair-follicle contexts. It is not a peptide, but it is often discussed in peptide-adjacent aesthetic communities.'**
+  String get peptideContentRu58841Description;
+
+  /// Reference amount text for RU-58841; this is not a dosing recommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'Topical 25–50 mg daily in informal protocols'**
+  String get peptideContentRu58841TypicalDose;
+
+  /// Educational half-life reference for RU-58841.
+  ///
+  /// In en, this message translates to:
+  /// **'Not well established'**
+  String get peptideContentRu58841HalfLife;
+
+  /// Neutral educational notes for RU-58841; preserve non-prescriptive framing.
+  ///
+  /// In en, this message translates to:
+  /// **'Related compound, not a peptide and not an approved medication. Quality-control and systemic exposure concerns are common discussion points.'**
+  String get peptideContentRu58841Notes;
+
+  /// Safety disclaimer shown below every bundled peptide reference. Preserve educational-only, non-medical-advice wording.
+  ///
+  /// In en, this message translates to:
+  /// **'For educational reference only. Not medical advice. Research peptides are not approved for human use in most jurisdictions — always consult a qualified healthcare provider.'**
+  String get peptideContentEducationalDisclaimer;
 }
 
 class _AppLocalizationsDelegate

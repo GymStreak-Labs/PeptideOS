@@ -408,6 +408,41 @@ class AppLocalizationsPt extends AppLocalizations {
       'Não foram encontradas compras para restaurar.';
 
   @override
+  String get subscriptionErrorServiceUnavailable =>
+      'As compras estão temporariamente indisponíveis. Tente novamente dentro de instantes.';
+
+  @override
+  String get subscriptionErrorPlansUnavailable =>
+      'Não foi possível carregar os planos de subscrição. Verifique a sua ligação e tente novamente.';
+
+  @override
+  String get subscriptionErrorPurchaseCancelled => 'Compra cancelada.';
+
+  @override
+  String get subscriptionErrorPurchaseNotAllowed =>
+      'As compras não são permitidas neste dispositivo.';
+
+  @override
+  String get subscriptionErrorPurchaseInvalid =>
+      'Não foi possível concluir a compra. Verifique a sua conta e tente novamente.';
+
+  @override
+  String get subscriptionErrorProductUnavailable =>
+      'Esta subscrição não está disponível de momento. Escolha outro plano ou tente novamente mais tarde.';
+
+  @override
+  String get subscriptionErrorNetwork =>
+      'Está offline. Verifique a sua ligação e tente novamente.';
+
+  @override
+  String get subscriptionErrorPurchaseFailed =>
+      'Falha na compra. Tente novamente.';
+
+  @override
+  String get subscriptionErrorRestoreFailed =>
+      'Não foi possível restaurar as compras. Verifique a sua ligação e tente novamente.';
+
+  @override
   String get unlockFullProtocol => 'Desbloquear o protocolo completo';
 
   @override
@@ -2512,6 +2547,547 @@ class AppLocalizationsPt extends AppLocalizations {
   String syringeOption(String volume, String capacity) {
     return 'U-100 · $volume ml / $capacity unidade';
   }
+
+  @override
+  String get peptideContentHcgDescription =>
+      'A gonadotrofina coriónica humana (HCG) é uma hormona glicoproteica utilizada em contextos clínicos regulados e frequentemente mencionada a par de protocolos de peptídeos. Esta entrada é fornecida como uma referência neutra de registo para os horários introduzidos pelo utilizador.';
+
+  @override
+  String get peptideContentHcgTypicalDose => 'UI inseridas pelo utilizador';
+
+  @override
+  String get peptideContentHcgHalfLife => '~24-36 horas';
+
+  @override
+  String get peptideContentHcgNotes =>
+      'Sujeito a receita médica em muitas jurisdições. Registe apenas o que já foi indicado por um profissional de saúde qualificado; o PepMod não fornece orientações de dosagem para HCG.';
+
+  @override
+  String get peptideContentBpc157Description =>
+      'O BPC-157 (Body Protection Compound 157) é um peptídeo sintético de 15 aminoácidos derivado de uma proteína encontrada no suco gástrico. Tem sido estudado em modelos animais quanto ao seu papel na reparação de tecidos moles e do revestimento intestinal. Os dados clínicos em humanos continuam limitados.';
+
+  @override
+  String get peptideContentBpc157TypicalDose => '250–500 mcg';
+
+  @override
+  String get peptideContentBpc157HalfLife => '~4 horas';
+
+  @override
+  String get peptideContentBpc157Notes =>
+      'Em estudos com animais, o BPC-157 é frequentemente mencionado em conjunto com o TB-500 em protocolos de investigação sobre tendões e ligamentos. Esta referência não constitui instruções de reconstituição ou utilização.';
+
+  @override
+  String get peptideContentTb500Description =>
+      'O TB-500 é um fragmento sintético da proteína natural timosina beta-4. Em estudos com animais, tem sido investigado quanto ao seu papel na migração celular e na regeneração de tecidos. É amplamente utilizado fora das indicações aprovadas por investigadores e em contextos veterinários.';
+
+  @override
+  String get peptideContentTb500TypicalDose =>
+      '2–5 mg semanais de carga, depois 2 mg de manutenção';
+
+  @override
+  String get peptideContentTb500HalfLife => '~2 dias';
+
+  @override
+  String get peptideContentTb500Notes =>
+      'Frequentemente associado ao BPC-157 em protocolos de tecidos moles. A divisão da dose duas vezes por semana é comum devido à longa meia-vida.';
+
+  @override
+  String get peptideContentGhkCuDescription =>
+      'O GHK-Cu (peptídeo de cobre) é um tripeptídeo natural de ligação ao cobre presente no plasma humano. Tem sido estudado em aplicações cosméticas tópicas quanto à remodelação da pele e à sinalização dos folículos capilares.';
+
+  @override
+  String get peptideContentGhkCuTypicalDose => '1–2 mg';
+
+  @override
+  String get peptideContentGhkCuHalfLife => '~1 hora';
+
+  @override
+  String get peptideContentGhkCuNotes =>
+      'Também utilizado topicamente em formulações de cuidados da pele. A dosagem subcutânea é normalmente inferior às concentrações tópicas.';
+
+  @override
+  String get peptideContentEpitalonDescription =>
+      'O Epitalon é um tetrapeptídeo sintético análogo da epitalamina, um peptídeo extraído da glândula pineal. A investigação russa explorou os seus efeitos na atividade da telomerase e na regulação circadiana.';
+
+  @override
+  String get peptideContentEpitalonTypicalDose => '5–10 mg por dia de ciclo';
+
+  @override
+  String get peptideContentEpitalonHalfLife => '~30 minutos';
+
+  @override
+  String get peptideContentEpitalonNotes =>
+      'Normalmente utilizado em ciclos curtos e pulsados (por exemplo, 10–20 dias de uso seguidos de meses de pausa), com base em protocolos de investigação russa sobre longevidade.';
+
+  @override
+  String get peptideContentSemaglutideDescription =>
+      'A semaglutida é um agonista do receptor de GLP-1, originalmente desenvolvida para a diabetes tipo 2 e mais tarde aprovada para o controlo crónico do peso sob as marcas Ozempic e Wegovy. Retarda o esvaziamento gástrico e modula a sinalização do apetite.';
+
+  @override
+  String get peptideContentSemaglutideTypicalDose =>
+      '0,25–2,4 mg semanais (titulado)';
+
+  @override
+  String get peptideContentSemaglutideHalfLife => '~7 dias';
+
+  @override
+  String get peptideContentSemaglutideNotes =>
+      'Sujeito a receita médica na maioria dos países. O esquema de titulação começa com uma dose baixa e aumenta a cada 4 semanas para gerir efeitos secundários gastrointestinais.';
+
+  @override
+  String get peptideContentTirzepatideDescription =>
+      'A tirzepatida é um agonista duplo dos receptores GIP/GLP-1 aprovado para a diabetes tipo 2 (Mounjaro) e a obesidade (Zepbound). Os ensaios clínicos demonstraram que produz reduções de peso superiores às dos agonistas únicos de GLP-1.';
+
+  @override
+  String get peptideContentTirzepatideTypicalDose =>
+      '2,5–15 mg semanais (titulado)';
+
+  @override
+  String get peptideContentTirzepatideHalfLife => '~5 dias';
+
+  @override
+  String get peptideContentTirzepatideNotes =>
+      'Sujeito a receita médica na maioria dos países. A titulação padrão é feita em incrementos de 4 semanas. Injetado por via subcutânea uma vez por semana.';
+
+  @override
+  String get peptideContentRetatrutideDescription =>
+      'A retatrutida é um agonista triplo experimental que atua nos receptores de GIP, GLP-1 e glucagon. Os ensaios de fase 2 relataram reduções de peso superiores às das terapias existentes baseadas em GLP-1.';
+
+  @override
+  String get peptideContentRetatrutideTypicalDose =>
+      'Doses de ensaio de 1–12 mg semanais';
+
+  @override
+  String get peptideContentRetatrutideHalfLife => '~6 dias';
+
+  @override
+  String get peptideContentRetatrutideNotes =>
+      'Ainda em fase de investigação — não aprovado pela FDA no momento da redação. Qualquer utilização fora de um ensaio clínico destina-se estritamente à investigação.';
+
+  @override
+  String get peptideContentIpamorelinDescription =>
+      'A ipamorelina é um pentapeptídeo mimético da grelina e secretagogo seletivo da hormona do crescimento. Tem sido investigada quanto à sua capacidade de estimular uma libertação pulsátil de GH com efeito mínimo no cortisol ou na prolactina.';
+
+  @override
+  String get peptideContentIpamorelinTypicalDose => '200–300 mcg por injeção';
+
+  @override
+  String get peptideContentIpamorelinHalfLife => '~2 horas';
+
+  @override
+  String get peptideContentIpamorelinNotes =>
+      'Frequentemente combinado com CJC-1295 (sem DAC) para um pulso sinérgico de GH. Momento típico: antes de dormir e/ou antes do treino, em jejum.';
+
+  @override
+  String get peptideContentCjc1295DacDescription =>
+      'O CJC-1295 é um análogo sintético da GHRH. A variante DAC (Drug Affinity Complex) liga-se à albumina sérica, prolongando a sua semivida e produzindo níveis sustentados de GH em vez de picos discretos.';
+
+  @override
+  String get peptideContentCjc1295DacTypicalDose => '1–2 mg semanais';
+
+  @override
+  String get peptideContentCjc1295DacHalfLife => '~8 dias';
+
+  @override
+  String get peptideContentCjc1295DacNotes =>
+      'Ação prolongada — normalmente dosado uma a duas vezes por semana. Eleva os níveis basais de GH/IGF-1 em vez de produzir pulsos acentuados.';
+
+  @override
+  String get peptideContentCjc1295NoDacDescription =>
+      'O CJC-1295 sem DAC — também conhecido como Mod-GRF(1-29) — é um análogo da GHRH com uma semivida curta. É normalmente combinado com um GHRP, como a ipamorelina, para desencadear a libertação pulsátil natural de GH.';
+
+  @override
+  String get peptideContentCjc1295NoDacTypicalDose => '100 mcg por injeção';
+
+  @override
+  String get peptideContentCjc1295NoDacHalfLife => '~30 minutos';
+
+  @override
+  String get peptideContentCjc1295NoDacNotes =>
+      'Ação curta — combinado com um GHRP (Ipamorelin, GHRP-2, GHRP-6) para amplificar os pulsos de GH. Normalmente dosado 1 a 3 vezes por dia, em jejum.';
+
+  @override
+  String get peptideContentTesamorelinDescription =>
+      'A tesamorelina é um análogo estabilizado da GHRH aprovado para reduzir o excesso de gordura visceral abdominal na lipodistrofia associada ao VIH (marca Egrifta). Também tem sido estudada em contextos de envelhecimento cognitivo.';
+
+  @override
+  String get peptideContentTesamorelinTypicalDose => '1–2 mg diários';
+
+  @override
+  String get peptideContentTesamorelinHalfLife => '~30 minutos';
+
+  @override
+  String get peptideContentTesamorelinNotes =>
+      'Medicamento sujeito a receita médica. Estudado principalmente para a redução do tecido adiposo visceral. Administrado uma vez por dia, por via subcutânea.';
+
+  @override
+  String get peptideContentMotsCDescription =>
+      'O MOTS-c é um peptídeo de origem mitocondrial codificado no gene MT-RNR1. A investigação tem estudado o seu papel na homeostasia metabólica, na sensibilidade à insulina e na fisiologia do exercício.';
+
+  @override
+  String get peptideContentMotsCTypicalDose => '5–10 mg 2–3x por semana';
+
+  @override
+  String get peptideContentMotsCHalfLife => '~90 minutos';
+
+  @override
+  String get peptideContentMotsCNotes =>
+      'A investigação ainda está a emergir. Alguns utilizadores relatam melhorias na recuperação do exercício e nos marcadores metabólicos em registos de autoexperimentação.';
+
+  @override
+  String get peptideContentCerebrolysinDescription =>
+      'O Cerebrolysin é uma mistura de peptídeos de baixo peso molecular e aminoácidos derivados de tecido cerebral suíno. É prescrito em vários países europeus e asiáticos para indicações neurodegenerativas e de recuperação após AVC.';
+
+  @override
+  String get peptideContentCerebrolysinTypicalDose =>
+      'Ampolas de 5–30 ml (contexto clínico)';
+
+  @override
+  String get peptideContentCerebrolysinHalfLife => 'Variável (mistura)';
+
+  @override
+  String get peptideContentCerebrolysinNotes =>
+      'Normalmente administrado em ciclos sob supervisão clínica. Não disponível nos EUA. Investigado no AVC isquémico e na doença de Alzheimer.';
+
+  @override
+  String get peptideContentSelankDescription =>
+      'O Selank é um heptapeptídeo sintético desenvolvido na Rússia como análogo do peptídeo imunomodulador tuftsina. Tem sido estudado quanto a efeitos ansiolíticos sem a sedação ou a dependência associadas às benzodiazepinas.';
+
+  @override
+  String get peptideContentSelankTypicalDose =>
+      '250–500 mcg por via intranasal';
+
+  @override
+  String get peptideContentSelankHalfLife => '~poucos minutos (sistémico)';
+
+  @override
+  String get peptideContentSelankNotes =>
+      'Mais frequentemente administrado por via intranasal. A investigação russa centra-se na ansiedade e na atenção. Meia-vida curta, mas os efeitos relatados duram várias horas.';
+
+  @override
+  String get peptideContentSemaxDescription =>
+      'O Semax é um heptapeptídeo sintético derivado de um fragmento da ACTH (4–10). A investigação russa tem estudado os seus efeitos nootrópicos e neuroprotetores, particularmente em protocolos de recuperação após AVC.';
+
+  @override
+  String get peptideContentSemaxTypicalDose =>
+      '250–1000 mcg por via intranasal';
+
+  @override
+  String get peptideContentSemaxHalfLife => '~30 minutos';
+
+  @override
+  String get peptideContentSemaxNotes =>
+      'A administração intranasal é habitual. Aprovado na Rússia para o AVC isquémico. Frequentemente ciclado com Selank para efeitos complementares.';
+
+  @override
+  String get peptideContentMelanotanIiDescription =>
+      'A Melanotan II é um análogo sintético da hormona estimulante dos alfa-melanócitos (α-MSH). Foi originalmente desenvolvida como um potencial agente de bronzeamento sem exposição solar e também tem sido associada a efeitos no apetite e na libido.';
+
+  @override
+  String get peptideContentMelanotanIiTypicalDose =>
+      '250–1000 mcg de carga, depois manutenção';
+
+  @override
+  String get peptideContentMelanotanIiHalfLife => '~1 hora';
+
+  @override
+  String get peptideContentMelanotanIiNotes =>
+      'Não aprovado para qualquer uso médico. Os efeitos secundários relatados com frequência incluem náuseas e o escurecimento de sinais existentes. Qualquer sinal novo ou em alteração deve ser avaliado por um dermatologista.';
+
+  @override
+  String get peptideContentPt141Description =>
+      'O PT-141, também conhecido como Bremelanotide e comercializado como Vyleesi, é um agonista dos receptores da melanocortina aprovado pela FDA para a perturbação do desejo sexual hipoativo em mulheres pré-menopáusicas. Atua nas vias do sistema nervoso central.';
+
+  @override
+  String get peptideContentPt141TypicalDose =>
+      '1,25–1,75 mg conforme necessário';
+
+  @override
+  String get peptideContentPt141HalfLife => '~2 horas';
+
+  @override
+  String get peptideContentPt141Notes =>
+      'Medicamento sujeito a receita médica em alguns mercados. Tomado conforme necessário, em vez de num horário fixo. Os efeitos secundários comuns incluem náuseas e aumentos transitórios da tensão arterial.';
+
+  @override
+  String get peptideContentDsipDescription =>
+      'O Delta Sleep-Inducing Peptide (DSIP) é um nonapeptídeo isolado do cérebro de coelho na década de 1970. Tem sido estudado quanto a possíveis papéis na regulação do sono, na modulação da dor e na resposta ao stress, embora os mecanismos permaneçam pouco claros.';
+
+  @override
+  String get peptideContentDsipTypicalDose => '100–500 mcg antes de dormir';
+
+  @override
+  String get peptideContentDsipHalfLife => '~7 minutos';
+
+  @override
+  String get peptideContentDsipNotes =>
+      'Normalmente administrado antes de dormir. Meia-vida plasmática curta, mas os efeitos relatados podem prolongar-se para além dela. A base de evidência científica continua limitada.';
+
+  @override
+  String get peptideContentThymosinAlpha1Description =>
+      'A Timosina Alfa-1 é um peptídeo de 28 aminoácidos originalmente isolado de tecido tímico. Foi aprovada em vários países como terapia adjuvante imunomoduladora (marca Zadaxin) para a hepatite B e C.';
+
+  @override
+  String get peptideContentThymosinAlpha1TypicalDose =>
+      '1,6 mg duas vezes por semana';
+
+  @override
+  String get peptideContentThymosinAlpha1HalfLife => '~2 horas';
+
+  @override
+  String get peptideContentThymosinAlpha1Notes =>
+      'Utilizado em vários mercados internacionais como parte de protocolos de modulação imunitária. Normalmente administrado duas vezes por semana. A investigação continua em várias indicações.';
+
+  @override
+  String get peptideContentNadPlusDescription =>
+      'O NAD+ (dinucleótido de nicotinamida e adenina) é uma coenzima central no metabolismo energético celular e na reparação do ADN. O NAD+ injetável e os seus precursores (NR, NMN) são estudados no contexto da saúde mitocondrial e do envelhecimento.';
+
+  @override
+  String get peptideContentNadPlusTypicalDose =>
+      '100–500 mg IV ou subcutâneo por sessão';
+
+  @override
+  String get peptideContentNadPlusHalfLife => '~90 minutos';
+
+  @override
+  String get peptideContentNadPlusNotes =>
+      'Tecnicamente uma coenzima e não um péptido, mas frequentemente agrupado com protocolos de longevidade. Recomenda-se uma infusão lenta para minimizar rubor e desconforto.';
+
+  @override
+  String get peptideContentSermorelinDescription =>
+      'A sermorelina é um análogo sintético da hormona libertadora da hormona do crescimento (GHRH). Tem sido utilizada clinicamente como agente de diagnóstico da reserva de hormona do crescimento e é frequentemente referida em contextos de bem-estar como um peptídeo de apoio ao eixo GH.';
+
+  @override
+  String get peptideContentSermorelinTypicalDose =>
+      '100–300 mcg antes de dormir';
+
+  @override
+  String get peptideContentSermorelinHalfLife => '~10–20 minutos';
+
+  @override
+  String get peptideContentSermorelinNotes =>
+      'Frequentemente comparado com o CJC-1295 sem DAC, uma vez que ambos atuam na via da GHRH. A meia-vida curta torna a administração noturna comum em protocolos não clínicos.';
+
+  @override
+  String get peptideContentAod9604Description =>
+      'O AOD-9604 é um fragmento modificado da hormona do crescimento humana, derivado da região 176–191. Tem sido investigado quanto à sinalização metabólica e da lipólise, mas a evidência publicada em humanos é limitada e inconsistente.';
+
+  @override
+  String get peptideContentAod9604TypicalDose => '250–500 mcg diários';
+
+  @override
+  String get peptideContentAod9604HalfLife => '~30 minutos';
+
+  @override
+  String get peptideContentAod9604Notes =>
+      'Também designado por fragmento de HGH 176–191 em algumas discussões. Não é um medicamento aprovado para perda de peso; utilize linguagem de registo neutra e evite garantias de resultados.';
+
+  @override
+  String get peptideContentKpvDescription =>
+      'O KPV é uma sequência tripeptídica curta (lisina-prolina-valina) derivada da hormona estimulante dos alfa-melanócitos. É referido em contextos de investigação para a sinalização imunitária e da barreira intestinal.';
+
+  @override
+  String get peptideContentKpvTypicalDose => '250–500 mcg diários';
+
+  @override
+  String get peptideContentKpvHalfLife => 'Não bem estabelecida';
+
+  @override
+  String get peptideContentKpvNotes =>
+      'Surge em discussões sobre saúde intestinal e uso tópico, incluindo combinações informais com BPC-157. A evidência sobre a dosagem em humanos é limitada, pelo que os protocolos devem ser conservadores.';
+
+  @override
+  String get peptideContentSs31Description =>
+      'O SS-31, também conhecido como Elamipretide, é um tetrapeptídeo dirigido às mitocôndrias, estudado quanto às interações com a cardiolipina e a função da membrana mitocondrial. A investigação clínica tem-se centrado em doenças mitocondriais e cardíacas raras.';
+
+  @override
+  String get peptideContentSs31TypicalDose => 'Protocolos de ensaio variam';
+
+  @override
+  String get peptideContentSs31HalfLife => '~4 horas';
+
+  @override
+  String get peptideContentSs31Notes =>
+      'Em fase de investigação em muitos contextos. Os protocolos da comunidade diferem frequentemente das formulações usadas em ensaios clínicos e devem ser tratados como exclusivamente para investigação.';
+
+  @override
+  String get peptideContentLl37Description =>
+      'O LL-37 é um peptídeo antimicrobiano catelicidina humano envolvido na sinalização imunitária inata. É discutido em comunidades de investigação quanto às vias de defesa do hospedeiro e de resposta tecidual, mas as considerações de segurança são significativas.';
+
+  @override
+  String get peptideContentLl37TypicalDose =>
+      'Protocolos de investigação variam';
+
+  @override
+  String get peptideContentLl37HalfLife => 'Não bem estabelecida';
+
+  @override
+  String get peptideContentLl37Notes =>
+      'Altamente experimental fora de investigação controlada. Uma vez que os péptidos antimicrobianos podem afetar a sinalização imunitária, é importante um enquadramento educativo conservador.';
+
+  @override
+  String get peptideContentDihexaDescription =>
+      'A Dihexa é um análogo peptídico oralmente ativo derivado da angiotensina IV, estudado pré-clinicamente quanto à sinalização do fator de crescimento de hepatócitos/c-Met e à atividade sinaptogénica. Os dados de segurança e eficácia em humanos não estão estabelecidos.';
+
+  @override
+  String get peptideContentDihexaTypicalDose =>
+      'Apenas investigação; protocolos variam';
+
+  @override
+  String get peptideContentDihexaHalfLife => 'Não bem estabelecida';
+
+  @override
+  String get peptideContentDihexaNotes =>
+      'Popular em discussões sobre nootrópicos, mas muito experimental. Deve ser tratado como uma entrada de composto de investigação e não como um protocolo sugerido.';
+
+  @override
+  String get peptideContentGhrp2Description =>
+      'O GHRP-2 é um peptídeo sintético libertador da hormona do crescimento que atua como agonista do receptor da grelina. Tem sido estudado quanto à secreção de GH, à sinalização do apetite e a testes endócrinos.';
+
+  @override
+  String get peptideContentGhrp2TypicalDose => '100–300 mcg por injeção';
+
+  @override
+  String get peptideContentGhrp2HalfLife => '~20–30 minutos';
+
+  @override
+  String get peptideContentGhrp2Notes =>
+      'Frequentemente associado a um análogo de GHRH, como o CJC-1295 sem DAC ou o Sermorelin. Pode afetar o apetite, o cortisol e a prolactina mais do que o Ipamorelin.';
+
+  @override
+  String get peptideContentGhrp6Description =>
+      'O GHRP-6 é um hexapeptídeo sintético e agonista do receptor da grelina, estudado quanto à libertação da hormona do crescimento e à sinalização do apetite. É um dos peptídeos mais antigos da família GHRP.';
+
+  @override
+  String get peptideContentGhrp6TypicalDose => '100–300 mcg por injeção';
+
+  @override
+  String get peptideContentGhrp6HalfLife => '~20–30 minutos';
+
+  @override
+  String get peptideContentGhrp6Notes =>
+      'O uso pela comunidade destaca frequentemente a estimulação do apetite. Opções mais seletivas, como o Ipamorelin, são normalmente preferidas quando os efeitos no apetite não são desejados.';
+
+  @override
+  String get peptideContentHexarelinDescription =>
+      'A hexarelina é um secretagogo sintético da hormona do crescimento e agonista do receptor da grelina, estudada quanto à libertação de GH e a sinais de investigação cardiovascular. É geralmente considerada um dos GHRPs mais potentes.';
+
+  @override
+  String get peptideContentHexarelinTypicalDose => '100–200 mcg por injeção';
+
+  @override
+  String get peptideContentHexarelinHalfLife => '~70 minutos';
+
+  @override
+  String get peptideContentHexarelinNotes =>
+      'Frequentemente ciclado de forma mais conservadora do que o Ipamorelin devido a preocupações com a potência e a dessensibilização discutidas em comunidades de investigação.';
+
+  @override
+  String get peptideContentIgf1Lr3Description =>
+      'O IGF-1 LR3 é um análogo modificado do fator de crescimento semelhante à insulina tipo 1, com substituições de aminoácidos que reduzem a afinidade às proteínas de ligação e prolongam a atividade. É discutido sobretudo em contextos avançados de investigação sobre desempenho e crescimento celular.';
+
+  @override
+  String get peptideContentIgf1Lr3TypicalDose =>
+      '20–50 mcg diários em protocolos de investigação';
+
+  @override
+  String get peptideContentIgf1Lr3HalfLife => '~20–30 horas';
+
+  @override
+  String get peptideContentIgf1Lr3Notes =>
+      'Composto de investigação de maior risco. Potenciais preocupações relacionadas com a glicose e a sinalização do crescimento tecidual tornam a supervisão médica especialmente importante.';
+
+  @override
+  String get peptideContentIgf1DesDescription =>
+      'O IGF-1 DES é um análogo mais curto do IGF-1, ao qual faltam os três primeiros aminoácidos. É discutido como uma variante de IGF de ação mais curta na investigação sobre sinalização tecidual local.';
+
+  @override
+  String get peptideContentIgf1DesTypicalDose =>
+      '20–50 mcg em protocolos de investigação';
+
+  @override
+  String get peptideContentIgf1DesHalfLife => '~20–30 minutos';
+
+  @override
+  String get peptideContentIgf1DesNotes =>
+      'Muito avançado e experimental. Evite sugestões amplas de protocolo, uma vez que os dados de segurança em humanos e a monitorização adequada são limitados.';
+
+  @override
+  String get peptideContentPegMgfDescription =>
+      'O PEG-MGF é uma variante peguilada do fator de crescimento mecânico, um peptídeo variante de splicing do IGF-1. A peguilação destina-se a prolongar o tempo de circulação em comparação com o MGF não modificado.';
+
+  @override
+  String get peptideContentPegMgfTypicalDose =>
+      '100–300 mcg semanais em protocolos de investigação';
+
+  @override
+  String get peptideContentPegMgfHalfLife => 'Prolongada pela peguilação';
+
+  @override
+  String get peptideContentPegMgfNotes =>
+      'Comum em fóruns de desempenho, mas não é uma terapia aprovada. Deve ser tratado como uma entrada de investigação avançada, com predefinições de registo conservadoras.';
+
+  @override
+  String get peptideContentMk677Description =>
+      'O MK-677, também conhecido como Ibutamoren, é um agonista do receptor da grelina oralmente ativo e secretagogo da hormona do crescimento. Não é um peptídeo, mas é frequentemente discutido a par dos peptídeos do eixo GH.';
+
+  @override
+  String get peptideContentMk677TypicalDose => '10–25 mg diários';
+
+  @override
+  String get peptideContentMk677HalfLife => '~24 horas';
+
+  @override
+  String get peptideContentMk677Notes =>
+      'Composto relacionado, não um péptido. As discussões da comunidade mencionam frequentemente considerações sobre apetite, retenção de água, sono e monitorização da glicose.';
+
+  @override
+  String get peptideContentFiveAmino1mqDescription =>
+      'O 5-Amino-1MQ é um inibidor de molécula pequena da NNMT, discutido em comunidades focadas no metabolismo e na composição corporal. Não é um peptídeo, mas surge frequentemente em combinações de longevidade e perda de gordura próximas dos peptídeos.';
+
+  @override
+  String get peptideContentFiveAmino1mqTypicalDose => '25–100 mg diários';
+
+  @override
+  String get peptideContentFiveAmino1mqHalfLife => 'Não bem estabelecida';
+
+  @override
+  String get peptideContentFiveAmino1mqNotes =>
+      'Composto relacionado, não um péptido. A evidência em humanos é limitada; evite afirmações sobre resultados de perda de gordura ou sensibilidade à insulina.';
+
+  @override
+  String get peptideContentTesofensineDescription =>
+      'A tesofensina é um inibidor oral da recaptação de monoaminas, investigado para a obesidade e doenças neurodegenerativas. Não é um peptídeo, mas é frequentemente discutida em comunidades de gestão de peso a par de compostos de GLP-1.';
+
+  @override
+  String get peptideContentTesofensineTypicalDose =>
+      '0,25–0,5 mg diários em estudos';
+
+  @override
+  String get peptideContentTesofensineHalfLife => '~9 dias';
+
+  @override
+  String get peptideContentTesofensineNotes =>
+      'Composto relacionado, não um péptido. Uma vez que afeta as vias dos neurotransmissores, a tensão arterial, a frequência cardíaca e o rastreio de interações são importantes.';
+
+  @override
+  String get peptideContentRu58841Description =>
+      'O RU-58841 é um antiandrogénio tópico não esteroide, investigado quanto à sinalização do receptor androgénico em contextos de folículos capilares. Não é um peptídeo, mas é frequentemente discutido em comunidades estéticas próximas dos peptídeos.';
+
+  @override
+  String get peptideContentRu58841TypicalDose =>
+      'Tópico, 25–50 mg diários em protocolos informais';
+
+  @override
+  String get peptideContentRu58841HalfLife => 'Não bem estabelecida';
+
+  @override
+  String get peptideContentRu58841Notes =>
+      'Composto relacionado, não um péptido nem um medicamento aprovado. As preocupações com o controlo de qualidade e a exposição sistémica são pontos de discussão comuns.';
+
+  @override
+  String get peptideContentEducationalDisclaimer =>
+      'Apenas para referência educativa. Não constitui aconselhamento médico. Os peptídeos de investigação não estão aprovados para uso humano na maioria das jurisdições — consulte sempre um profissional de saúde qualificado.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -2914,6 +3490,41 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get noPurchasesToRestore =>
       'Nenhuma compra encontrada para restaurar.';
+
+  @override
+  String get subscriptionErrorServiceUnavailable =>
+      'As compras estão temporariamente indisponíveis. Tente novamente em instantes.';
+
+  @override
+  String get subscriptionErrorPlansUnavailable =>
+      'Não foi possível carregar os planos de assinatura. Verifique sua conexão e tente novamente.';
+
+  @override
+  String get subscriptionErrorPurchaseCancelled => 'Compra cancelada.';
+
+  @override
+  String get subscriptionErrorPurchaseNotAllowed =>
+      'Compras não são permitidas neste dispositivo.';
+
+  @override
+  String get subscriptionErrorPurchaseInvalid =>
+      'Não foi possível concluir a compra. Verifique sua conta e tente novamente.';
+
+  @override
+  String get subscriptionErrorProductUnavailable =>
+      'Esta assinatura não está disponível no momento. Escolha outro plano ou tente novamente mais tarde.';
+
+  @override
+  String get subscriptionErrorNetwork =>
+      'Você está offline. Verifique sua conexão e tente novamente.';
+
+  @override
+  String get subscriptionErrorPurchaseFailed =>
+      'Falha na compra. Tente novamente.';
+
+  @override
+  String get subscriptionErrorRestoreFailed =>
+      'Não foi possível restaurar as compras. Verifique sua conexão e tente novamente.';
 
   @override
   String get unlockFullProtocol => 'Desbloqueie o protocolo completo';
@@ -5013,4 +5624,543 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String syringeOption(String volume, String capacity) {
     return 'U-100 · $volume mL / $capacity unidade';
   }
+
+  @override
+  String get peptideContentHcgDescription =>
+      'A gonadotrofina coriônica humana (HCG) é um hormônio glicoproteico usado em contextos clínicos regulados e frequentemente mencionado ao lado de protocolos com peptídeos. Este item é fornecido como referência neutra de rastreamento para cronogramas inseridos pelo usuário.';
+
+  @override
+  String get peptideContentHcgTypicalDose => 'UI inserida pelo usuário';
+
+  @override
+  String get peptideContentHcgHalfLife => '~24-36 horas';
+
+  @override
+  String get peptideContentHcgNotes =>
+      'Uso sob prescrição em muitas jurisdições. Registre apenas o que já foi indicado por um profissional de saúde qualificado; o PepMod não fornece orientação de dosagem para HCG.';
+
+  @override
+  String get peptideContentBpc157Description =>
+      'BPC-157 (Body Protection Compound 157) é um peptídeo sintético de 15 aminoácidos derivado de uma proteína encontrada no suco gástrico. Foi estudado em modelos animais quanto ao seu papel na reparação de tecidos moles e do revestimento intestinal. Os dados clínicos em humanos ainda são limitados.';
+
+  @override
+  String get peptideContentBpc157TypicalDose => '250–500 mcg';
+
+  @override
+  String get peptideContentBpc157HalfLife => '~4 horas';
+
+  @override
+  String get peptideContentBpc157Notes =>
+      'Em estudos com animais, o BPC-157 é frequentemente mencionado junto com o TB-500 em protocolos de pesquisa sobre tendões e ligamentos. Esta referência não fornece instruções de reconstituição nem de uso.';
+
+  @override
+  String get peptideContentTb500Description =>
+      'TB-500 é um fragmento sintético da proteína timosina beta-4, encontrada naturalmente no organismo. Em estudos com animais, foi investigado quanto ao seu papel na migração celular e na regeneração de tecidos. É amplamente usado off-label por pesquisadores e em contextos veterinários.';
+
+  @override
+  String get peptideContentTb500TypicalDose =>
+      '2–5 mg semanais de ataque, depois 2 mg de manutenção';
+
+  @override
+  String get peptideContentTb500HalfLife => '~2 dias';
+
+  @override
+  String get peptideContentTb500Notes =>
+      'Frequentemente combinado com BPC-157 em protocolos para tecidos moles. Dose dividida duas vezes por semana é comum devido à meia-vida longa.';
+
+  @override
+  String get peptideContentGhkCuDescription =>
+      'GHK-Cu (peptídeo de cobre) é um tripeptídeo ligante de cobre que ocorre naturalmente no plasma humano. Foi estudado em aplicações cosméticas tópicas relacionadas à remodelação da pele e à sinalização dos folículos capilares.';
+
+  @override
+  String get peptideContentGhkCuTypicalDose => '1–2 mg';
+
+  @override
+  String get peptideContentGhkCuHalfLife => '~1 hora';
+
+  @override
+  String get peptideContentGhkCuNotes =>
+      'Também usado topicamente em formulações para a pele. A dose subcutânea costuma ser menor do que as concentrações tópicas.';
+
+  @override
+  String get peptideContentEpitalonDescription =>
+      'Epitalon é um tetrapeptídeo sintético análogo à epitalamina, um peptídeo extraído da glândula pineal. Pesquisas russas exploraram seus efeitos sobre a atividade da telomerase e a regulação circadiana.';
+
+  @override
+  String get peptideContentEpitalonTypicalDose => '5–10 mg por dia de ciclo';
+
+  @override
+  String get peptideContentEpitalonHalfLife => '~30 minutos';
+
+  @override
+  String get peptideContentEpitalonNotes =>
+      'Costuma ser usado em ciclos curtos e pulsados (por exemplo, 10–20 dias de uso, meses de pausa), com base em protocolos russos de pesquisa sobre longevidade.';
+
+  @override
+  String get peptideContentSemaglutideDescription =>
+      'A semaglutida é um agonista do receptor de GLP-1 originalmente desenvolvido para o diabetes tipo 2 e posteriormente aprovado para o controle crônico do peso sob as marcas Ozempic e Wegovy. Ela retarda o esvaziamento gástrico e modula a sinalização de apetite.';
+
+  @override
+  String get peptideContentSemaglutideTypicalDose =>
+      '0.25–2.4 mg semanais (com ajuste gradual)';
+
+  @override
+  String get peptideContentSemaglutideHalfLife => '~7 dias';
+
+  @override
+  String get peptideContentSemaglutideNotes =>
+      'Uso sob prescrição na maioria dos países. O esquema de titulação começa baixo e aumenta a cada 4 semanas para controlar efeitos colaterais gastrointestinais.';
+
+  @override
+  String get peptideContentTirzepatideDescription =>
+      'A tirzepatida é um agonista duplo dos receptores GIP/GLP-1 aprovado para o diabetes tipo 2 (Mounjaro) e para a obesidade (Zepbound). Ensaios clínicos demonstraram que ela produz reduções de peso maiores do que os agonistas de GLP-1 isolados.';
+
+  @override
+  String get peptideContentTirzepatideTypicalDose =>
+      '2.5–15 mg semanais (com ajuste gradual)';
+
+  @override
+  String get peptideContentTirzepatideHalfLife => '~5 dias';
+
+  @override
+  String get peptideContentTirzepatideNotes =>
+      'Uso sob prescrição na maioria dos países. A titulação padrão ocorre em incrementos de 4 semanas. Aplicado por via subcutânea uma vez por semana.';
+
+  @override
+  String get peptideContentRetatrutideDescription =>
+      'A retatrutida é um agonista triplo em fase de investigação, direcionado aos receptores GIP, GLP-1 e glucagon. Ensaios de fase 2 relataram reduções de peso superiores às das terapias existentes baseadas em GLP-1.';
+
+  @override
+  String get peptideContentRetatrutideTypicalDose =>
+      'Doses de estudo de 1–12 mg semanais';
+
+  @override
+  String get peptideContentRetatrutideHalfLife => '~6 dias';
+
+  @override
+  String get peptideContentRetatrutideNotes =>
+      'Ainda em fase de investigação — sem aprovação da FDA até o momento desta publicação. Qualquer uso fora de um ensaio clínico é estritamente para fins de pesquisa.';
+
+  @override
+  String get peptideContentIpamorelinDescription =>
+      'A ipamorelina é um pentapeptídeo mimético da grelina e secretagogo seletivo do hormônio do crescimento. Foi investigada quanto à sua capacidade de estimular uma liberação pulsátil de GH com efeito mínimo sobre o cortisol ou a prolactina.';
+
+  @override
+  String get peptideContentIpamorelinTypicalDose => '200–300 mcg por injeção';
+
+  @override
+  String get peptideContentIpamorelinHalfLife => '~2 horas';
+
+  @override
+  String get peptideContentIpamorelinNotes =>
+      'Frequentemente combinado com CJC-1295 (sem DAC) para um pulso sinérgico de GH. Horário típico: antes de dormir e/ou antes do treino, em jejum.';
+
+  @override
+  String get peptideContentCjc1295DacDescription =>
+      'CJC-1295 é um análogo sintético do GHRH. A variante DAC (Drug Affinity Complex) se liga à albumina sérica, prolongando sua meia-vida e produzindo níveis sustentados de GH em vez de picos isolados.';
+
+  @override
+  String get peptideContentCjc1295DacTypicalDose => '1–2 mg semanais';
+
+  @override
+  String get peptideContentCjc1295DacHalfLife => '~8 dias';
+
+  @override
+  String get peptideContentCjc1295DacNotes =>
+      'Ação prolongada — geralmente aplicado uma ou duas vezes por semana. Eleva o nível basal de GH/IGF-1 em vez de gerar pulsos acentuados.';
+
+  @override
+  String get peptideContentCjc1295NoDacDescription =>
+      'CJC-1295 sem DAC — também conhecido como Mod-GRF(1-29) — é um análogo do GHRH com meia-vida curta. Geralmente é combinado com um GHRP, como a ipamorelina, para desencadear a liberação pulsátil natural de GH.';
+
+  @override
+  String get peptideContentCjc1295NoDacTypicalDose => '100 mcg por injeção';
+
+  @override
+  String get peptideContentCjc1295NoDacHalfLife => '~30 minutos';
+
+  @override
+  String get peptideContentCjc1295NoDacNotes =>
+      'Ação curta — combinado com um GHRP (Ipamorelin, GHRP-2, GHRP-6) para amplificar os pulsos de GH. Normalmente aplicado de 1 a 3 vezes por dia, em jejum.';
+
+  @override
+  String get peptideContentTesamorelinDescription =>
+      'A tesamorelina é um análogo estabilizado do GHRH aprovado para reduzir o excesso de gordura visceral abdominal na lipodistrofia associada ao HIV (nome comercial Egrifta). Também foi estudada em contextos de envelhecimento cognitivo.';
+
+  @override
+  String get peptideContentTesamorelinTypicalDose => '1–2 mg por dia';
+
+  @override
+  String get peptideContentTesamorelinHalfLife => '~30 minutos';
+
+  @override
+  String get peptideContentTesamorelinNotes =>
+      'Medicamento sob prescrição. Estudado principalmente para redução do tecido adiposo visceral. Administrado uma vez ao dia por via subcutânea.';
+
+  @override
+  String get peptideContentMotsCDescription =>
+      'MOTS-c é um peptídeo de origem mitocondrial codificado dentro do gene MT-RNR1. Pesquisas investigaram seu papel na homeostase metabólica, na sensibilidade à insulina e na fisiologia do exercício.';
+
+  @override
+  String get peptideContentMotsCTypicalDose => '5–10 mg 2–3x por semana';
+
+  @override
+  String get peptideContentMotsCHalfLife => '~90 minutos';
+
+  @override
+  String get peptideContentMotsCNotes =>
+      'Pesquisa ainda emergente. Alguns usuários relatam melhora na recuperação do exercício e em marcadores metabólicos em registros de autoexperimentação.';
+
+  @override
+  String get peptideContentCerebrolysinDescription =>
+      'Cerebrolysin é uma mistura de peptídeos de baixo peso molecular e aminoácidos derivados de tecido cerebral suíno. É prescrito em vários países da Europa e da Ásia para indicações neurodegenerativas e de recuperação pós-AVC.';
+
+  @override
+  String get peptideContentCerebrolysinTypicalDose =>
+      'Ampolas de 5–30 ml (ambiente clínico)';
+
+  @override
+  String get peptideContentCerebrolysinHalfLife => 'Variável (mistura)';
+
+  @override
+  String get peptideContentCerebrolysinNotes =>
+      'Geralmente administrado em ciclos sob supervisão clínica. Não disponível nos EUA. Pesquisado em AVC isquêmico e na doença de Alzheimer.';
+
+  @override
+  String get peptideContentSelankDescription =>
+      'Selank é um heptapeptídeo sintético desenvolvido na Rússia como análogo do peptídeo imunomodulador tuftsina. Foi estudado quanto a efeitos ansiolíticos sem a sedação ou a dependência associadas aos benzodiazepínicos.';
+
+  @override
+  String get peptideContentSelankTypicalDose => '250–500 mcg via intranasal';
+
+  @override
+  String get peptideContentSelankHalfLife => '~poucos minutos (sistêmico)';
+
+  @override
+  String get peptideContentSelankNotes =>
+      'Administrado com mais frequência por via intranasal. A pesquisa russa concentra-se em ansiedade e atenção. Meia-vida curta, mas os efeitos relatados duram várias horas.';
+
+  @override
+  String get peptideContentSemaxDescription =>
+      'Semax é um heptapeptídeo sintético derivado de um fragmento do ACTH (4–10). Pesquisas russas investigaram seus efeitos nootrópicos e neuroprotetores, particularmente em protocolos de recuperação pós-AVC.';
+
+  @override
+  String get peptideContentSemaxTypicalDose => '250–1000 mcg via intranasal';
+
+  @override
+  String get peptideContentSemaxHalfLife => '~30 minutos';
+
+  @override
+  String get peptideContentSemaxNotes =>
+      'A administração intranasal é a mais comum. Aprovado na Rússia para AVC isquêmico. Frequentemente alternado em ciclos com Selank para efeitos complementares.';
+
+  @override
+  String get peptideContentMelanotanIiDescription =>
+      'A melanotan II é um análogo sintético do hormônio estimulante de alfa-melanócitos (α-MSH). Foi originalmente desenvolvida como possível agente de bronzeamento sem exposição solar e também tem sido associada a efeitos sobre apetite e libido.';
+
+  @override
+  String get peptideContentMelanotanIiTypicalDose =>
+      '250–1000 mcg de ataque, depois manutenção';
+
+  @override
+  String get peptideContentMelanotanIiHalfLife => '~1 hora';
+
+  @override
+  String get peptideContentMelanotanIiNotes =>
+      'Não aprovado para nenhum uso médico. Efeitos colaterais comumente relatados incluem náusea e escurecimento de pintas já existentes. Qualquer pinta nova ou que mude deve ser avaliada por um dermatologista.';
+
+  @override
+  String get peptideContentPt141Description =>
+      'PT-141, também conhecido como bremelanotida e comercializado como Vyleesi, é um agonista dos receptores de melanocortina aprovado pela FDA para o transtorno do desejo sexual hipoativo em mulheres na pré-menopausa. Atua sobre vias do sistema nervoso central.';
+
+  @override
+  String get peptideContentPt141TypicalDose =>
+      '1.25–1.75 mg conforme necessário';
+
+  @override
+  String get peptideContentPt141HalfLife => '~2 horas';
+
+  @override
+  String get peptideContentPt141Notes =>
+      'Medicamento sob prescrição em alguns mercados. Usado conforme a necessidade, e não em um cronograma fixo. Efeitos colaterais comuns incluem náusea e aumentos transitórios da pressão arterial.';
+
+  @override
+  String get peptideContentDsipDescription =>
+      'O peptídeo indutor de sono delta (DSIP) é um nonapeptídeo isolado do cérebro de coelhos na década de 1970. Foi estudado quanto a possíveis papéis na regulação do sono, na modulação da dor e na resposta ao estresse, embora seus mecanismos ainda não estejam totalmente esclarecidos.';
+
+  @override
+  String get peptideContentDsipTypicalDose => '100–500 mcg antes de dormir';
+
+  @override
+  String get peptideContentDsipHalfLife => '~7 minutos';
+
+  @override
+  String get peptideContentDsipNotes =>
+      'Geralmente administrado antes de dormir. Meia-vida plasmática curta, mas os efeitos relatados podem durar mais do que ela. A base de evidências ainda é limitada.';
+
+  @override
+  String get peptideContentThymosinAlpha1Description =>
+      'A timosina alfa-1 é um peptídeo de 28 aminoácidos originalmente isolado do tecido do timo. Foi aprovada em diversos países como terapia adjuvante moduladora do sistema imunológico (nome comercial Zadaxin) para hepatite B e C.';
+
+  @override
+  String get peptideContentThymosinAlpha1TypicalDose =>
+      '1.6 mg duas vezes por semana';
+
+  @override
+  String get peptideContentThymosinAlpha1HalfLife => '~2 horas';
+
+  @override
+  String get peptideContentThymosinAlpha1Notes =>
+      'Usado em vários mercados internacionais como parte de protocolos de modulação imunológica. Geralmente administrado duas vezes por semana. A pesquisa continua em diversas indicações.';
+
+  @override
+  String get peptideContentNadPlusDescription =>
+      'NAD+ (dinucleotídeo de nicotinamida e adenina) é uma coenzima central para o metabolismo energético celular e o reparo do DNA. O NAD+ injetável e seus precursores (NR, NMN) são estudados no contexto da saúde mitocondrial e do envelhecimento.';
+
+  @override
+  String get peptideContentNadPlusTypicalDose =>
+      '100–500 mg IV ou subcutâneo por sessão';
+
+  @override
+  String get peptideContentNadPlusHalfLife => '~90 minutos';
+
+  @override
+  String get peptideContentNadPlusNotes =>
+      'Tecnicamente uma coenzima, e não um peptídeo, mas frequentemente agrupado em protocolos de longevidade. Recomenda-se infusão lenta para minimizar rubor e desconforto.';
+
+  @override
+  String get peptideContentSermorelinDescription =>
+      'A sermorelina é um análogo sintético do hormônio liberador do hormônio do crescimento (GHRH). Tem sido usada clinicamente como agente diagnóstico da reserva de hormônio do crescimento e é comumente mencionada em contextos de bem-estar como peptídeo de suporte ao eixo do GH.';
+
+  @override
+  String get peptideContentSermorelinTypicalDose =>
+      '100–300 mcg antes de dormir';
+
+  @override
+  String get peptideContentSermorelinHalfLife => '~10–20 minutos';
+
+  @override
+  String get peptideContentSermorelinNotes =>
+      'Frequentemente comparado ao CJC-1295 sem DAC, pois ambos atuam na via do GHRH. A meia-vida curta faz com que a dose noturna seja comum em protocolos não clínicos.';
+
+  @override
+  String get peptideContentAod9604Description =>
+      'AOD-9604 é um fragmento modificado do hormônio do crescimento humano, derivado da região 176–191. Foi investigado quanto à sinalização metabólica e lipolítica, mas as evidências publicadas em humanos são limitadas e inconsistentes.';
+
+  @override
+  String get peptideContentAod9604TypicalDose => '250–500 mcg por dia';
+
+  @override
+  String get peptideContentAod9604HalfLife => '~30 minutos';
+
+  @override
+  String get peptideContentAod9604Notes =>
+      'Também chamado de fragmento de HGH 176–191 em algumas discussões. Não é um medicamento aprovado para perda de peso; use linguagem neutra de acompanhamento e evite garantias de resultado.';
+
+  @override
+  String get peptideContentKpvDescription =>
+      'KPV é uma sequência curta de tripeptídeo (lisina-prolina-valina) derivada do hormônio estimulante de alfa-melanócitos. É discutido em contextos de pesquisa relacionados à sinalização imunológica e da barreira intestinal.';
+
+  @override
+  String get peptideContentKpvTypicalDose => '250–500 mcg por dia';
+
+  @override
+  String get peptideContentKpvHalfLife => 'Não bem estabelecida';
+
+  @override
+  String get peptideContentKpvNotes =>
+      'Aparece em discussões sobre saúde intestinal e uso tópico, incluindo combinações informais com BPC-157. A evidência de dosagem em humanos é limitada, então os protocolos devem ser conservadores.';
+
+  @override
+  String get peptideContentSs31Description =>
+      'SS-31, também conhecido como elamipretida, é um tetrapeptídeo direcionado às mitocôndrias, estudado quanto às suas interações com a cardiolipina e a função da membrana mitocondrial. A pesquisa clínica tem se concentrado em condições mitocondriais e cardíacas raras.';
+
+  @override
+  String get peptideContentSs31TypicalDose => 'Os protocolos de estudo variam';
+
+  @override
+  String get peptideContentSs31HalfLife => '~4 horas';
+
+  @override
+  String get peptideContentSs31Notes =>
+      'Em fase de investigação em muitos contextos. Os protocolos usados pela comunidade costumam diferir das formulações de ensaios clínicos e devem ser tratados apenas como pesquisa.';
+
+  @override
+  String get peptideContentLl37Description =>
+      'LL-37 é um peptídeo antimicrobiano catelicidina humano envolvido na sinalização imunológica inata. É discutido em comunidades de pesquisa quanto a vias de defesa do hospedeiro e resposta tecidual, mas as considerações de segurança são significativas.';
+
+  @override
+  String get peptideContentLl37TypicalDose =>
+      'Os protocolos de pesquisa variam';
+
+  @override
+  String get peptideContentLl37HalfLife => 'Não bem estabelecida';
+
+  @override
+  String get peptideContentLl37Notes =>
+      'Altamente experimental fora de pesquisas controladas. Como peptídeos antimicrobianos podem afetar a sinalização imunológica, é importante manter uma abordagem educativa conservadora.';
+
+  @override
+  String get peptideContentDihexaDescription =>
+      'Dihexa é um análogo peptídico derivado da angiotensina IV, ativo por via oral, estudado pré-clinicamente quanto à sinalização do fator de crescimento de hepatócitos/c-Met e à atividade sinaptogênica. Os dados de segurança e eficácia em humanos não estão estabelecidos.';
+
+  @override
+  String get peptideContentDihexaTypicalDose =>
+      'Apenas para pesquisa; os protocolos variam';
+
+  @override
+  String get peptideContentDihexaHalfLife => 'Não bem estabelecida';
+
+  @override
+  String get peptideContentDihexaNotes =>
+      'Popular em discussões sobre nootrópicos, mas ainda muito experimental. Trate como um registro de composto de pesquisa, e não como um protocolo sugerido.';
+
+  @override
+  String get peptideContentGhrp2Description =>
+      'GHRP-2 é um peptídeo sintético liberador do hormônio do crescimento que atua como agonista do receptor de grelina. Foi estudado quanto à secreção de GH, à sinalização de apetite e a testes endócrinos.';
+
+  @override
+  String get peptideContentGhrp2TypicalDose => '100–300 mcg por injeção';
+
+  @override
+  String get peptideContentGhrp2HalfLife => '~20–30 minutos';
+
+  @override
+  String get peptideContentGhrp2Notes =>
+      'Frequentemente combinado com um análogo de GHRH, como CJC-1295 sem DAC ou Sermorelin. Pode afetar apetite, cortisol e prolactina mais do que o Ipamorelin.';
+
+  @override
+  String get peptideContentGhrp6Description =>
+      'GHRP-6 é um hexapeptídeo sintético e agonista do receptor de grelina estudado quanto à liberação do hormônio do crescimento e à sinalização de apetite. É um dos peptídeos mais antigos da família GHRP.';
+
+  @override
+  String get peptideContentGhrp6TypicalDose => '100–300 mcg por injeção';
+
+  @override
+  String get peptideContentGhrp6HalfLife => '~20–30 minutos';
+
+  @override
+  String get peptideContentGhrp6Notes =>
+      'O uso pela comunidade costuma enfatizar a estimulação do apetite. Opções mais seletivas, como o Ipamorelin, costumam ser preferidas quando os efeitos sobre o apetite não são desejados.';
+
+  @override
+  String get peptideContentHexarelinDescription =>
+      'A hexarelina é um secretagogo sintético do hormônio do crescimento e agonista do receptor de grelina estudado quanto à liberação de GH e a sinais de pesquisa cardiovascular. Geralmente é considerada um dos GHRPs mais potentes.';
+
+  @override
+  String get peptideContentHexarelinTypicalDose => '100–200 mcg por injeção';
+
+  @override
+  String get peptideContentHexarelinHalfLife => '~70 minutos';
+
+  @override
+  String get peptideContentHexarelinNotes =>
+      'Frequentemente usado em ciclos mais conservadores do que o Ipamorelin devido à potência e a preocupações com dessensibilização discutidas em comunidades de pesquisa.';
+
+  @override
+  String get peptideContentIgf1Lr3Description =>
+      'IGF-1 LR3 é um análogo modificado do fator de crescimento semelhante à insulina tipo 1, com substituições de aminoácidos que reduzem a afinidade por proteínas de ligação e prolongam a atividade. É discutido principalmente em contextos avançados de pesquisa sobre desempenho e crescimento celular.';
+
+  @override
+  String get peptideContentIgf1Lr3TypicalDose =>
+      '20–50 mcg por dia em protocolos de pesquisa';
+
+  @override
+  String get peptideContentIgf1Lr3HalfLife => '~20–30 horas';
+
+  @override
+  String get peptideContentIgf1Lr3Notes =>
+      'Composto de pesquisa de maior risco. Possíveis preocupações com sinalização de glicose e crescimento tecidual tornam a supervisão médica especialmente importante.';
+
+  @override
+  String get peptideContentIgf1DesDescription =>
+      'IGF-1 DES é um análogo mais curto do IGF-1, ao qual faltam os três primeiros aminoácidos. É discutido como uma variante de IGF de ação mais curta em pesquisas de sinalização tecidual local.';
+
+  @override
+  String get peptideContentIgf1DesTypicalDose =>
+      '20–50 mcg em protocolos de pesquisa';
+
+  @override
+  String get peptideContentIgf1DesHalfLife => '~20–30 minutos';
+
+  @override
+  String get peptideContentIgf1DesNotes =>
+      'Muito avançado e experimental. Evite sugestões amplas de protocolo, pois os dados de segurança em humanos e o monitoramento adequado ainda são limitados.';
+
+  @override
+  String get peptideContentPegMgfDescription =>
+      'PEG-MGF é uma variante peguilada do fator de crescimento mecânico, um peptídeo de splice variante do IGF-1. A peguilação tem o objetivo de prolongar o tempo de circulação em comparação com o MGF não modificado.';
+
+  @override
+  String get peptideContentPegMgfTypicalDose =>
+      '100–300 mcg semanais em protocolos de pesquisa';
+
+  @override
+  String get peptideContentPegMgfHalfLife => 'Prolongada pela peguilação';
+
+  @override
+  String get peptideContentPegMgfNotes =>
+      'Comum em fóruns de desempenho, mas não é uma terapia aprovada. Trate como um registro de pesquisa avançado, com padrões de acompanhamento conservadores.';
+
+  @override
+  String get peptideContentMk677Description =>
+      'MK-677, também conhecido como ibutamoren, é um agonista do receptor de grelina e secretagogo do hormônio do crescimento ativo por via oral. Não é um peptídeo, mas é comumente discutido ao lado de peptídeos do eixo do GH.';
+
+  @override
+  String get peptideContentMk677TypicalDose => '10–25 mg por dia';
+
+  @override
+  String get peptideContentMk677HalfLife => '~24 horas';
+
+  @override
+  String get peptideContentMk677Notes =>
+      'Composto relacionado, não um peptídeo. As discussões da comunidade costumam mencionar apetite, retenção de líquidos, sono e monitoramento de glicose.';
+
+  @override
+  String get peptideContentFiveAmino1mqDescription =>
+      '5-Amino-1MQ é um inibidor de molécula pequena da NNMT, discutido em comunidades voltadas ao metabolismo e à composição corporal. Não é um peptídeo, mas costuma aparecer em combinações de longevidade e perda de gordura próximas a peptídeos.';
+
+  @override
+  String get peptideContentFiveAmino1mqTypicalDose => '25–100 mg por dia';
+
+  @override
+  String get peptideContentFiveAmino1mqHalfLife => 'Não bem estabelecida';
+
+  @override
+  String get peptideContentFiveAmino1mqNotes =>
+      'Composto relacionado, não um peptídeo. A evidência em humanos é limitada; evite alegações sobre perda de gordura ou sensibilidade à insulina.';
+
+  @override
+  String get peptideContentTesofensineDescription =>
+      'A tesofensina é um inibidor oral da recaptação de monoaminas investigado para obesidade e condições neurodegenerativas. Não é um peptídeo, mas é frequentemente discutida em comunidades de controle de peso próximas a compostos GLP-1.';
+
+  @override
+  String get peptideContentTesofensineTypicalDose =>
+      '0.25–0.5 mg por dia em estudos';
+
+  @override
+  String get peptideContentTesofensineHalfLife => '~9 dias';
+
+  @override
+  String get peptideContentTesofensineNotes =>
+      'Composto relacionado, não um peptídeo. Como afeta vias de neurotransmissores, pressão arterial e frequência cardíaca, a triagem de interações é importante.';
+
+  @override
+  String get peptideContentRu58841Description =>
+      'RU-58841 é um antiandrógeno tópico não esteroidal pesquisado quanto à sinalização do receptor de andrógeno em contextos de folículos capilares. Não é um peptídeo, mas costuma ser discutido em comunidades estéticas próximas a peptídeos.';
+
+  @override
+  String get peptideContentRu58841TypicalDose =>
+      'Tópico, 25–50 mg por dia em protocolos informais';
+
+  @override
+  String get peptideContentRu58841HalfLife => 'Não bem estabelecida';
+
+  @override
+  String get peptideContentRu58841Notes =>
+      'Composto relacionado, não um peptídeo e não um medicamento aprovado. Preocupações com controle de qualidade e exposição sistêmica são pontos comuns de discussão.';
+
+  @override
+  String get peptideContentEducationalDisclaimer =>
+      'Apenas para referência educativa. Não é orientação médica. Os peptídeos de pesquisa não são aprovados para uso humano na maioria das jurisdições — sempre consulte um profissional de saúde qualificado.';
 }
