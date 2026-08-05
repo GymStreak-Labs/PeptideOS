@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -9,6 +10,7 @@ import '../../../core/widgets/widgets.dart';
 import '../../../models/blend_vial.dart';
 import '../../../models/peptide.dart';
 import '../../../models/protocol.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../library/providers/custom_compound_provider.dart';
 import '../../library/providers/peptide_provider.dart';
 import '../../library/screens/custom_compound_library_screen.dart';
@@ -48,13 +50,21 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
   void initState() {
     super.initState();
     final initial = widget.initialProtocol;
-    _nameController = TextEditingController(
-      text: initial?.name ?? 'My Protocol',
-    );
+    _nameController = TextEditingController(text: initial?.name ?? '');
     _notesController = TextEditingController(text: initial?.notes ?? '');
     if (initial != null) {
       _startDate = initial.startDate;
       _peptides.addAll(initial.peptides.map(_cloneProtocolPeptide));
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isEditing && _nameController.text.isEmpty) {
+      _nameController.text = AppLocalizations.of(
+        context,
+      ).createProtocolDefaultName;
     }
   }
 
@@ -72,9 +82,7 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
       final purchased = await showSoftPaywall(
         context,
         source: 'peptide_limit',
-        reason:
-            'Free plan is limited to one peptide per protocol. Upgrade to '
-            'stack multiple compounds.',
+        reason: AppLocalizations.of(context).createProtocolFreeLimitReason,
       );
       if (!purchased) return;
       if (!mounted) return;
@@ -111,7 +119,9 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
   Future<void> _save() async {
     if (_peptides.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Add at least one peptide.')),
+        SnackBar(
+          content: Text(AppLocalizations.of(context).createProtocolAddOneError),
+        ),
       );
       return;
     }
@@ -141,7 +151,9 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to save protocol. Try again.')),
+        SnackBar(
+          content: Text(AppLocalizations.of(context).createProtocolSaveError),
+        ),
       );
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -162,6 +174,7 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -179,6 +192,7 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
                 children: [
                   IconButton(
                     onPressed: _back,
+                    tooltip: l10n.back,
                     icon: const Icon(
                       Icons.arrow_back_rounded,
                       color: AppColors.textPrimary,
@@ -195,7 +209,9 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
                           style: AppTypography.systemLabel,
                         ),
                         Text(
-                          '${_isEditing ? 'Edit' : 'Build'} Protocol · Step ${_step + 1} / 3',
+                          _isEditing
+                              ? l10n.createProtocolEditStep(_step + 1, 3)
+                              : l10n.createProtocolBuildStep(_step + 1, 3),
                           style: AppTypography.h3,
                         ),
                       ],
@@ -279,8 +295,10 @@ class _CreateProtocolScreenState extends State<CreateProtocolScreen> {
               padding: const EdgeInsets.all(AppSpacing.screenHorizontal),
               child: PrimaryButton(
                 label: _step == 2
-                    ? (_isEditing ? 'SAVE CHANGES' : 'CREATE PROTOCOL')
-                    : 'NEXT',
+                    ? (_isEditing
+                          ? l10n.saveChanges
+                          : l10n.createProtocolAction)
+                    : l10n.nextLabel,
                 icon: _step == 2 ? Icons.check_rounded : null,
                 isLoading: _saving,
                 onPressed: _canAdvance ? _next : null,
@@ -306,19 +324,20 @@ class _Step1Name extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.screenHorizontal,
+    final l10n = AppLocalizations.of(context);
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.screenHorizontal,
+        0,
+        AppSpacing.screenHorizontal,
+        AppSpacing.base,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Name your protocol', style: AppTypography.h2),
+          Text(l10n.createProtocolNameTitle, style: AppTypography.h2),
           const SizedBox(height: AppSpacing.sm),
-          Text(
-            'Give it a memorable label — e.g. "Recovery Stack" or "Q2 Shred".',
-            style: AppTypography.bodyMedium,
-          ),
+          Text(l10n.createProtocolNameBody, style: AppTypography.bodyMedium),
           const SizedBox(height: AppSpacing.xl),
           Container(
             decoration: BoxDecoration(
@@ -338,10 +357,10 @@ class _Step1Name extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.xl),
-          Text('Protocol notes', style: AppTypography.h3),
+          Text(l10n.protocolNotesLabel, style: AppTypography.h3),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Save context you want visible when reviewing this protocol.',
+            l10n.protocolNotesBody,
             style: AppTypography.bodySmall.copyWith(
               color: AppColors.textSecondary,
             ),
@@ -361,9 +380,8 @@ class _Step1Name extends StatelessWidget {
               style: AppTypography.bodyMedium.copyWith(
                 color: AppColors.textPrimary,
               ),
-              decoration: const InputDecoration(
-                hintText:
-                    'e.g. questions, tracking context, or clinician notes',
+              decoration: InputDecoration(
+                hintText: l10n.protocolNotesHint,
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.all(AppSpacing.md),
                 filled: false,
@@ -392,6 +410,7 @@ class _Step2Peptides extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.screenHorizontal,
@@ -399,12 +418,9 @@ class _Step2Peptides extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Build your stack', style: AppTypography.h2),
+          Text(l10n.createProtocolStackTitle, style: AppTypography.h2),
           const SizedBox(height: AppSpacing.sm),
-          Text(
-            'Add one peptide or stack multiple compounds. Configure each label, dose, frequency, and cycle.',
-            style: AppTypography.bodyMedium,
-          ),
+          Text(l10n.createProtocolStackBody, style: AppTypography.bodyMedium),
           const SizedBox(height: AppSpacing.lg),
           Expanded(
             child: peptides.isEmpty
@@ -419,12 +435,12 @@ class _Step2Peptides extends StatelessWidget {
                         ),
                         const SizedBox(height: AppSpacing.base),
                         Text(
-                          'No peptides yet',
+                          l10n.createProtocolNoPeptides,
                           style: AppTypography.labelLarge,
                         ),
                         const SizedBox(height: AppSpacing.xs),
                         Text(
-                          'Tap + to pick from the library',
+                          l10n.createProtocolPickHint,
                           style: AppTypography.bodySmall,
                         ),
                       ],
@@ -455,7 +471,7 @@ class _Step2Peptides extends StatelessWidget {
                                     style: AppTypography.labelLarge,
                                   ),
                                   Text(
-                                    _scheduleSummary(p),
+                                    _scheduleSummary(context, p),
                                     style: AppTypography.bodySmall.copyWith(
                                       fontFamily: 'JetBrainsMono',
                                     ),
@@ -465,6 +481,7 @@ class _Step2Peptides extends StatelessWidget {
                             ),
                             IconButton(
                               onPressed: () => onRemove(p),
+                              tooltip: l10n.removePeptide(p.peptideName),
                               icon: Icon(
                                 Icons.close_rounded,
                                 color: AppColors.textTertiary,
@@ -497,7 +514,7 @@ class _Step2Peptides extends StatelessWidget {
             ),
             icon: const Icon(Icons.add_rounded),
             label: Text(
-              'ADD TO STACK',
+              l10n.addToStack,
               style: AppTypography.button.copyWith(color: AppColors.primary),
             ),
           ),
@@ -524,6 +541,7 @@ class _Step3Review extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.screenHorizontal,
@@ -531,29 +549,26 @@ class _Step3Review extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Review', style: AppTypography.h2),
+          Text(l10n.reviewLabel, style: AppTypography.h2),
           const SizedBox(height: AppSpacing.sm),
-          Text(
-            'Confirm the protocol details. You can edit anytime from the Manage view.',
-            style: AppTypography.bodyMedium,
-          ),
+          Text(l10n.createProtocolReviewBody, style: AppTypography.bodyMedium),
           const SizedBox(height: AppSpacing.lg),
           AppCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('NAME', style: AppTypography.systemLabel),
+                Text(l10n.nameLabel, style: AppTypography.systemLabel),
                 const SizedBox(height: AppSpacing.xs),
                 Text(name, style: AppTypography.labelLarge),
                 const SizedBox(height: AppSpacing.base),
-                Text('START DATE', style: AppTypography.systemLabel),
+                Text(l10n.startDateLabel, style: AppTypography.systemLabel),
                 const SizedBox(height: AppSpacing.xs),
                 GestureDetector(
                   onTap: onPickDate,
                   child: Row(
                     children: [
                       Text(
-                        _formatDate(startDate),
+                        _formatDate(context, startDate),
                         style: AppTypography.tabular.copyWith(fontSize: 16),
                       ),
                       const SizedBox(width: AppSpacing.sm),
@@ -567,7 +582,7 @@ class _Step3Review extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.base),
                 Text(
-                  'PEPTIDES (${peptides.length})',
+                  l10n.peptidesCount(peptides.length),
                   style: AppTypography.systemLabel,
                 ),
                 const SizedBox(height: AppSpacing.xs),
@@ -587,7 +602,7 @@ class _Step3Review extends StatelessWidget {
                         const SizedBox(width: AppSpacing.sm),
                         Expanded(
                           child: Text(
-                            '${p.peptideName} · ${_scheduleSummary(p)}',
+                            '${p.peptideName} · ${_scheduleSummary(context, p)}',
                             style: AppTypography.bodyMedium,
                           ),
                         ),
@@ -600,7 +615,7 @@ class _Step3Review extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.base),
           Text(
-            'Educational tracking only. Always consult a qualified healthcare provider.',
+            l10n.educationalTrackingDisclaimer,
             style: AppTypography.disclaimer,
             textAlign: TextAlign.center,
           ),
@@ -611,54 +626,71 @@ class _Step3Review extends StatelessWidget {
 }
 
 // ── Helpers shared across steps ────────────────────────────────────────────
-String _formatDate(DateTime d) {
-  const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-  return '${months[d.month - 1]} ${d.day}, ${d.year}';
+String _formatDate(BuildContext context, DateTime d) =>
+    DateFormat.yMMMd(AppLocalizations.of(context).localeName).format(d);
+
+String _formatAmount(BuildContext context, double d) => NumberFormat(
+  d == d.roundToDouble() ? '0' : '0.#',
+  AppLocalizations.of(context).localeName,
+).format(d);
+
+String _formatInitialAmount(double d) =>
+    NumberFormat(d == d.roundToDouble() ? '0' : '0.#').format(d);
+
+String _formatStoredTime(BuildContext context, String value) {
+  final parts = value.split(':');
+  final hour = parts.isNotEmpty ? int.tryParse(parts.first) : null;
+  final minute = parts.length > 1 ? int.tryParse(parts[1]) : null;
+  if (hour == null || minute == null) return value;
+  return TimeOfDay(hour: hour, minute: minute).format(context);
 }
 
-String _formatAmount(double d) =>
-    d == d.roundToDouble() ? d.toStringAsFixed(0) : d.toStringAsFixed(1);
+String _freqLabel(BuildContext context, String key) {
+  final l10n = AppLocalizations.of(context);
+  return switch (key) {
+    'daily' => l10n.frequencyDaily,
+    'every_other_day' => l10n.frequencyEveryOtherDay,
+    'twice_weekly' => l10n.frequencyTwiceWeekly,
+    'weekly' => l10n.frequencyWeekly,
+    'as_needed' => l10n.frequencyAsNeeded,
+    kCustomWeekdayFrequency => l10n.customDays,
+    _ => l10n.frequencyDaily,
+  };
+}
 
-String _freqLabel(String key) => kFrequencies
-    .firstWhere((f) => f.key == key, orElse: () => kFrequencies.first)
-    .label;
+String _routeLabel(BuildContext context, String key) {
+  final l10n = AppLocalizations.of(context);
+  return switch (key) {
+    'subcutaneous' => l10n.routeSubcutaneous,
+    'intramuscular' => l10n.routeIntramuscular,
+    'oral' => l10n.routeOral,
+    'nasal' => l10n.routeNasal,
+    _ => key,
+  };
+}
 
-String _weekdayLabel(int weekday) => switch (weekday) {
-  DateTime.monday => 'Mon',
-  DateTime.tuesday => 'Tue',
-  DateTime.wednesday => 'Wed',
-  DateTime.thursday => 'Thu',
-  DateTime.friday => 'Fri',
-  DateTime.saturday => 'Sat',
-  DateTime.sunday => 'Sun',
-  _ => 'Day',
-};
+String _weekdayLabel(BuildContext context, int weekday) {
+  final locale = AppLocalizations.of(context).localeName;
+  final monday = DateTime.utc(2024, 1, 1);
+  final safeWeekday = weekday.clamp(DateTime.monday, DateTime.sunday);
+  return DateFormat.E(
+    locale,
+  ).format(monday.add(Duration(days: safeWeekday - 1)));
+}
 
-String _scheduleSummary(ProtocolPeptide p) {
+String _scheduleSummary(BuildContext context, ProtocolPeptide p) {
+  final l10n = AppLocalizations.of(context);
   final phaseSuffix = p.phases.isEmpty
       ? ''
-      : ' · ${p.phases.length} ${p.phases.length == 1 ? 'phase' : 'phases'}';
+      : ' · ${l10n.phasesCount(p.phases.length)}';
   if (p.isBlend) {
-    return '${_formatAmount(p.syringeUnits)} syringe units · '
-        '${_freqLabel(p.frequency)} · '
-        '${p.blendVial!.constituents.length} compounds$phaseSuffix';
+    return '${l10n.syringeUnitsAmount(_formatAmount(context, p.syringeUnits))} · '
+        '${_freqLabel(context, p.frequency)} · '
+        '${l10n.compoundsCount(p.blendVial!.constituents.length)}$phaseSuffix';
   }
   if (!p.usesCustomWeekdays) {
-    return '${_formatAmount(p.dosePerInjection)} ${p.doseUnit} · '
-        '${_freqLabel(p.frequency)}${_syringeSummary(p.syringeUnits)}'
+    return '${_formatAmount(context, p.dosePerInjection)} ${p.doseUnit} · '
+        '${_freqLabel(context, p.frequency)}${_syringeSummary(context, p.syringeUnits)}'
         '$phaseSuffix';
   }
   final days = [...p.weekdayDoses]
@@ -666,15 +698,17 @@ String _scheduleSummary(ProtocolPeptide p) {
   final summary = days
       .map(
         (d) =>
-            '${_weekdayLabel(d.weekday)} ${_formatAmount(d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(d.syringeUnits)}',
+            '${_weekdayLabel(context, d.weekday)} ${_formatAmount(context, d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(context, d.syringeUnits)}',
       )
       .join(', ');
-  return summary.isEmpty ? 'Custom days$phaseSuffix' : '$summary$phaseSuffix';
+  return summary.isEmpty
+      ? '${l10n.customDays}$phaseSuffix'
+      : '$summary$phaseSuffix';
 }
 
-String _syringeSummary(double value) {
+String _syringeSummary(BuildContext context, double value) {
   if (value <= 0) return '';
-  return ' · ${_formatAmount(value)} syringe units';
+  return ' · ${AppLocalizations.of(context).syringeUnitsAmount(_formatAmount(context, value))}';
 }
 
 ProtocolPeptide _cloneProtocolPeptide(ProtocolPeptide p) {
@@ -700,7 +734,7 @@ Future<ProtocolPeptide?> _pickPeptide(
   if (slug == _blendVialSlug) {
     draft = provider.buildPeptide(
       slug: _blendVialSlug,
-      name: 'Custom blend',
+      name: AppLocalizations.of(context).customBlend,
       dose: 10,
       unit: 'syringe units',
       frequency: 'as_needed',
@@ -739,7 +773,7 @@ Future<ProtocolPeptide?> _pickPeptide(
   } else if (slug == _customPeptideSlug) {
     draft = provider.buildPeptide(
       slug: _customPeptideSlug,
-      name: 'Custom peptide',
+      name: AppLocalizations.of(context).customPeptide,
       dose: 0,
       frequency: 'as_needed',
       route: 'subcutaneous',
@@ -797,6 +831,7 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final peptides = context.watch<PeptideProvider>().search(query: _query);
     final normalizedQuery = _query.trim().toLowerCase();
     final customCompounds = context
@@ -838,7 +873,7 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
               const SizedBox(height: AppSpacing.lg),
               Text('PICK.COMPOUND', style: AppTypography.systemLabel),
               const SizedBox(height: AppSpacing.sm),
-              Text('Library', style: AppTypography.h2),
+              Text(l10n.libraryTitle, style: AppTypography.h2),
               const SizedBox(height: AppSpacing.base),
               Container(
                 height: AppSpacing.inputHeight,
@@ -863,7 +898,7 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                         onChanged: (v) => setState(() => _query = v),
                         style: AppTypography.bodyMedium,
                         decoration: InputDecoration(
-                          hintText: 'Search compounds...',
+                          hintText: l10n.searchCompounds,
                           hintStyle: AppTypography.bodyMedium.copyWith(
                             color: AppColors.textDisabled,
                           ),
@@ -912,11 +947,11 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Pre-blended vial',
+                                    l10n.preBlendedVial,
                                     style: AppTypography.labelLarge,
                                   ),
                                   Text(
-                                    'One vial · one draw · multiple compounds',
+                                    l10n.preBlendedVialBody,
                                     style: AppTypography.bodySmall,
                                   ),
                                 ],
@@ -960,11 +995,11 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'One-off compound',
+                                    l10n.oneOffCompound,
                                     style: AppTypography.labelLarge,
                                   ),
                                   Text(
-                                    'Use once without saving a preset',
+                                    l10n.oneOffCompoundBody,
                                     style: AppTypography.bodySmall,
                                   ),
                                 ],
@@ -1014,7 +1049,15 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                                     style: AppTypography.labelLarge,
                                   ),
                                   Text(
-                                    '${_formatAmount(compound.vialAmount)} ${compound.vialUnit} vial · Saved preset',
+                                    AppLocalizations.of(
+                                      context,
+                                    ).savedVialPreset(
+                                      _formatAmount(
+                                        context,
+                                        compound.vialAmount,
+                                      ),
+                                      compound.vialUnit,
+                                    ),
                                     style: AppTypography.bodySmall,
                                   ),
                                 ],
@@ -1071,7 +1114,7 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                   if (mounted) setState(() {});
                 },
                 icon: const Icon(Icons.tune_rounded, size: 18),
-                label: const Text('Manage saved compounds'),
+                label: Text(l10n.manageSavedCompounds),
               ),
             ],
           ),
@@ -1290,6 +1333,7 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final blend = _blend;
     return Padding(
       padding: EdgeInsets.only(
@@ -1328,22 +1372,19 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                 const SizedBox(height: AppSpacing.lg),
                 Text('CONFIG.BLEND', style: AppTypography.systemLabel),
                 const SizedBox(height: AppSpacing.sm),
-                Text('Pre-blended vial', style: AppTypography.h2),
+                Text(l10n.preBlendedVial, style: AppTypography.h2),
                 const SizedBox(height: AppSpacing.xs),
-                Text(
-                  'Enter exactly what is printed on the vial. PepMod converts the draw into a per-compound snapshot.',
-                  style: AppTypography.bodySmall,
-                ),
+                Text(l10n.blendConfigBody, style: AppTypography.bodySmall),
                 const SizedBox(height: AppSpacing.lg),
                 _FieldLabel(
-                  label: 'BLEND NAME',
+                  label: l10n.blendNameLabel,
                   child: TextField(
                     controller: _nameCtrl,
                     onChanged: (_) => setState(() {}),
                     textCapitalization: TextCapitalization.words,
                     style: AppTypography.bodyLarge,
-                    decoration: const InputDecoration(
-                      hintText: 'e.g. Recovery blend',
+                    decoration: InputDecoration(
+                      hintText: l10n.blendNameHint,
                       border: InputBorder.none,
                       filled: false,
                       contentPadding: EdgeInsets.symmetric(
@@ -1356,10 +1397,13 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                 const SizedBox(height: AppSpacing.lg),
                 Row(
                   children: [
-                    Text('VIAL CONTENTS', style: AppTypography.systemLabel),
+                    Text(
+                      l10n.vialContentsLabel,
+                      style: AppTypography.systemLabel,
+                    ),
                     const Spacer(),
                     Text(
-                      '${_constituents.length} compounds',
+                      l10n.compoundsCount(_constituents.length),
                       style: AppTypography.bodySmall,
                     ),
                   ],
@@ -1383,7 +1427,7 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                     minimumSize: const Size.fromHeight(44),
                   ),
                   child: Text(
-                    '+ ADD COMPOUND',
+                    l10n.addCompound,
                     style: AppTypography.button.copyWith(
                       color: AppColors.primary,
                     ),
@@ -1394,7 +1438,7 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                   children: [
                     Expanded(
                       child: _FieldLabel(
-                        label: 'DILUENT VOLUME',
+                        label: l10n.diluentVolumeLabel,
                         child: TextField(
                           controller: _diluentCtrl,
                           onChanged: (_) => setState(() {}),
@@ -1419,7 +1463,7 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                     const SizedBox(width: AppSpacing.cardGap),
                     Expanded(
                       child: _FieldLabel(
-                        label: 'DRAW',
+                        label: l10n.drawLabel,
                         child: TextField(
                           controller: _drawCtrl,
                           onChanged: (_) => setState(() {}),
@@ -1428,9 +1472,9 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                           ),
                           inputFormatters: const [decimalInputFormatter],
                           style: AppTypography.tabular.copyWith(fontSize: 16),
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             hintText: '10',
-                            suffixText: 'units',
+                            suffixText: l10n.units,
                             border: InputBorder.none,
                             filled: false,
                             contentPadding: EdgeInsets.symmetric(
@@ -1445,13 +1489,13 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
-                  'Uses U-100 syringe markings (100 units = 1 mL). Values are user-entered tracking data.',
+                  l10n.u100TrackingDisclaimer,
                   style: AppTypography.disclaimer,
                 ),
                 const SizedBox(height: AppSpacing.base),
                 _BlendPreview(blend: blend),
                 const SizedBox(height: AppSpacing.lg),
-                Text('SCHEDULE', style: AppTypography.systemLabel),
+                Text(l10n.scheduleLabel, style: AppTypography.systemLabel),
                 const SizedBox(height: AppSpacing.sm),
                 Wrap(
                   spacing: AppSpacing.sm,
@@ -1459,7 +1503,7 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                   children: [
                     for (final option in kFrequencies)
                       _Chip(
-                        label: option.label,
+                        label: _freqLabel(context, option.key),
                         selected: _frequency == option.key,
                         onTap: () => setState(() {
                           _frequency = option.key;
@@ -1483,7 +1527,7 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                         weekday++
                       )
                         _Chip(
-                          label: _weekdayLabel(weekday),
+                          label: _weekdayLabel(context, weekday),
                           selected: _selectedWeekdays.contains(weekday),
                           onTap: () => _toggleWeekday(weekday),
                         ),
@@ -1497,18 +1541,22 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                   children: [
                     for (final time in _times)
                       _TimeChip(
-                        label: time,
+                        label: _formatStoredTime(context, time),
                         canRemove: _times.length > 1,
                         onTap: () => _editTime(time),
                         onRemove: () => setState(() {
                           if (_times.length > 1) _times.remove(time);
                         }),
                       ),
-                    _Chip(label: 'Add time', selected: false, onTap: _addTime),
+                    _Chip(
+                      label: l10n.addTime,
+                      selected: false,
+                      onTap: _addTime,
+                    ),
                   ],
                 ),
                 const SizedBox(height: AppSpacing.lg),
-                Text('ROUTE', style: AppTypography.systemLabel),
+                Text(l10n.routeLabel, style: AppTypography.systemLabel),
                 const SizedBox(height: AppSpacing.sm),
                 Wrap(
                   spacing: AppSpacing.sm,
@@ -1516,7 +1564,7 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                   children: [
                     for (final option in kRoutes)
                       _Chip(
-                        label: option.label,
+                        label: _routeLabel(context, option.key),
                         selected: _route == option.key,
                         onTap: () => setState(() => _route = option.key),
                       ),
@@ -1527,7 +1575,7 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                   children: [
                     Expanded(
                       child: _FieldLabel(
-                        label: 'CYCLE WEEKS',
+                        label: l10n.cycleWeeksLabel,
                         child: TextField(
                           controller: _cycleWeeksCtrl,
                           keyboardType: TextInputType.number,
@@ -1535,8 +1583,8 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                           style: AppTypography.tabular.copyWith(fontSize: 16),
-                          decoration: const InputDecoration(
-                            hintText: 'None',
+                          decoration: InputDecoration(
+                            hintText: l10n.noneLabel,
                             border: InputBorder.none,
                             filled: false,
                             contentPadding: EdgeInsets.symmetric(
@@ -1550,7 +1598,7 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                     const SizedBox(width: AppSpacing.cardGap),
                     Expanded(
                       child: _FieldLabel(
-                        label: 'REST WEEKS',
+                        label: l10n.restWeeksLabel,
                         child: TextField(
                           controller: _washoutWeeksCtrl,
                           keyboardType: TextInputType.number,
@@ -1558,8 +1606,8 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                           style: AppTypography.tabular.copyWith(fontSize: 16),
-                          decoration: const InputDecoration(
-                            hintText: 'None',
+                          decoration: InputDecoration(
+                            hintText: l10n.noneLabel,
                             border: InputBorder.none,
                             filled: false,
                             contentPadding: EdgeInsets.symmetric(
@@ -1573,7 +1621,7 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                   ],
                 ),
                 const SizedBox(height: AppSpacing.lg),
-                Text('LABEL COLOR', style: AppTypography.systemLabel),
+                Text(l10n.labelColorLabel, style: AppTypography.systemLabel),
                 const SizedBox(height: AppSpacing.sm),
                 Wrap(
                   spacing: AppSpacing.sm,
@@ -1589,14 +1637,14 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                 ),
                 const SizedBox(height: AppSpacing.base),
                 Text(
-                  'Unit conversion only. PepMod does not recommend a blend, dose, frequency, or reconstitution method.',
+                  l10n.blendSafetyDisclaimer,
                   style: AppTypography.disclaimer.copyWith(
                     color: AppColors.warning,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xl),
                 PrimaryButton(
-                  label: 'SAVE BLEND',
+                  label: l10n.saveBlend,
                   onPressed: _canSave ? _save : null,
                 ),
                 const SizedBox(height: AppSpacing.sm),
@@ -1604,7 +1652,7 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                   child: TextButton(
                     onPressed: () => Navigator.of(context).pop(),
                     child: Text(
-                      'Cancel',
+                      l10n.cancelLabel,
                       style: AppTypography.labelMedium.copyWith(
                         color: AppColors.textTertiary,
                       ),
@@ -1678,19 +1726,23 @@ class _BlendConstituentEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Text('COMPOUND ${index + 1}', style: AppTypography.systemLabel),
+              Text(
+                l10n.compoundNumber(index + 1),
+                style: AppTypography.systemLabel,
+              ),
               const Spacer(),
               if (canRemove)
                 TextButton(
                   onPressed: onRemove,
                   child: Text(
-                    'REMOVE',
+                    l10n.removeLabel,
                     style: AppTypography.systemLabel.copyWith(
                       color: AppColors.textTertiary,
                       fontSize: 9,
@@ -1704,8 +1756,8 @@ class _BlendConstituentEditor extends StatelessWidget {
             onChanged: (_) => onChanged(),
             textCapitalization: TextCapitalization.words,
             style: AppTypography.bodyLarge,
-            decoration: const InputDecoration(
-              hintText: 'Name from vial label',
+            decoration: InputDecoration(
+              hintText: l10n.vialLabelNameHint,
               border: InputBorder.none,
               filled: false,
             ),
@@ -1722,8 +1774,8 @@ class _BlendConstituentEditor extends StatelessWidget {
                   ),
                   inputFormatters: const [decimalInputFormatter],
                   style: AppTypography.tabular.copyWith(fontSize: 16),
-                  decoration: const InputDecoration(
-                    hintText: 'Vial amount',
+                  decoration: InputDecoration(
+                    hintText: l10n.vialAmountHint,
                     border: InputBorder.none,
                     filled: false,
                   ),
@@ -1770,34 +1822,39 @@ class _BlendPreview extends StatelessWidget {
 
   final BlendVial blend;
 
-  String _amount(double value) {
-    if (value >= 100) return value.toStringAsFixed(0);
-    if (value >= 10) return value.toStringAsFixed(1);
-    return value.toStringAsFixed(2);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    String amount(double value) => NumberFormat(
+      value >= 100
+          ? '0'
+          : value >= 10
+          ? '0.#'
+          : '0.##',
+      l10n.localeName,
+    ).format(value);
     return AppCard(
       borderColor: blend.isValid ? AppColors.borderCyan : AppColors.border,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('DRAW PREVIEW', style: AppTypography.systemLabel),
+          Text(l10n.drawPreviewLabel, style: AppTypography.systemLabel),
           const SizedBox(height: AppSpacing.sm),
           if (!blend.isValid)
             Text(
               blend.drawVolumeMl > blend.diluentMl && blend.diluentMl > 0
-                  ? 'Draw cannot exceed the vial volume.'
-                  : 'Complete at least two compounds, diluent volume, and draw.',
+                  ? l10n.drawExceedsVialError
+                  : l10n.blendIncompleteError,
               style: AppTypography.bodySmall.copyWith(
                 color: AppColors.textTertiary,
               ),
             )
           else ...[
             Text(
-              '${_amount(blend.drawSyringeUnits)} units = '
-              '${_amount(blend.drawVolumeMl)} mL',
+              l10n.drawPreviewValue(
+                amount(blend.drawSyringeUnits),
+                amount(blend.drawVolumeMl),
+              ),
               style: AppTypography.tabular.copyWith(
                 fontSize: 16,
                 color: AppColors.primary,
@@ -1816,7 +1873,7 @@ class _BlendPreview extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${_amount(blend.amountPerDraw(constituent))} '
+                      '${amount(blend.amountPerDraw(constituent))} '
                       '${constituent.unit}',
                       style: AppTypography.tabular.copyWith(fontSize: 13),
                     ),
@@ -1862,11 +1919,11 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
     super.initState();
     _nameCtrl = TextEditingController(text: widget.initial.peptideName);
     _doseCtrl = TextEditingController(
-      text: _formatAmount(widget.initial.dosePerInjection),
+      text: _formatInitialAmount(widget.initial.dosePerInjection),
     );
     _syringeUnitsCtrl = TextEditingController(
       text: widget.initial.syringeUnits > 0
-          ? _formatAmount(widget.initial.syringeUnits)
+          ? _formatInitialAmount(widget.initial.syringeUnits)
           : '',
     );
     _cycleWeeksCtrl = TextEditingController(
@@ -1929,7 +1986,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
       }
     }
     _weekdayDoseCtrls[weekday] = TextEditingController(
-      text: _formatAmount(existing?.dosePerInjection ?? _parsedBaseDose),
+      text: _formatInitialAmount(existing?.dosePerInjection ?? _parsedBaseDose),
     );
   }
 
@@ -2015,7 +2072,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
         previous ??
         ProtocolPhase(
           uuid: const Uuid().v4(),
-          name: 'Phase ${_phases.length + 1}',
+          name: AppLocalizations.of(context).phaseNumber(_phases.length + 1),
           startWeek: nextWeek,
           endWeek: nextWeek,
           dosePerInjection: _parsedBaseDose,
@@ -2041,8 +2098,9 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'This protocol cycle ends after week $_parsedCycleWeeks. '
-            'Keep phase weeks inside that window.',
+            AppLocalizations.of(
+              context,
+            ).phaseOutsideCycleError(_parsedCycleWeeks),
           ),
         ),
       );
@@ -2056,7 +2114,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
     );
     if (overlaps) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Phase week ranges cannot overlap.')),
+        SnackBar(content: Text(AppLocalizations.of(context).phaseOverlapError)),
       );
       return;
     }
@@ -2135,6 +2193,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -2172,7 +2231,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                   Text(
                     _isCustomPeptide
                         ? _nameCtrl.text.trim().isEmpty
-                              ? 'Custom peptide'
+                              ? l10n.customPeptide
                               : _nameCtrl.text.trim()
                         : widget.initial.peptideName,
                     style: AppTypography.h2,
@@ -2192,9 +2251,13 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                           const SizedBox(width: AppSpacing.sm),
                           Expanded(
                             child: Text(
-                              '${_formatAmount(widget.initial.vialAmountSnapshot)} '
-                              '${widget.initial.vialUnitSnapshot} vial preset · '
-                              'copied into this protocol',
+                              l10n.copiedVialPreset(
+                                _formatAmount(
+                                  context,
+                                  widget.initial.vialAmountSnapshot,
+                                ),
+                                widget.initial.vialUnitSnapshot,
+                              ),
                               style: AppTypography.bodySmall,
                             ),
                           ),
@@ -2206,14 +2269,14 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
 
                   if (_isCustomPeptide) ...[
                     _FieldLabel(
-                      label: 'NAME',
+                      label: l10n.nameLabel,
                       child: TextField(
                         controller: _nameCtrl,
                         onChanged: (_) => setState(() {}),
                         textCapitalization: TextCapitalization.words,
                         style: AppTypography.bodyLarge,
                         decoration: InputDecoration(
-                          hintText: 'Enter peptide name',
+                          hintText: l10n.enterPeptideName,
                           hintStyle: AppTypography.bodyMedium.copyWith(
                             color: AppColors.textDisabled,
                           ),
@@ -2230,7 +2293,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                     const SizedBox(height: AppSpacing.lg),
                   ],
 
-                  Text('LABEL COLOR', style: AppTypography.systemLabel),
+                  Text(l10n.labelColorLabel, style: AppTypography.systemLabel),
                   const SizedBox(height: AppSpacing.sm),
                   Wrap(
                     spacing: AppSpacing.sm,
@@ -2245,10 +2308,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                     ],
                   ),
                   const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    'Match this color to the pen or vial label you use in real life.',
-                    style: AppTypography.disclaimer,
-                  ),
+                  Text(l10n.labelColorBody, style: AppTypography.disclaimer),
                   const SizedBox(height: AppSpacing.lg),
 
                   // Dose + unit
@@ -2257,7 +2317,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                       Expanded(
                         flex: 2,
                         child: _FieldLabel(
-                          label: 'DOSE',
+                          label: l10n.doseLabel,
                           child: TextField(
                             controller: _doseCtrl,
                             onChanged: (_) => setState(() {}),
@@ -2282,7 +2342,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                       const SizedBox(width: AppSpacing.cardGap),
                       Expanded(
                         child: _FieldLabel(
-                          label: 'UNIT',
+                          label: l10n.unitLabel,
                           child: _SegmentedToggle(
                             options: const ['mcg', 'mg', 'IU'],
                             selected: _unit,
@@ -2294,7 +2354,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                   ),
                   const SizedBox(height: AppSpacing.base),
                   _FieldLabel(
-                    label: 'SYRINGE UNITS OPTIONAL',
+                    label: l10n.syringeUnitsOptional,
                     child: TextField(
                       controller: _syringeUnitsCtrl,
                       keyboardType: const TextInputType.numberWithOptions(
@@ -2303,11 +2363,11 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                       inputFormatters: const [decimalInputFormatter],
                       style: AppTypography.tabular.copyWith(fontSize: 16),
                       decoration: InputDecoration(
-                        hintText: 'e.g. 12.5',
+                        hintText: l10n.syringeUnitsHint,
                         hintStyle: AppTypography.bodySmall.copyWith(
                           color: AppColors.textDisabled,
                         ),
-                        suffixText: 'syringe units',
+                        suffixText: l10n.syringeUnitsLabel,
                         suffixStyle: AppTypography.bodySmall.copyWith(
                           color: AppColors.textTertiary,
                         ),
@@ -2323,13 +2383,13 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
-                    'Optional user-entered U-100 syringe markings for tracking only.',
+                    l10n.syringeUnitsDisclaimer,
                     style: AppTypography.disclaimer,
                   ),
                   const SizedBox(height: AppSpacing.lg),
 
                   // Frequency
-                  Text('FREQUENCY', style: AppTypography.systemLabel),
+                  Text(l10n.frequencyLabel, style: AppTypography.systemLabel),
                   const SizedBox(height: AppSpacing.sm),
                   Wrap(
                     spacing: AppSpacing.sm,
@@ -2337,7 +2397,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                     children: [
                       for (final f in kFrequencies)
                         _Chip(
-                          label: f.label,
+                          label: _freqLabel(context, f.key),
                           selected: _frequency == f.key,
                           onTap: () => _selectFrequency(f.key),
                         ),
@@ -2345,7 +2405,10 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                   ),
                   if (_frequency == kCustomWeekdayFrequency) ...[
                     const SizedBox(height: AppSpacing.base),
-                    Text('CUSTOM DAYS', style: AppTypography.systemLabel),
+                    Text(
+                      l10n.customDays.toUpperCase(),
+                      style: AppTypography.systemLabel,
+                    ),
                     const SizedBox(height: AppSpacing.sm),
                     Wrap(
                       spacing: AppSpacing.sm,
@@ -2357,7 +2420,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                           weekday++
                         )
                           _Chip(
-                            label: _weekdayLabel(weekday),
+                            label: _weekdayLabel(context, weekday),
                             selected: _selectedWeekdays.contains(weekday),
                             onTap: () => _toggleWeekday(weekday),
                           ),
@@ -2366,7 +2429,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                     const SizedBox(height: AppSpacing.base),
                     if (_selectedWeekdays.isEmpty)
                       Text(
-                        'Select at least one day to schedule this peptide.',
+                        l10n.selectDayError,
                         style: AppTypography.bodySmall.copyWith(
                           color: AppColors.warning,
                         ),
@@ -2381,7 +2444,9 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                                 bottom: AppSpacing.sm,
                               ),
                               child: _FieldLabel(
-                                label: '${_weekdayLabel(weekday)} DOSE',
+                                label: AppLocalizations.of(
+                                  context,
+                                ).weekdayDose(_weekdayLabel(context, weekday)),
                                 child: TextField(
                                   controller: _weekdayDoseCtrls[weekday],
                                   onChanged: (_) => setState(() {}),
@@ -2416,14 +2481,14 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                       ),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      'Only selected weekdays are scheduled. Amounts are user-entered tracking values, not dosing advice.',
+                      l10n.customDaysDisclaimer,
                       style: AppTypography.disclaimer,
                     ),
                   ],
                   const SizedBox(height: AppSpacing.lg),
 
                   // Route
-                  Text('ROUTE', style: AppTypography.systemLabel),
+                  Text(l10n.routeLabel, style: AppTypography.systemLabel),
                   const SizedBox(height: AppSpacing.sm),
                   Wrap(
                     spacing: AppSpacing.sm,
@@ -2431,7 +2496,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                     children: [
                       for (final r in kRoutes)
                         _Chip(
-                          label: r.label,
+                          label: _routeLabel(context, r.key),
                           selected: _route == r.key,
                           onTap: () => setState(() => _route = r.key),
                         ),
@@ -2444,7 +2509,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                     children: [
                       Expanded(
                         child: _FieldLabel(
-                          label: 'CYCLE WEEKS',
+                          label: l10n.cycleWeeksLabel,
                           child: TextField(
                             controller: _cycleWeeksCtrl,
                             keyboardType: TextInputType.number,
@@ -2452,8 +2517,8 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                               FilteringTextInputFormatter.digitsOnly,
                             ],
                             style: AppTypography.tabular.copyWith(fontSize: 16),
-                            decoration: const InputDecoration(
-                              hintText: 'None',
+                            decoration: InputDecoration(
+                              hintText: l10n.noneLabel,
                               border: InputBorder.none,
                               isDense: true,
                               filled: false,
@@ -2468,7 +2533,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                       const SizedBox(width: AppSpacing.cardGap),
                       Expanded(
                         child: _FieldLabel(
-                          label: 'REST WEEKS',
+                          label: l10n.restWeeksLabel,
                           child: TextField(
                             controller: _washoutWeeksCtrl,
                             keyboardType: TextInputType.number,
@@ -2476,8 +2541,8 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                               FilteringTextInputFormatter.digitsOnly,
                             ],
                             style: AppTypography.tabular.copyWith(fontSize: 16),
-                            decoration: const InputDecoration(
-                              hintText: 'None',
+                            decoration: InputDecoration(
+                              hintText: l10n.noneLabel,
                               border: InputBorder.none,
                               isDense: true,
                               filled: false,
@@ -2493,17 +2558,14 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
-                    'Cycle and rest windows organize tracking history. PepMod will not schedule future doses after the cycle window ends.',
+                    l10n.cycleWindowDisclaimer,
                     style: AppTypography.disclaimer,
                   ),
                   const SizedBox(height: AppSpacing.lg),
 
-                  Text('WEEK-TO-WEEK PHASES', style: AppTypography.systemLabel),
+                  Text(l10n.weekToWeekPhases, style: AppTypography.systemLabel),
                   const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    'Optional date windows can override this base amount and schedule. Outside them, the base schedule continues.',
-                    style: AppTypography.bodySmall,
-                  ),
+                  Text(l10n.phasesBody, style: AppTypography.bodySmall),
                   if (_phases.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.base),
                     for (var index = 0; index < _phases.length; index++) ...[
@@ -2522,7 +2584,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                       )) ...[
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      'A phase extends beyond the $_parsedCycleWeeks-week cycle. Adjust the phase or cycle window.',
+                      l10n.phaseExtendsWarning(_parsedCycleWeeks),
                       style: AppTypography.bodySmall.copyWith(
                         color: AppColors.warning,
                       ),
@@ -2543,21 +2605,21 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                     ),
                     icon: const Icon(Icons.add_rounded, size: 18),
                     label: Text(
-                      'ADD PHASE',
+                      l10n.addPhase,
                       style: AppTypography.button.copyWith(
                         color: AppColors.primary,
                       ),
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    'Weeks are counted from the protocol start date. Saved phase notes and change reminders are tracking aids only.',
-                    style: AppTypography.disclaimer,
-                  ),
+                  Text(l10n.phasesDisclaimer, style: AppTypography.disclaimer),
                   const SizedBox(height: AppSpacing.lg),
 
                   // Reminder times
-                  Text('REMINDER TIMES', style: AppTypography.systemLabel),
+                  Text(
+                    l10n.reminderTimesLabel,
+                    style: AppTypography.systemLabel,
+                  ),
                   const SizedBox(height: AppSpacing.sm),
                   Wrap(
                     spacing: AppSpacing.sm,
@@ -2565,34 +2627,31 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                     children: [
                       for (final time in _times)
                         _TimeChip(
-                          label: time,
+                          label: _formatStoredTime(context, time),
                           canRemove: _times.length > 1,
                           onTap: () => _editTime(time),
                           onRemove: () => _removeTime(time),
                         ),
                       _Chip(
-                        label: 'Add time',
+                        label: l10n.addTime,
                         selected: false,
                         onTap: _addTime,
                       ),
                     ],
                   ),
                   const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    'Each selected time creates its own tracking row and reminder on scheduled days.',
-                    style: AppTypography.disclaimer,
-                  ),
+                  Text(l10n.reminderTimesBody, style: AppTypography.disclaimer),
                   const SizedBox(height: AppSpacing.xl),
 
                   PrimaryButton(
-                    label: 'SAVE',
+                    label: l10n.saveLabel,
                     onPressed: _canSave ? _save : null,
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
                     child: Text(
-                      'Cancel',
+                      l10n.cancelLabel,
                       style: AppTypography.labelMedium.copyWith(
                         color: AppColors.textTertiary,
                       ),
@@ -2621,19 +2680,20 @@ class _PhaseSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final weeks = phase.startWeek == phase.endWeek
-        ? 'WEEK ${phase.startWeek}'
-        : 'WEEKS ${phase.startWeek}–${phase.endWeek}';
+        ? l10n.weekNumber(phase.startWeek)
+        : l10n.weekRange(phase.startWeek, phase.endWeek);
     final amount =
         phase.frequency == kCustomWeekdayFrequency &&
             phase.weekdayDoses.isNotEmpty
-        ? 'Per-day amounts'
+        ? l10n.perDayAmounts
         : phase.dosePerInjection == null
-        ? 'Base amount'
-        : '${_formatAmount(phase.dosePerInjection!)} ${phase.doseUnit ?? ''}';
+        ? l10n.baseAmount
+        : '${_formatAmount(context, phase.dosePerInjection!)} ${phase.doseUnit ?? ''}';
     final frequency = phase.frequency == null
-        ? 'base schedule'
-        : _freqLabel(phase.frequency!);
+        ? l10n.baseSchedule
+        : _freqLabel(context, phase.frequency!);
     return AppCard(
       onTap: onEdit,
       borderColor: AppColors.borderCyan,
@@ -2669,7 +2729,7 @@ class _PhaseSummaryCard extends StatelessWidget {
             ),
           ),
           IconButton(
-            tooltip: 'Remove phase',
+            tooltip: l10n.removePhase,
             onPressed: onDelete,
             icon: const Icon(
               Icons.close_rounded,
@@ -2724,11 +2784,11 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
     _startWeekCtrl = TextEditingController(text: '${phase.startWeek}');
     _endWeekCtrl = TextEditingController(text: '${phase.endWeek}');
     _doseCtrl = TextEditingController(
-      text: _formatAmount(phase.dosePerInjection ?? widget.fallbackDose),
+      text: _formatInitialAmount(phase.dosePerInjection ?? widget.fallbackDose),
     );
     _syringeCtrl = TextEditingController(
       text: (phase.syringeUnits ?? 0) > 0
-          ? _formatAmount(phase.syringeUnits!)
+          ? _formatInitialAmount(phase.syringeUnits!)
           : '',
     );
     _noteCtrl = TextEditingController(text: phase.note);
@@ -2742,7 +2802,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
     _selectedWeekdays = phase.weekdayDoses.map((dose) => dose.weekday).toSet();
     for (final dose in phase.weekdayDoses) {
       _weekdayDoseCtrls[dose.weekday] = TextEditingController(
-        text: _formatAmount(dose.dosePerInjection),
+        text: _formatInitialAmount(dose.dosePerInjection),
       );
       _weekdayTimes[dose.weekday] = _normalizePhaseTimes(dose.scheduledTimes);
     }
@@ -2934,6 +2994,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
     return Padding(
       padding: EdgeInsets.only(bottom: bottomInset),
@@ -2969,21 +3030,18 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                 const SizedBox(height: AppSpacing.lg),
                 Text('CONFIG.PHASE', style: AppTypography.systemLabel),
                 const SizedBox(height: AppSpacing.sm),
-                Text('Week-to-week override', style: AppTypography.h2),
+                Text(l10n.phaseOverrideTitle, style: AppTypography.h2),
                 const SizedBox(height: AppSpacing.xs),
-                Text(
-                  'Enter only the tracking schedule you already intend to follow. PepMod does not recommend amounts.',
-                  style: AppTypography.bodySmall,
-                ),
+                Text(l10n.phaseOverrideBody, style: AppTypography.bodySmall),
                 const SizedBox(height: AppSpacing.lg),
                 _FieldLabel(
-                  label: 'PHASE NAME',
+                  label: l10n.phaseNameLabel,
                   child: TextField(
                     controller: _nameCtrl,
                     onChanged: (_) => setState(() {}),
                     style: AppTypography.bodyLarge,
-                    decoration: const InputDecoration(
-                      hintText: 'e.g. Week 1 tracking',
+                    decoration: InputDecoration(
+                      hintText: l10n.phaseNameHint,
                       border: InputBorder.none,
                       filled: false,
                       contentPadding: EdgeInsets.all(AppSpacing.md),
@@ -2995,7 +3053,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                   children: [
                     Expanded(
                       child: _FieldLabel(
-                        label: 'START WEEK',
+                        label: l10n.startWeekLabel,
                         child: TextField(
                           controller: _startWeekCtrl,
                           onChanged: (_) => setState(() {}),
@@ -3015,7 +3073,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                     const SizedBox(width: AppSpacing.cardGap),
                     Expanded(
                       child: _FieldLabel(
-                        label: 'END WEEK',
+                        label: l10n.endWeekLabel,
                         child: TextField(
                           controller: _endWeekCtrl,
                           onChanged: (_) => setState(() {}),
@@ -3041,8 +3099,8 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                       flex: 2,
                       child: _FieldLabel(
                         label: _frequency == kCustomWeekdayFrequency
-                            ? 'DEFAULT AMOUNT'
-                            : 'TRACKED AMOUNT',
+                            ? l10n.defaultAmountLabel
+                            : l10n.trackedAmountLabel,
                         child: TextField(
                           controller: _doseCtrl,
                           onChanged: (_) => setState(() {}),
@@ -3062,7 +3120,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                     const SizedBox(width: AppSpacing.cardGap),
                     Expanded(
                       child: _FieldLabel(
-                        label: 'UNIT',
+                        label: l10n.unitLabel,
                         child: _SegmentedToggle(
                           options: const ['mcg', 'mg', 'IU'],
                           selected: _unit,
@@ -3074,7 +3132,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                 ),
                 const SizedBox(height: AppSpacing.base),
                 _FieldLabel(
-                  label: 'SYRINGE UNITS OPTIONAL',
+                  label: l10n.syringeUnitsOptional,
                   child: TextField(
                     controller: _syringeCtrl,
                     keyboardType: const TextInputType.numberWithOptions(
@@ -3082,8 +3140,8 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                     ),
                     inputFormatters: const [decimalInputFormatter],
                     style: AppTypography.tabular,
-                    decoration: const InputDecoration(
-                      hintText: 'Optional',
+                    decoration: InputDecoration(
+                      hintText: l10n.optionalLabel,
                       border: InputBorder.none,
                       filled: false,
                       contentPadding: EdgeInsets.all(AppSpacing.md),
@@ -3091,7 +3149,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                   ),
                 ),
                 const SizedBox(height: AppSpacing.lg),
-                Text('PHASE SCHEDULE', style: AppTypography.systemLabel),
+                Text(l10n.phaseScheduleLabel, style: AppTypography.systemLabel),
                 const SizedBox(height: AppSpacing.sm),
                 Wrap(
                   spacing: AppSpacing.sm,
@@ -3099,7 +3157,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                   children: [
                     for (final frequency in kFrequencies)
                       _Chip(
-                        label: frequency.label,
+                        label: _freqLabel(context, frequency.key),
                         selected: _frequency == frequency.key,
                         onTap: () => setState(() => _frequency = frequency.key),
                       ),
@@ -3107,7 +3165,10 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                 ),
                 if (_frequency == kCustomWeekdayFrequency) ...[
                   const SizedBox(height: AppSpacing.base),
-                  Text('CUSTOM DAYS', style: AppTypography.systemLabel),
+                  Text(
+                    l10n.customDays.toUpperCase(),
+                    style: AppTypography.systemLabel,
+                  ),
                   const SizedBox(height: AppSpacing.sm),
                   Wrap(
                     spacing: AppSpacing.sm,
@@ -3119,7 +3180,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                         weekday++
                       )
                         _Chip(
-                          label: _weekdayLabel(weekday),
+                          label: _weekdayLabel(context, weekday),
                           selected: _selectedWeekdays.contains(weekday),
                           onTap: () => _toggleWeekday(weekday),
                         ),
@@ -3128,7 +3189,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                   const SizedBox(height: AppSpacing.base),
                   if (_selectedWeekdays.isEmpty)
                     Text(
-                      'Select at least one day. PepMod will not choose a schedule for you.',
+                      l10n.phaseSelectDayError,
                       style: AppTypography.bodySmall.copyWith(
                         color: AppColors.warning,
                       ),
@@ -3163,7 +3224,10 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                   ],
                 ] else ...[
                   const SizedBox(height: AppSpacing.base),
-                  Text('REMINDER TIMES', style: AppTypography.systemLabel),
+                  Text(
+                    l10n.reminderTimesLabel,
+                    style: AppTypography.systemLabel,
+                  ),
                   const SizedBox(height: AppSpacing.sm),
                   Wrap(
                     spacing: AppSpacing.sm,
@@ -3171,13 +3235,13 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                     children: [
                       for (final time in _times)
                         _TimeChip(
-                          label: time,
+                          label: _formatStoredTime(context, time),
                           canRemove: _times.length > 1,
                           onTap: () => _editTime(time),
                           onRemove: () => setState(() => _times.remove(time)),
                         ),
                       _Chip(
-                        label: 'Add time',
+                        label: l10n.addTime,
                         selected: false,
                         onTap: _addTime,
                       ),
@@ -3186,14 +3250,14 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                 ],
                 const SizedBox(height: AppSpacing.base),
                 _FieldLabel(
-                  label: 'CHANGE NOTE OPTIONAL',
+                  label: l10n.changeNoteOptional,
                   child: TextField(
                     controller: _noteCtrl,
                     minLines: 2,
                     maxLines: 3,
                     style: AppTypography.bodyMedium,
-                    decoration: const InputDecoration(
-                      hintText: 'Your own context for this phase',
+                    decoration: InputDecoration(
+                      hintText: l10n.changeNoteHint,
                       border: InputBorder.none,
                       filled: false,
                       contentPadding: EdgeInsets.all(AppSpacing.md),
@@ -3201,13 +3265,10 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xs),
-                Text(
-                  'A neutral phase-change reminder is scheduled for 9:00 AM when protocol reminders are enabled.',
-                  style: AppTypography.disclaimer,
-                ),
+                Text(l10n.phaseReminderBody, style: AppTypography.disclaimer),
                 const SizedBox(height: AppSpacing.xl),
                 PrimaryButton(
-                  label: 'SAVE PHASE',
+                  label: l10n.savePhase,
                   onPressed: _canSave ? _save : null,
                 ),
                 const SizedBox(height: AppSpacing.sm),
@@ -3215,7 +3276,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                   child: TextButton(
                     onPressed: () => Navigator.of(context).pop(),
                     child: Text(
-                      'Cancel',
+                      l10n.cancelLabel,
                       style: AppTypography.labelMedium.copyWith(
                         color: AppColors.textTertiary,
                       ),
@@ -3254,17 +3315,20 @@ class _PhaseWeekdayEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${_weekdayLabel(weekday).toUpperCase()} SCHEDULE',
+            AppLocalizations.of(
+              context,
+            ).weekdaySchedule(_weekdayLabel(context, weekday).toUpperCase()),
             style: AppTypography.systemLabel,
           ),
           const SizedBox(height: AppSpacing.sm),
           _FieldLabel(
-            label: 'TRACKED AMOUNT',
+            label: l10n.trackedAmountLabel,
             child: TextField(
               controller: amountController,
               onChanged: onAmountChanged,
@@ -3283,7 +3347,7 @@ class _PhaseWeekdayEditor extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
-          Text('REMINDER TIMES', style: AppTypography.systemLabel),
+          Text(l10n.reminderTimesLabel, style: AppTypography.systemLabel),
           const SizedBox(height: AppSpacing.xs),
           Wrap(
             spacing: AppSpacing.sm,
@@ -3291,12 +3355,12 @@ class _PhaseWeekdayEditor extends StatelessWidget {
             children: [
               for (final time in times)
                 _TimeChip(
-                  label: time,
+                  label: _formatStoredTime(context, time),
                   canRemove: times.length > 1,
                   onTap: () => onEditTime(time),
                   onRemove: () => onRemoveTime(time),
                 ),
-              _Chip(label: 'Add time', selected: false, onTap: onAddTime),
+              _Chip(label: l10n.addTime, selected: false, onTap: onAddTime),
             ],
           ),
         ],
@@ -3320,13 +3384,14 @@ class _PhaseSchedulePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final weekdays = selectedWeekdays.toList()..sort();
     return AppCard(
       borderColor: AppColors.borderCyan,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('PHASE PREVIEW', style: AppTypography.systemLabel),
+          Text(l10n.phasePreviewLabel, style: AppTypography.systemLabel),
           const SizedBox(height: AppSpacing.sm),
           for (final weekday in weekdays)
             Padding(
@@ -3337,24 +3402,21 @@ class _PhaseSchedulePreview extends StatelessWidget {
                   SizedBox(
                     width: 34,
                     child: Text(
-                      _weekdayLabel(weekday).toUpperCase(),
+                      _weekdayLabel(context, weekday).toUpperCase(),
                       style: AppTypography.systemLabel.copyWith(fontSize: 9),
                     ),
                   ),
                   Expanded(
                     child: Text(
-                      '${amountControllers[weekday]?.text.trim().isEmpty ?? true ? 'Amount required' : '${amountControllers[weekday]!.text.trim()} $unit'}'
-                      ' · ${(timesByWeekday[weekday] ?? const <String>[]).join(', ')}',
+                      '${amountControllers[weekday]?.text.trim().isEmpty ?? true ? l10n.amountRequired : '${amountControllers[weekday]!.text.trim()} $unit'}'
+                      ' · ${(timesByWeekday[weekday] ?? const <String>[]).map((time) => _formatStoredTime(context, time)).join(', ')}',
                       style: AppTypography.bodySmall,
                     ),
                   ),
                 ],
               ),
             ),
-          Text(
-            'Preview of your entries only. No schedule is recommended by PepMod.',
-            style: AppTypography.disclaimer,
-          ),
+          Text(l10n.phasePreviewDisclaimer, style: AppTypography.disclaimer),
         ],
       ),
     );
@@ -3409,24 +3471,30 @@ class _SegmentedToggle extends StatelessWidget {
       children: options.map((o) {
         final isOn = o == selected;
         return Expanded(
-          child: GestureDetector(
-            onTap: () {
-              HapticFeedback.selectionClick();
-              onSelect(o);
-            },
-            child: AnimatedContainer(
-              duration: AppDurations.fast,
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              decoration: BoxDecoration(
-                color: isOn
-                    ? AppColors.primary.withValues(alpha: 0.15)
-                    : Colors.transparent,
-              ),
-              child: Center(
-                child: Text(
-                  o,
-                  style: AppTypography.labelMedium.copyWith(
-                    color: isOn ? AppColors.primary : AppColors.textSecondary,
+          child: Semantics(
+            button: true,
+            selected: isOn,
+            label: AppLocalizations.of(context).selectOption(o),
+            excludeSemantics: true,
+            child: GestureDetector(
+              onTap: () {
+                HapticFeedback.selectionClick();
+                onSelect(o);
+              },
+              child: AnimatedContainer(
+                duration: AppDurations.fast,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                decoration: BoxDecoration(
+                  color: isOn
+                      ? AppColors.primary.withValues(alpha: 0.15)
+                      : Colors.transparent,
+                ),
+                child: Center(
+                  child: Text(
+                    o,
+                    style: AppTypography.labelMedium.copyWith(
+                      color: isOn ? AppColors.primary : AppColors.textSecondary,
+                    ),
                   ),
                 ),
               ),
@@ -3453,52 +3521,62 @@ class _TimeChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.selectionClick();
-        onTap();
-      },
-      child: AnimatedContainer(
-        duration: AppDurations.fast,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.primary.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: AppColors.primary, width: 1.5),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.2),
-              blurRadius: 6,
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              label,
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.primary,
-              ),
-            ),
-            if (canRemove) ...[
-              const SizedBox(width: AppSpacing.xs),
-              GestureDetector(
-                onTap: () {
-                  HapticFeedback.selectionClick();
-                  onRemove();
-                },
-                child: const Icon(
-                  Icons.close_rounded,
-                  color: AppColors.primary,
-                  size: 14,
-                ),
+    final l10n = AppLocalizations.of(context);
+    return Semantics(
+      button: true,
+      label: l10n.editTime(label),
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: () {
+          HapticFeedback.selectionClick();
+          onTap();
+        },
+        child: AnimatedContainer(
+          duration: AppDurations.fast,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.sm,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.primary.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: AppColors.primary, width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primary.withValues(alpha: 0.2),
+                blurRadius: 6,
               ),
             ],
-          ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.primary,
+                ),
+              ),
+              if (canRemove) ...[
+                const SizedBox(width: AppSpacing.xs),
+                Semantics(
+                  button: true,
+                  label: l10n.removeTime(label),
+                  child: GestureDetector(
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                      onRemove();
+                    },
+                    child: const Icon(
+                      Icons.close_rounded,
+                      color: AppColors.primary,
+                      size: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
         ),
       ),
     );
@@ -3517,39 +3595,45 @@ class _Chip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.selectionClick();
-        onTap();
-      },
-      child: AnimatedContainer(
-        duration: AppDurations.fast,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
-        ),
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primary.withValues(alpha: 0.15)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(
-            color: selected ? AppColors.primary : AppColors.border,
-            width: selected ? 1.5 : 1,
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: () {
+          HapticFeedback.selectionClick();
+          onTap();
+        },
+        child: AnimatedContainer(
+          duration: AppDurations.fast,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.sm,
           ),
-          boxShadow: selected
-              ? [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.2),
-                    blurRadius: 6,
-                  ),
-                ]
-              : null,
-        ),
-        child: Text(
-          label,
-          style: AppTypography.labelMedium.copyWith(
-            color: selected ? AppColors.primary : AppColors.textSecondary,
+          decoration: BoxDecoration(
+            color: selected
+                ? AppColors.primary.withValues(alpha: 0.15)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+              color: selected ? AppColors.primary : AppColors.border,
+              width: selected ? 1.5 : 1,
+            ),
+            boxShadow: selected
+                ? [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.2),
+                      blurRadius: 6,
+                    ),
+                  ]
+                : null,
+          ),
+          child: Text(
+            label,
+            style: AppTypography.labelMedium.copyWith(
+              color: selected ? AppColors.primary : AppColors.textSecondary,
+            ),
           ),
         ),
       ),
@@ -3571,36 +3655,41 @@ class _ColorChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = peptideLabelColor(hex);
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.selectionClick();
-        onTap();
-      },
-      child: AnimatedContainer(
-        duration: AppDurations.fast,
-        width: 44,
-        height: 44,
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: selected ? 0.26 : 0.14),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: selected ? color : AppColors.border,
-            width: selected ? 2 : 1,
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: AppLocalizations.of(context).colorOption(hex),
+      child: GestureDetector(
+        onTap: () {
+          HapticFeedback.selectionClick();
+          onTap();
+        },
+        child: AnimatedContainer(
+          duration: AppDurations.fast,
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: selected ? 0.26 : 0.14),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: selected ? color : AppColors.border,
+              width: selected ? 2 : 1,
+            ),
+            boxShadow: selected
+                ? [
+                    BoxShadow(
+                      color: color.withValues(alpha: 0.28),
+                      blurRadius: 10,
+                    ),
+                  ]
+                : null,
           ),
-          boxShadow: selected
-              ? [
-                  BoxShadow(
-                    color: color.withValues(alpha: 0.28),
-                    blurRadius: 10,
-                  ),
-                ]
-              : null,
-        ),
-        child: Center(
-          child: PeptideLabelSwatch(
-            hex: hex,
-            size: 18,
-            borderColor: AppColors.background,
+          child: Center(
+            child: PeptideLabelSwatch(
+              hex: hex,
+              size: 18,
+              borderColor: AppColors.background,
+            ),
           ),
         ),
       ),
