@@ -101,10 +101,14 @@ class ProtocolProvider extends ChangeNotifier {
     required List<ProtocolPeptide> peptides,
     String notes = '',
   }) async {
+    final trimmedName = name.trim();
+    if (trimmedName.isEmpty) {
+      throw ArgumentError.value(name, 'name', 'Protocol name cannot be empty');
+    }
     final now = DateTime.now();
     final p = Protocol(
       uuid: _uuid.v4(),
-      name: name.isEmpty ? 'My Protocol' : name,
+      name: trimmedName,
       startDate: startDate,
       status: ProtocolStatus.active,
       peptides: peptides,
@@ -131,6 +135,10 @@ class ProtocolProvider extends ChangeNotifier {
     required List<ProtocolPeptide> peptides,
     String? notes,
   }) async {
+    final trimmedName = name.trim();
+    if (trimmedName.isEmpty) {
+      throw ArgumentError.value(name, 'name', 'Protocol name cannot be empty');
+    }
     if (_uid.isEmpty) return;
 
     await NotificationService.instance.cancelProtocolRemindersForProtocol(
@@ -138,7 +146,7 @@ class ProtocolProvider extends ChangeNotifier {
     );
 
     protocol
-      ..name = name.isEmpty ? 'My Protocol' : name
+      ..name = trimmedName
       ..startDate = startDate
       ..peptides = peptides;
     if (notes != null) protocol.notes = notes.trim();

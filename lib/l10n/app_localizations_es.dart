@@ -578,6 +578,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get injectionSiteRightTriceps => 'Tríceps derecho';
 
   @override
+  String get injectionSiteLeftDeltoid => 'Deltoides izquierdo';
+
+  @override
+  String get injectionSiteRightDeltoid => 'Deltoides derecho';
+
+  @override
   String get plannerToday => 'HOY';
 
   @override

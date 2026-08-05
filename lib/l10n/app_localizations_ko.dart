@@ -551,6 +551,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get injectionSiteRightTriceps => '오른쪽 삼두근';
 
   @override
+  String get injectionSiteLeftDeltoid => '왼쪽 삼각근';
+
+  @override
+  String get injectionSiteRightDeltoid => '오른쪽 삼각근';
+
+  @override
   String get plannerToday => '오늘';
 
   @override

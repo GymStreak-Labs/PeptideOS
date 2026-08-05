@@ -164,7 +164,7 @@ void main() {
         takenAt: now.subtract(const Duration(hours: 2)),
         amountTaken: 1.5,
         units: 'mg',
-        injectionSite: 'left-thigh',
+        injectionSite: 'left-delt',
       ),
     );
     final doseProvider = DoseLogProvider(doseRepository, uid: 'test-user');
@@ -204,7 +204,7 @@ void main() {
     expect(find.text('DOSISVERLAUF // 30 TAGE'), findsOneWidget);
     expect(find.text('Protokollierte Dosen'), findsOneWidget);
     expect(find.textContaining('1,5 mg'), findsOneWidget);
-    expect(find.text('Linker Oberschenkel'), findsOneWidget);
+    expect(find.text('Linker Deltamuskel'), findsOneWidget);
     expect(tester.takeException(), isNull);
 
     await tester.tap(find.text('FRÜHERE DOSIS'));

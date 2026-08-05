@@ -581,6 +581,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get injectionSiteRightTriceps => 'Rechter Trizeps';
 
   @override
+  String get injectionSiteLeftDeltoid => 'Linker Deltamuskel';
+
+  @override
+  String get injectionSiteRightDeltoid => 'Rechter Deltamuskel';
+
+  @override
   String get plannerToday => 'HEUTE';
 
   @override

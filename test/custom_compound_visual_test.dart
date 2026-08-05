@@ -40,6 +40,7 @@ void main() {
         ChangeNotifierProvider.value(
           value: provider,
           child: MaterialApp(
+            locale: const Locale('en'),
             debugShowCheckedModeBanner: false,
             theme: AppTheme.dark,
             localizationsDelegates: AppLocalizations.localizationsDelegates,

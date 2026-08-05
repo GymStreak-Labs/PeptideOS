@@ -1149,6 +1149,18 @@ abstract class AppLocalizations {
   /// **'Right Triceps'**
   String get injectionSiteRightTriceps;
 
+  /// Display name for the left deltoid injection site.
+  ///
+  /// In en, this message translates to:
+  /// **'Left Deltoid'**
+  String get injectionSiteLeftDeltoid;
+
+  /// Display name for the right deltoid injection site.
+  ///
+  /// In en, this message translates to:
+  /// **'Right Deltoid'**
+  String get injectionSiteRightDeltoid;
+
   /// Action that returns the planner to today.
   ///
   /// In en, this message translates to:

@@ -112,6 +112,33 @@ void main() {
       }
     },
   );
+
+  test('localized Google Play listings fit store field limits', () {
+    final files = Directory('metadata/play-listings')
+        .listSync()
+        .whereType<File>()
+        .where((file) => file.path.endsWith('.json'));
+
+    expect(files.length, 8);
+    for (final file in files) {
+      final metadata = _readJson(file.path);
+      expect(
+        (metadata['title'] as String).runes.length,
+        lessThanOrEqualTo(30),
+        reason: '${file.path} title exceeds Google Play limit',
+      );
+      expect(
+        (metadata['shortDescription'] as String).runes.length,
+        lessThanOrEqualTo(80),
+        reason: '${file.path} short description exceeds Google Play limit',
+      );
+      expect(
+        (metadata['fullDescription'] as String).runes.length,
+        lessThanOrEqualTo(4000),
+        reason: '${file.path} full description exceeds Google Play limit',
+      );
+    }
+  });
 }
 
 Map<String, dynamic> _readJson(String path) =>

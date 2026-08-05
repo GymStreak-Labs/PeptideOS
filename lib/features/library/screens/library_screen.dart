@@ -213,6 +213,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       l10n,
                       p.category,
                     ),
+                    typicalDoseLabel: localizedPeptideContent(
+                      l10n,
+                      p,
+                    ).typicalDose,
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -415,10 +419,12 @@ class _PeptideCard extends StatelessWidget {
   const _PeptideCard({
     required this.peptide,
     required this.categoryLabel,
+    required this.typicalDoseLabel,
     required this.onTap,
   });
   final Peptide peptide;
   final String categoryLabel;
+  final String typicalDoseLabel;
   final VoidCallback onTap;
 
   @override
@@ -454,7 +460,7 @@ class _PeptideCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  peptide.typicalDose,
+                  typicalDoseLabel,
                   style: AppTypography.bodySmall.copyWith(
                     fontFamily: 'JetBrainsMono',
                   ),

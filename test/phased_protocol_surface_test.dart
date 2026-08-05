@@ -108,6 +108,7 @@ void main() {
           ChangeNotifierProvider.value(value: doseProvider),
         ],
         child: MaterialApp(
+          locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           debugShowCheckedModeBanner: false,

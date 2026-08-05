@@ -237,6 +237,18 @@
     "sourceString": "Right Triceps",
     "sourceDescription": "Display name for the right triceps injection site."
   },
+  "injectionSiteLeftDeltoid": "Deltoide esquerdo",
+  "@injectionSiteLeftDeltoid": {
+    "description": "Display name for the left deltoid injection site.",
+    "sourceString": "Left Deltoid",
+    "sourceDescription": "Display name for the left deltoid injection site."
+  },
+  "injectionSiteRightDeltoid": "Deltoide direito",
+  "@injectionSiteRightDeltoid": {
+    "description": "Display name for the right deltoid injection site.",
+    "sourceString": "Right Deltoid",
+    "sourceDescription": "Display name for the right deltoid injection site."
+  },
   "plannerToday": "HOJE",
   "plannerBack": "Voltar",
   "plannerPreviousWeek": "Semana anterior",

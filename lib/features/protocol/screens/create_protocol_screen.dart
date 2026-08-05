@@ -15,6 +15,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../library/providers/custom_compound_provider.dart';
 import '../../library/providers/peptide_provider.dart';
 import '../../library/screens/custom_compound_library_screen.dart';
+import '../../library/utils/library_labels.dart';
 import '../../library/utils/localized_peptide_content.dart';
 import '../../subscription/providers/subscription_provider.dart';
 import '../../subscription/screens/soft_paywall_sheet.dart';
@@ -645,27 +646,11 @@ String _formatStoredTime(BuildContext context, String value) {
 }
 
 String _freqLabel(BuildContext context, String key) {
-  final l10n = AppLocalizations.of(context);
-  return switch (key) {
-    'daily' => l10n.frequencyDaily,
-    'every_other_day' => l10n.frequencyEveryOtherDay,
-    'twice_weekly' => l10n.frequencyTwiceWeekly,
-    'weekly' => l10n.frequencyWeekly,
-    'as_needed' => l10n.frequencyAsNeeded,
-    kCustomWeekdayFrequency => l10n.customDays,
-    _ => l10n.frequencyDaily,
-  };
+  return localizedProtocolFrequencyLabel(AppLocalizations.of(context), key);
 }
 
 String _routeLabel(BuildContext context, String key) {
-  final l10n = AppLocalizations.of(context);
-  return switch (key) {
-    'subcutaneous' => l10n.routeSubcutaneous,
-    'intramuscular' => l10n.routeIntramuscular,
-    'oral' => l10n.routeOral,
-    'nasal' => l10n.routeNasal,
-    _ => key,
-  };
+  return localizedProtocolRouteLabel(AppLocalizations.of(context), key);
 }
 
 String _weekdayLabel(BuildContext context, int weekday) {
@@ -1089,7 +1074,10 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                               children: [
                                 Text(p.name, style: AppTypography.labelLarge),
                                 Text(
-                                  p.category.label,
+                                  localizedPeptideCategoryLabel(
+                                    AppLocalizations.of(context),
+                                    p.category,
+                                  ),
                                   style: AppTypography.bodySmall,
                                 ),
                               ],

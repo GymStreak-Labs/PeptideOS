@@ -6,6 +6,23 @@ import 'package:peptide_os/features/protocol/providers/protocol_provider.dart';
 import 'package:peptide_os/models/protocol.dart';
 
 void main() {
+  test('protocol provider rejects an empty persisted name', () async {
+    final provider = ProtocolProvider(
+      ProtocolRepository(firestore: FakeFirebaseFirestore()),
+      DoseLogRepository(firestore: FakeFirebaseFirestore()),
+      uid: '',
+    );
+
+    await expectLater(
+      provider.createProtocol(
+        name: '  ',
+        startDate: DateTime(2026, 8, 5),
+        peptides: const [],
+      ),
+      throwsArgumentError,
+    );
+  });
+
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test(

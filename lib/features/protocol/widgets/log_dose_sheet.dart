@@ -14,19 +14,6 @@ import '../providers/protocol_provider.dart';
 import 'peptide_label_color.dart';
 import 'protocol_localizations.dart';
 
-String _localizedInjectionSite(AppLocalizations l10n, String key) =>
-    switch (key) {
-      'left-abdomen' => l10n.injectionSiteLeftAbdomen,
-      'right-abdomen' => l10n.injectionSiteRightAbdomen,
-      'left-thigh' => l10n.injectionSiteLeftThigh,
-      'right-thigh' => l10n.injectionSiteRightThigh,
-      'left-glute' => l10n.injectionSiteLeftGlute,
-      'right-glute' => l10n.injectionSiteRightGlute,
-      'left-triceps' => l10n.injectionSiteLeftTriceps,
-      'right-triceps' => l10n.injectionSiteRightTriceps,
-      _ => key,
-    };
-
 /// Bottom sheet that lets a user log / edit / skip a scheduled dose.
 class LogDoseSheet extends StatefulWidget {
   const LogDoseSheet({super.key, required this.dose});
@@ -526,7 +513,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   }
 
   String _siteLabel(AppLocalizations l10n, String key) =>
-      _localizedInjectionSite(l10n, key);
+      localizedInjectionSiteLabel(l10n, key);
 }
 
 /// Recent completed/skipped dose records. Tapping a row reuses
@@ -686,7 +673,7 @@ class _DoseHistoryRow extends StatelessWidget {
                 ),
                 if (dose.injectionSite.isNotEmpty)
                   Text(
-                    _localizedInjectionSite(l10n, dose.injectionSite),
+                    localizedInjectionSiteLabel(l10n, dose.injectionSite),
                     style: AppTypography.bodySmall,
                   ),
               ],
@@ -1117,7 +1104,10 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
             children: [
               for (final s in kInjectionSites)
                 _SiteChip(
-                  label: _localizedInjectionSite(context.protocolL10n, s.key),
+                  label: localizedInjectionSiteLabel(
+                    context.protocolL10n,
+                    s.key,
+                  ),
                   selected: _site == s.key,
                   onTap: () =>
                       setState(() => _site = _site == s.key ? '' : s.key),

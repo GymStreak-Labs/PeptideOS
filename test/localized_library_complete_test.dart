@@ -72,6 +72,15 @@ void main() {
 
     expect(find.text('1,5 mg + 2,5 ml'), findsOneWidget);
     expect(find.text('0,25 mg · 50 E'), findsOneWidget);
+
+    await tester.tap(find.text('1,5 mg + 2,5 ml'));
+    await tester.pumpAndSettle();
+
+    final editableValues = tester
+        .widgetList<TextField>(find.byType(TextField))
+        .map((field) => field.controller?.text)
+        .whereType<String>();
+    expect(editableValues, containsAll(<String>['1,5', '2,5', '0,25']));
     expect(tester.takeException(), isNull);
   });
 

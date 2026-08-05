@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/utils/decimal_input.dart';
+import '../../../core/utils/localized_decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/conversion_workspace.dart';
@@ -38,25 +39,43 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
   late ConversionQuantityMode _quantityMode;
   late ConversionSyringe _syringe;
   late List<SavedVialCalculation> _saved;
+  bool _initialNumbersLocalized = false;
 
   @override
   void initState() {
     super.initState();
     final initial = widget.initialInput;
-    _vialController = TextEditingController(
-      text: initial == null ? '' : _editableNumber(initial.vialAmountMg),
-    );
-    _diluentController = TextEditingController(
-      text: initial == null ? '' : _editableNumber(initial.diluentVolumeMl),
-    );
-    _desiredController = TextEditingController(
-      text: initial == null ? '' : _editableNumber(initial.desiredAmount),
-    );
+    _vialController = TextEditingController();
+    _diluentController = TextEditingController();
+    _desiredController = TextEditingController();
     _desiredUnit =
         initial?.desiredAmountUnit ?? ConversionAmountUnit.micrograms;
     _quantityMode = initial?.quantityMode ?? ConversionQuantityMode.mass;
     _syringe = initial?.syringe ?? ConversionSyringe.units100;
     _saved = List<SavedVialCalculation>.from(widget.savedCalculations);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_initialNumbersLocalized) return;
+    final initial = widget.initialInput;
+    if (initial != null) {
+      final localeName = AppLocalizations.of(context).localeName;
+      _vialController.text = formatLocalizedDecimalInput(
+        initial.vialAmountMg,
+        localeName: localeName,
+      );
+      _diluentController.text = formatLocalizedDecimalInput(
+        initial.diluentVolumeMl,
+        localeName: localeName,
+      );
+      _desiredController.text = formatLocalizedDecimalInput(
+        initial.desiredAmount,
+        localeName: localeName,
+      );
+    }
+    _initialNumbersLocalized = true;
   }
 
   ConversionInput get _input => ConversionInput(
@@ -112,10 +131,20 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
 
   void _loadSaved(SavedVialCalculation item) {
     final input = item.input;
+    final localeName = AppLocalizations.of(context).localeName;
     setState(() {
-      _vialController.text = _editableNumber(input.vialAmount);
-      _diluentController.text = _editableNumber(input.diluentVolumeMl);
-      _desiredController.text = _editableNumber(input.desiredAmount);
+      _vialController.text = formatLocalizedDecimalInput(
+        input.vialAmount,
+        localeName: localeName,
+      );
+      _diluentController.text = formatLocalizedDecimalInput(
+        input.diluentVolumeMl,
+        localeName: localeName,
+      );
+      _desiredController.text = formatLocalizedDecimalInput(
+        input.desiredAmount,
+        localeName: localeName,
+      );
       _desiredUnit = input.desiredAmountUnit;
       _quantityMode = input.quantityMode;
       _syringe = input.syringe;
@@ -1066,11 +1095,6 @@ String _localizedNumber(
   };
   final format = NumberFormat(pattern, locale)..turnOffGrouping();
   return format.format(value);
-}
-
-String _editableNumber(double value) {
-  if (value == value.roundToDouble()) return value.toStringAsFixed(0);
-  return value.toString().replaceFirst(RegExp(r'\.?0+$'), '');
 }
 
 SyringeType _visualType(ConversionSyringe syringe) => switch (syringe) {

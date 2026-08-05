@@ -8,6 +8,7 @@ import '../../../core/widgets/widgets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/dose_log.dart';
 import '../../../models/protocol.dart';
+import '../../library/utils/library_labels.dart';
 import '../providers/dose_log_provider.dart';
 import '../providers/protocol_provider.dart';
 import '../widgets/peptide_label_color.dart';
@@ -1013,14 +1014,8 @@ class _PeptideRowCard extends StatelessWidget {
     return format.format(value);
   }
 
-  String _freqLabel(AppLocalizations l10n, String key) => switch (key) {
-    'daily' => l10n.frequencyDaily,
-    'eod' => l10n.frequencyEveryOtherDay,
-    'twice_weekly' => l10n.frequencyTwiceWeekly,
-    'weekly' => l10n.frequencyWeekly,
-    'as_needed' => l10n.frequencyAsNeeded,
-    _ => key,
-  };
+  String _freqLabel(AppLocalizations l10n, String key) =>
+      localizedProtocolFrequencyLabel(l10n, key);
 
   String _weekdayLabel(BuildContext context, int weekday) =>
       MaterialLocalizations.of(context).narrowWeekdays[weekday % 7];
@@ -1051,13 +1046,8 @@ class _PeptideRowCard extends StatelessWidget {
     return l10n.protocolSyringeUnitsSuffix(_formatAmount(l10n, value));
   }
 
-  String _routeLabel(AppLocalizations l10n, String key) => switch (key) {
-    'subcutaneous' => l10n.routeSubcutaneous,
-    'intramuscular' => l10n.routeIntramuscular,
-    'oral' => l10n.routeOral,
-    'nasal' => l10n.routeNasal,
-    _ => key,
-  };
+  String _routeLabel(AppLocalizations l10n, String key) =>
+      localizedProtocolRouteLabel(l10n, key);
 
   @override
   Widget build(BuildContext context) {

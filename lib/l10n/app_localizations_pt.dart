@@ -577,6 +577,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get injectionSiteRightTriceps => 'Tríceps direito';
 
   @override
+  String get injectionSiteLeftDeltoid => 'Deltóide esquerdo';
+
+  @override
+  String get injectionSiteRightDeltoid => 'Deltóide direito';
+
+  @override
   String get plannerToday => 'HOJE';
 
   @override
@@ -3660,6 +3666,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get injectionSiteRightTriceps => 'Tríceps direito';
+
+  @override
+  String get injectionSiteLeftDeltoid => 'Deltoide esquerdo';
+
+  @override
+  String get injectionSiteRightDeltoid => 'Deltoide direito';
 
   @override
   String get plannerToday => 'HOJE';

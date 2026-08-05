@@ -579,6 +579,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get injectionSiteRightTriceps => 'Triceps droit';
 
   @override
+  String get injectionSiteLeftDeltoid => 'Deltoïde gauche';
+
+  @override
+  String get injectionSiteRightDeltoid => 'Deltoïde droit';
+
+  @override
   String get plannerToday => 'AUJOURD\'HUI';
 
   @override

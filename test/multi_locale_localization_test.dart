@@ -113,6 +113,16 @@ void main() {
 
         expect(find.text(l10n.libraryTitle), findsOneWidget);
         expect(find.bySemanticsLabel(l10n.openUnitConverter), findsOneWidget);
+        await tester.scrollUntilVisible(
+          find.text('BPC-157'),
+          180,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.pumpAndSettle();
+        expect(
+          find.text(l10n.peptideContentBpc157TypicalDose),
+          findsOneWidget,
+        );
         expect(tester.takeException(), isNull);
 
         await tester.pumpWidget(

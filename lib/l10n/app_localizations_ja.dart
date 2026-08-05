@@ -551,6 +551,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get injectionSiteRightTriceps => '右上腕三頭筋';
 
   @override
+  String get injectionSiteLeftDeltoid => '左三角筋';
+
+  @override
+  String get injectionSiteRightDeltoid => '右三角筋';
+
+  @override
   String get plannerToday => '本日';
 
   @override

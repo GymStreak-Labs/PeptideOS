@@ -547,17 +547,8 @@ class _NextDoseCard extends StatelessWidget {
     return context.protocolL10n.protocolDurationMinutes(d.inMinutes);
   }
 
-  String _siteLabel(BuildContext context, String key) => switch (key) {
-    'left-abdomen' => context.protocolL10n.injectionSiteLeftAbdomen,
-    'right-abdomen' => context.protocolL10n.injectionSiteRightAbdomen,
-    'left-thigh' => context.protocolL10n.injectionSiteLeftThigh,
-    'right-thigh' => context.protocolL10n.injectionSiteRightThigh,
-    'left-glute' => context.protocolL10n.injectionSiteLeftGlute,
-    'right-glute' => context.protocolL10n.injectionSiteRightGlute,
-    'left-triceps' => context.protocolL10n.injectionSiteLeftTriceps,
-    'right-triceps' => context.protocolL10n.injectionSiteRightTriceps,
-    _ => key,
-  };
+  String _siteLabel(BuildContext context, String key) =>
+      localizedInjectionSiteLabel(context.protocolL10n, key);
 
   String _syringeLabel(BuildContext context, double value) {
     if (value <= 0) return '';
@@ -694,17 +685,8 @@ class _DoseCard extends StatelessWidget {
     );
   }
 
-  String _siteLabel(BuildContext context, String key) => switch (key) {
-    'left-abdomen' => context.protocolL10n.injectionSiteLeftAbdomen,
-    'right-abdomen' => context.protocolL10n.injectionSiteRightAbdomen,
-    'left-thigh' => context.protocolL10n.injectionSiteLeftThigh,
-    'right-thigh' => context.protocolL10n.injectionSiteRightThigh,
-    'left-glute' => context.protocolL10n.injectionSiteLeftGlute,
-    'right-glute' => context.protocolL10n.injectionSiteRightGlute,
-    'left-triceps' => context.protocolL10n.injectionSiteLeftTriceps,
-    'right-triceps' => context.protocolL10n.injectionSiteRightTriceps,
-    _ => key,
-  };
+  String _siteLabel(BuildContext context, String key) =>
+      localizedInjectionSiteLabel(context.protocolL10n, key);
 
   String _syringeLabel(BuildContext context, double value) {
     if (value <= 0) return '';

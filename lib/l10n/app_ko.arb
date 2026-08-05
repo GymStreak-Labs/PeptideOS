@@ -237,6 +237,18 @@
     "sourceString": "Right Triceps",
     "sourceDescription": "Display name for the right triceps injection site."
   },
+  "injectionSiteLeftDeltoid": "왼쪽 삼각근",
+  "@injectionSiteLeftDeltoid": {
+    "description": "Display name for the left deltoid injection site.",
+    "sourceString": "Left Deltoid",
+    "sourceDescription": "Display name for the left deltoid injection site."
+  },
+  "injectionSiteRightDeltoid": "오른쪽 삼각근",
+  "@injectionSiteRightDeltoid": {
+    "description": "Display name for the right deltoid injection site.",
+    "sourceString": "Right Deltoid",
+    "sourceDescription": "Display name for the right deltoid injection site."
+  },
   "plannerToday": "오늘",
   "plannerBack": "뒤로",
   "plannerPreviousWeek": "이전 주",
