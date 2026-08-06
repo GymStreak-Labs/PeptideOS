@@ -13,3 +13,8 @@ for review.
 The `play-listings` files are the equivalent checked-in source for Google Play
 title, short description, full description, and privacy URL. They are review
 artifacts only; checking them in does not authorize a Play Console mutation.
+
+Versioned release notes live under `release-notes/app-store` and
+`release-notes/google-play`. Each file maps the store's locale code to the exact
+text intended for that release. Google Play release-note values must remain at
+or below 500 characters and are passed directly to `gpc upload --notes-file`.
