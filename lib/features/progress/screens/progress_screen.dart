@@ -5,16 +5,19 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
+import '../../../core/utils/weight_units.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/body_metric.dart';
 import '../../../models/dose_log.dart';
 import '../../../models/protocol.dart';
+import '../../../models/user_settings.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../protocol/providers/dose_log_provider.dart';
 import '../../protocol/providers/protocol_provider.dart';
 import '../../protocol/screens/active_protocol_detail_screen.dart';
 import '../../protocol/widgets/empty_state.dart';
 import '../../protocol/widgets/log_dose_sheet.dart';
+import '../../profile/providers/settings_provider.dart';
 import '../providers/body_metric_provider.dart';
 import '../widgets/log_metric_sheet.dart';
 
@@ -34,6 +37,7 @@ class ProgressScreen extends StatelessWidget {
     final doseProvider = context.watch<DoseLogProvider>();
     final metricProvider = context.watch<BodyMetricProvider>();
     final protocolProvider = context.watch<ProtocolProvider>();
+    final unitSystem = context.watch<SettingsProvider>().settings.units;
 
     return RefreshIndicator(
       color: AppColors.primary,
@@ -150,6 +154,7 @@ class ProgressScreen extends StatelessWidget {
               child: _WeightChartCard(
                 entries: metricProvider.all,
                 latestKg: metricProvider.latestWeightKg,
+                unitSystem: unitSystem,
                 onLog: () => _openLogSheet(context),
               ),
             ),
@@ -469,11 +474,13 @@ class _WeightChartCard extends StatelessWidget {
   const _WeightChartCard({
     required this.entries,
     required this.latestKg,
+    required this.unitSystem,
     required this.onLog,
   });
 
   final List<BodyMetric> entries;
   final double? latestKg;
+  final UnitSystem unitSystem;
   final VoidCallback onLog;
 
   @override
@@ -502,15 +509,19 @@ class _WeightChartCard extends StatelessWidget {
 
     final spots = <FlSpot>[];
     for (var i = 0; i < weighted.length; i++) {
-      spots.add(FlSpot(i.toDouble(), weighted[i].weightKg!));
+      spots.add(
+        FlSpot(
+          i.toDouble(),
+          unitSystem.displayWeightFromKg(weighted[i].weightKg!),
+        ),
+      );
     }
 
-    final minY = weighted
-        .map((e) => e.weightKg!)
-        .reduce((a, b) => a < b ? a : b);
-    final maxY = weighted
-        .map((e) => e.weightKg!)
-        .reduce((a, b) => a > b ? a : b);
+    final displayWeights = weighted.map(
+      (e) => unitSystem.displayWeightFromKg(e.weightKg!),
+    );
+    final minY = displayWeights.reduce((a, b) => a < b ? a : b);
+    final maxY = displayWeights.reduce((a, b) => a > b ? a : b);
     final padding = ((maxY - minY) * 0.1).clamp(0.5, 5.0);
 
     return AppCard(
@@ -527,9 +538,7 @@ class _WeightChartCard extends StatelessWidget {
               ),
               if (latestKg != null)
                 Text(
-                  l10n.weightKgValue(
-                    NumberFormat('#,##0.0', l10n.localeName).format(latestKg),
-                  ),
+                  '${NumberFormat('#,##0.0', l10n.localeName).format(unitSystem.displayWeightFromKg(latestKg!))} ${unitSystem.weightSuffix}',
                   style: AppTypography.tabular.copyWith(fontSize: 15),
                 ),
             ],

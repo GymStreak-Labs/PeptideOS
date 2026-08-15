@@ -4,9 +4,11 @@ import 'package:provider/provider.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/utils/decimal_input.dart';
+import '../../../core/utils/weight_units.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/body_metric.dart';
+import '../../profile/providers/settings_provider.dart';
 import '../providers/body_metric_provider.dart';
 
 /// Bottom sheet for logging a body metric snapshot — weight, body fat,
@@ -38,13 +40,17 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
 
   Future<void> _save() async {
     final l10n = AppLocalizations.of(context);
-    final weight = parseDecimalInput(_weightCtrl.text);
+    final displayWeight = parseDecimalInput(_weightCtrl.text);
+    final unitSystem = context.read<SettingsProvider>().settings.units;
+    final weightKg = displayWeight == null
+        ? null
+        : unitSystem.storageWeightInKg(displayWeight);
     final bf = parseDecimalInput(_bfCtrl.text);
     final waist = parseDecimalInput(_waistCtrl.text);
     final chest = parseDecimalInput(_chestCtrl.text);
     final arm = parseDecimalInput(_armCtrl.text);
 
-    if (weight == null &&
+    if (weightKg == null &&
         bf == null &&
         waist == null &&
         chest == null &&
@@ -81,7 +87,7 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
 
     try {
       await context.read<BodyMetricProvider>().logMetric(
-        weightKg: weight,
+        weightKg: weightKg,
         bodyFatPct: bf,
         measurements: measurements,
       );
@@ -102,6 +108,7 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final unitSystem = context.watch<SettingsProvider>().settings.units;
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -149,7 +156,7 @@ class _LogMetricSheetState extends State<LogMetricSheet> {
                       Expanded(
                         child: _Field(
                           label: l10n.weightLabel,
-                          suffix: 'kg',
+                          suffix: unitSystem.weightSuffix,
                           controller: _weightCtrl,
                         ),
                       ),

@@ -7,12 +7,15 @@ import 'package:provider/provider.dart';
 import 'package:peptide_os/data/repositories/body_metric_repository.dart';
 import 'package:peptide_os/data/repositories/dose_log_repository.dart';
 import 'package:peptide_os/data/repositories/protocol_repository.dart';
+import 'package:peptide_os/data/repositories/user_settings_repository.dart';
+import 'package:peptide_os/features/profile/providers/settings_provider.dart';
 import 'package:peptide_os/features/progress/providers/body_metric_provider.dart';
 import 'package:peptide_os/features/progress/screens/progress_screen.dart';
 import 'package:peptide_os/features/progress/widgets/log_metric_sheet.dart';
 import 'package:peptide_os/features/protocol/providers/dose_log_provider.dart';
 import 'package:peptide_os/features/protocol/providers/protocol_provider.dart';
 import 'package:peptide_os/l10n/app_localizations.dart';
+import 'package:peptide_os/models/user_settings.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -51,6 +54,7 @@ void main() {
               uid: '',
             ),
           ),
+          ChangeNotifierProvider(create: (_) => _settingsProvider(firestore)),
         ],
         child: const _LocalizedHarness(home: ProgressScreen()),
       ),
@@ -80,8 +84,13 @@ void main() {
     addTearDown(provider.dispose);
 
     await tester.pumpWidget(
-      ChangeNotifierProvider.value(
-        value: provider,
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: provider),
+          ChangeNotifierProvider(
+            create: (_) => _settingsProvider(FakeFirebaseFirestore()),
+          ),
+        ],
         child: const _LocalizedHarness(home: Scaffold(body: LogMetricSheet())),
       ),
     );
@@ -98,6 +107,15 @@ void main() {
     expect(find.text('Gib mindestens einen Wert ein.'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+}
+
+SettingsProvider _settingsProvider(FakeFirebaseFirestore firestore) {
+  final provider = SettingsProvider(
+    UserSettingsRepository(firestore: firestore),
+    uid: '',
+  );
+  provider.update((settings) => settings.units = UnitSystem.metric);
+  return provider;
 }
 
 Future<void> _useNarrowPhone(WidgetTester tester) async {
