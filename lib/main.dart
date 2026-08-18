@@ -37,7 +37,6 @@ import 'features/progress/providers/body_metric_provider.dart';
 import 'features/protocol/providers/dose_log_provider.dart';
 import 'features/protocol/providers/notification_permission_provider.dart';
 import 'features/protocol/providers/protocol_provider.dart';
-import 'features/subscription/paywall_offer_state.dart';
 import 'features/subscription/providers/subscription_provider.dart';
 import 'features/subscription/subscription_error_localization.dart';
 import 'l10n/app_localizations.dart';
@@ -599,7 +598,9 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
         localizedPrice: product.priceString,
         amount: product.price,
         currencyCode: product.currencyCode,
-        freeTrialDays: freeTrialDaysFromStoreProduct(product),
+        // Eligibility-gated: null unless the store confirms this user can
+        // start the trial (Apple eligibility check / Play-filtered options).
+        trialOffer: sub.trialOfferForProduct(product),
       );
     }
     return Scaffold(

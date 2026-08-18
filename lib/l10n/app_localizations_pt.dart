@@ -3116,12 +3116,45 @@ class AppLocalizationsPt extends AppLocalizations {
   String get openSettingsAction => 'Abrir definições';
 
   @override
-  String freeTrialBadge(int days) {
+  String freeTrialBadgeDays(int count) {
     String _temp0 = intl.Intl.pluralLogic(
-      days,
+      count,
       locale: localeName,
-      other: 'TESTE GRATUITO DE $days DIAS',
-      one: 'TESTE GRATUITO DE $days DIA',
+      other: 'TESTE GRATUITO DE $count DIAS',
+      one: 'TESTE GRATUITO DE $count DIA',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'TESTE GRATUITO DE $count SEMANAS',
+      one: 'TESTE GRATUITO DE $count SEMANA',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'TESTE GRATUITO DE $count MESES',
+      one: 'TESTE GRATUITO DE $count MÊS',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'TESTE GRATUITO DE $count ANOS',
+      one: 'TESTE GRATUITO DE $count ANO',
     );
     return '$_temp0';
   }
@@ -6302,12 +6335,45 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get openSettingsAction => 'Abrir configurações';
 
   @override
-  String freeTrialBadge(int days) {
+  String freeTrialBadgeDays(int count) {
     String _temp0 = intl.Intl.pluralLogic(
-      days,
+      count,
       locale: localeName,
-      other: 'TESTE GRÁTIS DE $days DIAS',
-      one: 'TESTE GRÁTIS DE $days DIA',
+      other: 'TESTE GRÁTIS DE $count DIAS',
+      one: 'TESTE GRÁTIS DE $count DIA',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'TESTE GRÁTIS DE $count SEMANAS',
+      one: 'TESTE GRÁTIS DE $count SEMANA',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'TESTE GRÁTIS DE $count MESES',
+      one: 'TESTE GRÁTIS DE $count MÊS',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'TESTE GRÁTIS DE $count ANOS',
+      one: 'TESTE GRÁTIS DE $count ANO',
     );
     return '$_temp0';
   }

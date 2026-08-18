@@ -41,20 +41,31 @@ class PeptideLibraryRepository {
   /// already reconciled against the remote collection.
   static const String seedVersionPrefsKey = 'pepmod_library_seed_version';
 
+  /// Maximum documents reconciled per transaction. Firestore transactions cap
+  /// at 500 writes; smaller chunks also keep retry cost low on contention.
+  static const int seedTransactionChunkSize = 100;
+
   /// Versioned, idempotent library seeding.
   ///
   /// Reconciles the remote collection with the bundled catalogue whenever the
   /// bundled [PeptideSeedData.seedVersion] is newer than the last version this
-  /// install processed. Only *missing* slugs are written — existing documents
-  /// are never touched, so remote edits (or a future admin-curated catalogue)
-  /// can never be clobbered by a client. Safe to call on every launch.
+  /// install processed. Only *missing* slugs are written, and each chunk runs
+  /// inside a Firestore transaction whose existence check and create are
+  /// atomic — a concurrent write (e.g. an admin curating a doc mid-seed)
+  /// forces a retry that then sees the doc and skips it, so existing
+  /// documents can never be clobbered by a client. Safe to call every launch.
   ///
   /// Read-side note: [watchAll]/[fetchAllOnce] merge the bundled seed under
   /// remote data, so users see new bundled entries immediately even when
   /// security rules deny client writes (the prod setup). The version marker is
   /// still advanced in that case to avoid retrying a denied write every
   /// launch.
-  Future<void> ensureSeeded() async {
+  Future<void> ensureSeeded({
+    @visibleForTesting int chunkSize = seedTransactionChunkSize,
+  }) async {
+    if (chunkSize <= 0) {
+      throw ArgumentError.value(chunkSize, 'chunkSize', 'must be positive');
+    }
     int? storedVersion;
     SharedPreferences? prefs;
     try {
@@ -68,18 +79,36 @@ class PeptideLibraryRepository {
     }
 
     try {
+      // Advisory pre-read only trims the workload; the authoritative
+      // existence check happens inside each transaction below.
       final existingSlugs = (await _col.get()).docs.map((d) => d.id).toSet();
       final missing = PeptideSeedData.build()
           .where((p) => !existingSlugs.contains(p.slug))
           .toList(growable: false);
-      if (missing.isNotEmpty) {
-        final batch = _firestore.batch();
-        for (final p in missing) {
-          batch.set(_col.doc(p.slug), p.toMap());
-        }
-        await batch.commit();
+      var seeded = 0;
+      for (var i = 0; i < missing.length; i += chunkSize) {
+        final chunk = missing.sublist(
+          i,
+          i + chunkSize > missing.length ? missing.length : i + chunkSize,
+        );
+        seeded += await _firestore.runTransaction<int>((txn) async {
+          // All reads must precede writes inside a Firestore transaction.
+          final snapshots = <DocumentSnapshot<Map<String, dynamic>>>[];
+          for (final p in chunk) {
+            snapshots.add(await txn.get(_col.doc(p.slug)));
+          }
+          var created = 0;
+          for (var j = 0; j < chunk.length; j++) {
+            if (snapshots[j].exists) continue;
+            txn.set(_col.doc(chunk[j].slug), chunk[j].toMap());
+            created++;
+          }
+          return created;
+        });
+      }
+      if (seeded > 0) {
         debugPrint(
-          'PeptideLibraryRepository: seeded ${missing.length} new library '
+          'PeptideLibraryRepository: seeded $seeded new library '
           'docs (seed v${PeptideSeedData.seedVersion}).',
         );
       }

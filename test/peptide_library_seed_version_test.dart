@@ -106,6 +106,27 @@ void main() {
       expect(docs.size, PeptideSeedData.build().length);
     });
 
+    test('supports chunked transactional reconciliation', () async {
+      SharedPreferences.setMockInitialValues({});
+      final firestore = FakeFirebaseFirestore();
+      final repo = PeptideLibraryRepository(firestore: firestore);
+
+      await repo.ensureSeeded(chunkSize: 3);
+
+      final docs = await firestore.collection('peptideLibrary').get();
+      expect(docs.size, PeptideSeedData.build().length);
+    });
+
+    test('rejects a non-positive transaction chunk size', () async {
+      SharedPreferences.setMockInitialValues({});
+      final repo = PeptideLibraryRepository(firestore: FakeFirebaseFirestore());
+
+      await expectLater(
+        repo.ensureSeeded(chunkSize: 0),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
     test('skips reconciliation when the stored version is current', () async {
       SharedPreferences.setMockInitialValues({
         PeptideLibraryRepository.seedVersionPrefsKey:

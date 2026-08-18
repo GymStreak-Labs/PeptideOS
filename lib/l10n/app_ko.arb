@@ -5752,16 +5752,49 @@
     "sourceString": "Open Settings",
     "sourceDescription": "Button that opens the OS notification settings for the app."
   },
-  "freeTrialBadge": "{days, plural, other{{days}일 무료 체험}}",
-  "@freeTrialBadge": {
-    "description": "Paywall badge for a store-derived free trial; days comes from the live store offer and is never hardcoded.",
+  "freeTrialBadgeDays": "{count, plural, other{{count}일 무료 체험}}",
+  "@freeTrialBadgeDays": {
+    "description": "Paywall badge for a store-derived free trial measured in days; the length comes from the live store offer and is never hardcoded.",
     "placeholders": {
-      "days": {
+      "count": {
         "type": "int"
       }
     },
-    "sourceString": "{days, plural, one{{days}-DAY FREE TRIAL} other{{days}-DAY FREE TRIAL}}",
-    "sourceDescription": "Paywall badge for a store-derived free trial; days comes from the live store offer and is never hardcoded."
+    "sourceString": "{count, plural, one{{count}-DAY FREE TRIAL} other{{count}-DAY FREE TRIAL}}",
+    "sourceDescription": "Paywall badge for a store-derived free trial measured in days; the length comes from the live store offer and is never hardcoded."
+  },
+  "freeTrialBadgeWeeks": "{count, plural, other{{count}주 무료 체험}}",
+  "@freeTrialBadgeWeeks": {
+    "description": "Paywall badge for a store-derived free trial measured in weeks; the length comes from the live store offer and is never hardcoded.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    },
+    "sourceString": "{count, plural, one{{count}-WEEK FREE TRIAL} other{{count}-WEEK FREE TRIAL}}",
+    "sourceDescription": "Paywall badge for a store-derived free trial measured in weeks; the length comes from the live store offer and is never hardcoded."
+  },
+  "freeTrialBadgeMonths": "{count, plural, other{{count}개월 무료 체험}}",
+  "@freeTrialBadgeMonths": {
+    "description": "Paywall badge for a store-derived free trial measured in calendar months; the length comes from the live store offer and is never hardcoded.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    },
+    "sourceString": "{count, plural, one{{count}-MONTH FREE TRIAL} other{{count}-MONTH FREE TRIAL}}",
+    "sourceDescription": "Paywall badge for a store-derived free trial measured in calendar months; the length comes from the live store offer and is never hardcoded."
+  },
+  "freeTrialBadgeYears": "{count, plural, other{{count}년 무료 체험}}",
+  "@freeTrialBadgeYears": {
+    "description": "Paywall badge for a store-derived free trial measured in calendar years; the length comes from the live store offer and is never hardcoded.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    },
+    "sourceString": "{count, plural, one{{count}-YEAR FREE TRIAL} other{{count}-YEAR FREE TRIAL}}",
+    "sourceDescription": "Paywall badge for a store-derived free trial measured in calendar years; the length comes from the live store offer and is never hardcoded."
   },
   "createCustomCompoundAction": "커스텀 화합물 만들기",
   "@createCustomCompoundAction": {

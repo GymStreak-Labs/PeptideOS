@@ -2983,11 +2983,41 @@ class AppLocalizationsJa extends AppLocalizations {
   String get openSettingsAction => '設定を開く';
 
   @override
-  String freeTrialBadge(int days) {
+  String freeTrialBadgeDays(int count) {
     String _temp0 = intl.Intl.pluralLogic(
-      days,
+      count,
       locale: localeName,
-      other: '$days日間無料トライアル',
+      other: '$count日間無料トライアル',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count週間無料トライアル',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countか月間無料トライアル',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count年間無料トライアル',
     );
     return '$_temp0';
   }

@@ -9,53 +9,103 @@ import 'package:peptide_os/l10n/app_localizations.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 void main() {
-  group('freeTrialDaysFromIntroductoryPrice', () {
+  group('trialOfferFromIntroductoryPrice', () {
     IntroductoryPrice intro({
       double price = 0,
       PeriodUnit unit = PeriodUnit.day,
       int units = 3,
-    }) => IntroductoryPrice(price, '\$0.00', 'P3D', 1, unit, units);
+      int cycles = 1,
+    }) => IntroductoryPrice(price, '\$0.00', 'P3D', cycles, unit, units);
 
     test('no introductory offer means no trial', () {
-      expect(freeTrialDaysFromIntroductoryPrice(null), isNull);
+      expect(trialOfferFromIntroductoryPrice(null), isNull);
     });
 
     test('a paid introductory price is a discount, not a free trial', () {
-      expect(freeTrialDaysFromIntroductoryPrice(intro(price: 0.99)), isNull);
+      expect(trialOfferFromIntroductoryPrice(intro(price: 0.99)), isNull);
     });
 
-    test('derives days from the store period unit', () {
-      expect(freeTrialDaysFromIntroductoryPrice(intro(units: 3)), 3);
+    test('preserves exact store calendar units without approximating', () {
       expect(
-        freeTrialDaysFromIntroductoryPrice(
-          intro(unit: PeriodUnit.week, units: 1),
-        ),
-        7,
+        trialOfferFromIntroductoryPrice(intro(units: 3)),
+        const StoreTrialOffer(count: 3, unit: TrialPeriodUnit.day),
       );
       expect(
-        freeTrialDaysFromIntroductoryPrice(
+        trialOfferFromIntroductoryPrice(intro(unit: PeriodUnit.week, units: 1)),
+        const StoreTrialOffer(count: 1, unit: TrialPeriodUnit.week),
+      );
+      expect(
+        trialOfferFromIntroductoryPrice(
           intro(unit: PeriodUnit.month, units: 1),
         ),
-        30,
+        const StoreTrialOffer(count: 1, unit: TrialPeriodUnit.month),
       );
       expect(
-        freeTrialDaysFromIntroductoryPrice(
-          intro(unit: PeriodUnit.year, units: 1),
+        trialOfferFromIntroductoryPrice(intro(unit: PeriodUnit.year, units: 1)),
+        const StoreTrialOffer(count: 1, unit: TrialPeriodUnit.year),
+      );
+      expect(
+        trialOfferFromIntroductoryPrice(
+          intro(unit: PeriodUnit.week, units: 1, cycles: 2),
         ),
-        365,
+        const StoreTrialOffer(count: 2, unit: TrialPeriodUnit.week),
       );
     });
 
     test('rejects malformed offers instead of guessing', () {
-      expect(freeTrialDaysFromIntroductoryPrice(intro(units: 0)), isNull);
+      expect(trialOfferFromIntroductoryPrice(intro(units: 0)), isNull);
       expect(
-        freeTrialDaysFromIntroductoryPrice(intro(unit: PeriodUnit.unknown)),
+        trialOfferFromIntroductoryPrice(intro(unit: PeriodUnit.unknown)),
         isNull,
       );
     });
   });
 
-  group('freeTrialDaysFromFreePhase (Google Play Billing 5+)', () {
+  group('Apple user eligibility', () {
+    final intro = IntroductoryPrice(0, '\$0.00', 'P1M', 1, PeriodUnit.month, 1);
+    late StoreProduct product;
+
+    setUp(() {
+      product = StoreProduct(
+        'pepmod_annual',
+        'Premium',
+        'PepMod Premium',
+        79.99,
+        '\$79.99',
+        'USD',
+        introductoryPrice: intro,
+      );
+    });
+
+    test('advertises the exact trial only when the user is eligible', () {
+      expect(
+        resolveTrialOffer(
+          product: product,
+          isApplePlatform: true,
+          eligibilityFor: (_) => TrialEligibility.eligible,
+        ),
+        const StoreTrialOffer(count: 1, unit: TrialPeriodUnit.month),
+      );
+    });
+
+    test('fails closed for ineligible and unknown users', () {
+      for (final eligibility in [
+        TrialEligibility.ineligible,
+        TrialEligibility.unknown,
+      ]) {
+        expect(
+          resolveTrialOffer(
+            product: product,
+            isApplePlatform: true,
+            eligibilityFor: (_) => eligibility,
+          ),
+          isNull,
+        );
+      }
+    });
+  });
+
+  group('trialOfferFromFreePhase (Google Play Billing 5+)', () {
     PricingPhase phase({
       int amountMicros = 0,
       PeriodUnit unit = PeriodUnit.week,
@@ -69,32 +119,38 @@ void main() {
       OfferPaymentMode.freeTrial,
     );
 
-    test('derives days from a zero-price free phase', () {
-      expect(freeTrialDaysFromFreePhase(phase()), 7);
+    test('preserves exact units from a zero-price free phase', () {
       expect(
-        freeTrialDaysFromFreePhase(phase(unit: PeriodUnit.day, value: 3)),
-        3,
+        trialOfferFromFreePhase(phase()),
+        const StoreTrialOffer(count: 1, unit: TrialPeriodUnit.week),
+      );
+      expect(
+        trialOfferFromFreePhase(phase(unit: PeriodUnit.day, value: 3)),
+        const StoreTrialOffer(count: 3, unit: TrialPeriodUnit.day),
+      );
+      expect(
+        trialOfferFromFreePhase(
+          phase(unit: PeriodUnit.month, value: 1, cycles: 2),
+        ),
+        const StoreTrialOffer(count: 2, unit: TrialPeriodUnit.month),
       );
     });
 
     test('a paid phase or missing phase is not a free trial', () {
-      expect(freeTrialDaysFromFreePhase(null), isNull);
-      expect(freeTrialDaysFromFreePhase(phase(amountMicros: 990000)), isNull);
+      expect(trialOfferFromFreePhase(null), isNull);
+      expect(trialOfferFromFreePhase(phase(amountMicros: 990000)), isNull);
     });
 
     test('rejects malformed phases instead of guessing', () {
-      expect(freeTrialDaysFromFreePhase(phase(value: 0)), isNull);
-      expect(
-        freeTrialDaysFromFreePhase(phase(unit: PeriodUnit.unknown)),
-        isNull,
-      );
+      expect(trialOfferFromFreePhase(phase(value: 0)), isNull);
+      expect(trialOfferFromFreePhase(phase(unit: PeriodUnit.unknown)), isNull);
     });
   });
 
   group('paywall trial copy', () {
     Future<void> pumpPaywall(
       WidgetTester tester, {
-      int? annualFreeTrialDays,
+      StoreTrialOffer? annualTrialOffer,
     }) async {
       tester.view.physicalSize = const Size(390, 900);
       tester.view.devicePixelRatio = 1;
@@ -122,7 +178,7 @@ void main() {
                   localizedPrice: 'CA\$79.99',
                   amount: 79.99,
                   currencyCode: 'CAD',
-                  freeTrialDays: annualFreeTrialDays,
+                  trialOffer: annualTrialOffer,
                 ),
                 2: const PaywallPlanPrice(
                   localizedPrice: 'CA\$12.99',
@@ -141,7 +197,13 @@ void main() {
     testWidgets('renders badge and CTA from the store-derived trial', (
       tester,
     ) async {
-      await pumpPaywall(tester, annualFreeTrialDays: 7);
+      await pumpPaywall(
+        tester,
+        annualTrialOffer: const StoreTrialOffer(
+          count: 7,
+          unit: TrialPeriodUnit.day,
+        ),
+      );
       expect(find.text('7-DAY FREE TRIAL'), findsOneWidget);
       expect(find.text('START FREE TRIAL'), findsOneWidget);
       expect(tester.takeException(), isNull);
@@ -150,7 +212,7 @@ void main() {
     testWidgets('never promises a trial when the store offer has none', (
       tester,
     ) async {
-      await pumpPaywall(tester, annualFreeTrialDays: null);
+      await pumpPaywall(tester);
       expect(find.textContaining('FREE TRIAL'), findsNothing);
       expect(find.text('SUBSCRIBE — CA\$79.99/year'), findsOneWidget);
       expect(tester.takeException(), isNull);
@@ -163,17 +225,17 @@ void main() {
     ).readAsStringSync();
 
     test('no hardcoded trial durations survive in the paywall', () {
-      // Trial length must come from the store offer via freeTrialDays.
+      // Trial length must come from the store offer via StoreTrialOffer.
       expect(paywallSource, isNot(contains('threeDayFreeTrial')));
       expect(paywallSource, isNot(contains('3-DAY')));
-      expect(paywallSource, contains('freeTrialDays'));
+      expect(paywallSource, contains('trialOffer'));
     });
 
     test('paywall gate derives the trial from the RevenueCat product', () {
       final gateSource = File('lib/main.dart').readAsStringSync();
       expect(
         gateSource,
-        contains('freeTrialDays: freeTrialDaysFromStoreProduct(product)'),
+        contains('trialOffer: sub.trialOfferForProduct(product)'),
       );
     });
 
@@ -185,9 +247,12 @@ void main() {
         final catalog = File('lib/l10n/app_$locale.arb').readAsStringSync();
         expect(
           catalog,
-          contains('"freeTrialBadge"'),
-          reason: 'app_$locale.arb must define freeTrialBadge',
+          contains('"freeTrialBadgeDays"'),
+          reason: 'app_$locale.arb must define freeTrialBadgeDays',
         );
+        expect(catalog, contains('"freeTrialBadgeWeeks"'));
+        expect(catalog, contains('"freeTrialBadgeMonths"'));
+        expect(catalog, contains('"freeTrialBadgeYears"'));
         expect(
           catalog,
           isNot(contains('"threeDayFreeTrial"')),

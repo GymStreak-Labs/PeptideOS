@@ -5465,11 +5465,29 @@ abstract class AppLocalizations {
   /// **'Open Settings'**
   String get openSettingsAction;
 
-  /// Paywall badge for a store-derived free trial; days comes from the live store offer and is never hardcoded.
+  /// Paywall badge for a store-derived free trial measured in days; the length comes from the live store offer and is never hardcoded.
   ///
   /// In en, this message translates to:
-  /// **'{days, plural, one{{days}-DAY FREE TRIAL} other{{days}-DAY FREE TRIAL}}'**
-  String freeTrialBadge(int days);
+  /// **'{count, plural, one{{count}-DAY FREE TRIAL} other{{count}-DAY FREE TRIAL}}'**
+  String freeTrialBadgeDays(int count);
+
+  /// Paywall badge for a store-derived free trial measured in weeks; the length comes from the live store offer and is never hardcoded.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count}-WEEK FREE TRIAL} other{{count}-WEEK FREE TRIAL}}'**
+  String freeTrialBadgeWeeks(int count);
+
+  /// Paywall badge for a store-derived free trial measured in calendar months; the length comes from the live store offer and is never hardcoded.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count}-MONTH FREE TRIAL} other{{count}-MONTH FREE TRIAL}}'**
+  String freeTrialBadgeMonths(int count);
+
+  /// Paywall badge for a store-derived free trial measured in calendar years; the length comes from the live store offer and is never hardcoded.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count}-YEAR FREE TRIAL} other{{count}-YEAR FREE TRIAL}}'**
+  String freeTrialBadgeYears(int count);
 
   /// Button on the empty library search state that creates a custom compound preset from the search term.
   ///

@@ -5752,16 +5752,49 @@
     "sourceString": "Open Settings",
     "sourceDescription": "Button that opens the OS notification settings for the app."
   },
-  "freeTrialBadge": "{days, plural, one{TESTE GRATUITO DE {days} DIA} other{TESTE GRATUITO DE {days} DIAS}}",
-  "@freeTrialBadge": {
-    "description": "Paywall badge for a store-derived free trial; days comes from the live store offer and is never hardcoded.",
+  "freeTrialBadgeDays": "{count, plural, one{TESTE GRATUITO DE {count} DIA} other{TESTE GRATUITO DE {count} DIAS}}",
+  "@freeTrialBadgeDays": {
+    "description": "Paywall badge for a store-derived free trial measured in days; the length comes from the live store offer and is never hardcoded.",
     "placeholders": {
-      "days": {
+      "count": {
         "type": "int"
       }
     },
-    "sourceString": "{days, plural, one{{days}-DAY FREE TRIAL} other{{days}-DAY FREE TRIAL}}",
-    "sourceDescription": "Paywall badge for a store-derived free trial; days comes from the live store offer and is never hardcoded."
+    "sourceString": "{count, plural, one{{count}-DAY FREE TRIAL} other{{count}-DAY FREE TRIAL}}",
+    "sourceDescription": "Paywall badge for a store-derived free trial measured in days; the length comes from the live store offer and is never hardcoded."
+  },
+  "freeTrialBadgeWeeks": "{count, plural, one{TESTE GRATUITO DE {count} SEMANA} other{TESTE GRATUITO DE {count} SEMANAS}}",
+  "@freeTrialBadgeWeeks": {
+    "description": "Paywall badge for a store-derived free trial measured in weeks; the length comes from the live store offer and is never hardcoded.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    },
+    "sourceString": "{count, plural, one{{count}-WEEK FREE TRIAL} other{{count}-WEEK FREE TRIAL}}",
+    "sourceDescription": "Paywall badge for a store-derived free trial measured in weeks; the length comes from the live store offer and is never hardcoded."
+  },
+  "freeTrialBadgeMonths": "{count, plural, one{TESTE GRATUITO DE {count} MÊS} other{TESTE GRATUITO DE {count} MESES}}",
+  "@freeTrialBadgeMonths": {
+    "description": "Paywall badge for a store-derived free trial measured in calendar months; the length comes from the live store offer and is never hardcoded.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    },
+    "sourceString": "{count, plural, one{{count}-MONTH FREE TRIAL} other{{count}-MONTH FREE TRIAL}}",
+    "sourceDescription": "Paywall badge for a store-derived free trial measured in calendar months; the length comes from the live store offer and is never hardcoded."
+  },
+  "freeTrialBadgeYears": "{count, plural, one{TESTE GRATUITO DE {count} ANO} other{TESTE GRATUITO DE {count} ANOS}}",
+  "@freeTrialBadgeYears": {
+    "description": "Paywall badge for a store-derived free trial measured in calendar years; the length comes from the live store offer and is never hardcoded.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    },
+    "sourceString": "{count, plural, one{{count}-YEAR FREE TRIAL} other{{count}-YEAR FREE TRIAL}}",
+    "sourceDescription": "Paywall badge for a store-derived free trial measured in calendar years; the length comes from the live store offer and is never hardcoded."
   },
   "createCustomCompoundAction": "Criar composto personalizado",
   "@createCustomCompoundAction": {

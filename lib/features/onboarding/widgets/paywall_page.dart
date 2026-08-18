@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/constants/legal_links.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../subscription/paywall_offer_state.dart';
 
 @immutable
 class PaywallPlanPrice {
@@ -12,17 +13,18 @@ class PaywallPlanPrice {
     required this.localizedPrice,
     required this.amount,
     required this.currencyCode,
-    this.freeTrialDays,
+    this.trialOffer,
   });
 
   final String localizedPrice;
   final double amount;
   final String currencyCode;
 
-  /// Store-derived free-trial length in days, or null when the live offer has
-  /// no free trial. Trial copy on the paywall renders only from this value —
+  /// Store-derived free trial the current user is eligible for, or null when
+  /// no trial may be advertised (no offer, ineligible user, or unknown
+  /// eligibility). Trial copy on the paywall renders only from this value —
   /// never from hardcoded durations.
-  final int? freeTrialDays;
+  final StoreTrialOffer? trialOffer;
 }
 
 /// Hard paywall — premium conversion design adapted to PepMod cyberpunk.
@@ -127,7 +129,7 @@ class _PaywallPageState extends State<PaywallPage>
   String _localizedPriceForPlan(int planIndex) =>
       _priceForPlan(planIndex)?.localizedPrice ?? '—';
 
-  int? get _annualFreeTrialDays => _priceForPlan(1)?.freeTrialDays;
+  StoreTrialOffer? get _annualTrialOffer => _priceForPlan(1)?.trialOffer;
 
   int? get _specialOfferSavingsPercent {
     final special = _priceForPlan(0);
@@ -414,9 +416,10 @@ class _PaywallPageState extends State<PaywallPage>
               index: 1,
               label: _l10n.annualLabel,
               // Trial badge is rendered only when the store offer includes a
-              // free trial — never as a hardcoded promise.
-              tag: switch (_annualFreeTrialDays) {
-                final days? => _l10n.freeTrialBadge(days),
+              // free trial the current user is eligible for — never as a
+              // hardcoded promise.
+              tag: switch (_annualTrialOffer) {
+                final offer? => freeTrialBadgeLabel(_l10n, offer),
                 null => null,
               },
               price: _localizedPriceForPlan(1),
@@ -970,12 +973,13 @@ class _PaywallPageState extends State<PaywallPage>
 
   Widget _buildFixedCta(double bottomPadding) {
     final selectedPrice = _priceForPlan(_selectedPlan)?.localizedPrice;
-    final hasAnnualTrial = _annualFreeTrialDays != null;
+    final hasAnnualTrial = _annualTrialOffer != null;
     final label = switch (_selectedPlan) {
       0 when selectedPrice != null => _l10n.activateProPrice(selectedPrice),
       0 => _l10n.activatePro,
       // "Start free trial" is only promised when the store-derived annual
-      // offer actually includes one; otherwise fall back to plain subscribe.
+      // offer includes one the current user is eligible for; otherwise fall
+      // back to plain subscribe.
       1 when hasAnnualTrial => _l10n.startFreeTrial,
       1 when selectedPrice != null => _l10n.subscribeAnnualPrice(selectedPrice),
       1 => _l10n.subscribeLabel,

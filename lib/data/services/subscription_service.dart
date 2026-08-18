@@ -108,6 +108,26 @@ class SubscriptionService {
     }
   }
 
+  /// Whether the current user can redeem the introductory offers of the given
+  /// products. iOS only — Android always reports unknown, so callers must use
+  /// Play's subscription options instead (see `resolveTrialOffer`).
+  ///
+  /// Fails closed: configuration or bridge errors return an empty map, which
+  /// callers must treat as unknown eligibility (no trial copy).
+  Future<Map<String, IntroEligibility>> checkTrialEligibility(
+    List<String> productIdentifiers,
+  ) async {
+    if (!_configured || productIdentifiers.isEmpty) return const {};
+    try {
+      return await Purchases.checkTrialOrIntroductoryPriceEligibility(
+        productIdentifiers,
+      );
+    } catch (e) {
+      debugPrint('[SubscriptionService] checkTrialEligibility failed: $e');
+      return const {};
+    }
+  }
+
   /// Returns whether the current/default offering metadata allows showing the
   /// mobile special-offer card. A missing metadata key preserves legacy
   /// behavior once offerings are loaded.

@@ -3118,12 +3118,45 @@ class AppLocalizationsDe extends AppLocalizations {
   String get openSettingsAction => 'Einstellungen öffnen';
 
   @override
-  String freeTrialBadge(int days) {
+  String freeTrialBadgeDays(int count) {
     String _temp0 = intl.Intl.pluralLogic(
-      days,
+      count,
       locale: localeName,
-      other: '$days TAGE KOSTENLOS TESTEN',
-      one: '$days TAG KOSTENLOS TESTEN',
+      other: '$count TAGE KOSTENLOS TESTEN',
+      one: '$count TAG KOSTENLOS TESTEN',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count WOCHEN KOSTENLOS TESTEN',
+      one: '$count WOCHE KOSTENLOS TESTEN',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count MONATE KOSTENLOS TESTEN',
+      one: '$count MONAT KOSTENLOS TESTEN',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count JAHRE KOSTENLOS TESTEN',
+      one: '$count JAHR KOSTENLOS TESTEN',
     );
     return '$_temp0';
   }

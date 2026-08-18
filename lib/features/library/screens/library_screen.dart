@@ -64,6 +64,14 @@ class _LibraryScreenState extends State<LibraryScreen> {
       localizedTerms: (peptide) =>
           localizedPeptideContent(l10n, peptide).searchTerms(l10n, peptide),
     );
+    // The parent Scaffold consumes MediaQuery.viewInsets when it resizes its
+    // body, so read the raw FlutterView inset to detect an open keyboard.
+    final keyboardInset = MediaQueryData.fromView(
+      View.of(context),
+    ).viewInsets.bottom;
+    final hasSearchQuery = _query.trim().isNotEmpty;
+    final compactEmptySearch =
+        hasSearchQuery && results.isEmpty && keyboardInset > 0;
 
     return RefreshIndicator(
       color: AppColors.primary,
@@ -126,53 +134,54 @@ class _LibraryScreenState extends State<LibraryScreen> {
             ),
           ),
 
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.screenHorizontal,
-                AppSpacing.md,
-                AppSpacing.screenHorizontal,
-                0,
-              ),
-              child: _ConversionToolsCard(onTap: _openUnitConverter),
-            ),
-          ),
-
-          const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.lg)),
-
-          // Category chips
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 36,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.screenHorizontal,
+          if (!compactEmptySearch) ...[
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.screenHorizontal,
+                  AppSpacing.md,
+                  AppSpacing.screenHorizontal,
+                  0,
                 ),
-                children: [
-                  _CategoryChip(
-                    label: l10n.categoryAll,
-                    selected: _category == null,
-                    onTap: () => setState(() => _category = null),
+                child: _ConversionToolsCard(onTap: _openUnitConverter),
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.lg)),
+
+            // Category chips
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 36,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.screenHorizontal,
                   ),
-                  for (final cat in PeptideCategory.values)
-                    if (cat != PeptideCategory.other)
-                      Padding(
-                        padding: const EdgeInsets.only(left: AppSpacing.sm),
-                        child: _CategoryChip(
-                          label: localizedPeptideCategoryLabel(l10n, cat),
-                          selected: _category == cat,
-                          onTap: () => setState(
-                            () => _category = cat == _category ? null : cat,
+                  children: [
+                    _CategoryChip(
+                      label: l10n.categoryAll,
+                      selected: _category == null,
+                      onTap: () => setState(() => _category = null),
+                    ),
+                    for (final cat in PeptideCategory.values)
+                      if (cat != PeptideCategory.other)
+                        Padding(
+                          padding: const EdgeInsets.only(left: AppSpacing.sm),
+                          child: _CategoryChip(
+                            label: localizedPeptideCategoryLabel(l10n, cat),
+                            selected: _category == cat,
+                            onTap: () => setState(
+                              () => _category = cat == _category ? null : cat,
+                            ),
                           ),
                         ),
-                      ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-
-          const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.lg)),
+            const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.lg)),
+          ] else
+            const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.md)),
 
           // Loading
           if (provider.isLoading)
@@ -261,8 +270,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
               ),
             ),
 
-          const SliverToBoxAdapter(
-            child: SizedBox(height: AppSpacing.screenBottom),
+          SliverToBoxAdapter(
+            child: SizedBox(height: AppSpacing.screenBottom + keyboardInset),
           ),
         ],
       ),
