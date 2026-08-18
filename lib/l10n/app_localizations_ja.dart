@@ -1196,6 +1196,11 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String subscribeAnnualPrice(String price) {
+    return '登録する — $price/年';
+  }
+
+  @override
   String get subscribeToActivate => '登録してプロトコルを有効化';
 
   @override
@@ -1224,9 +1229,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get thirtyDayAdherence => '30日間のアドヒアランス';
-
-  @override
-  String get threeDayFreeTrial => '3日間無料トライアル';
 
   @override
   String get timelineLabel => 'タイムライン';
@@ -2963,4 +2965,100 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get peptideContentEducationalDisclaimer =>
       '教育目的の参考情報であり、医療上の助言ではありません。研究用ペプチドは、多くの地域でヒトへの使用が承認されていません。必ず資格のある医療従事者に相談してください。';
+
+  @override
+  String get twiceWeeklyPickDaysHint => 'このスケジュールには曜日をちょうど2つ選んでください。';
+
+  @override
+  String get selectExactlyTwoDaysError => '週2回のスケジュールには曜日をちょうど2つ選択してください。';
+
+  @override
+  String get remindersBlockedTitle => 'リマインダーがブロックされています';
+
+  @override
+  String get remindersBlockedBody =>
+      'PepModでは投与リマインダーがオンになっていますが、システム設定で通知がオフのため、リマインダーを届けられません。';
+
+  @override
+  String get openSettingsAction => '設定を開く';
+
+  @override
+  String freeTrialBadge(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days日間無料トライアル',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get createCustomCompoundAction => 'カスタム化合物を作成';
+
+  @override
+  String get noPeptidesFoundCreateHint =>
+      'リファレンスライブラリに一致がありません。カスタム化合物として記録できます。';
+
+  @override
+  String get blendSearchHint =>
+      'このようなブレンド名には標準的な配合はなく、内容は販売元によって異なります。ここでカスタム化合物として、またはプロトコル作成時にプレブレンドバイアルとして作成し、実際のバイアルの内容を入力してください。';
+
+  @override
+  String get typicalDoseReferenceNote => '教育目的で公表されている参考範囲です。推奨や指示ではありません。';
+
+  @override
+  String get peptideContentTestosteroneDescription =>
+      'テストステロンは内因性のアンドロゲンホルモンです。注射用エステル製剤（シピオン酸エステルやエナント酸エステルなど）は、医師の管理下で行うホルモン療法に使われる処方薬です。この項目はユーザーが入力したスケジュールのための中立的な記録用リファレンスです。';
+
+  @override
+  String get peptideContentTestosteroneTypicalDose => 'ユーザー入力のmg';
+
+  @override
+  String get peptideContentTestosteroneHalfLife => 'エステルにより異なる';
+
+  @override
+  String get peptideContentTestosteroneNotes =>
+      '多くの法域で処方箋が必要な規制物質です。資格のある医療専門家の指示があるもののみ記録してください。PepModはテストステロンの投与ガイダンスを提供しません。';
+
+  @override
+  String get peptideContentGlutathioneDescription =>
+      'グルタチオンは天然に存在するトリペプチド（グルタミン酸-システイン-グリシン）で、主要な細胞内抗酸化物質として機能します。注射剤は一部のウェルネスや臨床の場で使用されています。この項目はユーザーが入力したスケジュールのための中立的な記録用リファレンスです。';
+
+  @override
+  String get peptideContentGlutathioneTypicalDose => 'ユーザー入力のmg';
+
+  @override
+  String get peptideContentGlutathioneHalfLife => '短い（全身）';
+
+  @override
+  String get peptideContentGlutathioneNotes =>
+      '注射用グルタチオンの規制状況は国によって異なります。入手・指示された通りの量のみ記録してください。PepModはこの化合物の投与ガイダンスを提供しません。';
+
+  @override
+  String get peptideContentKisspeptin10Description =>
+      'キスペプチン-10は神経ペプチドであるキスペプチンの10アミノ酸フラグメントで、GnRHシグナル伝達と生殖軸の調節における役割が研究されています。管理された研究以外でのヒトのデータは限られています。この項目はユーザーが入力したスケジュールのための中立的な記録用リファレンスです。';
+
+  @override
+  String get peptideContentKisspeptin10TypicalDose => 'ユーザー入力';
+
+  @override
+  String get peptideContentKisspeptin10HalfLife => '約数分（報告値）';
+
+  @override
+  String get peptideContentKisspeptin10Notes =>
+      '確立されたプロトコルのない研究用化合物です。ユーザーが入力した量のみ記録してください。PepModはこの化合物の投与ガイダンスを提供しません。';
+
+  @override
+  String get peptideContentSluPp332Description =>
+      'SLU-PP-332は運動生理学研究で前臨床的に調査されている実験的な低分子ERRアゴニストです。ペプチドではなく、ヒトでの安全性や有効性の確立されたデータはありません。この項目はユーザーが入力したスケジュールのための中立的な記録用リファレンスです。';
+
+  @override
+  String get peptideContentSluPp332TypicalDose => 'ユーザー入力';
+
+  @override
+  String get peptideContentSluPp332HalfLife => '十分に確立されていない';
+
+  @override
+  String get peptideContentSluPp332Notes =>
+      'ヒトでの試験がない極めて実験的な研究用化合物です。関連化合物であり、ペプチドではありません。ユーザーが入力した量のみ記録してください。PepModはこの化合物の投与ガイダンスを提供しません。';
 }

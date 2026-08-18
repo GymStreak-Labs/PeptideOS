@@ -653,6 +653,19 @@ String _routeLabel(BuildContext context, String key) {
   return localizedProtocolRouteLabel(AppLocalizations.of(context), key);
 }
 
+/// Frequencies that require the weekday chips. "2x per week" is a guided
+/// two-day weekday selection so users always see exactly which days are
+/// scheduled — it is persisted as [kCustomWeekdayFrequency].
+bool _usesWeekdaySelection(String frequency) =>
+    frequency == kCustomWeekdayFrequency || frequency == kTwiceWeeklyFrequency;
+
+/// The stored frequency for a UI selection. The legacy `twice_weekly` key is
+/// never written for new/edited entries — explicit weekdays are stored instead
+/// so existing Monday/Thursday protocols are the only ones still on the
+/// implicit legacy interpretation.
+String _persistedFrequencyKey(String frequency) =>
+    frequency == kTwiceWeeklyFrequency ? kCustomWeekdayFrequency : frequency;
+
 String _weekdayLabel(BuildContext context, int weekday) {
   final locale = AppLocalizations.of(context).localeName;
   final monday = DateTime.utc(2024, 1, 1);
@@ -704,21 +717,26 @@ Future<ProtocolPeptide?> _pickPeptide(
   BuildContext context, {
   required String defaultLabelColorHex,
 }) async {
-  final slug = await showModalBottomSheet<String>(
+  final picked = await showModalBottomSheet<(String, String)>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (_) => const _PeptideLibraryPicker(),
   );
-  if (slug == null) return null;
+  if (picked == null) return null;
   if (!context.mounted) return null;
+  // The search query travels with the selection so "create it yourself" paths
+  // start from what the user was looking for instead of a generic name.
+  final (slug, pickerQuery) = picked;
 
   final provider = context.read<ProtocolProvider>();
   final ProtocolPeptide draft;
   if (slug == _blendVialSlug) {
     draft = provider.buildPeptide(
       slug: _blendVialSlug,
-      name: AppLocalizations.of(context).customBlend,
+      name: pickerQuery.isNotEmpty
+          ? pickerQuery
+          : AppLocalizations.of(context).customBlend,
       dose: 10,
       unit: 'syringe units',
       frequency: 'as_needed',
@@ -757,7 +775,9 @@ Future<ProtocolPeptide?> _pickPeptide(
   } else if (slug == _customPeptideSlug) {
     draft = provider.buildPeptide(
       slug: _customPeptideSlug,
-      name: AppLocalizations.of(context).customPeptide,
+      name: pickerQuery.isNotEmpty
+          ? pickerQuery
+          : AppLocalizations.of(context).customPeptide,
       dose: 0,
       frequency: 'as_needed',
       route: 'subcutaneous',
@@ -910,7 +930,9 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                       return AppCard(
                         onTap: () {
                           HapticFeedback.selectionClick();
-                          Navigator.of(context).pop(_blendVialSlug);
+                          Navigator.of(
+                            context,
+                          ).pop((_blendVialSlug, _query.trim()));
                         },
                         borderColor: AppColors.warning.withValues(alpha: 0.7),
                         child: Row(
@@ -958,7 +980,9 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                       return AppCard(
                         onTap: () {
                           HapticFeedback.selectionClick();
-                          Navigator.of(context).pop(_customPeptideSlug);
+                          Navigator.of(
+                            context,
+                          ).pop((_customPeptideSlug, _query.trim()));
                         },
                         borderColor: AppColors.borderCyan,
                         child: Row(
@@ -1008,9 +1032,10 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                       return AppCard(
                         onTap: () {
                           HapticFeedback.selectionClick();
-                          Navigator.of(
-                            context,
-                          ).pop('$_savedCompoundSlugPrefix${compound.id}');
+                          Navigator.of(context).pop((
+                            '$_savedCompoundSlugPrefix${compound.id}',
+                            '',
+                          ));
                         },
                         borderColor: AppColors.borderCyan,
                         child: Row(
@@ -1064,7 +1089,7 @@ class _PeptideLibraryPickerState extends State<_PeptideLibraryPicker> {
                     return AppCard(
                       onTap: () {
                         HapticFeedback.selectionClick();
-                        Navigator.of(context).pop(p.slug);
+                        Navigator.of(context).pop((p.slug, ''));
                       },
                       child: Row(
                         children: [
@@ -1166,6 +1191,11 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
     if (_frequency == kCustomWeekdayFrequency && _selectedWeekdays.isEmpty) {
       _selectedWeekdays.add(DateTime.now().weekday);
     }
+    // Legacy twice-weekly blends surface their historical Monday/Thursday
+    // days explicitly so saving never shifts them.
+    if (_frequency == kTwiceWeeklyFrequency && _selectedWeekdays.isEmpty) {
+      _selectedWeekdays = {...kLegacyTwiceWeeklyWeekdays};
+    }
   }
 
   @override
@@ -1238,7 +1268,8 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
       _nameCtrl.text.trim().isNotEmpty &&
       _blend.isValid &&
       _times.isNotEmpty &&
-      (_frequency != kCustomWeekdayFrequency || _selectedWeekdays.isNotEmpty);
+      (_frequency != kCustomWeekdayFrequency || _selectedWeekdays.isNotEmpty) &&
+      (_frequency != kTwiceWeeklyFrequency || _selectedWeekdays.length == 2);
 
   void _addConstituent() {
     HapticFeedback.selectionClick();
@@ -1320,7 +1351,7 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
       ..peptideName = _nameCtrl.text.trim()
       ..dosePerInjection = _drawUnits
       ..doseUnit = 'syringe units'
-      ..frequency = _frequency
+      ..frequency = _persistedFrequencyKey(_frequency)
       ..route = _route
       ..cycleWeeks = (int.tryParse(_cycleWeeksCtrl.text) ?? 0)
           .clamp(0, 104)
@@ -1331,7 +1362,7 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
       ..syringeUnits = _drawUnits
       ..labelColorHex = _labelColorHex
       ..scheduledTimes = _times
-      ..weekdayDoses = _frequency == kCustomWeekdayFrequency
+      ..weekdayDoses = _usesWeekdaySelection(_frequency)
           ? [
               for (final weekday in (_selectedWeekdays.toList()..sort()))
                 ProtocolWeekdayDose(
@@ -1527,12 +1558,25 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                               _selectedWeekdays.isEmpty) {
                             _selectedWeekdays.add(DateTime.now().weekday);
                           }
+                          if (_frequency == kTwiceWeeklyFrequency &&
+                              _selectedWeekdays.length != 2) {
+                            _selectedWeekdays = {...kLegacyTwiceWeeklyWeekdays};
+                          }
                         }),
                       ),
                   ],
                 ),
-                if (_frequency == kCustomWeekdayFrequency) ...[
+                if (_usesWeekdaySelection(_frequency)) ...[
                   const SizedBox(height: AppSpacing.base),
+                  if (_frequency == kTwiceWeeklyFrequency) ...[
+                    Text(
+                      l10n.twiceWeeklyPickDaysHint,
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                  ],
                   Wrap(
                     spacing: AppSpacing.sm,
                     runSpacing: AppSpacing.sm,
@@ -1549,6 +1593,16 @@ class _BlendVialConfigSheetState extends State<BlendVialConfigSheet> {
                         ),
                     ],
                   ),
+                  if (_frequency == kTwiceWeeklyFrequency &&
+                      _selectedWeekdays.length != 2) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    Text(
+                      l10n.selectExactlyTwoDaysError,
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.warning,
+                      ),
+                    ),
+                  ],
                 ],
                 const SizedBox(height: AppSpacing.base),
                 Wrap(
@@ -1953,6 +2007,11 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
     if (_frequency == kCustomWeekdayFrequency && _selectedWeekdays.isEmpty) {
       _selectedWeekdays = {DateTime.now().weekday};
     }
+    // Legacy twice-weekly entries have no stored weekdays — surface their
+    // historical Monday/Thursday days explicitly so saving never shifts them.
+    if (_frequency == kTwiceWeeklyFrequency && _selectedWeekdays.isEmpty) {
+      _selectedWeekdays = {...kLegacyTwiceWeeklyWeekdays};
+    }
     _phases =
         widget.initial.phases
             .map((phase) => ProtocolPhase.fromMap(phase.toMap()))
@@ -2066,6 +2125,15 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
       if (_frequency == kCustomWeekdayFrequency && _selectedWeekdays.isEmpty) {
         _selectedWeekdays.add(DateTime.now().weekday);
         _ensureWeekdayController(DateTime.now().weekday);
+      }
+      if (_frequency == kTwiceWeeklyFrequency &&
+          _selectedWeekdays.length != 2) {
+        _selectedWeekdays = {...kLegacyTwiceWeeklyWeekdays};
+      }
+      if (_usesWeekdaySelection(_frequency)) {
+        for (final weekday in _selectedWeekdays) {
+          _ensureWeekdayController(weekday);
+        }
       }
     });
   }
@@ -2199,6 +2267,9 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
     if (_frequency == kCustomWeekdayFrequency && _selectedWeekdays.isEmpty) {
       return false;
     }
+    if (_frequency == kTwiceWeeklyFrequency && _selectedWeekdays.length != 2) {
+      return false;
+    }
     if (_parsedCycleWeeks > 0 &&
         _phases.any((phase) => phase.endWeek > _parsedCycleWeeks)) {
       return false;
@@ -2208,7 +2279,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
 
   void _save() {
     final dose = _parsedBaseDose;
-    final weekdayDoses = _frequency == kCustomWeekdayFrequency
+    final weekdayDoses = _usesWeekdaySelection(_frequency)
         ? _buildWeekdayDoses(dose)
         : <ProtocolWeekdayDose>[];
     final updated = widget.initial
@@ -2217,7 +2288,7 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
           : widget.initial.peptideName
       ..dosePerInjection = dose
       ..doseUnit = _unit
-      ..frequency = _frequency
+      ..frequency = _persistedFrequencyKey(_frequency)
       ..route = _route
       ..cycleWeeks = _parsedCycleWeeks.clamp(0, 104).toInt()
       ..washoutWeeks = _parsedWashoutWeeks.clamp(0, 52).toInt()
@@ -2441,12 +2512,21 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                         ),
                     ],
                   ),
-                  if (_frequency == kCustomWeekdayFrequency) ...[
+                  if (_usesWeekdaySelection(_frequency)) ...[
                     const SizedBox(height: AppSpacing.base),
                     Text(
                       l10n.customDays.toUpperCase(),
                       style: AppTypography.systemLabel,
                     ),
+                    if (_frequency == kTwiceWeeklyFrequency) ...[
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(
+                        l10n.twiceWeeklyPickDaysHint,
+                        style: AppTypography.bodySmall.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: AppSpacing.sm),
                     Wrap(
                       spacing: AppSpacing.sm,
@@ -2465,7 +2545,18 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                       ],
                     ),
                     const SizedBox(height: AppSpacing.base),
-                    if (_selectedWeekdays.isEmpty)
+                    if (_frequency == kTwiceWeeklyFrequency &&
+                        _selectedWeekdays.length != 2) ...[
+                      Text(
+                        l10n.selectExactlyTwoDaysError,
+                        style: AppTypography.bodySmall.copyWith(
+                          color: AppColors.warning,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                    ],
+                    if (_selectedWeekdays.isEmpty &&
+                        _frequency == kCustomWeekdayFrequency)
                       Text(
                         l10n.selectDayError,
                         style: AppTypography.bodySmall.copyWith(
@@ -2836,6 +2927,14 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
     for (final dose in phase.weekdayDoses) {
       _weekdayTimes[dose.weekday] = _normalizePhaseTimes(dose.scheduledTimes);
     }
+    // Legacy twice-weekly phases surface their historical Monday/Thursday
+    // days explicitly so saving never shifts them.
+    if (_frequency == kTwiceWeeklyFrequency && _selectedWeekdays.isEmpty) {
+      _selectedWeekdays = {...kLegacyTwiceWeeklyWeekdays};
+    }
+    for (final weekday in _selectedWeekdays) {
+      _weekdayTimes.putIfAbsent(weekday, () => List<String>.from(_times));
+    }
   }
 
   @override
@@ -2873,6 +2972,12 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
           localeName: localeName,
           maximumFractionDigits: 1,
         ),
+      );
+    }
+    for (final weekday in _selectedWeekdays) {
+      _weekdayDoseCtrls.putIfAbsent(
+        weekday,
+        () => TextEditingController(text: _doseCtrl.text),
       );
     }
     _initialNumbersLocalized = true;
@@ -3037,7 +3142,9 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
         start > 0 &&
         end >= start &&
         dose > 0 &&
-        (_frequency == kCustomWeekdayFrequency
+        (_frequency != kTwiceWeeklyFrequency ||
+            _selectedWeekdays.length == 2) &&
+        (_usesWeekdaySelection(_frequency)
             ? _customWeekdaysAreValid
             : _times.isNotEmpty);
   }
@@ -3054,9 +3161,9 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
         ..dosePerInjection = parseDecimalInput(_doseCtrl.text)
         ..doseUnit = _unit
         ..syringeUnits = parseDecimalInput(_syringeCtrl.text)
-        ..frequency = _frequency
+        ..frequency = _persistedFrequencyKey(_frequency)
         ..scheduledTimes = _times
-        ..weekdayDoses = _frequency == kCustomWeekdayFrequency
+        ..weekdayDoses = _usesWeekdaySelection(_frequency)
             ? _buildWeekdayDoses()
             : <ProtocolWeekdayDose>[],
     );
@@ -3168,7 +3275,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                     Expanded(
                       flex: 2,
                       child: _FieldLabel(
-                        label: _frequency == kCustomWeekdayFrequency
+                        label: _usesWeekdaySelection(_frequency)
                             ? l10n.defaultAmountLabel
                             : l10n.trackedAmountLabel,
                         child: TextField(
@@ -3229,16 +3336,44 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                       _Chip(
                         label: _freqLabel(context, frequency.key),
                         selected: _frequency == frequency.key,
-                        onTap: () => setState(() => _frequency = frequency.key),
+                        onTap: () => setState(() {
+                          _frequency = frequency.key;
+                          if (_frequency == kTwiceWeeklyFrequency &&
+                              _selectedWeekdays.length != 2) {
+                            _selectedWeekdays = {...kLegacyTwiceWeeklyWeekdays};
+                          }
+                          if (_usesWeekdaySelection(_frequency)) {
+                            for (final weekday in _selectedWeekdays) {
+                              _weekdayDoseCtrls.putIfAbsent(
+                                weekday,
+                                () =>
+                                    TextEditingController(text: _doseCtrl.text),
+                              );
+                              _weekdayTimes.putIfAbsent(
+                                weekday,
+                                () => List<String>.from(_times),
+                              );
+                            }
+                          }
+                        }),
                       ),
                   ],
                 ),
-                if (_frequency == kCustomWeekdayFrequency) ...[
+                if (_usesWeekdaySelection(_frequency)) ...[
                   const SizedBox(height: AppSpacing.base),
                   Text(
                     l10n.customDays.toUpperCase(),
                     style: AppTypography.systemLabel,
                   ),
+                  if (_frequency == kTwiceWeeklyFrequency) ...[
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      l10n.twiceWeeklyPickDaysHint,
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: AppSpacing.sm),
                   Wrap(
                     spacing: AppSpacing.sm,
@@ -3257,7 +3392,18 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                     ],
                   ),
                   const SizedBox(height: AppSpacing.base),
-                  if (_selectedWeekdays.isEmpty)
+                  if (_frequency == kTwiceWeeklyFrequency &&
+                      _selectedWeekdays.length != 2) ...[
+                    Text(
+                      l10n.selectExactlyTwoDaysError,
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.warning,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                  ],
+                  if (_selectedWeekdays.isEmpty &&
+                      _frequency == kCustomWeekdayFrequency)
                     Text(
                       l10n.phaseSelectDayError,
                       style: AppTypography.bodySmall.copyWith(

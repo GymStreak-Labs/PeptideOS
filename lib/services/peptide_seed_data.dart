@@ -4,6 +4,16 @@ import '../models/peptide.dart';
 /// Wikipedia-like neutral tone. No medical claims. Every entry ends with a
 /// mandatory educational-use disclaimer.
 class PeptideSeedData {
+  /// Monotonic version of the bundled seed catalogue. Bump this whenever
+  /// entries are added so `PeptideLibraryRepository.ensureSeeded()` knows a
+  /// re-seed pass is needed. Existing remote documents are never overwritten —
+  /// version bumps only ever add missing slugs.
+  ///
+  /// History:
+  ///  1 — original catalogue (36 entries).
+  ///  2 — adds testosterone, glutathione, kisspeptin-10, slu-pp-332.
+  static const int seedVersion = 2;
+
   static const String _stdDisclaimer =
       'For educational reference only. Not medical advice. Research peptides are not approved for human use in most jurisdictions — always consult a qualified healthcare provider.';
 
@@ -607,6 +617,76 @@ class PeptideSeedData {
       stack: [],
       notes:
           'Related compound, not a peptide. Because it affects neurotransmitter pathways, blood pressure, heart rate, and interaction screening matter.',
+    ),
+    // ── Seed version 2 additions ─────────────────────────────────────────
+    // Neutral tracking references only: no suggested dose, frequency, or
+    // cycle. Amounts are always user-entered.
+    _Seed(
+      slug: 'testosterone',
+      name: 'Testosterone',
+      category: PeptideCategory.other,
+      description:
+          'Testosterone is an endogenous androgen hormone. Injectable ester preparations (such as cypionate and enanthate) are prescription medications used in clinician-supervised hormone therapy. This entry is a neutral tracking reference for user-entered schedules.',
+      typicalDose: 'User-entered mg',
+      defaultDoseMcg: 0,
+      defaultDoseUnit: 'mg',
+      defaultFrequency: 'as_needed',
+      halfLife: 'Ester-dependent',
+      cycleWeeks: 0,
+      route: 'intramuscular',
+      stack: [],
+      notes:
+          'Prescription-only and a controlled substance in many jurisdictions. Track only what has been directed by a qualified healthcare professional; PepMod does not provide testosterone dosing guidance.',
+    ),
+    _Seed(
+      slug: 'glutathione',
+      name: 'Glutathione',
+      category: PeptideCategory.longevity,
+      description:
+          'Glutathione is a naturally occurring tripeptide (glutamate-cysteine-glycine) that functions as a major intracellular antioxidant. Injectable forms are used in some wellness and clinical settings. This entry is a neutral tracking reference for user-entered schedules.',
+      typicalDose: 'User-entered mg',
+      defaultDoseMcg: 0,
+      defaultDoseUnit: 'mg',
+      defaultFrequency: 'as_needed',
+      halfLife: 'Short (systemic)',
+      cycleWeeks: 0,
+      route: 'subcutaneous',
+      stack: [],
+      notes:
+          'Regulatory status of injectable glutathione varies by country. Track amounts exactly as sourced and directed; PepMod does not provide dosing guidance for this compound.',
+    ),
+    _Seed(
+      slug: 'kisspeptin-10',
+      name: 'Kisspeptin-10',
+      category: PeptideCategory.other,
+      description:
+          'Kisspeptin-10 is a ten-amino-acid fragment of the kisspeptin neuropeptide, studied in research settings for its role in GnRH signalling and reproductive-axis regulation. Human data outside controlled studies is limited. This entry is a neutral tracking reference for user-entered schedules.',
+      typicalDose: 'User-entered',
+      defaultDoseMcg: 0,
+      defaultFrequency: 'as_needed',
+      halfLife: '~minutes (reported)',
+      cycleWeeks: 0,
+      route: 'subcutaneous',
+      stack: [],
+      notes:
+          'Research compound without established protocols. Track only user-entered amounts; PepMod does not provide dosing guidance for this compound.',
+    ),
+    _Seed(
+      slug: 'slu-pp-332',
+      name: 'SLU-PP-332',
+      category: PeptideCategory.other,
+      description:
+          'SLU-PP-332 is an experimental small-molecule ERR agonist investigated preclinically in exercise-physiology research. It is not a peptide and has no established human safety or efficacy data. This entry is a neutral tracking reference for user-entered schedules.',
+      typicalDose: 'User-entered',
+      defaultDoseMcg: 0,
+      defaultDoseUnit: 'mg',
+      defaultFrequency: 'as_needed',
+      halfLife: 'Not well established',
+      cycleWeeks: 0,
+      route: 'oral',
+      stack: [],
+      notes:
+          'Highly experimental research compound with no human trials. Related compound, not a peptide. Track only user-entered amounts; PepMod does not provide dosing guidance for this compound.',
     ),
     _Seed(
       slug: 'ru-58841',

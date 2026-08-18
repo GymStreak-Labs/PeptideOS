@@ -1277,6 +1277,11 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String subscribeAnnualPrice(String price) {
+    return 'ABONNEZ-VOUS — $price/an';
+  }
+
+  @override
   String get subscribeToActivate => 'Abonnez-vous pour activer votre protocole';
 
   @override
@@ -1305,9 +1310,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get thirtyDayAdherence => 'Observance sur 30 jours';
-
-  @override
-  String get threeDayFreeTrial => 'ESSAI GRATUIT DE 3 JOURS';
 
   @override
   String get timelineLabel => 'Chronologie';
@@ -3104,4 +3106,107 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get peptideContentEducationalDisclaimer =>
       'À titre éducatif uniquement. Ceci ne constitue pas un avis médical. Les peptides de recherche ne sont pas approuvés pour un usage humain dans la plupart des juridictions — consultez toujours un professionnel de santé qualifié.';
+
+  @override
+  String get twiceWeeklyPickDaysHint =>
+      'Choisis exactement deux jours de la semaine pour ce planning.';
+
+  @override
+  String get selectExactlyTwoDaysError =>
+      'Sélectionne exactement deux jours pour un planning de 2 fois par semaine.';
+
+  @override
+  String get remindersBlockedTitle => 'Les rappels sont bloqués';
+
+  @override
+  String get remindersBlockedBody =>
+      'Les rappels de dose sont activés dans PepMod, mais les notifications sont désactivées dans les réglages système : ils ne peuvent donc pas être envoyés.';
+
+  @override
+  String get openSettingsAction => 'Ouvrir les réglages';
+
+  @override
+  String freeTrialBadge(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'ESSAI GRATUIT DE $days JOURS',
+      one: 'ESSAI GRATUIT DE $days JOUR',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get createCustomCompoundAction => 'Créer un composé personnalisé';
+
+  @override
+  String get noPeptidesFoundCreateHint =>
+      'Aucun résultat dans la bibliothèque de référence. Tu peux quand même le suivre comme composé personnalisé.';
+
+  @override
+  String get blendSearchHint =>
+      'Les noms de mélanges comme celui-ci n\'ont pas de formulation standard — le contenu varie selon le fournisseur. Crée-le ici comme composé personnalisé, ou comme flacon pré-mélangé lors de la création d\'un protocole, en saisissant le contenu réel de ton flacon.';
+
+  @override
+  String get typicalDoseReferenceNote =>
+      'Plage de référence publiée à titre éducatif — ni une recommandation ni une instruction.';
+
+  @override
+  String get peptideContentTestosteroneDescription =>
+      'La testostérone est une hormone androgène endogène. Les préparations injectables d\'esters (comme le cypionate et l\'énanthate) sont des médicaments sur ordonnance utilisés en hormonothérapie supervisée par un clinicien. Cette fiche est une référence de suivi neutre pour des plannings saisis par l\'utilisateur.';
+
+  @override
+  String get peptideContentTestosteroneTypicalDose =>
+      'mg saisis par l\'utilisateur';
+
+  @override
+  String get peptideContentTestosteroneHalfLife => 'Dépend de l\'ester';
+
+  @override
+  String get peptideContentTestosteroneNotes =>
+      'Sur ordonnance uniquement et substance contrôlée dans de nombreuses juridictions. Ne suis que ce qui a été prescrit par un professionnel de santé qualifié ; PepMod ne fournit aucune indication de dosage de testostérone.';
+
+  @override
+  String get peptideContentGlutathioneDescription =>
+      'Le glutathion est un tripeptide naturel (glutamate-cystéine-glycine) qui agit comme antioxydant intracellulaire majeur. Les formes injectables sont utilisées dans certains cadres cliniques et de bien-être. Cette fiche est une référence de suivi neutre pour des plannings saisis par l\'utilisateur.';
+
+  @override
+  String get peptideContentGlutathioneTypicalDose =>
+      'mg saisis par l\'utilisateur';
+
+  @override
+  String get peptideContentGlutathioneHalfLife => 'Courte (systémique)';
+
+  @override
+  String get peptideContentGlutathioneNotes =>
+      'Le statut réglementaire du glutathion injectable varie selon les pays. Suis les quantités exactement telles qu\'obtenues et prescrites ; PepMod ne fournit aucune indication de dosage pour ce composé.';
+
+  @override
+  String get peptideContentKisspeptin10Description =>
+      'La kisspeptine-10 est un fragment de dix acides aminés du neuropeptide kisspeptine, étudié en recherche pour son rôle dans la signalisation de la GnRH et la régulation de l\'axe reproducteur. Les données humaines hors études contrôlées sont limitées. Cette fiche est une référence de suivi neutre pour des plannings saisis par l\'utilisateur.';
+
+  @override
+  String get peptideContentKisspeptin10TypicalDose =>
+      'Saisi par l\'utilisateur';
+
+  @override
+  String get peptideContentKisspeptin10HalfLife => '~minutes (rapporté)';
+
+  @override
+  String get peptideContentKisspeptin10Notes =>
+      'Composé de recherche sans protocoles établis. Ne suis que des quantités saisies par l\'utilisateur ; PepMod ne fournit aucune indication de dosage pour ce composé.';
+
+  @override
+  String get peptideContentSluPp332Description =>
+      'Le SLU-PP-332 est un agoniste ERR expérimental à petite molécule étudié en préclinique dans la recherche en physiologie de l\'exercice. Ce n\'est pas un peptide et il n\'existe pas de données établies de sécurité ou d\'efficacité chez l\'humain. Cette fiche est une référence de suivi neutre pour des plannings saisis par l\'utilisateur.';
+
+  @override
+  String get peptideContentSluPp332TypicalDose => 'Saisi par l\'utilisateur';
+
+  @override
+  String get peptideContentSluPp332HalfLife => 'Mal établie';
+
+  @override
+  String get peptideContentSluPp332Notes =>
+      'Composé de recherche hautement expérimental sans essais chez l\'humain. Composé apparenté, pas un peptide. Ne suis que des quantités saisies par l\'utilisateur ; PepMod ne fournit aucune indication de dosage pour ce composé.';
 }

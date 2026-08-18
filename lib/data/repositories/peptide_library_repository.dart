@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/peptide.dart';
 import '../../services/peptide_seed_data.dart';
@@ -36,28 +37,67 @@ class PeptideLibraryRepository {
     return snap.size;
   }
 
-  /// Seed the 20 reference peptides if the collection is empty. Idempotent —
-  /// safe to call on every launch.
-  Future<void> seedIfEmpty() async {
-    try {
-      final existing = await count();
-      if (existing > 0) return;
+  /// Local marker recording which bundled seed version this install has
+  /// already reconciled against the remote collection.
+  static const String seedVersionPrefsKey = 'pepmod_library_seed_version';
 
-      final seed = PeptideSeedData.build();
-      final batch = _firestore.batch();
-      for (final p in seed) {
-        batch.set(_col.doc(p.slug), p.toMap());
-      }
-      await batch.commit();
-      debugPrint(
-        'PeptideLibraryRepository: seeded ${seed.length} library docs.',
-      );
+  /// Versioned, idempotent library seeding.
+  ///
+  /// Reconciles the remote collection with the bundled catalogue whenever the
+  /// bundled [PeptideSeedData.seedVersion] is newer than the last version this
+  /// install processed. Only *missing* slugs are written — existing documents
+  /// are never touched, so remote edits (or a future admin-curated catalogue)
+  /// can never be clobbered by a client. Safe to call on every launch.
+  ///
+  /// Read-side note: [watchAll]/[fetchAllOnce] merge the bundled seed under
+  /// remote data, so users see new bundled entries immediately even when
+  /// security rules deny client writes (the prod setup). The version marker is
+  /// still advanced in that case to avoid retrying a denied write every
+  /// launch.
+  Future<void> ensureSeeded() async {
+    int? storedVersion;
+    SharedPreferences? prefs;
+    try {
+      prefs = await SharedPreferences.getInstance();
+      storedVersion = prefs.getInt(seedVersionPrefsKey);
     } catch (e) {
-      // Seeding relies on security rules being lax enough to write — in a
-      // locked-down prod setup the admin console seeds instead.
+      debugPrint('PeptideLibraryRepository: seed version read failed: $e');
+    }
+    if (storedVersion != null && storedVersion >= PeptideSeedData.seedVersion) {
+      return;
+    }
+
+    try {
+      final existingSlugs = (await _col.get()).docs.map((d) => d.id).toSet();
+      final missing = PeptideSeedData.build()
+          .where((p) => !existingSlugs.contains(p.slug))
+          .toList(growable: false);
+      if (missing.isNotEmpty) {
+        final batch = _firestore.batch();
+        for (final p in missing) {
+          batch.set(_col.doc(p.slug), p.toMap());
+        }
+        await batch.commit();
+        debugPrint(
+          'PeptideLibraryRepository: seeded ${missing.length} new library '
+          'docs (seed v${PeptideSeedData.seedVersion}).',
+        );
+      }
+    } catch (e) {
+      // Client writes are denied by prod security rules — the bundled merge in
+      // watchAll()/fetchAllOnce() still surfaces the new entries to users.
       debugPrint('PeptideLibraryRepository seed failed: $e');
     }
+
+    try {
+      await prefs?.setInt(seedVersionPrefsKey, PeptideSeedData.seedVersion);
+    } catch (e) {
+      debugPrint('PeptideLibraryRepository: seed version save failed: $e');
+    }
   }
+
+  /// Backwards-compatible alias for the pre-versioned bootstrap entry point.
+  Future<void> seedIfEmpty() => ensureSeeded();
 
   Future<List<Peptide>> fetchAllOnce() async {
     final snap = await _col.orderBy('name').get();

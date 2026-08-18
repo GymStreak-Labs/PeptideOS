@@ -28,6 +28,16 @@ class _LibraryScreenState extends State<LibraryScreen> {
   String _query = '';
   PeptideCategory? _category;
 
+  void _createCustomCompoundFromSearch(BuildContext context) {
+    HapticFeedback.lightImpact();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) =>
+            CustomCompoundLibraryScreen(initialEditorName: _query.trim()),
+      ),
+    );
+  }
+
   void _openUnitConverter() {
     HapticFeedback.lightImpact();
     final settingsProvider = context.read<SettingsProvider>();
@@ -189,10 +199,32 @@ class _LibraryScreenState extends State<LibraryScreen> {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(AppSpacing.xxl),
-                child: EmptyState(
-                  icon: Icons.search_off_rounded,
-                  title: l10n.noPeptidesFound,
-                  description: l10n.tryDifferentSearch,
+                child: Column(
+                  children: [
+                    EmptyState(
+                      icon: Icons.search_off_rounded,
+                      title: l10n.noPeptidesFound,
+                      description: _query.trim().isEmpty
+                          ? l10n.tryDifferentSearch
+                          : l10n.noPeptidesFoundCreateHint,
+                      actionLabel: _query.trim().isEmpty
+                          ? null
+                          : l10n.createCustomCompoundAction,
+                      onAction: _query.trim().isEmpty
+                          ? null
+                          : () => _createCustomCompoundFromSearch(context),
+                    ),
+                    if (isKnownBlendAlias(_query)) ...[
+                      const SizedBox(height: AppSpacing.lg),
+                      Text(
+                        l10n.blendSearchHint,
+                        style: AppTypography.bodySmall.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ],
                 ),
               ),
             )

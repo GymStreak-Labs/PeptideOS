@@ -12,11 +12,17 @@ class PaywallPlanPrice {
     required this.localizedPrice,
     required this.amount,
     required this.currencyCode,
+    this.freeTrialDays,
   });
 
   final String localizedPrice;
   final double amount;
   final String currencyCode;
+
+  /// Store-derived free-trial length in days, or null when the live offer has
+  /// no free trial. Trial copy on the paywall renders only from this value —
+  /// never from hardcoded durations.
+  final int? freeTrialDays;
 }
 
 /// Hard paywall — premium conversion design adapted to PepMod cyberpunk.
@@ -120,6 +126,8 @@ class _PaywallPageState extends State<PaywallPage>
 
   String _localizedPriceForPlan(int planIndex) =>
       _priceForPlan(planIndex)?.localizedPrice ?? '—';
+
+  int? get _annualFreeTrialDays => _priceForPlan(1)?.freeTrialDays;
 
   int? get _specialOfferSavingsPercent {
     final special = _priceForPlan(0);
@@ -405,7 +413,12 @@ class _PaywallPageState extends State<PaywallPage>
             _buildPlanCard(
               index: 1,
               label: _l10n.annualLabel,
-              tag: _l10n.threeDayFreeTrial,
+              // Trial badge is rendered only when the store offer includes a
+              // free trial — never as a hardcoded promise.
+              tag: switch (_annualFreeTrialDays) {
+                final days? => _l10n.freeTrialBadge(days),
+                null => null,
+              },
               price: _localizedPriceForPlan(1),
               period: _l10n.perYear,
             ),
@@ -957,13 +970,17 @@ class _PaywallPageState extends State<PaywallPage>
 
   Widget _buildFixedCta(double bottomPadding) {
     final selectedPrice = _priceForPlan(_selectedPlan)?.localizedPrice;
+    final hasAnnualTrial = _annualFreeTrialDays != null;
     final label = switch (_selectedPlan) {
       0 when selectedPrice != null => _l10n.activateProPrice(selectedPrice),
       0 => _l10n.activatePro,
-      1 => _l10n.startFreeTrial,
+      // "Start free trial" is only promised when the store-derived annual
+      // offer actually includes one; otherwise fall back to plain subscribe.
+      1 when hasAnnualTrial => _l10n.startFreeTrial,
+      1 when selectedPrice != null => _l10n.subscribeAnnualPrice(selectedPrice),
+      1 => _l10n.subscribeLabel,
       2 when selectedPrice != null => _l10n.subscribePrice(selectedPrice),
-      2 => _l10n.subscribeLabel,
-      _ => _l10n.startFreeTrial,
+      _ => _l10n.subscribeLabel,
     };
 
     return AnimatedOpacity(

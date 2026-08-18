@@ -182,10 +182,25 @@ users/{uid}                              # User doc (email, displayName, created
   bodyMetrics/{entryId}                  # BodyMetric (weight, body fat, measurements, date)
 
 peptideLibrary/{slug}                    # Shared reference peptides — read-authed, write-none
-                                         # Seeded via `PeptideLibraryRepository.seedIfEmpty()` on first authed launch.
+                                         # Reconciled via `PeptideLibraryRepository.ensureSeeded()` on launch.
 ```
 
 Security rules at `firestore.rules` — `users/{uid}/**` is owner-only, library is read-authed.
+
+### Versioned library seeding
+`PeptideSeedData.seedVersion` (currently 2) versions the bundled catalogue.
+`ensureSeeded()` compares it against the local marker
+(`pepmod_library_seed_version` in SharedPreferences) and, when the bundle is
+newer, writes only *missing* slugs — existing remote docs are never
+overwritten. Prod rules deny client library writes; that's fine because
+`watchAll()`/`fetchAllOnce()` merge the bundled seed under remote data, so new
+bundled entries are visible regardless. Bump the version + doc-comment history
+whenever entries are added. New entries for compounds without established
+published protocols must stay neutral (`defaultDoseMcg: 0`,
+`defaultFrequency: 'as_needed'`, no cycle). Never ship presets for vendor
+blend marketing names (KLOW/GLOW/Wolverine) — Library search routes those to
+custom compound creation with the query prefilled. See
+`docs/releases/release-checklist.md`.
 
 ## App init order (lib/main.dart)
 Essential (awaited, pre-`runApp`):
@@ -195,7 +210,7 @@ Essential (awaited, pre-`runApp`):
 4. `SubscriptionService.configure()` — safe no-op if RC key still TODO
 5. `AppReferSDK.configure()` — safe no-op if API key still TODO
 6. `AnalyticsService().initializeIdentity()` — stable install ID stamped on Crashlytics / Analytics / RC / AppRefer
-7. `PeptideLibraryRepository().seedIfEmpty()` — fire-and-forget
+7. `PeptideLibraryRepository().ensureSeeded()` — fire-and-forget, versioned + add-only
 8. `runApp(PepModApp())`
 
 Deferred (post-first-frame):
@@ -243,9 +258,36 @@ Any file calling `.filter()`, `.sortByX()`, `.findAll()` MUST import `package:is
 `frequency` key on `ProtocolPeptide` drives `_isDosingDay`:
 - `daily` — every day
 - `eod` — every other day from start
-- `twice_weekly` — Mon & Thu
+- `twice_weekly` — Mon & Thu (LEGACY, read-only: pre-existing stored protocols
+  only; must never change interpretation or existing users' days shift)
 - `weekly` — every 7 days from start
+- `custom_weekdays` — explicit `weekdayDoses` entries
 - `as_needed` — never auto-scheduled (log ad-hoc)
+
+Picking "2x per week" in any editor (peptide, blend, phase, onboarding draft
+replay) prefills Mon/Thu, requires exactly two selected weekdays, and
+persists as `custom_weekdays` with two explicit `ProtocolWeekdayDose` rows —
+the legacy `twice_weekly` key is never written for new/edited entries.
+
+### Notification permission recovery
+`NotificationPermissionProvider` (`features/protocol/providers/`) watches the
+OS permission (never prompts), re-checks on app resume, and fires
+`onPermissionRegranted` once on denied→granted so `main.dart` resyncs dose
+reminders. `RemindersBlockedBanner` shows on Protocol home + Profile only when
+`settings.notificationsEnabled && permission.isBlocked`, with an Open Settings
+CTA via `app_settings`. When a permission request is denied in Profile, the
+user's intent stays ON so the banner provides the recovery path. iOS reports
+"never asked" and "denied" identically, so `permissionStatus()` only reports
+denied after this install has actually prompted (persisted flag).
+
+### Paywall trial guardrail
+Trial copy renders only from store data: `_PostAuthPaywallGate` maps
+`StoreProduct.introductoryPrice` through `freeTrialDaysFromIntroductoryPrice`
+(`features/subscription/paywall_offer_state.dart`) into
+`PaywallPlanPrice.freeTrialDays`. No trial on the store product → no badge and
+the CTA falls back to `subscribeAnnualPrice`. Never reintroduce hardcoded
+trial strings — see `docs/releases/release-checklist.md` for the store/ads
+alignment checklist.
 
 ### Routing
 `_AppRoot` in `main.dart` listens to `SettingsProvider`. If `settings.onboardingCompleted` is false it renders `OnboardingScreen`, else `AppShell`. Onboarding's final paywall CTA calls `SettingsProvider.completeOnboarding(...)` AND auto-creates a first protocol by matching picked peptides (case-insensitive) against the seeded library.

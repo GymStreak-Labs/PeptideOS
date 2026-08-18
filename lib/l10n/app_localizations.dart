@@ -2355,6 +2355,12 @@ abstract class AppLocalizations {
   /// **'SUBSCRIBE — {price}/week'**
   String subscribePrice(String price);
 
+  /// English paywall CTA for the annual plan when the store offer has no free trial.
+  ///
+  /// In en, this message translates to:
+  /// **'SUBSCRIBE — {price}/year'**
+  String subscribeAnnualPrice(String price);
+
   /// English onboarding copy for subscribe to activate.
   ///
   /// In en, this message translates to:
@@ -2402,12 +2408,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'30-day adherence'**
   String get thirtyDayAdherence;
-
-  /// English onboarding copy for three day free trial.
-  ///
-  /// In en, this message translates to:
-  /// **'3-DAY FREE TRIAL'**
-  String get threeDayFreeTrial;
 
   /// English onboarding copy for timeline label.
   ///
@@ -5434,6 +5434,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'For educational reference only. Not medical advice. Research peptides are not approved for human use in most jurisdictions — always consult a qualified healthcare provider.'**
   String get peptideContentEducationalDisclaimer;
+
+  /// Helper under the 2x-per-week frequency asking the user to pick exactly two weekdays.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick exactly two weekdays for this schedule.'**
+  String get twiceWeeklyPickDaysHint;
+
+  /// Validation error when a 2x-per-week schedule does not have exactly two weekdays selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Select exactly two days for a 2x per week schedule.'**
+  String get selectExactlyTwoDaysError;
+
+  /// Title of the persistent banner shown when dose reminders are on in the app but notifications are denied at the OS level.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders are blocked'**
+  String get remindersBlockedTitle;
+
+  /// Body of the reminders-blocked banner explaining that system notification settings prevent delivery and how to fix it.
+  ///
+  /// In en, this message translates to:
+  /// **'Dose reminders are on in PepMod, but notifications are turned off in system settings, so reminders can\'t be delivered.'**
+  String get remindersBlockedBody;
+
+  /// Button that opens the OS notification settings for the app.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettingsAction;
+
+  /// Paywall badge for a store-derived free trial; days comes from the live store offer and is never hardcoded.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, one{{days}-DAY FREE TRIAL} other{{days}-DAY FREE TRIAL}}'**
+  String freeTrialBadge(int days);
+
+  /// Button on the empty library search state that creates a custom compound preset from the search term.
+  ///
+  /// In en, this message translates to:
+  /// **'Create custom compound'**
+  String get createCustomCompoundAction;
+
+  /// Empty library search description pointing to the create-custom-compound path.
+  ///
+  /// In en, this message translates to:
+  /// **'No match in the reference library. You can still track it as your own custom compound.'**
+  String get noPeptidesFoundCreateHint;
+
+  /// Shown when a search matches a known blend marketing name; blends vary by vendor so no preset composition is shipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Blend names like this have no standard formulation — contents vary by vendor. Create it as a custom compound here, or as a pre-blended vial when building a protocol, and enter your vial\'s actual contents.'**
+  String get blendSearchHint;
+
+  /// Framing note under the typical dose field clarifying it is published reference material, not an instruction. Preserve the not-a-recommendation meaning.
+  ///
+  /// In en, this message translates to:
+  /// **'Published reference range for educational context — not a recommendation or instruction.'**
+  String get typicalDoseReferenceNote;
+
+  /// Educational reference description for Testosterone.
+  ///
+  /// In en, this message translates to:
+  /// **'Testosterone is an endogenous androgen hormone. Injectable ester preparations (such as cypionate and enanthate) are prescription medications used in clinician-supervised hormone therapy. This entry is a neutral tracking reference for user-entered schedules.'**
+  String get peptideContentTestosteroneDescription;
+
+  /// User-entered tracking dose label for Testosterone.
+  ///
+  /// In en, this message translates to:
+  /// **'User-entered mg'**
+  String get peptideContentTestosteroneTypicalDose;
+
+  /// Reported half-life label for Testosterone.
+  ///
+  /// In en, this message translates to:
+  /// **'Ester-dependent'**
+  String get peptideContentTestosteroneHalfLife;
+
+  /// Educational reference notes for Testosterone.
+  ///
+  /// In en, this message translates to:
+  /// **'Prescription-only and a controlled substance in many jurisdictions. Track only what has been directed by a qualified healthcare professional; PepMod does not provide testosterone dosing guidance.'**
+  String get peptideContentTestosteroneNotes;
+
+  /// Educational reference description for Glutathione.
+  ///
+  /// In en, this message translates to:
+  /// **'Glutathione is a naturally occurring tripeptide (glutamate-cysteine-glycine) that functions as a major intracellular antioxidant. Injectable forms are used in some wellness and clinical settings. This entry is a neutral tracking reference for user-entered schedules.'**
+  String get peptideContentGlutathioneDescription;
+
+  /// User-entered tracking dose label for Glutathione.
+  ///
+  /// In en, this message translates to:
+  /// **'User-entered mg'**
+  String get peptideContentGlutathioneTypicalDose;
+
+  /// Reported half-life label for Glutathione.
+  ///
+  /// In en, this message translates to:
+  /// **'Short (systemic)'**
+  String get peptideContentGlutathioneHalfLife;
+
+  /// Educational reference notes for Glutathione.
+  ///
+  /// In en, this message translates to:
+  /// **'Regulatory status of injectable glutathione varies by country. Track amounts exactly as sourced and directed; PepMod does not provide dosing guidance for this compound.'**
+  String get peptideContentGlutathioneNotes;
+
+  /// Educational reference description for Kisspeptin10.
+  ///
+  /// In en, this message translates to:
+  /// **'Kisspeptin-10 is a ten-amino-acid fragment of the kisspeptin neuropeptide, studied in research settings for its role in GnRH signalling and reproductive-axis regulation. Human data outside controlled studies is limited. This entry is a neutral tracking reference for user-entered schedules.'**
+  String get peptideContentKisspeptin10Description;
+
+  /// User-entered tracking dose label for Kisspeptin10.
+  ///
+  /// In en, this message translates to:
+  /// **'User-entered'**
+  String get peptideContentKisspeptin10TypicalDose;
+
+  /// Reported half-life label for Kisspeptin10.
+  ///
+  /// In en, this message translates to:
+  /// **'~minutes (reported)'**
+  String get peptideContentKisspeptin10HalfLife;
+
+  /// Educational reference notes for Kisspeptin10.
+  ///
+  /// In en, this message translates to:
+  /// **'Research compound without established protocols. Track only user-entered amounts; PepMod does not provide dosing guidance for this compound.'**
+  String get peptideContentKisspeptin10Notes;
+
+  /// Educational reference description for SluPp332.
+  ///
+  /// In en, this message translates to:
+  /// **'SLU-PP-332 is an experimental small-molecule ERR agonist investigated preclinically in exercise-physiology research. It is not a peptide and has no established human safety or efficacy data. This entry is a neutral tracking reference for user-entered schedules.'**
+  String get peptideContentSluPp332Description;
+
+  /// User-entered tracking dose label for SluPp332.
+  ///
+  /// In en, this message translates to:
+  /// **'User-entered'**
+  String get peptideContentSluPp332TypicalDose;
+
+  /// Reported half-life label for SluPp332.
+  ///
+  /// In en, this message translates to:
+  /// **'Not well established'**
+  String get peptideContentSluPp332HalfLife;
+
+  /// Educational reference notes for SluPp332.
+  ///
+  /// In en, this message translates to:
+  /// **'Highly experimental research compound with no human trials. Related compound, not a peptide. Track only user-entered amounts; PepMod does not provide dosing guidance for this compound.'**
+  String get peptideContentSluPp332Notes;
 }
 
 class _AppLocalizationsDelegate

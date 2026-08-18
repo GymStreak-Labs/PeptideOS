@@ -89,11 +89,17 @@ class OnboardingDraftService {
       );
       protocols.setNotificationsEnabled(draft.notificationsEnabled);
 
-      await AnalyticsService().sendAppReferAdvancedMatching(
-        email: email,
-        firstName: draft.firstName,
-        dateOfBirth: draft.birthDate,
-      );
+      // Attribution is best-effort — an analytics failure must never abort
+      // the replay and silently drop the user's onboarding protocol.
+      try {
+        await AnalyticsService().sendAppReferAdvancedMatching(
+          email: email,
+          firstName: draft.firstName,
+          dateOfBirth: draft.birthDate,
+        );
+      } catch (e) {
+        debugPrint('OnboardingDraftService advanced matching failed: $e');
+      }
 
       if (draft.selectedPeptides.isNotEmpty && protocols.all.isEmpty) {
         if (library.all.isEmpty) {
@@ -103,15 +109,31 @@ class OnboardingDraftService {
         for (final name in draft.selectedPeptides) {
           final lib = _findLibraryPeptide(library, name);
           if (lib == null) continue;
+          // Twice-weekly defaults are stored as explicit weekdays (the same
+          // Monday/Thursday pair the legacy key implied) so the schedule is
+          // visible and editable rather than an implicit convention.
+          final isTwiceWeekly = lib.defaultFrequency == kTwiceWeeklyFrequency;
           peptideEntries.add(
             protocols.buildPeptide(
               slug: lib.slug,
               name: lib.name,
               dose: lib.defaultDoseMcg,
               unit: lib.defaultDoseUnit,
-              frequency: lib.defaultFrequency,
+              frequency: isTwiceWeekly
+                  ? kCustomWeekdayFrequency
+                  : lib.defaultFrequency,
               route: lib.defaultRoute,
               cycleWeeks: lib.typicalCycleWeeks,
+              weekdayDoses: isTwiceWeekly
+                  ? [
+                      for (final weekday in kLegacyTwiceWeeklyWeekdays)
+                        ProtocolWeekdayDose(
+                          weekday: weekday,
+                          dosePerInjection: lib.defaultDoseMcg,
+                          doseUnit: lib.defaultDoseUnit,
+                        ),
+                    ]
+                  : null,
             ),
           );
         }

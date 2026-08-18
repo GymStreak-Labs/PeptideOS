@@ -130,6 +130,13 @@ class PeptideDetailScreen extends StatelessWidget {
                             '${localizedProtocolRouteLabel(l10n, peptide.defaultRoute)} · ${localizedProtocolFrequencyLabel(l10n, peptide.defaultFrequency)}',
                             style: AppTypography.bodySmall,
                           ),
+                          const SizedBox(height: AppSpacing.sm),
+                          // Framing guardrail: reported ranges are reference
+                          // material, never an instruction to dose.
+                          Text(
+                            l10n.typicalDoseReferenceNote,
+                            style: AppTypography.disclaimer,
+                          ),
                         ],
                       ),
                     ),
