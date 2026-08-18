@@ -4715,10 +4715,10 @@ abstract class AppLocalizations {
   /// **'Retatrutide is an investigational triple agonist targeting GIP, GLP-1, and glucagon receptors. Phase 2 trials reported weight reductions exceeding those of existing GLP-1-based therapies.'**
   String get peptideContentRetatrutideDescription;
 
-  /// Reference amount text for Retatrutide; this is not a dosing recommendation.
+  /// Investigational status text for Retatrutide; preserve no-approved-dosing and not-instructions wording.
   ///
   /// In en, this message translates to:
-  /// **'Trial doses 1–12 mg weekly'**
+  /// **'No approved dosing regimen. Retatrutide is investigational; amounts reported in trials are study references, not instructions for use.'**
   String get peptideContentRetatrutideTypicalDose;
 
   /// Educational half-life reference for Retatrutide.
@@ -5608,6 +5608,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Highly experimental research compound with no human trials. Related compound, not a peptide. Track only user-entered amounts; PepMod does not provide dosing guidance for this compound.'**
   String get peptideContentSluPp332Notes;
+
+  /// Heading replacing Typical Dose for an investigational compound with no approved dosing regimen.
+  ///
+  /// In en, this message translates to:
+  /// **'INVESTIGATIONAL — NO APPROVED DOSING'**
+  String get investigationalDosingLabel;
+
+  /// Safety warning in the protocol editor for investigational/reference-only compounds.
+  ///
+  /// In en, this message translates to:
+  /// **'No approved protocol exists for this investigational compound. PepMod does not provide an amount or schedule; enter your own tracking values explicitly.'**
+  String get investigationalProtocolEntryWarning;
 }
 
 class _AppLocalizationsDelegate

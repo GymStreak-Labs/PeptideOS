@@ -2660,7 +2660,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get peptideContentRetatrutideTypicalDose =>
-      'Dosis de ensayo de 1–12 mg semanales';
+      'No existe una pauta de dosificación aprobada. La retatrutida está en investigación; las cantidades publicadas en ensayos son referencias de estudio, no instrucciones de uso.';
 
   @override
   String get peptideContentRetatrutideHalfLife => '~6 días';
@@ -3229,4 +3229,12 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get peptideContentSluPp332Notes =>
       'Compuesto de investigación altamente experimental sin ensayos en humanos. Compuesto relacionado, no un péptido. Registra solo cantidades introducidas por el usuario; PepMod no ofrece pautas de dosificación para este compuesto.';
+
+  @override
+  String get investigationalDosingLabel =>
+      'EN INVESTIGACIÓN — SIN DOSIFICACIÓN APROBADA';
+
+  @override
+  String get investigationalProtocolEntryWarning =>
+      'No existe un protocolo aprobado para este compuesto en investigación. PepMod no proporciona una cantidad ni un calendario; introduce explícitamente tus propios valores de seguimiento.';
 }

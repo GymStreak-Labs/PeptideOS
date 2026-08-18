@@ -2550,7 +2550,8 @@ class AppLocalizationsKo extends AppLocalizations {
       'Retatrutide는 GIP, GLP-1 및 글루카곤 수용체를 표적으로 하는 연구용 삼중 작용제입니다. 2상 임상시험에서는 기존 GLP-1 기반 치료법을 능가하는 체중 감소 효과가 보고됐다.';
 
   @override
-  String get peptideContentRetatrutideTypicalDose => '시험 용량 매주 1~12mg';
+  String get peptideContentRetatrutideTypicalDose =>
+      '승인된 투여 요법이 없습니다. Retatrutide는 연구 단계이며, 임상시험에서 보고된 용량은 연구 참고 정보일 뿐 사용 지침이 아닙니다.';
 
   @override
   String get peptideContentRetatrutideHalfLife => '~6일';
@@ -3094,4 +3095,11 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get peptideContentSluPp332Notes =>
       '인간 대상 시험이 없는 매우 실험적인 연구용 화합물입니다. 관련 화합물이며 펩타이드가 아닙니다. 사용자가 입력한 양만 기록하세요. PepMod는 이 화합물에 대한 투여 지침을 제공하지 않습니다.';
+
+  @override
+  String get investigationalDosingLabel => '연구 단계 — 승인된 투여량 없음';
+
+  @override
+  String get investigationalProtocolEntryWarning =>
+      '이 연구 단계 화합물에 대해 승인된 프로토콜은 없습니다. PepMod는 용량이나 일정을 제공하지 않으므로 기록할 값을 직접 명시적으로 입력하세요.';
 }

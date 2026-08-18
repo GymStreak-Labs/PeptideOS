@@ -12,7 +12,9 @@ class PeptideSeedData {
   /// History:
   ///  1 — original catalogue (36 entries).
   ///  2 — adds testosterone, glutathione, kisspeptin-10, slu-pp-332.
-  static const int seedVersion = 2;
+  ///  3 — marks investigational/no-default entries and removes Retatrutide
+  ///      regimen suggestions.
+  static const int seedVersion = 3;
 
   static const String _stdDisclaimer =
       'For educational reference only. Not medical advice. Research peptides are not approved for human use in most jurisdictions — always consult a qualified healthcare provider.';
@@ -35,6 +37,8 @@ class PeptideSeedData {
             commonStack: List<String>.from(e.stack),
             notes: e.notes,
             disclaimer: _stdDisclaimer,
+            isInvestigational: e.isInvestigational,
+            hasProtocolDefaults: e.hasProtocolDefaults,
           ),
         )
         .toList();
@@ -50,7 +54,8 @@ class PeptideSeedData {
       typicalDose: 'User-entered IU',
       defaultDoseMcg: 0,
       defaultDoseUnit: 'IU',
-      defaultFrequency: 'as_needed',
+      defaultFrequency: '',
+      hasProtocolDefaults: false,
       halfLife: '~24-36 hours',
       cycleWeeks: 0,
       route: 'subcutaneous',
@@ -160,15 +165,18 @@ class PeptideSeedData {
       category: PeptideCategory.metabolic,
       description:
           'Retatrutide is an investigational triple agonist targeting GIP, GLP-1, and glucagon receptors. Phase 2 trials reported weight reductions exceeding those of existing GLP-1-based therapies.',
-      typicalDose: 'Trial doses 1–12 mg weekly',
-      defaultDoseMcg: 2000,
-      defaultFrequency: 'weekly',
+      typicalDose:
+          'No approved dosing regimen. Trial amounts are study references, not instructions for use.',
+      defaultDoseMcg: 0,
+      defaultFrequency: '',
       halfLife: '~6 days',
       cycleWeeks: 0,
       route: 'subcutaneous',
       stack: [],
       notes:
           'Still investigational — not FDA approved at time of writing. Any use outside a clinical trial is strictly research-only.',
+      isInvestigational: true,
+      hasProtocolDefaults: false,
     ),
     _Seed(
       slug: 'ipamorelin',
@@ -630,7 +638,8 @@ class PeptideSeedData {
       typicalDose: 'User-entered mg',
       defaultDoseMcg: 0,
       defaultDoseUnit: 'mg',
-      defaultFrequency: 'as_needed',
+      defaultFrequency: '',
+      hasProtocolDefaults: false,
       halfLife: 'Ester-dependent',
       cycleWeeks: 0,
       route: 'intramuscular',
@@ -647,7 +656,8 @@ class PeptideSeedData {
       typicalDose: 'User-entered mg',
       defaultDoseMcg: 0,
       defaultDoseUnit: 'mg',
-      defaultFrequency: 'as_needed',
+      defaultFrequency: '',
+      hasProtocolDefaults: false,
       halfLife: 'Short (systemic)',
       cycleWeeks: 0,
       route: 'subcutaneous',
@@ -663,7 +673,9 @@ class PeptideSeedData {
           'Kisspeptin-10 is a ten-amino-acid fragment of the kisspeptin neuropeptide, studied in research settings for its role in GnRH signalling and reproductive-axis regulation. Human data outside controlled studies is limited. This entry is a neutral tracking reference for user-entered schedules.',
       typicalDose: 'User-entered',
       defaultDoseMcg: 0,
-      defaultFrequency: 'as_needed',
+      defaultFrequency: '',
+      isInvestigational: true,
+      hasProtocolDefaults: false,
       halfLife: '~minutes (reported)',
       cycleWeeks: 0,
       route: 'subcutaneous',
@@ -680,7 +692,9 @@ class PeptideSeedData {
       typicalDose: 'User-entered',
       defaultDoseMcg: 0,
       defaultDoseUnit: 'mg',
-      defaultFrequency: 'as_needed',
+      defaultFrequency: '',
+      isInvestigational: true,
+      hasProtocolDefaults: false,
       halfLife: 'Not well established',
       cycleWeeks: 0,
       route: 'oral',
@@ -722,6 +736,8 @@ class _Seed {
     required this.route,
     required this.stack,
     required this.notes,
+    this.isInvestigational = false,
+    this.hasProtocolDefaults = true,
   });
 
   final String slug;
@@ -737,4 +753,6 @@ class _Seed {
   final String route;
   final List<String> stack;
   final String notes;
+  final bool isInvestigational;
+  final bool hasProtocolDefaults;
 }

@@ -2628,7 +2628,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get peptideContentRetatrutideTypicalDose =>
-      'Trial doses 1–12 mg weekly';
+      'No approved dosing regimen. Retatrutide is investigational; amounts reported in trials are study references, not instructions for use.';
 
   @override
   String get peptideContentRetatrutideHalfLife => '~6 days';
@@ -3187,4 +3187,12 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get peptideContentSluPp332Notes =>
       'Highly experimental research compound with no human trials. Related compound, not a peptide. Track only user-entered amounts; PepMod does not provide dosing guidance for this compound.';
+
+  @override
+  String get investigationalDosingLabel =>
+      'INVESTIGATIONAL — NO APPROVED DOSING';
+
+  @override
+  String get investigationalProtocolEntryWarning =>
+      'No approved protocol exists for this investigational compound. PepMod does not provide an amount or schedule; enter your own tracking values explicitly.';
 }

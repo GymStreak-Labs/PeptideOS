@@ -2668,7 +2668,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get peptideContentRetatrutideTypicalDose =>
-      'Studiendosen 1–12 mg wöchentlich';
+      'Kein zugelassenes Dosierungsschema. Retatrutid ist ein Prüfpräparat; in Studien berichtete Mengen dienen nur als Studienreferenz und sind keine Anwendungshinweise.';
 
   @override
   String get peptideContentRetatrutideHalfLife => '~6 Tage';
@@ -3233,4 +3233,12 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get peptideContentSluPp332Notes =>
       'Hochexperimentelle Forschungssubstanz ohne Humanstudien. Verwandte Substanz, kein Peptid. Erfasse nur vom Nutzer eingegebene Mengen; PepMod gibt keine Dosierungsempfehlungen für diese Substanz.';
+
+  @override
+  String get investigationalDosingLabel =>
+      'PRÜFPRÄPARAT — KEINE ZUGELASSENE DOSIERUNG';
+
+  @override
+  String get investigationalProtocolEntryWarning =>
+      'Für diese Prüfsubstanz gibt es kein zugelassenes Protokoll. PepMod gibt weder Menge noch Zeitplan vor; gib deine eigenen Tracking-Werte ausdrücklich ein.';
 }

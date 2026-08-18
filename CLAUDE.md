@@ -188,7 +188,7 @@ peptideLibrary/{slug}                    # Shared reference peptides — read-au
 Security rules at `firestore.rules` — `users/{uid}/**` is owner-only, library is read-authed.
 
 ### Versioned library seeding
-`PeptideSeedData.seedVersion` (currently 2) versions the bundled catalogue.
+`PeptideSeedData.seedVersion` (currently 3) versions the bundled catalogue.
 `ensureSeeded()` compares it against the local marker
 (`pepmod_library_seed_version` in SharedPreferences) and, when the bundle is
 newer, writes only *missing* slugs — existing remote docs are never
@@ -197,7 +197,11 @@ overwritten. Prod rules deny client library writes; that's fine because
 bundled entries are visible regardless. Bump the version + doc-comment history
 whenever entries are added. New entries for compounds without established
 published protocols must stay neutral (`defaultDoseMcg: 0`,
-`defaultFrequency: 'as_needed'`, no cycle). Never ship presets for vendor
+blank `defaultFrequency`, `hasProtocolDefaults: false`, no cycle).
+Investigational entries additionally set `isInvestigational: true`; the model
+fails Retatrutide closed by slug for backward compatibility with older remote
+documents. These entries are skipped during onboarding protocol creation and
+open blank in the protocol builder. Never ship presets for vendor
 blend marketing names (KLOW/GLOW/Wolverine) — Library search routes those to
 custom compound creation with the query prefilled. See
 `docs/releases/release-checklist.md`.

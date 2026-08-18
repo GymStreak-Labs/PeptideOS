@@ -2663,7 +2663,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get peptideContentRetatrutideTypicalDose =>
-      'Doses de ensaio de 1–12 mg semanais';
+      'Não existe um regime posológico aprovado. A retatrutida é experimental; as quantidades comunicadas em ensaios são referências de estudo, não instruções de utilização.';
 
   @override
   String get peptideContentRetatrutideHalfLife => '~6 dias';
@@ -3232,6 +3232,14 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get peptideContentSluPp332Notes =>
       'Composto de investigação altamente experimental sem ensaios em humanos. Composto relacionado, não um péptido. Regista apenas quantidades inseridas pelo utilizador; o PepMod não fornece orientações de dosagem para este composto.';
+
+  @override
+  String get investigationalDosingLabel =>
+      'EXPERIMENTAL — SEM POSOLOGIA APROVADA';
+
+  @override
+  String get investigationalProtocolEntryWarning =>
+      'Não existe um protocolo aprovado para este composto experimental. O PepMod não fornece quantidade nem horário; introduz explicitamente os teus próprios valores de registo.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -5884,7 +5892,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get peptideContentRetatrutideTypicalDose =>
-      'Doses de estudo de 1–12 mg semanais';
+      'Não existe um regime de dosagem aprovado. A retatrutida é experimental; as quantidades relatadas em estudos são referências de pesquisa, não instruções de uso.';
 
   @override
   String get peptideContentRetatrutideHalfLife => '~6 dias';
@@ -6450,4 +6458,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get peptideContentSluPp332Notes =>
       'Composto de pesquisa altamente experimental sem ensaios em humanos. Composto relacionado, não um peptídeo. Registre apenas quantidades inseridas pelo usuário; o PepMod não fornece orientações de dosagem para este composto.';
+
+  @override
+  String get investigationalDosingLabel =>
+      'EXPERIMENTAL — SEM DOSAGEM APROVADA';
+
+  @override
+  String get investigationalProtocolEntryWarning =>
+      'Não existe um protocolo aprovado para este composto experimental. O PepMod não fornece quantidade nem cronograma; insira explicitamente seus próprios valores de acompanhamento.';
 }

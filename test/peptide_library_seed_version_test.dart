@@ -14,12 +14,12 @@ void main() {
     'slu-pp-332',
   ];
 
-  group('seed catalogue v2', () {
+  group('versioned seed catalogue', () {
     final peptides = PeptideSeedData.build();
     final bySlug = {for (final p in peptides) p.slug: p};
 
     test('bundles the requested reference additions', () {
-      expect(PeptideSeedData.seedVersion, 2);
+      expect(PeptideSeedData.seedVersion, 3);
       expect(bySlug.keys, containsAll(newSlugs));
     });
 
@@ -37,7 +37,8 @@ void main() {
       for (final slug in newSlugs) {
         final entry = bySlug[slug]!;
         expect(entry.defaultDoseMcg, 0, reason: slug);
-        expect(entry.defaultFrequency, 'as_needed', reason: slug);
+        expect(entry.defaultFrequency, isEmpty, reason: slug);
+        expect(entry.hasProtocolDefaults, isFalse, reason: slug);
         expect(entry.typicalCycleWeeks, 0, reason: slug);
         expect(
           entry.notes,

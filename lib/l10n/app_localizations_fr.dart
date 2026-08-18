@@ -2674,7 +2674,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get peptideContentRetatrutideTypicalDose =>
-      'Doses d\'essai de 1 à 12 mg par semaine';
+      'Aucun schéma posologique approuvé. Le rétatrutide est expérimental ; les quantités rapportées dans les essais sont des références d’étude, pas des instructions d’utilisation.';
 
   @override
   String get peptideContentRetatrutideHalfLife => '~6 jours';
@@ -3242,4 +3242,12 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get peptideContentSluPp332Notes =>
       'Composé de recherche hautement expérimental sans essais chez l\'humain. Composé apparenté, pas un peptide. Ne suis que des quantités saisies par l\'utilisateur ; PepMod ne fournit aucune indication de dosage pour ce composé.';
+
+  @override
+  String get investigationalDosingLabel =>
+      'EXPÉRIMENTAL — AUCUNE POSOLOGIE APPROUVÉE';
+
+  @override
+  String get investigationalProtocolEntryWarning =>
+      'Aucun protocole approuvé n’existe pour ce composé expérimental. PepMod ne fournit ni quantité ni calendrier ; saisis explicitement tes propres valeurs de suivi.';
 }

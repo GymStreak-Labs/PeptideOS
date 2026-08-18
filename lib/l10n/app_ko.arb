@@ -4948,11 +4948,11 @@
     "sourceString": "Retatrutide is an investigational triple agonist targeting GIP, GLP-1, and glucagon receptors. Phase 2 trials reported weight reductions exceeding those of existing GLP-1-based therapies.",
     "sourceDescription": "Educational reference description for Retatrutide."
   },
-  "peptideContentRetatrutideTypicalDose": "시험 용량 매주 1~12mg",
+  "peptideContentRetatrutideTypicalDose": "승인된 투여 요법이 없습니다. Retatrutide는 연구 단계이며, 임상시험에서 보고된 용량은 연구 참고 정보일 뿐 사용 지침이 아닙니다.",
   "@peptideContentRetatrutideTypicalDose": {
-    "description": "Reference amount text for Retatrutide; this is not a dosing recommendation.",
-    "sourceString": "Trial doses 1–12 mg weekly",
-    "sourceDescription": "Reference amount text for Retatrutide; this is not a dosing recommendation."
+    "description": "Investigational status text for Retatrutide; preserve no-approved-dosing and not-instructions wording.",
+    "sourceString": "No approved dosing regimen. Retatrutide is investigational; amounts reported in trials are study references, not instructions for use.",
+    "sourceDescription": "Investigational status text for Retatrutide; preserve no-approved-dosing and not-instructions wording."
   },
   "peptideContentRetatrutideHalfLife": "~6일",
   "@peptideContentRetatrutideHalfLife": {
@@ -5915,5 +5915,17 @@
     "description": "Educational reference notes for SluPp332.",
     "sourceString": "Highly experimental research compound with no human trials. Related compound, not a peptide. Track only user-entered amounts; PepMod does not provide dosing guidance for this compound.",
     "sourceDescription": "Educational reference notes for SluPp332."
+  },
+  "investigationalDosingLabel": "연구 단계 — 승인된 투여량 없음",
+  "@investigationalDosingLabel": {
+    "description": "Heading replacing Typical Dose for an investigational compound with no approved dosing regimen.",
+    "sourceString": "INVESTIGATIONAL — NO APPROVED DOSING",
+    "sourceDescription": "Heading replacing Typical Dose for an investigational compound with no approved dosing regimen."
+  },
+  "investigationalProtocolEntryWarning": "이 연구 단계 화합물에 대해 승인된 프로토콜은 없습니다. PepMod는 용량이나 일정을 제공하지 않으므로 기록할 값을 직접 명시적으로 입력하세요.",
+  "@investigationalProtocolEntryWarning": {
+    "description": "Safety warning in the protocol editor for investigational/reference-only compounds.",
+    "sourceString": "No approved protocol exists for this investigational compound. PepMod does not provide an amount or schedule; enter your own tracking values explicitly.",
+    "sourceDescription": "Safety warning in the protocol editor for investigational/reference-only compounds."
   }
 }

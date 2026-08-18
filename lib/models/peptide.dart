@@ -27,6 +27,8 @@ class Peptide {
     required this.commonStack,
     required this.notes,
     required this.disclaimer,
+    this.isInvestigational = false,
+    this.hasProtocolDefaults = true,
   });
 
   /// Stable string identifier (e.g. "bpc-157"). Doubles as the Firestore doc ID.
@@ -67,6 +69,19 @@ class Peptide {
   /// Mandatory disclaimer line shown on the detail screen.
   final String disclaimer;
 
+  /// Whether this catalogue entry represents an investigational compound with
+  /// no approved use/dosing regimen. Presentation and onboarding must fail
+  /// safe for these entries rather than turning trial data into instructions.
+  final bool isInvestigational;
+
+  /// Whether PepMod may prefill a protocol amount and frequency for this
+  /// entry. When false, the builder starts blank and requires both values from
+  /// the user; onboarding never auto-creates a protocol from the entry.
+  final bool hasProtocolDefaults;
+
+  bool get requiresExplicitProtocolEntry =>
+      isInvestigational || !hasProtocolDefaults;
+
   Map<String, dynamic> toMap() => <String, dynamic>{
     'slug': slug,
     'name': name,
@@ -82,11 +97,17 @@ class Peptide {
     'commonStack': commonStack,
     'notes': notes,
     'disclaimer': disclaimer,
+    'isInvestigational': isInvestigational,
+    'hasProtocolDefaults': hasProtocolDefaults,
   };
 
   factory Peptide.fromMap(String id, Map<String, dynamic> data) {
+    final slug = (data['slug'] as String?) ?? id;
+    // Existing production Retatrutide documents predate the explicit safety
+    // fields. Fail closed by stable slug until the remote document is migrated.
+    final legacyInvestigational = slug == 'retatrutide';
     return Peptide(
-      slug: (data['slug'] as String?) ?? id,
+      slug: slug,
       name: (data['name'] as String?) ?? '',
       category: _parseCategory(data['category'] as String?),
       description: (data['description'] as String?) ?? '',
@@ -102,6 +123,10 @@ class Peptide {
           .toList(),
       notes: (data['notes'] as String?) ?? '',
       disclaimer: (data['disclaimer'] as String?) ?? '',
+      isInvestigational:
+          (data['isInvestigational'] as bool?) ?? legacyInvestigational,
+      hasProtocolDefaults:
+          (data['hasProtocolDefaults'] as bool?) ?? !legacyInvestigational,
     );
   }
 

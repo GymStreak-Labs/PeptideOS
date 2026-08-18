@@ -56,7 +56,9 @@ When adding library entries:
       comment history.
 - [ ] New entries must stay neutral: no invented default dose, frequency, or
       cycle for compounds without established published protocols
-      (`defaultDoseMcg: 0`, `defaultFrequency: 'as_needed'`).
+      (`defaultDoseMcg: 0`, blank `defaultFrequency`,
+      `hasProtocolDefaults: false`). Investigational entries also set
+      `isInvestigational: true` and must not auto-create onboarding protocols.
 - [ ] Never ship a preset for vendor blend marketing names (KLOW, GLOW,
       Wolverine, …) — compositions vary by vendor; users enter their own
       vial contents via custom compounds / blend vials.
@@ -64,6 +66,22 @@ When adding library entries:
       `lib/features/library/utils/localized_peptide_content.dart` plus all 9
       ARB catalogs.
 - [ ] Run `flutter test test/peptide_library_seed_version_test.dart`.
+
+Existing remote documents are not overwritten by seed reconciliation. When
+changing safety metadata on an existing slug, apply an explicit admin migration
+after review. Retatrutide seed v3 requires these fields on
+`peptideLibrary/retatrutide` (the client also fails safe by slug until then):
+
+```json
+{
+  "isInvestigational": true,
+  "hasProtocolDefaults": false,
+  "defaultDoseMcg": 0,
+  "defaultFrequency": "",
+  "typicalCycleWeeks": 0,
+  "typicalDose": "No approved dosing regimen. Trial amounts are study references, not instructions for use."
+}
+```
 
 ## Localization
 

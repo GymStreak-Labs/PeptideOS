@@ -653,6 +653,34 @@ String _routeLabel(BuildContext context, String key) {
   return localizedProtocolRouteLabel(AppLocalizations.of(context), key);
 }
 
+/// Builds a library entry's initial editor draft. Reference-only entries start
+/// without app-authored regimen values even if a stale remote document still
+/// carries historical defaults.
+ProtocolPeptide buildLibraryProtocolDraft({
+  required ProtocolProvider provider,
+  required Peptide peptide,
+  required String labelColorHex,
+}) {
+  final requiresExplicitInput = peptide.requiresExplicitProtocolEntry;
+  return provider.buildPeptide(
+    slug: peptide.slug,
+    name: peptide.name,
+    dose: requiresExplicitInput ? 0 : peptide.defaultDoseMcg,
+    unit: peptide.defaultDoseUnit,
+    frequency: requiresExplicitInput ? '' : peptide.defaultFrequency,
+    route: peptide.defaultRoute,
+    cycleWeeks: requiresExplicitInput ? 0 : peptide.typicalCycleWeeks,
+    labelColorHex: labelColorHex,
+  );
+}
+
+/// A protocol needs a positive amount and an explicitly selected known
+/// frequency. Blank investigational drafts therefore cannot be saved.
+bool protocolConfigurationHasRequiredInput({
+  required double dose,
+  required String frequency,
+}) => dose > 0 && kFrequencies.any((option) => option.key == frequency);
+
 /// Frequencies that require the weekday chips. "2x per week" is a guided
 /// two-day weekday selection so users always see exactly which days are
 /// scheduled — it is persisted as [kCustomWeekdayFrequency].
@@ -731,6 +759,7 @@ Future<ProtocolPeptide?> _pickPeptide(
 
   final provider = context.read<ProtocolProvider>();
   final ProtocolPeptide draft;
+  var requiresExplicitProtocolInput = false;
   if (slug == _blendVialSlug) {
     draft = provider.buildPeptide(
       slug: _blendVialSlug,
@@ -786,14 +815,10 @@ Future<ProtocolPeptide?> _pickPeptide(
   } else {
     final peptide = context.read<PeptideProvider>().findBySlug(slug);
     if (peptide == null) return null;
-    draft = provider.buildPeptide(
-      slug: peptide.slug,
-      name: peptide.name,
-      dose: peptide.defaultDoseMcg,
-      unit: peptide.defaultDoseUnit,
-      frequency: peptide.defaultFrequency,
-      route: peptide.defaultRoute,
-      cycleWeeks: peptide.typicalCycleWeeks,
+    requiresExplicitProtocolInput = peptide.requiresExplicitProtocolEntry;
+    draft = buildLibraryProtocolDraft(
+      provider: provider,
+      peptide: peptide,
       labelColorHex: defaultLabelColorHex,
     );
   }
@@ -804,7 +829,10 @@ Future<ProtocolPeptide?> _pickPeptide(
     backgroundColor: Colors.transparent,
     builder: (_) => draft.peptideSlug == _blendVialSlug
         ? BlendVialConfigSheet(initial: draft)
-        : _PeptideConfigSheet(initial: draft),
+        : PeptideProtocolConfigSheet(
+            initial: draft,
+            requiresExplicitProtocolInput: requiresExplicitProtocolInput,
+          ),
   );
 }
 
@@ -818,7 +846,7 @@ Future<ProtocolPeptide?> _editPeptide(
     backgroundColor: Colors.transparent,
     builder: (_) => p.isBlend
         ? BlendVialConfigSheet(initial: p)
-        : _PeptideConfigSheet(initial: p),
+        : PeptideProtocolConfigSheet(initial: p),
   );
 }
 
@@ -1955,15 +1983,20 @@ class _BlendPreview extends StatelessWidget {
 }
 
 // ── Peptide config sheet ────────────────────────────────────────────────────
-class _PeptideConfigSheet extends StatefulWidget {
-  const _PeptideConfigSheet({required this.initial});
+class PeptideProtocolConfigSheet extends StatefulWidget {
+  const PeptideProtocolConfigSheet({
+    super.key,
+    required this.initial,
+    this.requiresExplicitProtocolInput = false,
+  });
   final ProtocolPeptide initial;
+  final bool requiresExplicitProtocolInput;
 
   @override
-  State<_PeptideConfigSheet> createState() => _PeptideConfigSheetState();
+  State<PeptideProtocolConfigSheet> createState() => _PeptideConfigSheetState();
 }
 
-class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
+class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
   late final TextEditingController _nameCtrl;
   late final TextEditingController _doseCtrl;
   late final TextEditingController _syringeUnitsCtrl;
@@ -2024,11 +2057,13 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
     super.didChangeDependencies();
     if (_initialNumbersLocalized) return;
     final localeName = AppLocalizations.of(context).localeName;
-    _doseCtrl.text = formatLocalizedDecimalInput(
-      widget.initial.dosePerInjection,
-      localeName: localeName,
-      maximumFractionDigits: 1,
-    );
+    _doseCtrl.text = widget.requiresExplicitProtocolInput
+        ? ''
+        : formatLocalizedDecimalInput(
+            widget.initial.dosePerInjection,
+            localeName: localeName,
+            maximumFractionDigits: 1,
+          );
     if (widget.initial.syringeUnits > 0) {
       _syringeUnitsCtrl.text = formatLocalizedDecimalInput(
         widget.initial.syringeUnits,
@@ -2263,7 +2298,12 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
 
   bool get _canSave {
     if (_isCustomPeptide && _nameCtrl.text.trim().isEmpty) return false;
-    if (_parsedBaseDose <= 0) return false;
+    if (!protocolConfigurationHasRequiredInput(
+      dose: _parsedBaseDose,
+      frequency: _frequency,
+    )) {
+      return false;
+    }
     if (_frequency == kCustomWeekdayFrequency && _selectedWeekdays.isEmpty) {
       return false;
     }
@@ -2346,6 +2386,19 @@ class _PeptideConfigSheetState extends State<_PeptideConfigSheet> {
                     style: AppTypography.h2,
                   ),
                   const SizedBox(height: AppSpacing.lg),
+
+                  if (widget.requiresExplicitProtocolInput) ...[
+                    AppCard(
+                      borderColor: AppColors.warning.withValues(alpha: 0.7),
+                      child: Text(
+                        l10n.investigationalProtocolEntryWarning,
+                        style: AppTypography.bodySmall.copyWith(
+                          color: AppColors.warning,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                  ],
 
                   if (widget.initial.sourceCompoundId.isNotEmpty) ...[
                     AppCard(

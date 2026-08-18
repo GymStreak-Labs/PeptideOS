@@ -109,6 +109,10 @@ class OnboardingDraftService {
         for (final name in draft.selectedPeptides) {
           final lib = _findLibraryPeptide(library, name);
           if (lib == null) continue;
+          // Keep investigational/reference-only selections as onboarding
+          // context, but never turn them into an active regimen without the
+          // user explicitly entering an amount and schedule.
+          if (lib.requiresExplicitProtocolEntry) continue;
           // Twice-weekly defaults are stored as explicit weekdays (the same
           // Monday/Thursday pair the legacy key implied) so the schedule is
           // visible and editable rather than an implicit convention.

@@ -2545,7 +2545,8 @@ class AppLocalizationsJa extends AppLocalizations {
       'レタトルチドは、GIP、GLP-1、およびグルカゴン受容体を標的とする研究中のトリプルアゴニストです。第 2 相試験では、既存の GLP-1 ベースの治療法を超える体重減少が報告されました。';
 
   @override
-  String get peptideContentRetatrutideTypicalDose => '試験用量は毎週 1 ～ 12 mg';
+  String get peptideContentRetatrutideTypicalDose =>
+      '承認された投与レジメンはありません。Retatrutideは治験段階であり、試験で報告された量は研究上の参考情報で、使用指示ではありません。';
 
   @override
   String get peptideContentRetatrutideHalfLife => '～6日';
@@ -3091,4 +3092,11 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get peptideContentSluPp332Notes =>
       'ヒトでの試験がない極めて実験的な研究用化合物です。関連化合物であり、ペプチドではありません。ユーザーが入力した量のみ記録してください。PepModはこの化合物の投与ガイダンスを提供しません。';
+
+  @override
+  String get investigationalDosingLabel => '治験段階 — 承認された投与量なし';
+
+  @override
+  String get investigationalProtocolEntryWarning =>
+      'この治験段階の化合物に承認されたプロトコルはありません。PepModは量やスケジュールを提示しません。記録値は自分で明示的に入力してください。';
 }
