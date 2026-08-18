@@ -1200,6 +1200,11 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String subscribeAnnualPrice(String price) {
+    return '구독하기 — $price/년';
+  }
+
+  @override
   String get subscribeToActivate => '구독하고 프로토콜을 활성화하세요';
 
   @override
@@ -1227,9 +1232,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get thirtyDayAdherence => '30일 순응도';
-
-  @override
-  String get threeDayFreeTrial => '3일 무료 체험';
 
   @override
   String get timelineLabel => '타임라인';
@@ -2548,7 +2550,8 @@ class AppLocalizationsKo extends AppLocalizations {
       'Retatrutide는 GIP, GLP-1 및 글루카곤 수용체를 표적으로 하는 연구용 삼중 작용제입니다. 2상 임상시험에서는 기존 GLP-1 기반 치료법을 능가하는 체중 감소 효과가 보고됐다.';
 
   @override
-  String get peptideContentRetatrutideTypicalDose => '시험 용량 매주 1~12mg';
+  String get peptideContentRetatrutideTypicalDose =>
+      '승인된 투여 요법이 없습니다. Retatrutide는 연구 단계이며, 임상시험에서 보고된 용량은 연구 참고 정보일 뿐 사용 지침이 아닙니다.';
 
   @override
   String get peptideContentRetatrutideHalfLife => '~6일';
@@ -2966,4 +2969,137 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get peptideContentEducationalDisclaimer =>
       '교육 목적의 참고 정보이며 의학적 조언이 아닙니다. 연구용 펩타이드는 많은 지역에서 인체 사용 승인을 받지 않았습니다. 반드시 자격을 갖춘 의료 전문가와 상담하세요.';
+
+  @override
+  String get twiceWeeklyPickDaysHint => '이 일정에 사용할 요일을 정확히 2개 선택하세요.';
+
+  @override
+  String get selectExactlyTwoDaysError => '주 2회 일정에는 요일을 정확히 2개 선택해야 합니다.';
+
+  @override
+  String get remindersBlockedTitle => '리마인더가 차단되어 있습니다';
+
+  @override
+  String get remindersBlockedBody =>
+      'PepMod에서 투여 리마인더가 켜져 있지만 시스템 설정에서 알림이 꺼져 있어 리마인더를 전달할 수 없습니다.';
+
+  @override
+  String get openSettingsAction => '설정 열기';
+
+  @override
+  String freeTrialBadgeDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count일 무료 체험',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count주 무료 체험',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count개월 무료 체험',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count년 무료 체험',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get createCustomCompoundAction => '커스텀 화합물 만들기';
+
+  @override
+  String get noPeptidesFoundCreateHint =>
+      '레퍼런스 라이브러리에 일치하는 항목이 없습니다. 커스텀 화합물로 직접 기록할 수 있습니다.';
+
+  @override
+  String get blendSearchHint =>
+      '이런 블렌드 이름에는 표준 배합이 없으며 내용물은 판매처마다 다릅니다. 여기에서 커스텀 화합물로 만들거나 프로토콜을 만들 때 프리블렌드 바이알로 만들어 실제 바이알 내용물을 입력하세요.';
+
+  @override
+  String get typicalDoseReferenceNote => '교육 목적으로 공개된 참고 범위이며 권장이나 지시가 아닙니다.';
+
+  @override
+  String get peptideContentTestosteroneDescription =>
+      '테스토스테론은 내인성 안드로겐 호르몬입니다. 주사용 에스터 제제(시피오네이트, 에난테이트 등)는 의사의 감독 하에 사용하는 처방 약물입니다. 이 항목은 사용자가 입력한 일정을 위한 중립적인 기록용 참고 자료입니다.';
+
+  @override
+  String get peptideContentTestosteroneTypicalDose => '사용자 입력 mg';
+
+  @override
+  String get peptideContentTestosteroneHalfLife => '에스터에 따라 다름';
+
+  @override
+  String get peptideContentTestosteroneNotes =>
+      '많은 법역에서 처방전이 필요한 규제 물질입니다. 자격을 갖춘 의료 전문가의 지시가 있는 것만 기록하세요. PepMod는 테스토스테론 투여 지침을 제공하지 않습니다.';
+
+  @override
+  String get peptideContentGlutathioneDescription =>
+      '글루타티온은 자연적으로 존재하는 트리펩타이드(글루타메이트-시스테인-글리신)로 주요 세포 내 항산화제 역할을 합니다. 주사 형태는 일부 웰니스 및 임상 환경에서 사용됩니다. 이 항목은 사용자가 입력한 일정을 위한 중립적인 기록용 참고 자료입니다.';
+
+  @override
+  String get peptideContentGlutathioneTypicalDose => '사용자 입력 mg';
+
+  @override
+  String get peptideContentGlutathioneHalfLife => '짧음(전신)';
+
+  @override
+  String get peptideContentGlutathioneNotes =>
+      '주사용 글루타티온의 규제 상태는 국가마다 다릅니다. 입수하고 지시받은 그대로의 양만 기록하세요. PepMod는 이 화합물에 대한 투여 지침을 제공하지 않습니다.';
+
+  @override
+  String get peptideContentKisspeptin10Description =>
+      '키스펩틴-10은 신경펩타이드 키스펩틴의 10개 아미노산 조각으로, GnRH 신호 전달과 생식 축 조절에서의 역할이 연구되고 있습니다. 통제된 연구 외의 인간 데이터는 제한적입니다. 이 항목은 사용자가 입력한 일정을 위한 중립적인 기록용 참고 자료입니다.';
+
+  @override
+  String get peptideContentKisspeptin10TypicalDose => '사용자 입력';
+
+  @override
+  String get peptideContentKisspeptin10HalfLife => '약 수분(보고됨)';
+
+  @override
+  String get peptideContentKisspeptin10Notes =>
+      '확립된 프로토콜이 없는 연구용 화합물입니다. 사용자가 입력한 양만 기록하세요. PepMod는 이 화합물에 대한 투여 지침을 제공하지 않습니다.';
+
+  @override
+  String get peptideContentSluPp332Description =>
+      'SLU-PP-332는 운동 생리학 연구에서 전임상적으로 조사되고 있는 실험적 저분자 ERR 작용제입니다. 펩타이드가 아니며 인간에 대한 확립된 안전성·유효성 데이터가 없습니다. 이 항목은 사용자가 입력한 일정을 위한 중립적인 기록용 참고 자료입니다.';
+
+  @override
+  String get peptideContentSluPp332TypicalDose => '사용자 입력';
+
+  @override
+  String get peptideContentSluPp332HalfLife => '충분히 확립되지 않음';
+
+  @override
+  String get peptideContentSluPp332Notes =>
+      '인간 대상 시험이 없는 매우 실험적인 연구용 화합물입니다. 관련 화합물이며 펩타이드가 아닙니다. 사용자가 입력한 양만 기록하세요. PepMod는 이 화합물에 대한 투여 지침을 제공하지 않습니다.';
+
+  @override
+  String get investigationalDosingLabel => '연구 단계 — 승인된 투여량 없음';
+
+  @override
+  String get investigationalProtocolEntryWarning =>
+      '이 연구 단계 화합물에 대해 승인된 프로토콜은 없습니다. PepMod는 용량이나 일정을 제공하지 않으므로 기록할 값을 직접 명시적으로 입력하세요.';
 }

@@ -13,6 +13,8 @@ import '../../../data/services/auth_service.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/user_settings.dart';
 import '../../../services/notification_service.dart';
+import '../../protocol/providers/notification_permission_provider.dart';
+import '../../protocol/widgets/reminders_blocked_banner.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../protocol/providers/dose_log_provider.dart';
 import '../../protocol/providers/protocol_provider.dart';
@@ -120,6 +122,16 @@ class ProfileScreen extends StatelessWidget {
               HapticFeedback.selectionClick();
               await _setNotificationsEnabled(context, v);
             },
+          ),
+        ),
+        const SliverToBoxAdapter(
+          child: RemindersBlockedBanner(
+            padding: EdgeInsets.fromLTRB(
+              AppSpacing.screenHorizontal,
+              AppSpacing.sm,
+              AppSpacing.screenHorizontal,
+              0,
+            ),
           ),
         ),
 
@@ -696,6 +708,7 @@ class ProfileScreen extends StatelessWidget {
   ) async {
     final settingsProvider = context.read<SettingsProvider>();
     final protocols = context.read<ProtocolProvider>();
+    final permissionProvider = context.read<NotificationPermissionProvider>();
     final messenger = ScaffoldMessenger.of(context);
     final notificationsDisabledMessage = AppLocalizations.of(
       context,
@@ -711,7 +724,11 @@ class ProfileScreen extends StatelessWidget {
     if (!context.mounted) return;
 
     if (!granted) {
-      await settingsProvider.update((s) => s.notificationsEnabled = false);
+      // Keep the user's intent on so the persistent reminders-blocked banner
+      // (with its Open Settings CTA) appears; re-granting in system settings
+      // then resumes reminders automatically on return.
+      await settingsProvider.update((s) => s.notificationsEnabled = true);
+      await permissionProvider.refresh();
       messenger.showSnackBar(
         SnackBar(content: Text(notificationsDisabledMessage)),
       );
@@ -720,6 +737,7 @@ class ProfileScreen extends StatelessWidget {
 
     await settingsProvider.update((s) => s.notificationsEnabled = true);
     await protocols.syncDoseReminders(enabled: true);
+    await permissionProvider.refresh();
   }
 }
 
