@@ -4,10 +4,26 @@
   "languageLabel": "Idioma",
   "languageSystemDefault": "Predefinição do sistema",
   "selectLanguageTitle": "Escolher idioma da app",
-  "@languageLabel": {"description": "Profile preference label for choosing the app language.", "sourceString": "Language", "sourceDescription": "Profile preference label for choosing the app language."},
-  "@languageSystemDefault": {"description": "Language option that follows the device setting.", "sourceString": "System default", "sourceDescription": "Language option that follows the device setting."},
-  "@selectLanguageTitle": {"description": "Heading shown above the app language choices.", "sourceString": "Choose app language", "sourceDescription": "Heading shown above the app language choices."},
-  "@plannerTaken": {"description": "Weekly planner status for a logged dose that can be edited.", "sourceString": "TAKEN · TAP TO EDIT", "sourceDescription": "Weekly planner status for a logged dose that can be edited."},
+  "@languageLabel": {
+    "description": "Profile preference label for choosing the app language.",
+    "sourceString": "Language",
+    "sourceDescription": "Profile preference label for choosing the app language."
+  },
+  "@languageSystemDefault": {
+    "description": "Language option that follows the device setting.",
+    "sourceString": "System default",
+    "sourceDescription": "Language option that follows the device setting."
+  },
+  "@selectLanguageTitle": {
+    "description": "Heading shown above the app language choices.",
+    "sourceString": "Choose app language",
+    "sourceDescription": "Heading shown above the app language choices."
+  },
+  "@plannerTaken": {
+    "description": "Weekly planner status for a logged dose that can be edited.",
+    "sourceString": "TAKEN · TAP TO EDIT",
+    "sourceDescription": "Weekly planner status for a logged dose that can be edited."
+  },
   "libraryTitle": "Biblioteca",
   "librarySystemLabel": "SYS.BASE DE DADOS // COMPOSTOS",
   "myCompounds": "Os meus compostos",

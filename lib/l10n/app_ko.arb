@@ -4,10 +4,26 @@
   "languageLabel": "언어",
   "languageSystemDefault": "시스템 기본값",
   "selectLanguageTitle": "앱 언어 선택",
-  "@languageLabel": {"description": "Profile preference label for choosing the app language.", "sourceString": "Language", "sourceDescription": "Profile preference label for choosing the app language."},
-  "@languageSystemDefault": {"description": "Language option that follows the device setting.", "sourceString": "System default", "sourceDescription": "Language option that follows the device setting."},
-  "@selectLanguageTitle": {"description": "Heading shown above the app language choices.", "sourceString": "Choose app language", "sourceDescription": "Heading shown above the app language choices."},
-  "@plannerTaken": {"description": "Weekly planner status for a logged dose that can be edited.", "sourceString": "TAKEN · TAP TO EDIT", "sourceDescription": "Weekly planner status for a logged dose that can be edited."},
+  "@languageLabel": {
+    "description": "Profile preference label for choosing the app language.",
+    "sourceString": "Language",
+    "sourceDescription": "Profile preference label for choosing the app language."
+  },
+  "@languageSystemDefault": {
+    "description": "Language option that follows the device setting.",
+    "sourceString": "System default",
+    "sourceDescription": "Language option that follows the device setting."
+  },
+  "@selectLanguageTitle": {
+    "description": "Heading shown above the app language choices.",
+    "sourceString": "Choose app language",
+    "sourceDescription": "Heading shown above the app language choices."
+  },
+  "@plannerTaken": {
+    "description": "Weekly planner status for a logged dose that can be edited.",
+    "sourceString": "TAKEN · TAP TO EDIT",
+    "sourceDescription": "Weekly planner status for a logged dose that can be edited."
+  },
   "libraryTitle": "라이브러리",
   "librarySystemLabel": "SYS.데이터베이스 // 화합물",
   "myCompounds": "내 화합물",
