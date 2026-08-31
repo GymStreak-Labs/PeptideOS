@@ -22,7 +22,8 @@ This pass responds to the complete Gleap conversations reviewed in the CEO suppo
 
 ## Wording and discoverability
 
-- The protocol control renders as **Open unit converter**, immediately below the syringe-units field described by the customer. The converter action renders as **ADD TO PROTOCOL**.
+- The protocol control renders as a full-width **Open unit converter** card immediately after the dose field and before the optional syringe-units field. The converter action renders as **ADD TO PROTOCOL**.
+- Today renders a full-width, localized **Weekly planner** entry directly beneath the header rather than relying on an unlabeled calendar icon.
 - Planner state uses short existing schedule language: **TAKEN · TAP TO EDIT**, **SKIPPED**, **MISSED**, and **LOG DOSE**. State color uses existing success, secondary, warning, and primary tokens on the dark card surface.
 - Profile uses **Language**, **System default**, and **Choose app language**, followed by each language's native name.
 - New copy is available in English, Spanish, French, Italian, German, Japanese, Korean, Portuguese, and Brazilian Portuguese.
@@ -32,7 +33,16 @@ This pass responds to the complete Gleap conversations reviewed in the CEO suppo
 - Existing protocols and settings require no migration; the new locale field defaults to an empty string and existing syringe-unit values remain untouched.
 - Invalid, zero, cross-family, above-vial, or over-capacity converter inputs cannot be applied.
 - Future planner cards remain read-only; past cards can be logged. Existing taken/skipped records remain editable through the established dose sheet.
+- Joined completion state is backed by the provider's recent 30-day dose-log window. This pass validates recent and prior-day recovery, not indefinite archival status rendering.
 - Planner schedules still come from `ProtocolPeptide.scheduleForDate`, so custom weekdays, phases, washouts, and legacy schedules do not fork into a second scheduling implementation.
+
+## Simulator and persona acceptance
+
+- Dedicated iPhone 17 Pro: protocol setup exposed the full-width converter entry; the production converter rendered `5 mg + 2 mL + 250 mcg` as **DRAW TO 10 units / 0.1 mL**, and its apply callback returned `10.0` units.
+- Dedicated iPhone 17 Pro: the prior day rendered **TAKEN · TAP TO EDIT**, **SKIPPED**, **MISSED**, and **LOG DOSE**. Logging the missing 10:00 row repainted it as taken immediately. Tapping a generated future row opened no edit sheet.
+- Dedicated iPhone 17 Pro: selecting Spanish updated Profile immediately and remained **Idioma / Español** after a real app terminate and relaunch.
+- Dedicated iPhone SE (3rd generation): the 10-row language sheet scrolled through its final **Português (Brasil)** option without overflow.
+- Three independent customer-persona reviewers represented the older Calendar/Notes user, the prior-day-history user, and the Spanish/English users. All three passed PR #48 with no blocker in scope after reviewing the simulator evidence. Reminder delivery/recovery remains PR #47 scope.
 
 ## Monetization assessment
 

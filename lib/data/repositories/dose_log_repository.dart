@@ -10,6 +10,12 @@ abstract interface class DoseLogDataSource {
 
   Future<List<DoseLog>> fetchByProtocol(String uid, String protocolUuid);
 
+  Future<DoseLog?> fetchLatestInjectionForPeptide(
+    String uid, {
+    required String protocolPeptideUuid,
+    String? excludingDoseUuid,
+  });
+
   Future<void> upsert(String uid, DoseLog log);
 
   Future<void> upsertMany(String uid, List<DoseLog> logs);
@@ -80,6 +86,7 @@ class DoseLogRepository implements DoseLogDataSource {
   /// read newest-first in small pages. Pagination keeps the lookup exact when
   /// the latest usable site is older than the 30-day stats window or is
   /// preceded by skipped/site-less records without loading full user history.
+  @override
   Future<DoseLog?> fetchLatestInjectionForPeptide(
     String uid, {
     required String protocolPeptideUuid,

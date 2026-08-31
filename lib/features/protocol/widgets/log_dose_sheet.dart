@@ -32,14 +32,18 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   Future<DoseLog?>? _lastInjectionFuture;
   bool _didLocalizeInitialAmount = false;
 
+  double get _displayAmount => widget.dose.blendSnapshot == null
+      ? widget.dose.amountTaken
+      : widget.dose.syringeUnits > 0
+      ? widget.dose.syringeUnits
+      : widget.dose.blendSnapshot!.drawSyringeUnits;
+
   @override
   void initState() {
     super.initState();
     _amountCtrl = TextEditingController(
-      text: widget.dose.amountTaken.toStringAsFixed(
-        widget.dose.amountTaken == widget.dose.amountTaken.roundToDouble()
-            ? 0
-            : 2,
+      text: _displayAmount.toStringAsFixed(
+        _displayAmount == _displayAmount.roundToDouble() ? 0 : 2,
       ),
     );
     _notesCtrl = TextEditingController(text: widget.dose.notes);
@@ -52,10 +56,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_didLocalizeInitialAmount) {
-      _amountCtrl.text = _formatAmount(
-        context.protocolL10n,
-        widget.dose.amountTaken,
-      );
+      _amountCtrl.text = _formatAmount(context.protocolL10n, _displayAmount);
       _didLocalizeInitialAmount = true;
     }
     _lastInjectionFuture ??= context
@@ -74,8 +75,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   }
 
   Future<void> _log() async {
-    final amount =
-        parseDecimalInput(_amountCtrl.text) ?? widget.dose.amountTaken;
+    final amount = parseDecimalInput(_amountCtrl.text) ?? _displayAmount;
     final editedBlend = widget.dose.blendSnapshot?.copyWith(
       drawSyringeUnits: amount,
     );
@@ -158,8 +158,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
       context.watch<ProtocolProvider>().all,
     );
     final blendPreview = widget.dose.blendSnapshot?.copyWith(
-      drawSyringeUnits:
-          parseDecimalInput(_amountCtrl.text) ?? widget.dose.amountTaken,
+      drawSyringeUnits: parseDecimalInput(_amountCtrl.text) ?? _displayAmount,
     );
     return Padding(
       padding: EdgeInsets.only(

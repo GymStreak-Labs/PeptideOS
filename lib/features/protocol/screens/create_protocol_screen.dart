@@ -2549,6 +2549,41 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
                     ],
                   ),
                   const SizedBox(height: AppSpacing.base),
+                  AppCard(
+                    key: const Key('protocol-open-unit-converter'),
+                    onTap: _openUnitConverter,
+                    borderColor: AppColors.borderCyan,
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.calculate_outlined,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: AppSpacing.md),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l10n.openUnitConverter,
+                                style: AppTypography.labelLarge,
+                              ),
+                              const SizedBox(height: AppSpacing.xs),
+                              Text(
+                                l10n.converterCardSubtitle,
+                                style: AppTypography.bodySmall,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(
+                          Icons.chevron_right_rounded,
+                          color: AppColors.textTertiary,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.base),
                   _FieldLabel(
                     label: l10n.syringeUnitsOptional,
                     child: TextField(
@@ -2581,16 +2616,6 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
                   Text(
                     l10n.syringeUnitsDisclaimer,
                     style: AppTypography.disclaimer,
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton.icon(
-                      key: const Key('protocol-open-unit-converter'),
-                      onPressed: _openUnitConverter,
-                      icon: const Icon(Icons.calculate_outlined),
-                      label: Text(l10n.openUnitConverter),
-                    ),
                   ),
                   const SizedBox(height: AppSpacing.lg),
 

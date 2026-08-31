@@ -68,6 +68,58 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('future scheduled logs stay read-only', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final tomorrow = DateTime.now().add(const Duration(days: 1));
+    final day = DateTime(tomorrow.year, tomorrow.month, tomorrow.day);
+    final protocol = Protocol(
+      uuid: 'future-protocol',
+      name: 'Future protocol',
+      startDate: day,
+      status: ProtocolStatus.active,
+      createdAt: day,
+      peptides: [
+        ProtocolPeptide(
+          uuid: 'future-peptide',
+          peptideName: 'Future peptide',
+          dosePerInjection: 100,
+          frequency: 'daily',
+          scheduledTimes: const ['08:00'],
+        ),
+      ],
+    );
+    final log = DoseLog(
+      uuid: 'future-dose',
+      protocolUuid: protocol.uuid,
+      protocolPeptideUuid: 'future-peptide',
+      peptideName: 'Future peptide',
+      scheduledAt: DateTime(day.year, day.month, day.day, 8),
+      amountTaken: 100,
+      units: 'mcg',
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: WeeklyPlannerScreen(
+          protocols: [protocol],
+          doseLogs: [log],
+          initialDate: day,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Future peptide'), findsOneWidget);
+    expect(find.text('LOG DOSE'), findsNothing);
+    await tester.tap(find.text('Future peptide'));
+    await tester.pumpAndSettle();
+    expect(find.text('LOG.DOSE'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets(
     'shows the exact custom schedule, phase, next week, and washout state',
     (tester) async {

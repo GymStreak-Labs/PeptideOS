@@ -508,7 +508,7 @@ class _PlannedDoseCard extends StatelessWidget {
                     key: Key('planner-status-${item.time}'),
                     style: AppTypography.systemLabel.copyWith(
                       color: item.statusColor,
-                      fontSize: 9,
+                      fontSize: 11,
                     ),
                   ),
                 ],
@@ -652,8 +652,7 @@ class _PlannerItem {
   final DoseLog? doseLog;
 
   bool get canOpen =>
-      doseLog != null ||
-      (scheduledAt != null && !scheduledAt!.isAfter(DateTime.now()));
+      scheduledAt != null && !scheduledAt!.isAfter(DateTime.now());
 
   String? statusLabel(BuildContext context) {
     final dose = doseLog;
@@ -661,6 +660,9 @@ class _PlannerItem {
     if (dose?.skipped == true) return context.protocolL10n.protocolSkipped;
     if (dose?.isMissed(DateTime.now()) == true) {
       return context.protocolL10n.protocolMissed;
+    }
+    if (dose?.isPending == true && canOpen) {
+      return context.protocolL10n.protocolLogDose;
     }
     if (dose == null && canOpen) return context.protocolL10n.protocolLogDose;
     return null;

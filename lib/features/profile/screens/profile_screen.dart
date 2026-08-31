@@ -777,24 +777,34 @@ Future<void> _selectLanguage(BuildContext context, String selected) async {
   final next = await showModalBottomSheet<String>(
     context: context,
     backgroundColor: AppColors.surfaceContainer,
-    builder: (sheetContext) => SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+    isScrollControlled: true,
+    builder: (sheetContext) => FractionallySizedBox(
+      heightFactor: 0.78,
+      child: SafeArea(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
               padding: const EdgeInsets.all(AppSpacing.md),
               child: Text(l10n.selectLanguageTitle, style: AppTypography.h2),
             ),
-            for (final option in options)
-              ListTile(
-                title: Text(option.$2, style: AppTypography.bodyLarge),
-                trailing: option.$1 == selected
-                    ? const Icon(Icons.check_rounded, color: AppColors.primary)
-                    : null,
-                onTap: () => Navigator.of(sheetContext).pop(option.$1),
+            Expanded(
+              child: ListView(
+                key: const Key('language-options-list'),
+                children: [
+                  for (final option in options)
+                    ListTile(
+                      title: Text(option.$2, style: AppTypography.bodyLarge),
+                      trailing: option.$1 == selected
+                          ? const Icon(
+                              Icons.check_rounded,
+                              color: AppColors.primary,
+                            )
+                          : null,
+                      onTap: () => Navigator.of(sheetContext).pop(option.$1),
+                    ),
+                ],
               ),
+            ),
           ],
         ),
       ),
