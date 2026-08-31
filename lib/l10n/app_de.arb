@@ -1599,6 +1599,17 @@
     "sourceString": "SUBSCRIBE — {price}/week",
     "sourceDescription": "English onboarding copy for subscribe price."
   },
+  "subscribeAnnualPrice": "ABONNIEREN — {price}/Jahr",
+  "@subscribeAnnualPrice": {
+    "description": "German paywall CTA for the annual plan when the store offer has no free trial.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    },
+    "sourceString": "SUBSCRIBE — {price}/year",
+    "sourceDescription": "English paywall CTA for the annual plan when the store offer has no free trial."
+  },
   "subscribeToActivate": "Abonniere, um dein Protokoll zu aktivieren",
   "@subscribeToActivate": {
     "description": "English onboarding copy for subscribe to activate.",
@@ -1651,12 +1662,6 @@
     "description": "English onboarding copy for thirty day adherence.",
     "sourceString": "30-day adherence",
     "sourceDescription": "English onboarding copy for thirty day adherence."
-  },
-  "threeDayFreeTrial": "3 TAGE KOSTENLOS TESTEN",
-  "@threeDayFreeTrial": {
-    "description": "English onboarding copy for three day free trial.",
-    "sourceString": "3-DAY FREE TRIAL",
-    "sourceDescription": "English onboarding copy for three day free trial."
   },
   "timelineLabel": "Zeitachse",
   "@timelineLabel": {
@@ -4943,11 +4948,11 @@
     "sourceString": "Retatrutide is an investigational triple agonist targeting GIP, GLP-1, and glucagon receptors. Phase 2 trials reported weight reductions exceeding those of existing GLP-1-based therapies.",
     "sourceDescription": "Educational reference description for Retatrutide."
   },
-  "peptideContentRetatrutideTypicalDose": "Studiendosen 1–12 mg wöchentlich",
+  "peptideContentRetatrutideTypicalDose": "Kein zugelassenes Dosierungsschema. Retatrutid ist ein Prüfpräparat; in Studien berichtete Mengen dienen nur als Studienreferenz und sind keine Anwendungshinweise.",
   "@peptideContentRetatrutideTypicalDose": {
-    "description": "Reference amount text for Retatrutide; this is not a dosing recommendation.",
-    "sourceString": "Trial doses 1–12 mg weekly",
-    "sourceDescription": "Reference amount text for Retatrutide; this is not a dosing recommendation."
+    "description": "Investigational status text for Retatrutide; preserve no-approved-dosing and not-instructions wording.",
+    "sourceString": "No approved dosing regimen. Retatrutide is investigational; amounts reported in trials are study references, not instructions for use.",
+    "sourceDescription": "Investigational status text for Retatrutide; preserve no-approved-dosing and not-instructions wording."
   },
   "peptideContentRetatrutideHalfLife": "~6 Tage",
   "@peptideContentRetatrutideHalfLife": {
@@ -5716,5 +5721,211 @@
     "description": "Shown when restoring previous purchases fails.",
     "sourceString": "Purchases could not be restored. Check your connection and try again.",
     "sourceDescription": "Shown when restoring previous purchases fails."
+  },
+  "twiceWeeklyPickDaysHint": "Wähle genau zwei Wochentage für diesen Plan aus.",
+  "@twiceWeeklyPickDaysHint": {
+    "description": "Helper under the 2x-per-week frequency asking the user to pick exactly two weekdays.",
+    "sourceString": "Pick exactly two weekdays for this schedule.",
+    "sourceDescription": "Helper under the 2x-per-week frequency asking the user to pick exactly two weekdays."
+  },
+  "selectExactlyTwoDaysError": "Wähle genau zwei Tage für einen 2×-pro-Woche-Plan aus.",
+  "@selectExactlyTwoDaysError": {
+    "description": "Validation error when a 2x-per-week schedule does not have exactly two weekdays selected.",
+    "sourceString": "Select exactly two days for a 2x per week schedule.",
+    "sourceDescription": "Validation error when a 2x-per-week schedule does not have exactly two weekdays selected."
+  },
+  "remindersBlockedTitle": "Erinnerungen sind blockiert",
+  "@remindersBlockedTitle": {
+    "description": "Title of the persistent banner shown when dose reminders are on in the app but notifications are denied at the OS level.",
+    "sourceString": "Reminders are blocked",
+    "sourceDescription": "Title of the persistent banner shown when dose reminders are on in the app but notifications are denied at the OS level."
+  },
+  "remindersBlockedBody": "Dosis-Erinnerungen sind in PepMod aktiviert, aber Mitteilungen sind in den Systemeinstellungen deaktiviert, daher können keine Erinnerungen zugestellt werden.",
+  "@remindersBlockedBody": {
+    "description": "Body of the reminders-blocked banner explaining that system notification settings prevent delivery and how to fix it.",
+    "sourceString": "Dose reminders are on in PepMod, but notifications are turned off in system settings, so reminders can't be delivered.",
+    "sourceDescription": "Body of the reminders-blocked banner explaining that system notification settings prevent delivery and how to fix it."
+  },
+  "openSettingsAction": "Einstellungen öffnen",
+  "@openSettingsAction": {
+    "description": "Button that opens the OS notification settings for the app.",
+    "sourceString": "Open Settings",
+    "sourceDescription": "Button that opens the OS notification settings for the app."
+  },
+  "freeTrialBadgeDays": "{count, plural, one{{count} TAG KOSTENLOS TESTEN} other{{count} TAGE KOSTENLOS TESTEN}}",
+  "@freeTrialBadgeDays": {
+    "description": "Paywall badge for a store-derived free trial measured in days; the length comes from the live store offer and is never hardcoded.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    },
+    "sourceString": "{count, plural, one{{count}-DAY FREE TRIAL} other{{count}-DAY FREE TRIAL}}",
+    "sourceDescription": "Paywall badge for a store-derived free trial measured in days; the length comes from the live store offer and is never hardcoded."
+  },
+  "freeTrialBadgeWeeks": "{count, plural, one{{count} WOCHE KOSTENLOS TESTEN} other{{count} WOCHEN KOSTENLOS TESTEN}}",
+  "@freeTrialBadgeWeeks": {
+    "description": "Paywall badge for a store-derived free trial measured in weeks; the length comes from the live store offer and is never hardcoded.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    },
+    "sourceString": "{count, plural, one{{count}-WEEK FREE TRIAL} other{{count}-WEEK FREE TRIAL}}",
+    "sourceDescription": "Paywall badge for a store-derived free trial measured in weeks; the length comes from the live store offer and is never hardcoded."
+  },
+  "freeTrialBadgeMonths": "{count, plural, one{{count} MONAT KOSTENLOS TESTEN} other{{count} MONATE KOSTENLOS TESTEN}}",
+  "@freeTrialBadgeMonths": {
+    "description": "Paywall badge for a store-derived free trial measured in calendar months; the length comes from the live store offer and is never hardcoded.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    },
+    "sourceString": "{count, plural, one{{count}-MONTH FREE TRIAL} other{{count}-MONTH FREE TRIAL}}",
+    "sourceDescription": "Paywall badge for a store-derived free trial measured in calendar months; the length comes from the live store offer and is never hardcoded."
+  },
+  "freeTrialBadgeYears": "{count, plural, one{{count} JAHR KOSTENLOS TESTEN} other{{count} JAHRE KOSTENLOS TESTEN}}",
+  "@freeTrialBadgeYears": {
+    "description": "Paywall badge for a store-derived free trial measured in calendar years; the length comes from the live store offer and is never hardcoded.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    },
+    "sourceString": "{count, plural, one{{count}-YEAR FREE TRIAL} other{{count}-YEAR FREE TRIAL}}",
+    "sourceDescription": "Paywall badge for a store-derived free trial measured in calendar years; the length comes from the live store offer and is never hardcoded."
+  },
+  "createCustomCompoundAction": "Eigenen Wirkstoff erstellen",
+  "@createCustomCompoundAction": {
+    "description": "Button on the empty library search state that creates a custom compound preset from the search term.",
+    "sourceString": "Create custom compound",
+    "sourceDescription": "Button on the empty library search state that creates a custom compound preset from the search term."
+  },
+  "noPeptidesFoundCreateHint": "Kein Treffer in der Referenzbibliothek. Du kannst es trotzdem als eigenen Wirkstoff erfassen.",
+  "@noPeptidesFoundCreateHint": {
+    "description": "Empty library search description pointing to the create-custom-compound path.",
+    "sourceString": "No match in the reference library. You can still track it as your own custom compound.",
+    "sourceDescription": "Empty library search description pointing to the create-custom-compound path."
+  },
+  "blendSearchHint": "Blend-Namen wie dieser haben keine Standardformel — der Inhalt variiert je nach Anbieter. Erstelle ihn hier als eigenen Wirkstoff oder beim Erstellen eines Protokolls als vorgemischtes Fläschchen und gib den tatsächlichen Inhalt deines Fläschchens ein.",
+  "@blendSearchHint": {
+    "description": "Shown when a search matches a known blend marketing name; blends vary by vendor so no preset composition is shipped.",
+    "sourceString": "Blend names like this have no standard formulation — contents vary by vendor. Create it as a custom compound here, or as a pre-blended vial when building a protocol, and enter your vial's actual contents.",
+    "sourceDescription": "Shown when a search matches a known blend marketing name; blends vary by vendor so no preset composition is shipped."
+  },
+  "typicalDoseReferenceNote": "Veröffentlichter Referenzbereich zu Bildungszwecken — keine Empfehlung oder Anweisung.",
+  "@typicalDoseReferenceNote": {
+    "description": "Framing note under the typical dose field clarifying it is published reference material, not an instruction. Preserve the not-a-recommendation meaning.",
+    "sourceString": "Published reference range for educational context — not a recommendation or instruction.",
+    "sourceDescription": "Framing note under the typical dose field clarifying it is published reference material, not an instruction. Preserve the not-a-recommendation meaning."
+  },
+  "peptideContentTestosteroneDescription": "Testosteron ist ein körpereigenes Androgen-Hormon. Injizierbare Ester-Präparate (wie Cypionat und Enanthat) sind verschreibungspflichtige Medikamente für die ärztlich überwachte Hormontherapie. Dieser Eintrag ist eine neutrale Tracking-Referenz für vom Nutzer eingegebene Pläne.",
+  "@peptideContentTestosteroneDescription": {
+    "description": "Educational reference description for Testosterone.",
+    "sourceString": "Testosterone is an endogenous androgen hormone. Injectable ester preparations (such as cypionate and enanthate) are prescription medications used in clinician-supervised hormone therapy. This entry is a neutral tracking reference for user-entered schedules.",
+    "sourceDescription": "Educational reference description for Testosterone."
+  },
+  "peptideContentTestosteroneTypicalDose": "Vom Nutzer eingegebene mg",
+  "@peptideContentTestosteroneTypicalDose": {
+    "description": "User-entered tracking dose label for Testosterone.",
+    "sourceString": "User-entered mg",
+    "sourceDescription": "User-entered tracking dose label for Testosterone."
+  },
+  "peptideContentTestosteroneHalfLife": "Ester-abhängig",
+  "@peptideContentTestosteroneHalfLife": {
+    "description": "Reported half-life label for Testosterone.",
+    "sourceString": "Ester-dependent",
+    "sourceDescription": "Reported half-life label for Testosterone."
+  },
+  "peptideContentTestosteroneNotes": "Verschreibungspflichtig und in vielen Rechtsordnungen eine kontrollierte Substanz. Erfasse nur, was von qualifiziertem medizinischem Fachpersonal angeordnet wurde; PepMod gibt keine Dosierungsempfehlungen für Testosteron.",
+  "@peptideContentTestosteroneNotes": {
+    "description": "Educational reference notes for Testosterone.",
+    "sourceString": "Prescription-only and a controlled substance in many jurisdictions. Track only what has been directed by a qualified healthcare professional; PepMod does not provide testosterone dosing guidance.",
+    "sourceDescription": "Educational reference notes for Testosterone."
+  },
+  "peptideContentGlutathioneDescription": "Glutathion ist ein natürlich vorkommendes Tripeptid (Glutamat-Cystein-Glycin), das als wichtiges intrazelluläres Antioxidans wirkt. Injizierbare Formen werden in einigen Wellness- und klinischen Umgebungen verwendet. Dieser Eintrag ist eine neutrale Tracking-Referenz für vom Nutzer eingegebene Pläne.",
+  "@peptideContentGlutathioneDescription": {
+    "description": "Educational reference description for Glutathione.",
+    "sourceString": "Glutathione is a naturally occurring tripeptide (glutamate-cysteine-glycine) that functions as a major intracellular antioxidant. Injectable forms are used in some wellness and clinical settings. This entry is a neutral tracking reference for user-entered schedules.",
+    "sourceDescription": "Educational reference description for Glutathione."
+  },
+  "peptideContentGlutathioneTypicalDose": "Vom Nutzer eingegebene mg",
+  "@peptideContentGlutathioneTypicalDose": {
+    "description": "User-entered tracking dose label for Glutathione.",
+    "sourceString": "User-entered mg",
+    "sourceDescription": "User-entered tracking dose label for Glutathione."
+  },
+  "peptideContentGlutathioneHalfLife": "Kurz (systemisch)",
+  "@peptideContentGlutathioneHalfLife": {
+    "description": "Reported half-life label for Glutathione.",
+    "sourceString": "Short (systemic)",
+    "sourceDescription": "Reported half-life label for Glutathione."
+  },
+  "peptideContentGlutathioneNotes": "Der Zulassungsstatus von injizierbarem Glutathion variiert je nach Land. Erfasse Mengen genau wie bezogen und angeordnet; PepMod gibt keine Dosierungsempfehlungen für diese Substanz.",
+  "@peptideContentGlutathioneNotes": {
+    "description": "Educational reference notes for Glutathione.",
+    "sourceString": "Regulatory status of injectable glutathione varies by country. Track amounts exactly as sourced and directed; PepMod does not provide dosing guidance for this compound.",
+    "sourceDescription": "Educational reference notes for Glutathione."
+  },
+  "peptideContentKisspeptin10Description": "Kisspeptin-10 ist ein Fragment des Neuropeptids Kisspeptin aus zehn Aminosäuren, das in der Forschung für seine Rolle in der GnRH-Signalgebung und der Regulation der Reproduktionsachse untersucht wird. Humandaten außerhalb kontrollierter Studien sind begrenzt. Dieser Eintrag ist eine neutrale Tracking-Referenz für vom Nutzer eingegebene Pläne.",
+  "@peptideContentKisspeptin10Description": {
+    "description": "Educational reference description for Kisspeptin10.",
+    "sourceString": "Kisspeptin-10 is a ten-amino-acid fragment of the kisspeptin neuropeptide, studied in research settings for its role in GnRH signalling and reproductive-axis regulation. Human data outside controlled studies is limited. This entry is a neutral tracking reference for user-entered schedules.",
+    "sourceDescription": "Educational reference description for Kisspeptin10."
+  },
+  "peptideContentKisspeptin10TypicalDose": "Vom Nutzer eingegeben",
+  "@peptideContentKisspeptin10TypicalDose": {
+    "description": "User-entered tracking dose label for Kisspeptin10.",
+    "sourceString": "User-entered",
+    "sourceDescription": "User-entered tracking dose label for Kisspeptin10."
+  },
+  "peptideContentKisspeptin10HalfLife": "~Minuten (berichtet)",
+  "@peptideContentKisspeptin10HalfLife": {
+    "description": "Reported half-life label for Kisspeptin10.",
+    "sourceString": "~minutes (reported)",
+    "sourceDescription": "Reported half-life label for Kisspeptin10."
+  },
+  "peptideContentKisspeptin10Notes": "Forschungssubstanz ohne etablierte Protokolle. Erfasse nur vom Nutzer eingegebene Mengen; PepMod gibt keine Dosierungsempfehlungen für diese Substanz.",
+  "@peptideContentKisspeptin10Notes": {
+    "description": "Educational reference notes for Kisspeptin10.",
+    "sourceString": "Research compound without established protocols. Track only user-entered amounts; PepMod does not provide dosing guidance for this compound.",
+    "sourceDescription": "Educational reference notes for Kisspeptin10."
+  },
+  "peptideContentSluPp332Description": "SLU-PP-332 ist ein experimenteller niedermolekularer ERR-Agonist, der präklinisch in der Bewegungsphysiologie-Forschung untersucht wird. Es ist kein Peptid und es liegen keine etablierten Daten zu Sicherheit oder Wirksamkeit beim Menschen vor. Dieser Eintrag ist eine neutrale Tracking-Referenz für vom Nutzer eingegebene Pläne.",
+  "@peptideContentSluPp332Description": {
+    "description": "Educational reference description for SluPp332.",
+    "sourceString": "SLU-PP-332 is an experimental small-molecule ERR agonist investigated preclinically in exercise-physiology research. It is not a peptide and has no established human safety or efficacy data. This entry is a neutral tracking reference for user-entered schedules.",
+    "sourceDescription": "Educational reference description for SluPp332."
+  },
+  "peptideContentSluPp332TypicalDose": "Vom Nutzer eingegeben",
+  "@peptideContentSluPp332TypicalDose": {
+    "description": "User-entered tracking dose label for SluPp332.",
+    "sourceString": "User-entered",
+    "sourceDescription": "User-entered tracking dose label for SluPp332."
+  },
+  "peptideContentSluPp332HalfLife": "Nicht gut belegt",
+  "@peptideContentSluPp332HalfLife": {
+    "description": "Reported half-life label for SluPp332.",
+    "sourceString": "Not well established",
+    "sourceDescription": "Reported half-life label for SluPp332."
+  },
+  "peptideContentSluPp332Notes": "Hochexperimentelle Forschungssubstanz ohne Humanstudien. Verwandte Substanz, kein Peptid. Erfasse nur vom Nutzer eingegebene Mengen; PepMod gibt keine Dosierungsempfehlungen für diese Substanz.",
+  "@peptideContentSluPp332Notes": {
+    "description": "Educational reference notes for SluPp332.",
+    "sourceString": "Highly experimental research compound with no human trials. Related compound, not a peptide. Track only user-entered amounts; PepMod does not provide dosing guidance for this compound.",
+    "sourceDescription": "Educational reference notes for SluPp332."
+  },
+  "investigationalDosingLabel": "PRÜFPRÄPARAT — KEINE ZUGELASSENE DOSIERUNG",
+  "@investigationalDosingLabel": {
+    "description": "Heading replacing Typical Dose for an investigational compound with no approved dosing regimen.",
+    "sourceString": "INVESTIGATIONAL — NO APPROVED DOSING",
+    "sourceDescription": "Heading replacing Typical Dose for an investigational compound with no approved dosing regimen."
+  },
+  "investigationalProtocolEntryWarning": "Für diese Prüfsubstanz gibt es kein zugelassenes Protokoll. PepMod gibt weder Menge noch Zeitplan vor; gib deine eigenen Tracking-Werte ausdrücklich ein.",
+  "@investigationalProtocolEntryWarning": {
+    "description": "Safety warning in the protocol editor for investigational/reference-only compounds.",
+    "sourceString": "No approved protocol exists for this investigational compound. PepMod does not provide an amount or schedule; enter your own tracking values explicitly.",
+    "sourceDescription": "Safety warning in the protocol editor for investigational/reference-only compounds."
   }
 }

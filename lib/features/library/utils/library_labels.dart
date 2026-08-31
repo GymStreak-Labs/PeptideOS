@@ -36,6 +36,16 @@ String localizedProtocolFrequencyLabel(AppLocalizations l10n, String key) =>
       _ => key,
     };
 
+/// Popular blend marketing names that deliberately have no bundled preset.
+/// Blend compositions vary by vendor and no verified canonical formulation
+/// exists, so the app never ships one — instead these searches surface the
+/// custom/blend creation path where the user enters their vial's actual
+/// contents.
+const kKnownBlendAliases = <String>{'klow', 'glow', 'wolverine'};
+
+bool isKnownBlendAlias(String query) =>
+    kKnownBlendAliases.contains(query.trim().toLowerCase());
+
 String localizedProtocolStatusLabel(
   AppLocalizations l10n,
   ProtocolStatus status,

@@ -115,7 +115,9 @@ class PeptideDetailScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            l10n.typicalDose,
+                            peptide.isInvestigational
+                                ? l10n.investigationalDosingLabel
+                                : l10n.typicalDose,
                             style: AppTypography.systemLabel,
                           ),
                           const SizedBox(height: AppSpacing.xs),
@@ -126,9 +128,17 @@ class PeptideDetailScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: AppSpacing.xs),
+                          if (!peptide.requiresExplicitProtocolEntry)
+                            Text(
+                              '${localizedProtocolRouteLabel(l10n, peptide.defaultRoute)} · ${localizedProtocolFrequencyLabel(l10n, peptide.defaultFrequency)}',
+                              style: AppTypography.bodySmall,
+                            ),
+                          const SizedBox(height: AppSpacing.sm),
+                          // Framing guardrail: reported ranges are reference
+                          // material, never an instruction to dose.
                           Text(
-                            '${localizedProtocolRouteLabel(l10n, peptide.defaultRoute)} · ${localizedProtocolFrequencyLabel(l10n, peptide.defaultFrequency)}',
-                            style: AppTypography.bodySmall,
+                            l10n.typicalDoseReferenceNote,
+                            style: AppTypography.disclaimer,
                           ),
                         ],
                       ),

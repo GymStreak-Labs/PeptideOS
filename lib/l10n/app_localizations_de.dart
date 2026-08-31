@@ -1271,6 +1271,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String subscribeAnnualPrice(String price) {
+    return 'ABONNIEREN — $price/Jahr';
+  }
+
+  @override
   String get subscribeToActivate =>
       'Abonniere, um dein Protokoll zu aktivieren';
 
@@ -1300,9 +1305,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get thirtyDayAdherence => '30-Tage-Adhärenz';
-
-  @override
-  String get threeDayFreeTrial => '3 TAGE KOSTENLOS TESTEN';
 
   @override
   String get timelineLabel => 'Zeitachse';
@@ -2666,7 +2668,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get peptideContentRetatrutideTypicalDose =>
-      'Studiendosen 1–12 mg wöchentlich';
+      'Kein zugelassenes Dosierungsschema. Retatrutid ist ein Prüfpräparat; in Studien berichtete Mengen dienen nur als Studienreferenz und sind keine Anwendungshinweise.';
 
   @override
   String get peptideContentRetatrutideHalfLife => '~6 Tage';
@@ -3096,4 +3098,147 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get peptideContentEducationalDisclaimer =>
       'Nur als Bildungsreferenz. Keine medizinische Beratung. Forschungspeptide sind in den meisten Rechtsordnungen nicht für die Anwendung am Menschen zugelassen — wende dich immer an qualifiziertes medizinisches Fachpersonal.';
+
+  @override
+  String get twiceWeeklyPickDaysHint =>
+      'Wähle genau zwei Wochentage für diesen Plan aus.';
+
+  @override
+  String get selectExactlyTwoDaysError =>
+      'Wähle genau zwei Tage für einen 2×-pro-Woche-Plan aus.';
+
+  @override
+  String get remindersBlockedTitle => 'Erinnerungen sind blockiert';
+
+  @override
+  String get remindersBlockedBody =>
+      'Dosis-Erinnerungen sind in PepMod aktiviert, aber Mitteilungen sind in den Systemeinstellungen deaktiviert, daher können keine Erinnerungen zugestellt werden.';
+
+  @override
+  String get openSettingsAction => 'Einstellungen öffnen';
+
+  @override
+  String freeTrialBadgeDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count TAGE KOSTENLOS TESTEN',
+      one: '$count TAG KOSTENLOS TESTEN',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count WOCHEN KOSTENLOS TESTEN',
+      one: '$count WOCHE KOSTENLOS TESTEN',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count MONATE KOSTENLOS TESTEN',
+      one: '$count MONAT KOSTENLOS TESTEN',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count JAHRE KOSTENLOS TESTEN',
+      one: '$count JAHR KOSTENLOS TESTEN',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get createCustomCompoundAction => 'Eigenen Wirkstoff erstellen';
+
+  @override
+  String get noPeptidesFoundCreateHint =>
+      'Kein Treffer in der Referenzbibliothek. Du kannst es trotzdem als eigenen Wirkstoff erfassen.';
+
+  @override
+  String get blendSearchHint =>
+      'Blend-Namen wie dieser haben keine Standardformel — der Inhalt variiert je nach Anbieter. Erstelle ihn hier als eigenen Wirkstoff oder beim Erstellen eines Protokolls als vorgemischtes Fläschchen und gib den tatsächlichen Inhalt deines Fläschchens ein.';
+
+  @override
+  String get typicalDoseReferenceNote =>
+      'Veröffentlichter Referenzbereich zu Bildungszwecken — keine Empfehlung oder Anweisung.';
+
+  @override
+  String get peptideContentTestosteroneDescription =>
+      'Testosteron ist ein körpereigenes Androgen-Hormon. Injizierbare Ester-Präparate (wie Cypionat und Enanthat) sind verschreibungspflichtige Medikamente für die ärztlich überwachte Hormontherapie. Dieser Eintrag ist eine neutrale Tracking-Referenz für vom Nutzer eingegebene Pläne.';
+
+  @override
+  String get peptideContentTestosteroneTypicalDose =>
+      'Vom Nutzer eingegebene mg';
+
+  @override
+  String get peptideContentTestosteroneHalfLife => 'Ester-abhängig';
+
+  @override
+  String get peptideContentTestosteroneNotes =>
+      'Verschreibungspflichtig und in vielen Rechtsordnungen eine kontrollierte Substanz. Erfasse nur, was von qualifiziertem medizinischem Fachpersonal angeordnet wurde; PepMod gibt keine Dosierungsempfehlungen für Testosteron.';
+
+  @override
+  String get peptideContentGlutathioneDescription =>
+      'Glutathion ist ein natürlich vorkommendes Tripeptid (Glutamat-Cystein-Glycin), das als wichtiges intrazelluläres Antioxidans wirkt. Injizierbare Formen werden in einigen Wellness- und klinischen Umgebungen verwendet. Dieser Eintrag ist eine neutrale Tracking-Referenz für vom Nutzer eingegebene Pläne.';
+
+  @override
+  String get peptideContentGlutathioneTypicalDose =>
+      'Vom Nutzer eingegebene mg';
+
+  @override
+  String get peptideContentGlutathioneHalfLife => 'Kurz (systemisch)';
+
+  @override
+  String get peptideContentGlutathioneNotes =>
+      'Der Zulassungsstatus von injizierbarem Glutathion variiert je nach Land. Erfasse Mengen genau wie bezogen und angeordnet; PepMod gibt keine Dosierungsempfehlungen für diese Substanz.';
+
+  @override
+  String get peptideContentKisspeptin10Description =>
+      'Kisspeptin-10 ist ein Fragment des Neuropeptids Kisspeptin aus zehn Aminosäuren, das in der Forschung für seine Rolle in der GnRH-Signalgebung und der Regulation der Reproduktionsachse untersucht wird. Humandaten außerhalb kontrollierter Studien sind begrenzt. Dieser Eintrag ist eine neutrale Tracking-Referenz für vom Nutzer eingegebene Pläne.';
+
+  @override
+  String get peptideContentKisspeptin10TypicalDose => 'Vom Nutzer eingegeben';
+
+  @override
+  String get peptideContentKisspeptin10HalfLife => '~Minuten (berichtet)';
+
+  @override
+  String get peptideContentKisspeptin10Notes =>
+      'Forschungssubstanz ohne etablierte Protokolle. Erfasse nur vom Nutzer eingegebene Mengen; PepMod gibt keine Dosierungsempfehlungen für diese Substanz.';
+
+  @override
+  String get peptideContentSluPp332Description =>
+      'SLU-PP-332 ist ein experimenteller niedermolekularer ERR-Agonist, der präklinisch in der Bewegungsphysiologie-Forschung untersucht wird. Es ist kein Peptid und es liegen keine etablierten Daten zu Sicherheit oder Wirksamkeit beim Menschen vor. Dieser Eintrag ist eine neutrale Tracking-Referenz für vom Nutzer eingegebene Pläne.';
+
+  @override
+  String get peptideContentSluPp332TypicalDose => 'Vom Nutzer eingegeben';
+
+  @override
+  String get peptideContentSluPp332HalfLife => 'Nicht gut belegt';
+
+  @override
+  String get peptideContentSluPp332Notes =>
+      'Hochexperimentelle Forschungssubstanz ohne Humanstudien. Verwandte Substanz, kein Peptid. Erfasse nur vom Nutzer eingegebene Mengen; PepMod gibt keine Dosierungsempfehlungen für diese Substanz.';
+
+  @override
+  String get investigationalDosingLabel =>
+      'PRÜFPRÄPARAT — KEINE ZUGELASSENE DOSIERUNG';
+
+  @override
+  String get investigationalProtocolEntryWarning =>
+      'Für diese Prüfsubstanz gibt es kein zugelassenes Protokoll. PepMod gibt weder Menge noch Zeitplan vor; gib deine eigenen Tracking-Werte ausdrücklich ein.';
 }

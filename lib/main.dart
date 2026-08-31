@@ -35,6 +35,7 @@ import 'features/onboarding/widgets/paywall_page.dart';
 import 'features/profile/providers/settings_provider.dart';
 import 'features/progress/providers/body_metric_provider.dart';
 import 'features/protocol/providers/dose_log_provider.dart';
+import 'features/protocol/providers/notification_permission_provider.dart';
 import 'features/protocol/providers/protocol_provider.dart';
 import 'features/subscription/providers/subscription_provider.dart';
 import 'features/subscription/subscription_error_localization.dart';
@@ -107,9 +108,10 @@ Future<void> main() async {
       // receives the same ID once it is configured on the first visible frame.
       await AnalyticsService().initializeIdentity();
 
-      // Seed the peptide library on first authenticated launch. Idempotent —
-      // safe to call even when the collection is already populated.
-      unawaited(PeptideLibraryRepository().seedIfEmpty());
+      // Reconcile the peptide library against the bundled seed catalogue.
+      // Versioned and idempotent — only ever adds missing entries, never
+      // overwrites existing documents.
+      unawaited(PeptideLibraryRepository().ensureSeeded());
 
       runApp(const PepModApp());
 
@@ -276,6 +278,24 @@ class PepModApp extends StatelessWidget {
             prov.setNotificationsEnabled(
               settings.settings.notificationsEnabled,
             );
+            return prov;
+          },
+        ),
+        // Watches the OS notification permission so blocked-reminder recovery
+        // banners can show an Open Settings CTA and resync after a re-grant.
+        ChangeNotifierProxyProvider2<
+          SettingsProvider,
+          ProtocolProvider,
+          NotificationPermissionProvider
+        >(
+          create: (_) => NotificationPermissionProvider(),
+          update: (_, settings, protocols, previous) {
+            final prov = previous ?? NotificationPermissionProvider();
+            prov.onPermissionRegranted = () async {
+              if (settings.settings.notificationsEnabled) {
+                await protocols.syncDoseReminders(enabled: true);
+              }
+            };
             return prov;
           },
         ),
@@ -578,6 +598,9 @@ class _PostAuthPaywallGateState extends State<_PostAuthPaywallGate> {
         localizedPrice: product.priceString,
         amount: product.price,
         currencyCode: product.currencyCode,
+        // Eligibility-gated: null unless the store confirms this user can
+        // start the trial (Apple eligibility check / Play-filtered options).
+        trialOffer: sub.trialOfferForProduct(product),
       );
     }
     return Scaffold(

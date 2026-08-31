@@ -14,7 +14,12 @@ import '../providers/custom_compound_provider.dart';
 import '../utils/library_labels.dart';
 
 class CustomCompoundLibraryScreen extends StatefulWidget {
-  const CustomCompoundLibraryScreen({super.key});
+  const CustomCompoundLibraryScreen({super.key, this.initialEditorName});
+
+  /// When set, the new-compound editor opens immediately with this name
+  /// prefilled — used by the Library empty-search "create custom compound"
+  /// path so the search term carries into the editor.
+  final String? initialEditorName;
 
   @override
   State<CustomCompoundLibraryScreen> createState() =>
@@ -24,6 +29,17 @@ class CustomCompoundLibraryScreen extends StatefulWidget {
 class _CustomCompoundLibraryScreenState
     extends State<CustomCompoundLibraryScreen> {
   bool _showArchived = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final initialName = widget.initialEditorName?.trim();
+    if (initialName != null && initialName.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _openEditor(context, null, initialName);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -276,13 +292,15 @@ class _CustomCompoundLibraryScreenState
   Future<void> _openEditor(
     BuildContext context, [
     CustomCompound? compound,
+    String? initialName,
   ]) async {
     HapticFeedback.selectionClick();
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (sheetContext) => _CustomCompoundEditor(initial: compound),
+      builder: (sheetContext) =>
+          _CustomCompoundEditor(initial: compound, initialName: initialName),
     );
   }
 }
@@ -324,8 +342,9 @@ class _EmptyCompounds extends StatelessWidget {
 }
 
 class _CustomCompoundEditor extends StatefulWidget {
-  const _CustomCompoundEditor({this.initial});
+  const _CustomCompoundEditor({this.initial, this.initialName});
   final CustomCompound? initial;
+  final String? initialName;
 
   @override
   State<_CustomCompoundEditor> createState() => _CustomCompoundEditorState();
@@ -345,7 +364,9 @@ class _CustomCompoundEditorState extends State<_CustomCompoundEditor> {
   void initState() {
     super.initState();
     final initial = widget.initial;
-    _name = TextEditingController(text: initial?.name ?? '');
+    _name = TextEditingController(
+      text: initial?.name ?? widget.initialName ?? '',
+    );
     _vialAmount = TextEditingController();
     _notes = TextEditingController(text: initial?.notes ?? '');
     _vialUnit = initial?.vialUnit ?? 'mg';

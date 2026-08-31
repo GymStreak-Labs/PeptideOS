@@ -1245,6 +1245,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String subscribeAnnualPrice(String price) {
+    return 'SUBSCRIBE — $price/year';
+  }
+
+  @override
   String get subscribeToActivate => 'Subscribe to activate your protocol';
 
   @override
@@ -1273,9 +1278,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get thirtyDayAdherence => '30-day adherence';
-
-  @override
-  String get threeDayFreeTrial => '3-DAY FREE TRIAL';
 
   @override
   String get timelineLabel => 'Timeline';
@@ -2626,7 +2628,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get peptideContentRetatrutideTypicalDose =>
-      'Trial doses 1–12 mg weekly';
+      'No approved dosing regimen. Retatrutide is investigational; amounts reported in trials are study references, not instructions for use.';
 
   @override
   String get peptideContentRetatrutideHalfLife => '~6 days';
@@ -3052,4 +3054,145 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get peptideContentEducationalDisclaimer =>
       'For educational reference only. Not medical advice. Research peptides are not approved for human use in most jurisdictions — always consult a qualified healthcare provider.';
+
+  @override
+  String get twiceWeeklyPickDaysHint =>
+      'Pick exactly two weekdays for this schedule.';
+
+  @override
+  String get selectExactlyTwoDaysError =>
+      'Select exactly two days for a 2x per week schedule.';
+
+  @override
+  String get remindersBlockedTitle => 'Reminders are blocked';
+
+  @override
+  String get remindersBlockedBody =>
+      'Dose reminders are on in PepMod, but notifications are turned off in system settings, so reminders can\'t be delivered.';
+
+  @override
+  String get openSettingsAction => 'Open Settings';
+
+  @override
+  String freeTrialBadgeDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count-DAY FREE TRIAL',
+      one: '$count-DAY FREE TRIAL',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count-WEEK FREE TRIAL',
+      one: '$count-WEEK FREE TRIAL',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count-MONTH FREE TRIAL',
+      one: '$count-MONTH FREE TRIAL',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String freeTrialBadgeYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count-YEAR FREE TRIAL',
+      one: '$count-YEAR FREE TRIAL',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get createCustomCompoundAction => 'Create custom compound';
+
+  @override
+  String get noPeptidesFoundCreateHint =>
+      'No match in the reference library. You can still track it as your own custom compound.';
+
+  @override
+  String get blendSearchHint =>
+      'Blend names like this have no standard formulation — contents vary by vendor. Create it as a custom compound here, or as a pre-blended vial when building a protocol, and enter your vial\'s actual contents.';
+
+  @override
+  String get typicalDoseReferenceNote =>
+      'Published reference range for educational context — not a recommendation or instruction.';
+
+  @override
+  String get peptideContentTestosteroneDescription =>
+      'Testosterone is an endogenous androgen hormone. Injectable ester preparations (such as cypionate and enanthate) are prescription medications used in clinician-supervised hormone therapy. This entry is a neutral tracking reference for user-entered schedules.';
+
+  @override
+  String get peptideContentTestosteroneTypicalDose => 'User-entered mg';
+
+  @override
+  String get peptideContentTestosteroneHalfLife => 'Ester-dependent';
+
+  @override
+  String get peptideContentTestosteroneNotes =>
+      'Prescription-only and a controlled substance in many jurisdictions. Track only what has been directed by a qualified healthcare professional; PepMod does not provide testosterone dosing guidance.';
+
+  @override
+  String get peptideContentGlutathioneDescription =>
+      'Glutathione is a naturally occurring tripeptide (glutamate-cysteine-glycine) that functions as a major intracellular antioxidant. Injectable forms are used in some wellness and clinical settings. This entry is a neutral tracking reference for user-entered schedules.';
+
+  @override
+  String get peptideContentGlutathioneTypicalDose => 'User-entered mg';
+
+  @override
+  String get peptideContentGlutathioneHalfLife => 'Short (systemic)';
+
+  @override
+  String get peptideContentGlutathioneNotes =>
+      'Regulatory status of injectable glutathione varies by country. Track amounts exactly as sourced and directed; PepMod does not provide dosing guidance for this compound.';
+
+  @override
+  String get peptideContentKisspeptin10Description =>
+      'Kisspeptin-10 is a ten-amino-acid fragment of the kisspeptin neuropeptide, studied in research settings for its role in GnRH signalling and reproductive-axis regulation. Human data outside controlled studies is limited. This entry is a neutral tracking reference for user-entered schedules.';
+
+  @override
+  String get peptideContentKisspeptin10TypicalDose => 'User-entered';
+
+  @override
+  String get peptideContentKisspeptin10HalfLife => '~minutes (reported)';
+
+  @override
+  String get peptideContentKisspeptin10Notes =>
+      'Research compound without established protocols. Track only user-entered amounts; PepMod does not provide dosing guidance for this compound.';
+
+  @override
+  String get peptideContentSluPp332Description =>
+      'SLU-PP-332 is an experimental small-molecule ERR agonist investigated preclinically in exercise-physiology research. It is not a peptide and has no established human safety or efficacy data. This entry is a neutral tracking reference for user-entered schedules.';
+
+  @override
+  String get peptideContentSluPp332TypicalDose => 'User-entered';
+
+  @override
+  String get peptideContentSluPp332HalfLife => 'Not well established';
+
+  @override
+  String get peptideContentSluPp332Notes =>
+      'Highly experimental research compound with no human trials. Related compound, not a peptide. Track only user-entered amounts; PepMod does not provide dosing guidance for this compound.';
+
+  @override
+  String get investigationalDosingLabel =>
+      'INVESTIGATIONAL — NO APPROVED DOSING';
+
+  @override
+  String get investigationalProtocolEntryWarning =>
+      'No approved protocol exists for this investigational compound. PepMod does not provide an amount or schedule; enter your own tracking values explicitly.';
 }

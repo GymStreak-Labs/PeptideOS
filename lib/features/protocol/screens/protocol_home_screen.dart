@@ -13,6 +13,7 @@ import '../providers/dose_log_provider.dart';
 import '../providers/protocol_provider.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/log_dose_sheet.dart';
+import '../widgets/reminders_blocked_banner.dart';
 import '../widgets/peptide_label_color.dart';
 import '../widgets/protocol_localizations.dart';
 import 'active_protocol_detail_screen.dart';
@@ -113,6 +114,19 @@ class ProtocolHomeScreen extends StatelessWidget {
                     },
                   ),
                 ],
+              ),
+            ),
+          ),
+
+          // Reminders-blocked recovery — renders only when the user wants
+          // reminders but the OS permission is denied.
+          const SliverToBoxAdapter(
+            child: RemindersBlockedBanner(
+              padding: EdgeInsets.fromLTRB(
+                AppSpacing.screenHorizontal,
+                0,
+                AppSpacing.screenHorizontal,
+                AppSpacing.base,
               ),
             ),
           ),

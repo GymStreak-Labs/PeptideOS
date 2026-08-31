@@ -503,10 +503,20 @@ extension ProtocolStatusLabel on ProtocolStatus {
 /// Available frequency options, keyed to the stored `frequency` string.
 const kCustomWeekdayFrequency = 'custom_weekdays';
 
+/// Legacy stored key. Older protocols carry this frequency and are pinned to
+/// Monday/Thursday by [isDosingDayForFrequency]; new and edited schedules
+/// persist an explicit two-day [kCustomWeekdayFrequency] selection instead.
+const kTwiceWeeklyFrequency = 'twice_weekly';
+
+/// The weekday pair that legacy `twice_weekly` protocols have always used.
+/// Also the prefill when a user picks "2x per week" in the builder, so the
+/// default matches historical behaviour exactly.
+const kLegacyTwiceWeeklyWeekdays = <int>{DateTime.monday, DateTime.thursday};
+
 const kFrequencies = <({String key, String label, int daysPerWeek})>[
   (key: 'daily', label: 'Daily', daysPerWeek: 7),
   (key: 'eod', label: 'Every other day', daysPerWeek: 4),
-  (key: 'twice_weekly', label: '2x per week', daysPerWeek: 2),
+  (key: kTwiceWeeklyFrequency, label: '2x per week', daysPerWeek: 2),
   (key: 'weekly', label: 'Weekly', daysPerWeek: 1),
   (key: kCustomWeekdayFrequency, label: 'Custom days', daysPerWeek: 0),
   (key: 'as_needed', label: 'As needed', daysPerWeek: 0),
@@ -522,6 +532,12 @@ bool isDosingDayForFrequency(String frequency, DateTime start, DateTime day) {
           .inDays;
       return diff.isEven;
     case 'twice_weekly':
+      // Legacy stored frequency. Protocols saved before explicit weekday
+      // selection existed rely on the fixed Monday/Thursday interpretation, so
+      // this branch must never change — shifting it would silently move
+      // existing users' scheduled days. New and edited protocols persist
+      // twice-weekly schedules as `custom_weekdays` with exactly two explicit
+      // weekday entries instead.
       return day.weekday == DateTime.monday || day.weekday == DateTime.thursday;
     case 'weekly':
       final diff = day

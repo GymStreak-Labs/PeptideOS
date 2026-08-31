@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -14,6 +15,13 @@ import '../models/protocol.dart';
 import '../l10n/app_localizations.dart';
 
 enum ProtocolReminderKind { cycleEnds, washoutEnds, phaseStarts }
+
+/// OS-level notification permission state as far as the app can observe it.
+///
+/// `unknown` covers platforms/test environments where the plugin is
+/// unavailable and iOS installs that have never been prompted — callers should
+/// treat it as "not blocked" to avoid false alarms.
+enum NotificationPermissionStatus { unknown, granted, denied }
 
 typedef NotificationCopy = ({
   String channelName,
@@ -31,6 +39,7 @@ typedef NotificationCopy = ({
 typedef NotificationLocaleChangeHandler = Future<bool> Function();
 
 const _scheduledNotificationLocaleKey = 'pepmod_scheduled_notification_locale';
+const _permissionRequestedKey = 'pepmod_notification_permission_requested';
 
 @visibleForTesting
 Locale resolveNotificationLocale(Locale locale) {
@@ -232,6 +241,24 @@ class NotificationService with WidgetsBindingObserver {
     }
   }
 
+  Future<bool> _hasPersistedPermissionRequest() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool(_permissionRequestedKey) ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> _persistPermissionRequest() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_permissionRequestedKey, true);
+    } catch (e) {
+      debugPrint('NotificationService: permission flag save failed: $e');
+    }
+  }
+
   Future<void> _loadScheduledLocaleTag() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -256,12 +283,71 @@ class NotificationService with WidgetsBindingObserver {
     }
   }
 
+  /// Read the current OS notification permission without prompting.
+  ///
+  /// Used by the reminders-blocked recovery UX to decide whether to surface
+  /// the "open settings" banner. Never triggers a system prompt.
+  Future<NotificationPermissionStatus> permissionStatus() async {
+    if (!_initialized) await initialize();
+    if (!_initialized) return NotificationPermissionStatus.unknown;
+    try {
+      if (Platform.isIOS) {
+        final permissions = await _plugin
+            .resolvePlatformSpecificImplementation<
+              IOSFlutterLocalNotificationsPlugin
+            >()
+            ?.checkPermissions();
+        if (permissions == null) return NotificationPermissionStatus.unknown;
+        if (permissions.isEnabled) {
+          _permissionGranted = true;
+          return NotificationPermissionStatus.granted;
+        }
+        // iOS reports the same disabled state for "never asked" and "denied".
+        // Only report denied once this install has actually prompted, so the
+        // blocked banner never appears before the user has made a choice.
+        if (!_permissionRequested &&
+            _permissionGranted != false &&
+            !await _hasPersistedPermissionRequest()) {
+          return NotificationPermissionStatus.unknown;
+        }
+        return NotificationPermissionStatus.denied;
+      }
+      if (Platform.isAndroid) {
+        final enabled = await _plugin
+            .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin
+            >()
+            ?.areNotificationsEnabled();
+        if (enabled == null) return NotificationPermissionStatus.unknown;
+        _permissionGranted = enabled;
+        return enabled
+            ? NotificationPermissionStatus.granted
+            : NotificationPermissionStatus.denied;
+      }
+      return NotificationPermissionStatus.granted;
+    } catch (e) {
+      debugPrint('NotificationService: permission status check failed: $e');
+      return NotificationPermissionStatus.unknown;
+    }
+  }
+
+  /// Open the OS notification settings page for this app so a user who denied
+  /// permission can re-enable reminders.
+  Future<void> openSystemNotificationSettings() async {
+    try {
+      await AppSettings.openAppSettings(type: AppSettingsType.notification);
+    } catch (e) {
+      debugPrint('NotificationService: open settings failed: $e');
+    }
+  }
+
   /// Ask the OS for permission — lazily, only once per install.
   Future<bool> requestPermission() async {
     if (!_initialized) await initialize();
     if (!_initialized) return false;
     if (_permissionRequested && _permissionGranted == true) return true;
     _permissionRequested = true;
+    unawaited(_persistPermissionRequest());
     try {
       bool? granted;
       if (Platform.isIOS) {
