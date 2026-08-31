@@ -117,6 +117,24 @@ abstract class AppLocalizations {
   /// **'Library'**
   String get libraryTitle;
 
+  /// Profile preference label for choosing the app language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get languageLabel;
+
+  /// Language option that follows the device setting.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get languageSystemDefault;
+
+  /// Heading shown above the app language choices.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose app language'**
+  String get selectLanguageTitle;
+
   /// Customer-facing app copy for librarySystemLabel.
   ///
   /// In en, this message translates to:
@@ -1076,6 +1094,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'SKIPPED'**
   String get protocolSkipped;
+
+  /// Weekly planner status for a logged dose that can be edited.
+  ///
+  /// In en, this message translates to:
+  /// **'TAKEN · TAP TO EDIT'**
+  String get plannerTaken;
 
   /// Empty-card title for no doses today.
   ///

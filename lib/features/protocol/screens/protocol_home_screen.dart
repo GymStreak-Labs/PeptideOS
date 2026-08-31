@@ -90,6 +90,10 @@ class ProtocolHomeScreen extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (_) => WeeklyPlannerScreen(
                             protocols: protocolProvider.active,
+                            doseLogs: <DoseLog>[
+                              ...doseProvider.recent30,
+                              ...doseProvider.today,
+                            ],
                           ),
                         ),
                       );

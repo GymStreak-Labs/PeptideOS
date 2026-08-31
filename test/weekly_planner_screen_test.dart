@@ -6,10 +6,67 @@ import 'package:peptide_os/data/repositories/protocol_repository.dart';
 import 'package:peptide_os/features/protocol/providers/protocol_provider.dart';
 import 'package:peptide_os/features/protocol/screens/weekly_planner_screen.dart';
 import 'package:peptide_os/l10n/app_localizations.dart';
+import 'package:peptide_os/models/dose_log.dart';
 import 'package:peptide_os/models/protocol.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  testWidgets('joins schedule cards to taken, skipped, and missed logs', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final date = DateTime.now().subtract(const Duration(days: 1));
+    final day = DateTime(date.year, date.month, date.day);
+    final protocol = Protocol(
+      uuid: 'status-protocol',
+      name: 'Status protocol',
+      startDate: day,
+      status: ProtocolStatus.active,
+      createdAt: day,
+      peptides: [
+        ProtocolPeptide(
+          uuid: 'status-peptide',
+          peptideName: 'Status peptide',
+          dosePerInjection: 100,
+          frequency: 'daily',
+          scheduledTimes: const ['07:00', '08:00', '09:00'],
+        ),
+      ],
+    );
+    DoseLog log(String id, int hour) => DoseLog(
+      uuid: id,
+      protocolUuid: protocol.uuid,
+      protocolPeptideUuid: 'status-peptide',
+      peptideName: 'Status peptide',
+      scheduledAt: DateTime(day.year, day.month, day.day, hour),
+      amountTaken: 100,
+      units: 'mcg',
+    );
+    final taken = log('taken', 7)
+      ..takenAt = DateTime(day.year, day.month, day.day, 7);
+    final skipped = log('skipped', 8)..skipped = true;
+    final missed = log('missed', 9);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: WeeklyPlannerScreen(
+          protocols: [protocol],
+          doseLogs: [taken, skipped, missed],
+          initialDate: day,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('TAKEN · TAP TO EDIT'), findsOneWidget);
+    expect(find.text('SKIPPED'), findsOneWidget);
+    expect(find.text('MISSED'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets(
     'shows the exact custom schedule, phase, next week, and washout state',

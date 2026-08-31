@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/protocol.dart';
+import '../../../models/dose_log.dart';
+import '../providers/dose_log_provider.dart';
+import '../widgets/log_dose_sheet.dart';
 import '../widgets/peptide_label_color.dart';
 import '../widgets/protocol_localizations.dart';
 
@@ -17,10 +22,12 @@ class WeeklyPlannerScreen extends StatefulWidget {
   const WeeklyPlannerScreen({
     super.key,
     required this.protocols,
+    this.doseLogs = const [],
     this.initialDate,
   });
 
   final List<Protocol> protocols;
+  final List<DoseLog> doseLogs;
   final DateTime? initialDate;
 
   @override
@@ -28,14 +35,25 @@ class WeeklyPlannerScreen extends StatefulWidget {
 }
 
 class _WeeklyPlannerScreenState extends State<WeeklyPlannerScreen> {
+  static const _uuid = Uuid();
   late DateTime _selectedDate;
   late DateTime _weekStart;
+  late List<DoseLog> _doseLogs;
 
   @override
   void initState() {
     super.initState();
     _selectedDate = _day(widget.initialDate ?? DateTime.now());
     _weekStart = _mondayOf(_selectedDate);
+    _doseLogs = List<DoseLog>.from(widget.doseLogs);
+  }
+
+  @override
+  void didUpdateWidget(covariant WeeklyPlannerScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.doseLogs, widget.doseLogs)) {
+      _doseLogs = List<DoseLog>.from(widget.doseLogs);
+    }
   }
 
   @override
@@ -126,7 +144,10 @@ class _WeeklyPlannerScreenState extends State<WeeklyPlannerScreen> {
                     const _EmptyDayCard()
                   else ...[
                     for (final item in selectedItems) ...[
-                      _PlannedDoseCard(item: item),
+                      _PlannedDoseCard(
+                        item: item,
+                        onTap: item.canOpen ? () => _openDose(item) : null,
+                      ),
                       const SizedBox(height: AppSpacing.cardGap),
                     ],
                     for (final item in selectedWashouts) ...[
@@ -172,6 +193,10 @@ class _WeeklyPlannerScreenState extends State<WeeklyPlannerScreen> {
           date: date,
         );
         for (final time in schedule.scheduledTimes) {
+          final scheduledAt = _scheduledAt(date, time);
+          final doseLog = scheduledAt == null
+              ? null
+              : _matchingDoseLog(protocol.uuid, peptide.uuid, scheduledAt);
           result.add(
             _PlannerItem(
               protocol: protocol,
@@ -182,6 +207,8 @@ class _WeeklyPlannerScreenState extends State<WeeklyPlannerScreen> {
               colorHex: peptide.labelColorHex.isEmpty
                   ? defaultPeptideLabelColorHex(index)
                   : peptide.labelColorHex,
+              scheduledAt: scheduledAt,
+              doseLog: doseLog,
             ),
           );
         }
@@ -189,6 +216,51 @@ class _WeeklyPlannerScreenState extends State<WeeklyPlannerScreen> {
     }
     result.sort((a, b) => a.time.compareTo(b.time));
     return result;
+  }
+
+  DoseLog? _matchingDoseLog(
+    String protocolUuid,
+    String peptideUuid,
+    DateTime scheduledAt,
+  ) {
+    for (final dose in _doseLogs) {
+      if (dose.protocolUuid == protocolUuid &&
+          dose.protocolPeptideUuid == peptideUuid &&
+          dose.scheduledAt.isAtSameMomentAs(scheduledAt)) {
+        return dose;
+      }
+    }
+    return null;
+  }
+
+  Future<void> _openDose(_PlannerItem item) async {
+    final scheduledAt = item.scheduledAt;
+    if (scheduledAt == null) return;
+    final dose =
+        item.doseLog ??
+        DoseLog(
+          uuid: _uuid.v4(),
+          protocolUuid: item.protocol.uuid,
+          protocolPeptideUuid: item.peptide.uuid,
+          peptideName: item.peptide.peptideName,
+          scheduledAt: scheduledAt,
+          amountTaken: item.schedule.dosePerInjection,
+          units: item.schedule.doseUnit,
+          syringeUnits: item.schedule.syringeUnits,
+          blendSnapshot: item.schedule.blendVial,
+        );
+    HapticFeedback.lightImpact();
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => LogDoseSheet(dose: dose),
+    );
+    if (!mounted) return;
+    final provider = context.read<DoseLogProvider>();
+    setState(
+      () => _doseLogs = <DoseLog>[...provider.recent30, ...provider.today],
+    );
   }
 
   List<_WashoutItem> _washoutsForDate(DateTime date) {
@@ -374,14 +446,16 @@ class _DayButton extends StatelessWidget {
 }
 
 class _PlannedDoseCard extends StatelessWidget {
-  const _PlannedDoseCard({required this.item});
+  const _PlannedDoseCard({required this.item, this.onTap});
 
   final _PlannerItem item;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final color = peptideLabelColor(item.colorHex);
     return AppCard(
+      onTap: onTap,
       borderColor: color.withValues(alpha: 0.45),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -426,6 +500,17 @@ class _PlannedDoseCard extends StatelessWidget {
                 if (item.phase != null) ...[
                   const SizedBox(height: AppSpacing.sm),
                   _PhaseLabel(phase: item.phase!),
+                ],
+                if (item.statusLabel(context) case final status?) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    status,
+                    key: Key('planner-status-${item.time}'),
+                    style: AppTypography.systemLabel.copyWith(
+                      color: item.statusColor,
+                      fontSize: 9,
+                    ),
+                  ),
                 ],
               ],
             ),
@@ -553,6 +638,8 @@ class _PlannerItem {
     required this.time,
     required this.phase,
     required this.colorHex,
+    required this.scheduledAt,
+    required this.doseLog,
   });
 
   final Protocol protocol;
@@ -561,6 +648,30 @@ class _PlannerItem {
   final String time;
   final ProtocolPhase? phase;
   final String colorHex;
+  final DateTime? scheduledAt;
+  final DoseLog? doseLog;
+
+  bool get canOpen =>
+      doseLog != null ||
+      (scheduledAt != null && !scheduledAt!.isAfter(DateTime.now()));
+
+  String? statusLabel(BuildContext context) {
+    final dose = doseLog;
+    if (dose?.isTaken == true) return context.protocolL10n.plannerTaken;
+    if (dose?.skipped == true) return context.protocolL10n.protocolSkipped;
+    if (dose?.isMissed(DateTime.now()) == true) {
+      return context.protocolL10n.protocolMissed;
+    }
+    if (dose == null && canOpen) return context.protocolL10n.protocolLogDose;
+    return null;
+  }
+
+  Color get statusColor {
+    if (doseLog?.isTaken == true) return AppColors.success;
+    if (doseLog?.skipped == true) return AppColors.textSecondary;
+    if (doseLog?.isMissed(DateTime.now()) == true) return AppColors.warning;
+    return AppColors.primary;
+  }
 }
 
 class _WashoutItem {
@@ -594,6 +705,15 @@ String _localizedStoredTime(BuildContext context, String value) {
   final minute = parts.length > 1 ? int.tryParse(parts[1]) : null;
   if (hour == null || minute == null) return value;
   return TimeOfDay(hour: hour, minute: minute).format(context);
+}
+
+DateTime? _scheduledAt(DateTime date, String value) {
+  final parts = value.split(':');
+  if (parts.length != 2) return null;
+  final hour = int.tryParse(parts[0]);
+  final minute = int.tryParse(parts[1]);
+  if (hour == null || minute == null) return null;
+  return DateTime(date.year, date.month, date.day, hour, minute);
 }
 
 String _weekRangeLabel(BuildContext context, DateTime monday) {

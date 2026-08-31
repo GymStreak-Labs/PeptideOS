@@ -12,6 +12,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get libraryTitle => 'Biblioteca';
 
   @override
+  String get languageLabel => 'Idioma';
+
+  @override
+  String get languageSystemDefault => 'Predefinição do sistema';
+
+  @override
+  String get selectLanguageTitle => 'Escolher idioma da app';
+
+  @override
   String get librarySystemLabel => 'SYS.BASE DE DADOS // COMPOSTOS';
 
   @override
@@ -535,6 +544,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get protocolSkipped => 'IGNORADO';
+
+  @override
+  String get plannerTaken => 'REGISTADA · TOCAR PARA EDITAR';
 
   @override
   String get protocolNoDosesToday => 'Sem doses hoje';
@@ -3250,6 +3262,15 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get libraryTitle => 'Biblioteca';
 
   @override
+  String get languageLabel => 'Idioma';
+
+  @override
+  String get languageSystemDefault => 'Padrão do sistema';
+
+  @override
+  String get selectLanguageTitle => 'Escolher idioma do app';
+
+  @override
   String get librarySystemLabel => 'SYS.BANCO // COMPOSTOS';
 
   @override
@@ -3772,6 +3793,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get protocolSkipped => 'PULADA';
+
+  @override
+  String get plannerTaken => 'REGISTRADA · TOQUE PARA EDITAR';
 
   @override
   String get protocolNoDosesToday => 'Nenhuma dose hoje';

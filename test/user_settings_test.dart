@@ -32,6 +32,20 @@ void main() {
     );
   });
 
+  test(
+    'persists an explicit app locale and defaults legacy users to system',
+    () {
+      final restored = UserSettings.fromMap(
+        UserSettings(localeCode: 'es').toMap(),
+      );
+      expect(restored.localeCode, 'es');
+      expect(
+        UserSettings.fromMap(const <String, dynamic>{}).localeCode,
+        isEmpty,
+      );
+    },
+  );
+
   test('saved vial calculations serialize as Firestore-safe primitives', () {
     final settings = UserSettings(
       savedVialCalculations: [

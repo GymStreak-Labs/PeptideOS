@@ -11,6 +11,7 @@ class UserSettings {
     this.firstName = '',
     this.birthDate = '',
     this.units = UnitSystem.metric,
+    this.localeCode = '',
     this.notificationsEnabled = false,
     this.onboardingCompleted = false,
     this.darkMode = true,
@@ -33,6 +34,9 @@ class UserSettings {
   /// ISO-8601 date only (`yyyy-MM-dd`) captured during onboarding.
   String birthDate;
   UnitSystem units;
+
+  /// Empty follows the device language; otherwise an app-supported locale.
+  String localeCode;
   bool notificationsEnabled;
   bool onboardingCompleted;
   bool darkMode;
@@ -52,6 +56,7 @@ class UserSettings {
     String? firstName,
     String? birthDate,
     UnitSystem? units,
+    String? localeCode,
     bool? notificationsEnabled,
     bool? onboardingCompleted,
     bool? darkMode,
@@ -68,6 +73,7 @@ class UserSettings {
       firstName: firstName ?? this.firstName,
       birthDate: birthDate ?? this.birthDate,
       units: units ?? this.units,
+      localeCode: localeCode ?? this.localeCode,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
       darkMode: darkMode ?? this.darkMode,
@@ -87,6 +93,7 @@ class UserSettings {
     'firstName': firstName,
     'birthDate': birthDate,
     'units': units.name,
+    'localeCode': localeCode,
     'notificationsEnabled': notificationsEnabled,
     'onboardingCompleted': onboardingCompleted,
     'darkMode': darkMode,
@@ -107,6 +114,7 @@ class UserSettings {
       firstName: (data['firstName'] as String?) ?? '',
       birthDate: (data['birthDate'] as String?) ?? '',
       units: _parseUnits(data['units'] as String?),
+      localeCode: (data['localeCode'] as String?) ?? '',
       notificationsEnabled: (data['notificationsEnabled'] as bool?) ?? false,
       onboardingCompleted: (data['onboardingCompleted'] as bool?) ?? false,
       darkMode: (data['darkMode'] as bool?) ?? true,

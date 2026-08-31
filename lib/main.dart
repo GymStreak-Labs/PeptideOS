@@ -323,21 +323,30 @@ class PepModApp extends StatelessWidget {
           create: (ctx) => ctx.read<AuthProvider>().authService,
         ),
       ],
-      child: MaterialApp(
-        title: 'PepMod',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.dark,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: const _AppRoot(),
+      child: Consumer<SettingsProvider>(
+        builder: (context, settings, _) => MaterialApp(
+          title: 'PepMod',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.dark,
+          locale: localeFromCode(settings.settings.localeCode),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const _AppRoot(),
+        ),
       ),
     );
   }
+}
+
+Locale? localeFromCode(String code) {
+  if (code.isEmpty) return null;
+  final parts = code.split('_');
+  return parts.length == 2 ? Locale(parts[0], parts[1]) : Locale(parts[0]);
 }
 
 /// Routes between auth gate, onboarding, and the main shell.
