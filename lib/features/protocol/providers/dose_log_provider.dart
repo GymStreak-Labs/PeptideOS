@@ -14,7 +14,7 @@ class DoseLogProvider extends ChangeNotifier {
     _subscribe();
   }
 
-  final DoseLogRepository _repo;
+  final DoseLogDataSource _repo;
   final _uuid = const Uuid();
   String _uid;
 
@@ -180,9 +180,11 @@ class DoseLogProvider extends ChangeNotifier {
     String? site,
     String? notes,
   }) async {
+    final isBlend = dose.blendSnapshot != null;
     final updated = dose.copyWith(
       takenAt: takenAt ?? DateTime.now(),
-      amountTaken: amount,
+      amountTaken: isBlend ? dose.amountTaken : amount,
+      syringeUnits: isBlend ? amount : dose.syringeUnits,
       injectionSite: site,
       notes: notes,
       skipped: false,
@@ -208,12 +210,50 @@ class DoseLogProvider extends ChangeNotifier {
 
   Future<void> _save(DoseLog dose) async {
     if (_uid.isEmpty) return;
+    final previousToday = _today;
+    final previousRecent30 = _recent30;
+    final now = DateTime.now();
+    final todayStart = DateTime(now.year, now.month, now.day);
+    _today = _replaceDose(
+      _today,
+      dose,
+      start: todayStart,
+      end: todayStart.add(const Duration(days: 1)),
+    );
+    _recent30 = _replaceDose(
+      _recent30,
+      dose,
+      start: todayStart.subtract(const Duration(days: 30)),
+      end: todayStart.add(const Duration(days: 1)),
+    );
+    notifyListeners();
     try {
       await _repo.upsert(_uid, dose);
     } catch (e) {
+      _today = previousToday;
+      _recent30 = previousRecent30;
+      notifyListeners();
       debugPrint('doseLog save failed: $e');
       rethrow;
     }
+  }
+
+  List<DoseLog> _replaceDose(
+    List<DoseLog> current,
+    DoseLog dose, {
+    required DateTime start,
+    required DateTime end,
+  }) {
+    if (!current.any((item) => item.uuid == dose.uuid)) {
+      if (dose.scheduledAt.isBefore(start) || !dose.scheduledAt.isBefore(end)) {
+        return current;
+      }
+      return <DoseLog>[...current, dose]
+        ..sort((a, b) => a.scheduledAt.compareTo(b.scheduledAt));
+    }
+    return <DoseLog>[
+      for (final item in current) item.uuid == dose.uuid ? dose : item,
+    ];
   }
 
   Future<void> logAdHoc({

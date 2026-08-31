@@ -12,6 +12,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get libraryTitle => 'ライブラリ';
 
   @override
+  String get languageLabel => '言語';
+
+  @override
+  String get languageSystemDefault => 'システム設定';
+
+  @override
+  String get selectLanguageTitle => 'アプリの言語を選択';
+
+  @override
   String get librarySystemLabel => 'SYS.データベース // 化合物';
 
   @override
@@ -510,6 +519,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get protocolSkipped => 'スキップ済み';
+
+  @override
+  String get plannerTaken => '記録済み・タップして編集';
 
   @override
   String get protocolNoDosesToday => '本日の投与はありません';

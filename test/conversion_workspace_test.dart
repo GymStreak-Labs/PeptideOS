@@ -273,6 +273,42 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('protocol handoff returns the validated draw-unit result', (
+    tester,
+  ) async {
+    ConversionResult? applied;
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.dark,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: ReconstitutionScreen(
+          initialInput: const ConversionInput(
+            vialAmountMg: 5,
+            diluentVolumeMl: 2,
+            desiredAmount: 250,
+            syringe: ConversionSyringe.units100,
+          ),
+          onApplyResult: (result) => applied = result,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('ADD TO PROTOCOL'),
+      250,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.text('ADD TO PROTOCOL'));
+    await tester.pump();
+
+    expect(applied?.drawUnits, 10);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('workspace stays overflow-free on a compact phone', (
     tester,
   ) async {

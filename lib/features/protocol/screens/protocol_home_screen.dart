@@ -82,21 +82,6 @@ class ProtocolHomeScreen extends StatelessWidget {
                     ),
                   ),
                   _HeaderIconButton(
-                    tooltip: context.protocolL10n.protocolWeeklyPlanner,
-                    icon: Icons.calendar_view_week_rounded,
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => WeeklyPlannerScreen(
-                            protocols: protocolProvider.active,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  _HeaderIconButton(
                     tooltip: context.protocolL10n.protocolDoseHistory,
                     icon: Icons.history_rounded,
                     onTap: () {
@@ -114,6 +99,54 @@ class ProtocolHomeScreen extends StatelessWidget {
                     },
                   ),
                 ],
+              ),
+            ),
+          ),
+
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.screenHorizontal,
+                0,
+                AppSpacing.screenHorizontal,
+                AppSpacing.base,
+              ),
+              child: AppCard(
+                key: const Key('weekly-planner-entry'),
+                onTap: () {
+                  HapticFeedback.lightImpact();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => WeeklyPlannerScreen(
+                        protocols: protocolProvider.active,
+                        doseLogs: <DoseLog>[
+                          ...doseProvider.recent30,
+                          ...doseProvider.today,
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                borderColor: AppColors.borderCyan,
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.calendar_view_week_rounded,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Text(
+                        context.protocolL10n.protocolWeeklyPlanner,
+                        style: AppTypography.labelLarge,
+                      ),
+                    ),
+                    const Icon(
+                      Icons.chevron_right_rounded,
+                      color: AppColors.textTertiary,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

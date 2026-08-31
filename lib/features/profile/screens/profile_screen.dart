@@ -124,6 +124,12 @@ class ProfileScreen extends StatelessWidget {
             },
           ),
         ),
+        _Tile(
+          icon: Icons.language_rounded,
+          label: l10n.languageLabel,
+          value: _languageName(settings.localeCode, l10n),
+          onTap: () => _selectLanguage(context, settings.localeCode),
+        ),
         const SliverToBoxAdapter(
           child: RemindersBlockedBanner(
             padding: EdgeInsets.fromLTRB(
@@ -739,6 +745,74 @@ class ProfileScreen extends StatelessWidget {
     await protocols.syncDoseReminders(enabled: true);
     await permissionProvider.refresh();
   }
+}
+
+String _languageName(String code, AppLocalizations l10n) => switch (code) {
+  'en' => 'English',
+  'es' => 'Español',
+  'fr' => 'Français',
+  'it' => 'Italiano',
+  'de' => 'Deutsch',
+  'ja' => '日本語',
+  'ko' => '한국어',
+  'pt' => 'Português',
+  'pt_BR' => 'Português (Brasil)',
+  _ => l10n.languageSystemDefault,
+};
+
+Future<void> _selectLanguage(BuildContext context, String selected) async {
+  final l10n = AppLocalizations.of(context);
+  final options = <(String, String)>[
+    ('', l10n.languageSystemDefault),
+    ('en', 'English'),
+    ('es', 'Español'),
+    ('fr', 'Français'),
+    ('it', 'Italiano'),
+    ('de', 'Deutsch'),
+    ('ja', '日本語'),
+    ('ko', '한국어'),
+    ('pt', 'Português'),
+    ('pt_BR', 'Português (Brasil)'),
+  ];
+  final next = await showModalBottomSheet<String>(
+    context: context,
+    backgroundColor: AppColors.surfaceContainer,
+    isScrollControlled: true,
+    builder: (sheetContext) => FractionallySizedBox(
+      heightFactor: 0.78,
+      child: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Text(l10n.selectLanguageTitle, style: AppTypography.h2),
+            ),
+            Expanded(
+              child: ListView(
+                key: const Key('language-options-list'),
+                children: [
+                  for (final option in options)
+                    ListTile(
+                      title: Text(option.$2, style: AppTypography.bodyLarge),
+                      trailing: option.$1 == selected
+                          ? const Icon(
+                              Icons.check_rounded,
+                              color: AppColors.primary,
+                            )
+                          : null,
+                      onTap: () => Navigator.of(sheetContext).pop(option.$1),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+  if (next == null || !context.mounted) return;
+  HapticFeedback.selectionClick();
+  await context.read<SettingsProvider>().update((s) => s.localeCode = next);
 }
 
 // ── Avatar card ───────────────────────────────────────────────────────────

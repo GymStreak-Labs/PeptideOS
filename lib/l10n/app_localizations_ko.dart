@@ -12,6 +12,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get libraryTitle => '라이브러리';
 
   @override
+  String get languageLabel => '언어';
+
+  @override
+  String get languageSystemDefault => '시스템 기본값';
+
+  @override
+  String get selectLanguageTitle => '앱 언어 선택';
+
+  @override
   String get librarySystemLabel => 'SYS.데이터베이스 // 화합물';
 
   @override
@@ -510,6 +519,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get protocolSkipped => '건너뜀';
+
+  @override
+  String get plannerTaken => '기록됨 · 탭하여 수정';
 
   @override
   String get protocolNoDosesToday => '오늘 투여 없음';

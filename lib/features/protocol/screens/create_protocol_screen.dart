@@ -9,12 +9,14 @@ import '../../../core/utils/decimal_input.dart';
 import '../../../core/utils/localized_decimal_input.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/blend_vial.dart';
+import '../../../models/conversion_workspace.dart';
 import '../../../models/peptide.dart';
 import '../../../models/protocol.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../library/providers/custom_compound_provider.dart';
 import '../../library/providers/peptide_provider.dart';
 import '../../library/screens/custom_compound_library_screen.dart';
+import '../../library/screens/reconstitution_screen.dart';
 import '../../library/utils/library_labels.dart';
 import '../../library/utils/localized_peptide_content.dart';
 import '../../subscription/providers/subscription_provider.dart';
@@ -2128,6 +2130,38 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
   double get _parsedSyringeUnits =>
       parseDecimalInput(_syringeUnitsCtrl.text) ?? 0;
 
+  Future<void> _openUnitConverter() async {
+    final dose = parseDecimalInput(_doseCtrl.text) ?? 0;
+    final isInternationalUnits = _unit == 'IU';
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute(
+        builder: (converterContext) => ReconstitutionScreen(
+          initialInput: ConversionInput(
+            vialAmount: widget.initial.vialAmountSnapshot,
+            diluentVolumeMl: 0,
+            desiredAmount: dose,
+            desiredAmountUnit: _unit == 'mg'
+                ? ConversionAmountUnit.milligrams
+                : ConversionAmountUnit.micrograms,
+            quantityMode: isInternationalUnits
+                ? ConversionQuantityMode.internationalUnits
+                : ConversionQuantityMode.mass,
+            syringe: ConversionSyringe.units100,
+          ),
+          onApplyResult: (result) {
+            _syringeUnitsCtrl.text = formatLocalizedDecimalInput(
+              result.drawUnits,
+              localeName: AppLocalizations.of(context).localeName,
+              maximumFractionDigits: 2,
+            );
+            Navigator.of(converterContext).pop();
+            if (mounted) setState(() {});
+          },
+        ),
+      ),
+    );
+  }
+
   int get _parsedCycleWeeks => int.tryParse(_cycleWeeksCtrl.text) ?? 0;
 
   int get _parsedWashoutWeeks => int.tryParse(_washoutWeeksCtrl.text) ?? 0;
@@ -2513,6 +2547,41 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: AppSpacing.base),
+                  AppCard(
+                    key: const Key('protocol-open-unit-converter'),
+                    onTap: _openUnitConverter,
+                    borderColor: AppColors.borderCyan,
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.calculate_outlined,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: AppSpacing.md),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l10n.openUnitConverter,
+                                style: AppTypography.labelLarge,
+                              ),
+                              const SizedBox(height: AppSpacing.xs),
+                              Text(
+                                l10n.converterCardSubtitle,
+                                style: AppTypography.bodySmall,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(
+                          Icons.chevron_right_rounded,
+                          color: AppColors.textTertiary,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: AppSpacing.base),
                   _FieldLabel(

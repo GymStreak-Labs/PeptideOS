@@ -20,12 +20,14 @@ class ReconstitutionScreen extends StatefulWidget {
     this.initialInput,
     this.savedCalculations = const [],
     this.onSavedCalculationsChanged,
+    this.onApplyResult,
   });
 
   final ConversionInput? initialInput;
   final List<SavedVialCalculation> savedCalculations;
   final Future<void> Function(List<SavedVialCalculation> calculations)?
   onSavedCalculationsChanged;
+  final ValueChanged<ConversionResult>? onApplyResult;
 
   @override
   State<ReconstitutionScreen> createState() => _ReconstitutionScreenState();
@@ -283,6 +285,10 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                       syringe: _syringe,
                       quantityMode: _quantityMode,
                       onSave: result.isValid ? _saveCalculation : null,
+                      onApply: result.isValid && !result.exceedsSyringeCapacity
+                          ? () => widget.onApplyResult?.call(result)
+                          : null,
+                      showApply: widget.onApplyResult != null,
                     ),
                     if (_saved.isNotEmpty) ...[
                       const SizedBox(height: AppSpacing.xxl),
@@ -793,12 +799,16 @@ class _ResultCard extends StatelessWidget {
     required this.syringe,
     required this.quantityMode,
     required this.onSave,
+    required this.onApply,
+    required this.showApply,
   });
 
   final ConversionResult result;
   final ConversionSyringe syringe;
   final ConversionQuantityMode quantityMode;
   final VoidCallback? onSave;
+  final VoidCallback? onApply;
+  final bool showApply;
 
   @override
   Widget build(BuildContext context) {
@@ -919,6 +929,10 @@ class _ResultCard extends StatelessWidget {
             ),
           ],
           const SizedBox(height: AppSpacing.base),
+          if (showApply) ...[
+            PrimaryButton(label: l10n.addToProtocol, onPressed: onApply),
+            const SizedBox(height: AppSpacing.sm),
+          ],
           PrimaryButton(label: l10n.savePreset, onPressed: onSave),
         ],
       ),

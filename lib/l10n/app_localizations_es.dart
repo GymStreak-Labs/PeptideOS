@@ -12,6 +12,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get libraryTitle => 'Biblioteca';
 
   @override
+  String get languageLabel => 'Idioma';
+
+  @override
+  String get languageSystemDefault => 'Predeterminado del sistema';
+
+  @override
+  String get selectLanguageTitle => 'Elegir idioma de la app';
+
+  @override
   String get librarySystemLabel => 'SYS.BASEDATOS // COMPUESTOS';
 
   @override
@@ -536,6 +545,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get protocolSkipped => 'OMITIDA';
+
+  @override
+  String get plannerTaken => 'REGISTRADA · TOCA PARA EDITAR';
 
   @override
   String get protocolNoDosesToday => 'Hoy no hay dosis';
