@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:peptide_os/data/services/subscription_service.dart';
@@ -37,6 +38,28 @@ void main() {
       ),
       SubscriptionErrorCode.purchaseCancelled,
     );
+  });
+
+  test('RevenueCat PlatformException preserves cancellation semantics', () {
+    final result = SubscriptionService.purchaseFailureFromPlatformException(
+      PlatformException(
+        code: PurchasesErrorCode.purchaseCancelledError.index.toString(),
+      ),
+    );
+
+    expect(result.success, isFalse);
+    expect(result.cancelled, isTrue);
+    expect(result.errorCode, SubscriptionErrorCode.purchaseCancelled);
+  });
+
+  test('malformed RevenueCat PlatformException fails safely', () {
+    final result = SubscriptionService.purchaseFailureFromPlatformException(
+      PlatformException(code: 'not-a-revenuecat-error-code'),
+    );
+
+    expect(result.success, isFalse);
+    expect(result.cancelled, isFalse);
+    expect(result.errorCode, SubscriptionErrorCode.purchaseFailed);
   });
 
   test('non-English presentation maps every typed failure through l10n', () {

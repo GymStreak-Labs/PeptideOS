@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 /// Wraps RevenueCat with PepMod-specific API keys + entitlement.
@@ -258,7 +259,10 @@ class SubscriptionService {
       );
     }
     try {
-      final info = await Purchases.purchasePackage(package);
+      final purchaseResult = await Purchases.purchase(
+        PurchaseParams.package(package),
+      );
+      final info = purchaseResult.customerInfo;
       _handleCustomerInfoUpdate(info);
       final premium = info.entitlements.active.containsKey(entitlementId);
       return PurchaseResult(
@@ -266,12 +270,8 @@ class SubscriptionService {
         customerInfo: info,
         errorCode: premium ? null : SubscriptionErrorCode.purchaseFailed,
       );
-    } on PurchasesErrorCode catch (e) {
-      return PurchaseResult(
-        success: false,
-        errorCode: purchaseErrorCode(e),
-        cancelled: e == PurchasesErrorCode.purchaseCancelledError,
-      );
+    } on PlatformException catch (error) {
+      return purchaseFailureFromPlatformException(error);
     } catch (error) {
       debugPrint('[SubscriptionService] purchase failed: $error');
       return PurchaseResult(
@@ -326,6 +326,23 @@ class SubscriptionService {
       default:
         return SubscriptionErrorCode.purchaseFailed;
     }
+  }
+
+  @visibleForTesting
+  static PurchaseResult purchaseFailureFromPlatformException(
+    PlatformException error,
+  ) {
+    PurchasesErrorCode code;
+    try {
+      code = PurchasesErrorHelper.getErrorCode(error);
+    } on FormatException {
+      code = PurchasesErrorCode.unknownError;
+    }
+    return PurchaseResult(
+      success: false,
+      errorCode: purchaseErrorCode(code),
+      cancelled: code == PurchasesErrorCode.purchaseCancelledError,
+    );
   }
 
   void dispose() {

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:purchases_flutter/purchases_flutter.dart' hide PurchaseResult;
 
 import '../../../data/services/subscription_service.dart';
 import '../../../core/services/analytics_service.dart';

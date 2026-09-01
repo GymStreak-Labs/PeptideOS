@@ -1,0 +1,10 @@
+{
+  "de-DE": "Hotfix für 1.0.8:\n- Erinnerungen werden nach Geräte- oder App-Neustarts zuverlässiger wiederhergestellt\n- Google Play Billing wurde auf die aktuelle unterstützte Version aktualisiert",
+  "en-US": "Hotfix for 1.0.8:\n- Improved reminder recovery after device restarts and app updates\n- Updated Google Play Billing to the current supported version",
+  "es-ES": "Corrección para 1.0.8:\n- Recuperación más fiable de recordatorios tras reinicios del dispositivo y actualizaciones\n- Google Play Billing actualizado a la versión compatible actual",
+  "fr-FR": "Correctif pour 1.0.8 :\n- Restauration plus fiable des rappels après un redémarrage ou une mise à jour\n- Mise à jour de Google Play Billing vers la version compatible actuelle",
+  "it-IT": "Correzione per la versione 1.0.8:\n- Ripristino più affidabile dei promemoria dopo riavvii e aggiornamenti\n- Google Play Billing aggiornato alla versione supportata attuale",
+  "ja-JP": "1.0.8の修正：\n- 端末の再起動やアプリ更新後のリマインダー復元を改善\n- Google Play Billingを現在サポートされているバージョンに更新",
+  "ko-KR": "1.0.8 핫픽스:\n- 기기 재시작 및 앱 업데이트 후 알림 복원 안정성 개선\n- Google Play Billing을 현재 지원되는 버전으로 업데이트",
+  "pt-BR": "Correção da versão 1.0.8:\n- Recuperação mais confiável de lembretes após reinícios e atualizações\n- Google Play Billing atualizado para a versão compatível atual"
+}
