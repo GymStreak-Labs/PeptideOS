@@ -5951,5 +5951,35 @@
     "description": "Safety warning in the protocol editor for investigational/reference-only compounds.",
     "sourceString": "No approved protocol exists for this investigational compound. PepMod does not provide an amount or schedule; enter your own tracking values explicitly.",
     "sourceDescription": "Safety warning in the protocol editor for investigational/reference-only compounds."
+  },
+  "doseUnitPreferenceLabel": "투여량 단위",
+  "@doseUnitPreferenceLabel": {
+    "description": "Profile preference label for the displayed mass dose unit.",
+    "sourceString": "Dose units",
+    "sourceDescription": "Profile preference label for the displayed mass dose unit."
+  },
+  "doseUnitPreferenceDescription": "질량 단위로 표시되는 투여량의 표시 방식을 선택하세요. 실제 투여량은 그대로 유지됩니다.",
+  "@doseUnitPreferenceDescription": {
+    "description": "Explains that mass dose unit conversion changes display only and preserves the actual dose.",
+    "sourceString": "Choose how mass doses are displayed. Your dose stays the same.",
+    "sourceDescription": "Explains that mass dose unit conversion changes display only and preserves the actual dose."
+  },
+  "doseUnitPreferenceOriginal": "입력한 단위 유지",
+  "@doseUnitPreferenceOriginal": {
+    "description": "Dose unit option that preserves the original unit in which each dose was entered.",
+    "sourceString": "As entered",
+    "sourceDescription": "Dose unit option that preserves the original unit in which each dose was entered."
+  },
+  "doseUnitPreferencePreview": "500 mcg = 0.5 mg",
+  "@doseUnitPreferencePreview": {
+    "description": "Example of equivalent microgram and milligram amounts. Localize the decimal separator but keep mcg and mg unit symbols.",
+    "sourceString": "500 mcg = 0.5 mg",
+    "sourceDescription": "Example of equivalent microgram and milligram amounts. Localize the decimal separator but keep mcg and mg unit symbols."
+  },
+  "doseUnitPreferenceIuNote": "IU와 주사기 눈금 단위는 변경되지 않습니다.",
+  "@doseUnitPreferenceIuNote": {
+    "description": "Clarifies that international units and syringe markings are unaffected by the mass dose display preference.",
+    "sourceString": "IU and syringe units stay unchanged.",
+    "sourceDescription": "Clarifies that international units and syringe markings are unaffected by the mass dose display preference."
   }
 }

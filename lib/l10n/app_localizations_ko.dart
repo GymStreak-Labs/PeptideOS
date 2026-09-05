@@ -3114,4 +3114,20 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get investigationalProtocolEntryWarning =>
       '이 연구 단계 화합물에 대해 승인된 프로토콜은 없습니다. PepMod는 용량이나 일정을 제공하지 않으므로 기록할 값을 직접 명시적으로 입력하세요.';
+
+  @override
+  String get doseUnitPreferenceLabel => '투여량 단위';
+
+  @override
+  String get doseUnitPreferenceDescription =>
+      '질량 단위로 표시되는 투여량의 표시 방식을 선택하세요. 실제 투여량은 그대로 유지됩니다.';
+
+  @override
+  String get doseUnitPreferenceOriginal => '입력한 단위 유지';
+
+  @override
+  String get doseUnitPreferencePreview => '500 mcg = 0.5 mg';
+
+  @override
+  String get doseUnitPreferenceIuNote => 'IU와 주사기 눈금 단위는 변경되지 않습니다.';
 }

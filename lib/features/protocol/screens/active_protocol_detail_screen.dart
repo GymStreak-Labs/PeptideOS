@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/utils/dose_presentation.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../l10n/app_localizations.dart';
@@ -693,6 +694,7 @@ class _PhaseTimelineCard extends StatelessWidget {
             for (final phase in peptide.phases) ...[
               _PhaseTimelineRow(
                 phase: phase,
+                baseDoseUnit: peptide.doseUnit,
                 protocolStart: protocol.startDate,
                 active:
                     peptide
@@ -719,11 +721,13 @@ class _PhaseTimelineCard extends StatelessWidget {
 class _PhaseTimelineRow extends StatelessWidget {
   const _PhaseTimelineRow({
     required this.phase,
+    required this.baseDoseUnit,
     required this.protocolStart,
     required this.active,
   });
 
   final ProtocolPhase phase;
+  final String baseDoseUnit;
   final DateTime protocolStart;
   final bool active;
 
@@ -743,7 +747,10 @@ class _PhaseTimelineRow extends StatelessWidget {
         ? l10n.activePerDayAmounts
         : phase.dosePerInjection == null
         ? l10n.activeBaseAmount
-        : '${_amount(l10n, phase.dosePerInjection!)} ${phase.doseUnit ?? ''}';
+        : context.displayDose(
+            phase.dosePerInjection!,
+            phase.doseUnit ?? baseDoseUnit,
+          );
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -807,12 +814,6 @@ class _PhaseTimelineRow extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  static String _amount(AppLocalizations l10n, double value) {
-    final format = NumberFormat.decimalPattern(l10n.localeName)
-      ..maximumFractionDigits = 1;
-    return format.format(value);
   }
 
   static String _frequency(AppLocalizations l10n, String? key) => switch (key) {
@@ -1028,7 +1029,7 @@ class _PeptideRowCard extends StatelessWidget {
           '${l10n.activeCompoundsCount(peptide.blendVial!.constituents.length)}';
     }
     if (!peptide.usesCustomWeekdays) {
-      return '${_formatAmount(l10n, peptide.dosePerInjection)} ${peptide.doseUnit} · '
+      return '${context.displayDose(peptide.dosePerInjection, peptide.doseUnit)} · '
           '${_freqLabel(l10n, peptide.frequency)}${_syringeSummary(l10n, peptide.syringeUnits)}';
     }
     final days = [...peptide.weekdayDoses]
@@ -1036,7 +1037,7 @@ class _PeptideRowCard extends StatelessWidget {
     return days
         .map(
           (d) =>
-              '${_weekdayLabel(context, d.weekday)} ${_formatAmount(l10n, d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(l10n, d.syringeUnits)}',
+              '${_weekdayLabel(context, d.weekday)} ${context.displayDose(d.dosePerInjection, d.doseUnit)}${_syringeSummary(l10n, d.syringeUnits)}',
         )
         .join(', ');
   }
@@ -1105,7 +1106,10 @@ class _PeptideRowCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '${_formatAmount(context.protocolL10n, peptide.blendVial!.amountPerDraw(item))} ${item.unit}',
+                            context.displayDose(
+                              peptide.blendVial!.amountPerDraw(item),
+                              item.unit,
+                            ),
                             style: AppTypography.tabular.copyWith(fontSize: 12),
                           ),
                         ],
@@ -1155,7 +1159,7 @@ class _PeptideRowCard extends StatelessWidget {
                 ]..sort((a, b) => a.weekday.compareTo(b.weekday))))
                   _Tag(
                     label:
-                        '${_weekdayLabel(context, d.weekday)} ${_formatAmount(context.protocolL10n, d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(context.protocolL10n, d.syringeUnits)}',
+                        '${_weekdayLabel(context, d.weekday)} ${context.displayDose(d.dosePerInjection, d.doseUnit)}${_syringeSummary(context.protocolL10n, d.syringeUnits)}',
                   ),
               for (final t in peptide.scheduledTimes)
                 _Tag(label: _localizedStoredTime(context, t)),

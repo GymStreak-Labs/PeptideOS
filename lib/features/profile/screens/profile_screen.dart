@@ -112,6 +112,14 @@ class ProfileScreen extends StatelessWidget {
           },
         ),
         _Tile(
+          icon: Icons.science_outlined,
+          label: l10n.doseUnitPreferenceLabel,
+          value: settings.doseUnitPreference == DoseUnitPreference.original
+              ? l10n.doseUnitPreferenceOriginal
+              : settings.doseUnitPreference.name,
+          onTap: () => _selectDoseUnit(context),
+        ),
+        _Tile(
           icon: Icons.notifications_outlined,
           label: l10n.notificationsLabel,
           value: settings.notificationsEnabled ? l10n.onLabel : l10n.offLabel,
@@ -630,6 +638,75 @@ class ProfileScreen extends StatelessWidget {
     );
     controller.dispose();
     return password;
+  }
+
+  Future<void> _selectDoseUnit(BuildContext context) async {
+    final provider = context.read<SettingsProvider>();
+    final l10n = AppLocalizations.of(context);
+    final selected = await showModalBottomSheet<DoseUnitPreference>(
+      context: context,
+      backgroundColor: AppColors.surfaceContainer,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (sheetContext) => SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.doseUnitPreferenceLabel, style: AppTypography.h2),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                l10n.doseUnitPreferenceDescription,
+                style: AppTypography.bodyMedium,
+              ),
+              const SizedBox(height: AppSpacing.base),
+              for (final unit in DoseUnitPreference.values)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                  child: AppCard(
+                    onTap: () => Navigator.of(sheetContext).pop(unit),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            unit == DoseUnitPreference.original
+                                ? l10n.doseUnitPreferenceOriginal
+                                : unit.name,
+                            style: AppTypography.bodyLarge,
+                          ),
+                        ),
+                        if (unit == provider.settings.doseUnitPreference)
+                          const Icon(
+                            Icons.check_rounded,
+                            color: AppColors.primary,
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                l10n.doseUnitPreferencePreview,
+                style: AppTypography.tabular,
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                l10n.doseUnitPreferenceIuNote,
+                style: AppTypography.bodySmall,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (selected != null) {
+      await provider.update(
+        (settings) => settings.doseUnitPreference = selected,
+      );
+    }
   }
 
   Future<void> _signOut(BuildContext context) async {

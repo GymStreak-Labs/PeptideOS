@@ -1,3 +1,5 @@
+import '../../../core/utils/dose_units.dart';
+import '../../../core/utils/dose_presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -716,7 +718,7 @@ String _scheduleSummary(BuildContext context, ProtocolPeptide p) {
         '${l10n.compoundsCount(p.blendVial!.constituents.length)}$phaseSuffix';
   }
   if (!p.usesCustomWeekdays) {
-    return '${_formatAmount(context, p.dosePerInjection)} ${p.doseUnit} · '
+    return '${context.displayDose(p.dosePerInjection, p.doseUnit)} · '
         '${_freqLabel(context, p.frequency)}${_syringeSummary(context, p.syringeUnits)}'
         '$phaseSuffix';
   }
@@ -725,7 +727,7 @@ String _scheduleSummary(BuildContext context, ProtocolPeptide p) {
   final summary = days
       .map(
         (d) =>
-            '${_weekdayLabel(context, d.weekday)} ${_formatAmount(context, d.dosePerInjection)} ${d.doseUnit}${_syringeSummary(context, d.syringeUnits)}',
+            '${_weekdayLabel(context, d.weekday)} ${context.displayDose(d.dosePerInjection, d.doseUnit)}${_syringeSummary(context, d.syringeUnits)}',
       )
       .join(', ');
   return summary.isEmpty
@@ -1970,8 +1972,10 @@ class _BlendPreview extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${amount(blend.amountPerDraw(constituent))} '
-                      '${constituent.unit}',
+                      context.displayDose(
+                        blend.amountPerDraw(constituent),
+                        constituent.unit,
+                      ),
                       style: AppTypography.tabular.copyWith(fontSize: 13),
                     ),
                   ],
@@ -2005,6 +2009,7 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
   late final TextEditingController _cycleWeeksCtrl;
   late final TextEditingController _washoutWeeksCtrl;
   final Map<int, TextEditingController> _weekdayDoseCtrls = {};
+  final Map<int, String> _weekdayDoseUnits = {};
   late String _unit;
   late String _frequency;
   late String _route;
@@ -2064,13 +2069,13 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
         : formatLocalizedDecimalInput(
             widget.initial.dosePerInjection,
             localeName: localeName,
-            maximumFractionDigits: 1,
+            maximumFractionDigits: 12,
           );
     if (widget.initial.syringeUnits > 0) {
       _syringeUnitsCtrl.text = formatLocalizedDecimalInput(
         widget.initial.syringeUnits,
         localeName: localeName,
-        maximumFractionDigits: 1,
+        maximumFractionDigits: 12,
       );
     }
     if (widget.initial.cycleWeeks > 0) {
@@ -2090,7 +2095,45 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
     for (final weekday in _selectedWeekdays) {
       _ensureWeekdayController(weekday);
     }
+    _selectDoseUnit(context.displayDoseUnit(_unit));
     _initialNumbersLocalized = true;
+  }
+
+  void _selectDoseUnit(String next) {
+    if (next == _unit) return;
+    // A phase may store an amount while inheriting the base unit. Pin that
+    // interpretation before changing the base so its actual dose cannot shift.
+    for (final phase in _phases) {
+      if (phase.doseUnit == null && phase.dosePerInjection != null) {
+        phase.doseUnit = _unit;
+      } else if (phase.doseUnit != null && phase.dosePerInjection == null) {
+        phase.dosePerInjection = _parsedBaseDose;
+      }
+    }
+    void updateAmount(TextEditingController controller, String from) {
+      if (isMassDoseUnit(from) && isMassDoseUnit(next)) {
+        final amount = parseDecimalInput(controller.text);
+        controller.text = amount == null
+            ? ''
+            : formatDoseNumber(
+                convertMassDose(amount, from, next),
+                AppLocalizations.of(context).localeName,
+              );
+      } else {
+        // IU has no universal mass equivalence: require a fresh amount.
+        controller.clear();
+      }
+    }
+
+    updateAmount(_doseCtrl, _unit);
+    for (final entry in _weekdayDoseCtrls.entries) {
+      final from = _weekdayDoseUnits[entry.key] ?? _unit;
+      if ((isMassDoseUnit(from) && isMassDoseUnit(next)) || from == _unit) {
+        updateAmount(entry.value, from);
+        _weekdayDoseUnits[entry.key] = next;
+      }
+    }
+    _unit = next;
   }
 
   @override
@@ -2115,17 +2158,27 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
         break;
       }
     }
+    final storedUnit = existing?.doseUnit ?? _unit;
+    final dayUnit = isMassDoseUnit(storedUnit) && isMassDoseUnit(_unit)
+        ? _unit
+        : storedUnit;
+    _weekdayDoseUnits[weekday] = dayUnit;
     _weekdayDoseCtrls[weekday] = TextEditingController(
       text: formatLocalizedDecimalInput(
-        existing?.dosePerInjection ?? _parsedBaseDose,
+        existing == null
+            ? _parsedBaseDose
+            : convertMassDose(
+                existing.dosePerInjection,
+                existing.doseUnit,
+                dayUnit,
+              ),
         localeName: AppLocalizations.of(context).localeName,
-        maximumFractionDigits: 1,
+        maximumFractionDigits: 12,
       ),
     );
   }
 
-  double get _parsedBaseDose =>
-      parseDecimalInput(_doseCtrl.text) ?? widget.initial.dosePerInjection;
+  double get _parsedBaseDose => parseDecimalInput(_doseCtrl.text) ?? 0;
 
   double get _parsedSyringeUnits =>
       parseDecimalInput(_syringeUnitsCtrl.text) ?? 0;
@@ -2323,7 +2376,7 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
           dosePerInjection:
               parseDecimalInput(_weekdayDoseCtrls[weekday]?.text ?? '') ??
               fallbackDose,
-          doseUnit: _unit,
+          doseUnit: _weekdayDoseUnits[weekday] ?? _unit,
           syringeUnits: _parsedSyringeUnits > 0 ? _parsedSyringeUnits : 0,
           scheduledTimes: _times,
         ),
@@ -2331,6 +2384,7 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
   }
 
   bool get _canSave {
+    if (!_parsedBaseDose.isFinite) return false;
     if (_isCustomPeptide && _nameCtrl.text.trim().isEmpty) return false;
     if (!protocolConfigurationHasRequiredInput(
       dose: _parsedBaseDose,
@@ -2347,6 +2401,14 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
     if (_parsedCycleWeeks > 0 &&
         _phases.any((phase) => phase.endWeek > _parsedCycleWeeks)) {
       return false;
+    }
+    if (_usesWeekdaySelection(_frequency)) {
+      for (final weekday in _selectedWeekdays) {
+        final amount = parseDecimalInput(
+          _weekdayDoseCtrls[weekday]?.text ?? '',
+        );
+        if (amount == null || !amount.isFinite || amount <= 0) return false;
+      }
     }
     return _times.isNotEmpty;
   }
@@ -2542,7 +2604,7 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
                           child: _SegmentedToggle(
                             options: const ['mcg', 'mg', 'IU'],
                             selected: _unit,
-                            onSelect: (v) => setState(() => _unit = v),
+                            onSelect: (v) => setState(() => _selectDoseUnit(v)),
                           ),
                         ),
                       ),
@@ -2712,7 +2774,8 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
                                     fontSize: 16,
                                   ),
                                   decoration: InputDecoration(
-                                    suffixText: _unit,
+                                    suffixText:
+                                        _weekdayDoseUnits[weekday] ?? _unit,
                                     suffixStyle: AppTypography.bodySmall
                                         .copyWith(
                                           color: AppColors.textTertiary,
@@ -2821,6 +2884,7 @@ class _PeptideConfigSheetState extends State<PeptideProtocolConfigSheet> {
                     const SizedBox(height: AppSpacing.base),
                     for (var index = 0; index < _phases.length; index++) ...[
                       _PhaseSummaryCard(
+                        fallbackUnit: _unit,
                         phase: _phases[index],
                         onEdit: () => _editPhase(index),
                         onDelete: () => setState(() => _phases.removeAt(index)),
@@ -2923,8 +2987,10 @@ class _PhaseSummaryCard extends StatelessWidget {
     required this.phase,
     required this.onEdit,
     required this.onDelete,
+    required this.fallbackUnit,
   });
 
+  final String fallbackUnit;
   final ProtocolPhase phase;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
@@ -2941,7 +3007,10 @@ class _PhaseSummaryCard extends StatelessWidget {
         ? l10n.perDayAmounts
         : phase.dosePerInjection == null
         ? l10n.baseAmount
-        : '${_formatAmount(context, phase.dosePerInjection!)} ${phase.doseUnit ?? ''}';
+        : context.displayDose(
+            phase.dosePerInjection!,
+            phase.doseUnit ?? fallbackUnit,
+          );
     final frequency = phase.frequency == null
         ? l10n.baseSchedule
         : _freqLabel(context, phase.frequency!);
@@ -3025,6 +3094,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
   late List<String> _times;
   late Set<int> _selectedWeekdays;
   final Map<int, TextEditingController> _weekdayDoseCtrls = {};
+  final Map<int, String> _weekdayDoseUnits = {};
   final Map<int, List<String>> _weekdayTimes = {};
   bool _initialNumbersLocalized = false;
 
@@ -3078,21 +3148,25 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
     _doseCtrl.text = formatLocalizedDecimalInput(
       phase.dosePerInjection ?? widget.fallbackDose,
       localeName: localeName,
-      maximumFractionDigits: 1,
+      maximumFractionDigits: 12,
     );
     if ((phase.syringeUnits ?? 0) > 0) {
       _syringeCtrl.text = formatLocalizedDecimalInput(
         phase.syringeUnits!,
         localeName: localeName,
-        maximumFractionDigits: 1,
+        maximumFractionDigits: 12,
       );
     }
     for (final dose in phase.weekdayDoses) {
+      final dayUnit = isMassDoseUnit(dose.doseUnit) && isMassDoseUnit(_unit)
+          ? _unit
+          : dose.doseUnit;
+      _weekdayDoseUnits[dose.weekday] = dayUnit;
       _weekdayDoseCtrls[dose.weekday] = TextEditingController(
         text: formatLocalizedDecimalInput(
-          dose.dosePerInjection,
+          convertMassDose(dose.dosePerInjection, dose.doseUnit, dayUnit),
           localeName: localeName,
-          maximumFractionDigits: 1,
+          maximumFractionDigits: 12,
         ),
       );
     }
@@ -3102,7 +3176,36 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
         () => TextEditingController(text: _doseCtrl.text),
       );
     }
+    _selectDoseUnit(context.displayDoseUnit(_unit));
     _initialNumbersLocalized = true;
+  }
+
+  void _selectDoseUnit(String next) {
+    if (next == _unit) return;
+    void updateAmount(TextEditingController controller, String from) {
+      if (isMassDoseUnit(from) && isMassDoseUnit(next)) {
+        final amount = parseDecimalInput(controller.text);
+        controller.text = amount == null
+            ? ''
+            : formatDoseNumber(
+                convertMassDose(amount, from, next),
+                AppLocalizations.of(context).localeName,
+              );
+      } else {
+        // IU has no universal mass equivalence: require a fresh amount.
+        controller.clear();
+      }
+    }
+
+    updateAmount(_doseCtrl, _unit);
+    for (final entry in _weekdayDoseCtrls.entries) {
+      final from = _weekdayDoseUnits[entry.key] ?? _unit;
+      if ((isMassDoseUnit(from) && isMassDoseUnit(next)) || from == _unit) {
+        updateAmount(entry.value, from);
+        _weekdayDoseUnits[entry.key] = next;
+      }
+    }
+    _unit = next;
   }
 
   @override
@@ -3233,7 +3336,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
     if (_selectedWeekdays.isEmpty) return false;
     for (final weekday in _selectedWeekdays) {
       final amount = parseDecimalInput(_weekdayDoseCtrls[weekday]?.text ?? '');
-      if (amount == null || amount <= 0) return false;
+      if (amount == null || !amount.isFinite || amount <= 0) return false;
       if ((_weekdayTimes[weekday] ?? const <String>[]).isEmpty) return false;
     }
     return true;
@@ -3249,7 +3352,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
           dosePerInjection: parseDecimalInput(
             _weekdayDoseCtrls[weekday]?.text ?? '',
           )!,
-          doseUnit: _unit,
+          doseUnit: _weekdayDoseUnits[weekday] ?? _unit,
           syringeUnits: syringeUnits,
           scheduledTimes: _weekdayTimes[weekday]!,
         ),
@@ -3263,6 +3366,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
     return _nameCtrl.text.trim().isNotEmpty &&
         start > 0 &&
         end >= start &&
+        dose.isFinite &&
         dose > 0 &&
         (_frequency != kTwiceWeeklyFrequency ||
             _selectedWeekdays.length == 2) &&
@@ -3423,7 +3527,8 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                         child: _SegmentedToggle(
                           options: const ['mcg', 'mg', 'IU'],
                           selected: _unit,
-                          onSelect: (value) => setState(() => _unit = value),
+                          onSelect: (value) =>
+                              setState(() => _selectDoseUnit(value)),
                         ),
                       ),
                     ),
@@ -3538,7 +3643,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                       _PhaseWeekdayEditor(
                         weekday: weekday,
                         amountController: _weekdayDoseCtrls[weekday]!,
-                        unit: _unit,
+                        unit: _weekdayDoseUnits[weekday] ?? _unit,
                         times: _weekdayTimes[weekday]!,
                         onAmountChanged: (_) => setState(() {}),
                         onEditTime: (time) => _editWeekdayTime(weekday, time),
@@ -3555,6 +3660,7 @@ class _PhaseConfigSheetState extends State<_PhaseConfigSheet> {
                     const SizedBox(height: AppSpacing.xs),
                     _PhaseSchedulePreview(
                       unit: _unit,
+                      weekdayUnits: _weekdayDoseUnits,
                       selectedWeekdays: _selectedWeekdays,
                       amountControllers: _weekdayDoseCtrls,
                       timesByWeekday: _weekdayTimes,
@@ -3710,12 +3816,14 @@ class _PhaseWeekdayEditor extends StatelessWidget {
 class _PhaseSchedulePreview extends StatelessWidget {
   const _PhaseSchedulePreview({
     required this.unit,
+    required this.weekdayUnits,
     required this.selectedWeekdays,
     required this.amountControllers,
     required this.timesByWeekday,
   });
 
   final String unit;
+  final Map<int, String> weekdayUnits;
   final Set<int> selectedWeekdays;
   final Map<int, TextEditingController> amountControllers;
   final Map<int, List<String>> timesByWeekday;
@@ -3746,7 +3854,7 @@ class _PhaseSchedulePreview extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      '${amountControllers[weekday]?.text.trim().isEmpty ?? true ? l10n.amountRequired : '${amountControllers[weekday]!.text.trim()} $unit'}'
+                      '${amountControllers[weekday]?.text.trim().isEmpty ?? true ? l10n.amountRequired : '${amountControllers[weekday]!.text.trim()} ${weekdayUnits[weekday] ?? unit}'}'
                       ' · ${(timesByWeekday[weekday] ?? const <String>[]).map((time) => _formatStoredTime(context, time)).join(', ')}',
                       style: AppTypography.bodySmall,
                     ),

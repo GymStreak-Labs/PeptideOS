@@ -1,3 +1,8 @@
+import 'package:provider/provider.dart';
+import '../../../core/utils/dose_units.dart';
+import '../../../core/utils/dose_presentation.dart';
+import '../../../models/user_settings.dart';
+import '../../profile/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -74,10 +79,35 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
       );
       _desiredController.text = formatLocalizedDecimalInput(
         initial.desiredAmount,
+        maximumFractionDigits: 12,
         localeName: localeName,
       );
     }
+    if (_quantityMode == ConversionQuantityMode.mass) {
+      _changeDesiredUnit(_preferredUnit(_desiredUnit));
+    }
     _initialNumbersLocalized = true;
+  }
+
+  ConversionAmountUnit _preferredUnit(ConversionAmountUnit original) {
+    final preference =
+        context.read<SettingsProvider?>()?.settings.doseUnitPreference ??
+        DoseUnitPreference.original;
+    return preferredDoseUnit(original.label, preference) == 'mg'
+        ? ConversionAmountUnit.milligrams
+        : ConversionAmountUnit.micrograms;
+  }
+
+  void _changeDesiredUnit(ConversionAmountUnit next) {
+    if (next == _desiredUnit) return;
+    final amount = parseDecimalInput(_desiredController.text);
+    _desiredController.text = amount == null
+        ? ''
+        : formatDoseNumber(
+            convertMassDose(amount, _desiredUnit.label, next.label),
+            AppLocalizations.of(context).localeName,
+          );
+    _desiredUnit = next;
   }
 
   ConversionInput get _input => ConversionInput(
@@ -145,10 +175,14 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
       );
       _desiredController.text = formatLocalizedDecimalInput(
         input.desiredAmount,
+        maximumFractionDigits: 12,
         localeName: localeName,
       );
       _desiredUnit = input.desiredAmountUnit;
       _quantityMode = input.quantityMode;
+      if (_quantityMode == ConversionQuantityMode.mass) {
+        _changeDesiredUnit(_preferredUnit(_desiredUnit));
+      }
       _syringe = input.syringe;
     });
     HapticFeedback.selectionClick();
@@ -159,7 +193,7 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
       _vialController.clear();
       _diluentController.clear();
       _desiredController.clear();
-      _desiredUnit = ConversionAmountUnit.micrograms;
+      _desiredUnit = _preferredUnit(ConversionAmountUnit.micrograms);
       _quantityMode = ConversionQuantityMode.mass;
       _syringe = ConversionSyringe.units100;
     });
@@ -260,7 +294,7 @@ class _ReconstitutionScreenState extends State<ReconstitutionScreen> {
                       unit: _desiredUnit,
                       quantityMode: _quantityMode,
                       onUnitChanged: (unit) =>
-                          setState(() => _desiredUnit = unit),
+                          setState(() => _changeDesiredUnit(unit)),
                       onChanged: () => setState(() {}),
                     ),
                     const SizedBox(height: AppSpacing.xl),
@@ -884,7 +918,7 @@ class _ResultCard extends StatelessWidget {
                     _DataRow(
                       label: l10n.concentration,
                       value:
-                          '${_localizedNumber(result.concentrationPerMl, l10n.localeName, maxDecimals: 1)} ${quantityMode == ConversionQuantityMode.internationalUnits ? 'IU/mL' : 'mcg/mL'}',
+                          '${context.displayDose(result.concentrationPerMl, quantityMode == ConversionQuantityMode.internationalUnits ? 'IU' : 'mcg')}/mL',
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     _DataRow(
@@ -991,7 +1025,7 @@ class _SavedSection extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        _savedCalculationDetail(l10n, item),
+                        _savedCalculationDetail(context, item),
                         style: AppTypography.bodySmall,
                       ),
                     ],
@@ -1081,19 +1115,24 @@ String _savedCalculationLabel(
 );
 
 String _savedCalculationDetail(
-  AppLocalizations l10n,
+  BuildContext context,
   SavedVialCalculation item,
-) => l10n.savedCalculationDetail(
-  _localizedNumber(item.input.desiredAmount, l10n.localeName, maxDecimals: 2),
-  item.input.quantityMode == ConversionQuantityMode.internationalUnits
+) {
+  final l10n = AppLocalizations.of(context);
+  final unit =
+      item.input.quantityMode == ConversionQuantityMode.internationalUnits
       ? 'IU'
-      : item.input.desiredAmountUnit.label,
-  _localizedNumber(
-    item.input.syringe.capacityUnits.toDouble(),
-    l10n.localeName,
-    maxDecimals: 0,
-  ),
-);
+      : item.input.desiredAmountUnit.label;
+  return l10n.savedCalculationDetail(
+    context.displayDoseNumber(item.input.desiredAmount, unit),
+    context.displayDoseUnit(unit),
+    _localizedNumber(
+      item.input.syringe.capacityUnits.toDouble(),
+      l10n.localeName,
+      maxDecimals: 0,
+    ),
+  );
+}
 
 String _localizedNumber(
   double value,

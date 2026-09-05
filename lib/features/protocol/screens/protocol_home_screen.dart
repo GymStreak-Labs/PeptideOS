@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/utils/dose_presentation.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/dose_log.dart';
@@ -539,19 +540,30 @@ class _NextDoseCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(
-                _localizedAmount(context, dose.amountTaken),
-                style: AppTypography.heroLarge.copyWith(
-                  color: AppColors.primary,
-                ),
+          SizedBox(
+            width: double.infinity,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: AlignmentDirectional.centerStart,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    context.displayDoseNumber(dose.amountTaken, dose.units),
+                    style: AppTypography.heroLarge.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Text(
+                    context.displayDoseUnit(dose.units),
+                    style: AppTypography.unit,
+                  ),
+                ],
               ),
-              const SizedBox(width: AppSpacing.sm),
-              Text(dose.units, style: AppTypography.unit),
-            ],
+            ),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
@@ -692,7 +704,7 @@ class _DoseCard extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  '${_localizedAmount(context, dose.amountTaken)} ${dose.units}'
+                  '${context.displayDose(dose.amountTaken, dose.units)}'
                   '${_syringeLabel(context, dose.syringeUnits)}'
                   '${dose.injectionSite.isEmpty ? '' : ' · ${_siteLabel(context, dose.injectionSite)}'}',
                   style: AppTypography.bodySmall.copyWith(

@@ -1,3 +1,7 @@
+import '../../../core/utils/dose_units.dart';
+import '../../../core/utils/dose_presentation.dart';
+import '../../../models/user_settings.dart';
+import '../../profile/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -31,6 +35,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   late String _site;
   Future<DoseLog?>? _lastInjectionFuture;
   bool _didLocalizeInitialAmount = false;
+  late String _entryUnit;
 
   double get _displayAmount => widget.dose.blendSnapshot == null
       ? widget.dose.amountTaken
@@ -56,7 +61,13 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_didLocalizeInitialAmount) {
-      _amountCtrl.text = _formatAmount(context.protocolL10n, _displayAmount);
+      _entryUnit = widget.dose.blendSnapshot == null
+          ? context.displayDoseUnit(widget.dose.units)
+          : widget.dose.units;
+      _amountCtrl.text = formatDoseNumber(
+        convertMassDose(_displayAmount, widget.dose.units, _entryUnit),
+        context.protocolL10n.localeName,
+      );
       _didLocalizeInitialAmount = true;
     }
     _lastInjectionFuture ??= context
@@ -74,8 +85,18 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
     super.dispose();
   }
 
+  bool get _canLog {
+    final amount = parseDecimalInput(_amountCtrl.text);
+    return amount != null &&
+        amount > 0 &&
+        convertMassDose(amount, _entryUnit, widget.dose.units).isFinite;
+  }
+
   Future<void> _log() async {
-    final amount = parseDecimalInput(_amountCtrl.text) ?? _displayAmount;
+    final entered = parseDecimalInput(_amountCtrl.text);
+    if (entered == null || !entered.isFinite || entered <= 0) return;
+    final amount = convertMassDose(entered, _entryUnit, widget.dose.units);
+    if (!amount.isFinite) return;
     final editedBlend = widget.dose.blendSnapshot?.copyWith(
       drawSyringeUnits: amount,
     );
@@ -227,7 +248,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                               : context.protocolL10n.doseAmount,
                           suffix: widget.dose.blendSnapshot != null
                               ? context.protocolL10n.doseUnits
-                              : widget.dose.units,
+                              : _entryUnit,
                           child: Semantics(
                             label: widget.dose.blendSnapshot != null
                                 ? context.protocolL10n.doseDraw
@@ -235,9 +256,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                             textField: true,
                             child: TextField(
                               controller: _amountCtrl,
-                              onChanged: blendPreview == null
-                                  ? null
-                                  : (_) => setState(() {}),
+                              onChanged: (_) => setState(() {}),
                               keyboardType:
                                   const TextInputType.numberWithOptions(
                                     decimal: true,
@@ -350,7 +369,10 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                                       ),
                                     ),
                                     Text(
-                                      '${_formatAmount(context.protocolL10n, blend.amountPerDraw(item))} ${item.unit}',
+                                      context.displayDose(
+                                        blend.amountPerDraw(item),
+                                        item.unit,
+                                      ),
                                       style: AppTypography.tabular.copyWith(
                                         fontSize: 12,
                                       ),
@@ -478,7 +500,7 @@ class _LogDoseSheetState extends State<LogDoseSheet> {
                         ? context.protocolL10n.doseSaveChanges
                         : context.protocolL10n.protocolLogDose,
                     icon: Icons.check_rounded,
-                    onPressed: _log,
+                    onPressed: _canLog ? _log : null,
                   ),
                   const SizedBox(height: AppSpacing.cardGap),
                   TextButton(
@@ -662,8 +684,11 @@ class _DoseHistoryRow extends StatelessWidget {
                           _formatDateTime(context, recordedAt),
                         )
                       : l10n.doseHistoryTaken(
-                          _formatAmount(l10n, dose.amountTaken),
-                          dose.units,
+                          context.displayDoseNumber(
+                            dose.amountTaken,
+                            dose.units,
+                          ),
+                          context.displayDoseUnit(dose.units),
                           _formatDateTime(context, recordedAt),
                         ),
                   style: AppTypography.bodySmall.copyWith(
@@ -694,12 +719,6 @@ class _DoseHistoryRow extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  static String _formatAmount(AppLocalizations l10n, double value) {
-    final format = NumberFormat.decimalPattern(l10n.localeName)
-      ..maximumFractionDigits = 2;
-    return format.format(value);
   }
 
   static String _formatDateTime(BuildContext context, DateTime value) {
@@ -770,6 +789,8 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
     super.dispose();
   }
 
+  String _entryUnit = 'mcg';
+
   void _applyTargetDefaults({bool localeAware = true}) {
     final schedule = _target.peptide.scheduleForDate(
       protocolStart: _target.protocol.startDate,
@@ -780,8 +801,19 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
     final time =
         _firstScheduledTime(schedule?.scheduledTimes) ??
         _firstScheduledTime(_target.peptide.scheduledTimes);
+    final storedUnit = schedule?.doseUnit ?? _target.peptide.doseUnit;
+    _entryUnit = localeAware
+        ? preferredDoseUnit(
+            storedUnit,
+            context.read<SettingsProvider?>()?.settings.doseUnitPreference ??
+                DoseUnitPreference.original,
+          )
+        : storedUnit;
     _amountCtrl.text = localeAware
-        ? _formatAmount(context.protocolL10n, amount)
+        ? formatDoseNumber(
+            convertMassDose(amount, storedUnit, _entryUnit),
+            context.protocolL10n.localeName,
+          )
         : amount.toString();
     if (time != null) _time = _parseTime(time);
   }
@@ -805,7 +837,12 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
   bool get _canSave =>
       _targets.isNotEmpty &&
       !_saving &&
-      (parseDecimalInput(_amountCtrl.text) ?? 0) > 0;
+      (parseDecimalInput(_amountCtrl.text) ?? 0) > 0 &&
+      convertMassDose(
+        parseDecimalInput(_amountCtrl.text) ?? 0,
+        _entryUnit,
+        _units,
+      ).isFinite;
 
   Future<void> _pickDate() async {
     final now = DateTime.now();
@@ -842,8 +879,9 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
 
   Future<void> _save() async {
     if (!_canSave) return;
-    final amount =
-        parseDecimalInput(_amountCtrl.text) ?? _target.peptide.dosePerInjection;
+    final entered = parseDecimalInput(_amountCtrl.text);
+    if (entered == null || !entered.isFinite || entered <= 0) return;
+    final amount = convertMassDose(entered, _entryUnit, _units);
     final blendSnapshot = _target.peptide.blendVial?.copyWith(
       drawSyringeUnits: amount,
     );
@@ -1050,7 +1088,7 @@ class _LogPastDoseSheetState extends State<LogPastDoseSheet> {
           const SizedBox(height: AppSpacing.lg),
           _LabeledField(
             label: context.protocolL10n.doseAmount,
-            suffix: _units,
+            suffix: _entryUnit,
             child: Semantics(
               label: context.protocolL10n.doseAmount,
               textField: true,
