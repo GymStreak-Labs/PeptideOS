@@ -3252,6 +3252,23 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get investigationalProtocolEntryWarning =>
       'Não existe um protocolo aprovado para este composto experimental. O PepMod não fornece quantidade nem horário; introduz explicitamente os teus próprios valores de registo.';
+
+  @override
+  String get doseUnitPreferenceLabel => 'Unidades da dose';
+
+  @override
+  String get doseUnitPreferenceDescription =>
+      'Escolhe como apresentar as doses em unidades de massa. A tua dose mantém-se igual.';
+
+  @override
+  String get doseUnitPreferenceOriginal => 'Como introduzida';
+
+  @override
+  String get doseUnitPreferencePreview => '500 mcg = 0,5 mg';
+
+  @override
+  String get doseUnitPreferenceIuNote =>
+      'As IU e as unidades da seringa mantêm-se inalteradas.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -6490,4 +6507,21 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get investigationalProtocolEntryWarning =>
       'Não existe um protocolo aprovado para este composto experimental. O PepMod não fornece quantidade nem cronograma; insira explicitamente seus próprios valores de acompanhamento.';
+
+  @override
+  String get doseUnitPreferenceLabel => 'Unidades da dose';
+
+  @override
+  String get doseUnitPreferenceDescription =>
+      'Escolha como exibir as doses em unidades de massa. Sua dose continua a mesma.';
+
+  @override
+  String get doseUnitPreferenceOriginal => 'Como inserida';
+
+  @override
+  String get doseUnitPreferencePreview => '500 mcg = 0,5 mg';
+
+  @override
+  String get doseUnitPreferenceIuNote =>
+      'As IU e as unidades da seringa permanecem inalteradas.';
 }

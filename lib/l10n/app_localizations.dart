@@ -5644,6 +5644,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No approved protocol exists for this investigational compound. PepMod does not provide an amount or schedule; enter your own tracking values explicitly.'**
   String get investigationalProtocolEntryWarning;
+
+  /// Profile preference label for the displayed mass dose unit.
+  ///
+  /// In en, this message translates to:
+  /// **'Dose units'**
+  String get doseUnitPreferenceLabel;
+
+  /// Explains that mass dose unit conversion changes display only and preserves the actual dose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how mass doses are displayed. Your dose stays the same.'**
+  String get doseUnitPreferenceDescription;
+
+  /// Dose unit option that preserves the original unit in which each dose was entered.
+  ///
+  /// In en, this message translates to:
+  /// **'As entered'**
+  String get doseUnitPreferenceOriginal;
+
+  /// Example of equivalent microgram and milligram amounts. Localize the decimal separator but keep mcg and mg unit symbols.
+  ///
+  /// In en, this message translates to:
+  /// **'500 mcg = 0.5 mg'**
+  String get doseUnitPreferencePreview;
+
+  /// Clarifies that international units and syringe markings are unaffected by the mass dose display preference.
+  ///
+  /// In en, this message translates to:
+  /// **'IU and syringe units stay unchanged.'**
+  String get doseUnitPreferenceIuNote;
 }
 
 class _AppLocalizationsDelegate

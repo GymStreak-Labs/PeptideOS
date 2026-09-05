@@ -3250,4 +3250,21 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get investigationalProtocolEntryWarning =>
       'Non esiste un protocollo approvato per questo composto sperimentale. PepMod non fornisce quantità o calendario; inserisci esplicitamente i tuoi valori di monitoraggio.';
+
+  @override
+  String get doseUnitPreferenceLabel => 'Unità della dose';
+
+  @override
+  String get doseUnitPreferenceDescription =>
+      'Scegli come visualizzare le dosi in unità di massa. La tua dose resta la stessa.';
+
+  @override
+  String get doseUnitPreferenceOriginal => 'Come inserita';
+
+  @override
+  String get doseUnitPreferencePreview => '500 mcg = 0,5 mg';
+
+  @override
+  String get doseUnitPreferenceIuNote =>
+      'Le IU e le unità della siringa restano invariate.';
 }

@@ -3207,4 +3207,20 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get investigationalProtocolEntryWarning =>
       'No approved protocol exists for this investigational compound. PepMod does not provide an amount or schedule; enter your own tracking values explicitly.';
+
+  @override
+  String get doseUnitPreferenceLabel => 'Dose units';
+
+  @override
+  String get doseUnitPreferenceDescription =>
+      'Choose how mass doses are displayed. Your dose stays the same.';
+
+  @override
+  String get doseUnitPreferenceOriginal => 'As entered';
+
+  @override
+  String get doseUnitPreferencePreview => '500 mcg = 0.5 mg';
+
+  @override
+  String get doseUnitPreferenceIuNote => 'IU and syringe units stay unchanged.';
 }

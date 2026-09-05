@@ -3,6 +3,9 @@ import 'conversion_workspace.dart';
 /// Units preference.
 enum UnitSystem { metric, imperial }
 
+/// Mass dose display preference. Existing records retain their stored units.
+enum DoseUnitPreference { original, mcg, mg }
+
 /// Per-user settings / profile. Persisted to Firestore at
 /// `users/{uid}/settings/profile`. A single document per user.
 class UserSettings {
@@ -11,6 +14,7 @@ class UserSettings {
     this.firstName = '',
     this.birthDate = '',
     this.units = UnitSystem.metric,
+    this.doseUnitPreference = DoseUnitPreference.original,
     this.localeCode = '',
     this.notificationsEnabled = false,
     this.onboardingCompleted = false,
@@ -34,6 +38,7 @@ class UserSettings {
   /// ISO-8601 date only (`yyyy-MM-dd`) captured during onboarding.
   String birthDate;
   UnitSystem units;
+  DoseUnitPreference doseUnitPreference;
 
   /// Empty follows the device language; otherwise an app-supported locale.
   String localeCode;
@@ -56,6 +61,7 @@ class UserSettings {
     String? firstName,
     String? birthDate,
     UnitSystem? units,
+    DoseUnitPreference? doseUnitPreference,
     String? localeCode,
     bool? notificationsEnabled,
     bool? onboardingCompleted,
@@ -73,6 +79,7 @@ class UserSettings {
       firstName: firstName ?? this.firstName,
       birthDate: birthDate ?? this.birthDate,
       units: units ?? this.units,
+      doseUnitPreference: doseUnitPreference ?? this.doseUnitPreference,
       localeCode: localeCode ?? this.localeCode,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
@@ -93,6 +100,7 @@ class UserSettings {
     'firstName': firstName,
     'birthDate': birthDate,
     'units': units.name,
+    'doseUnitPreference': doseUnitPreference.name,
     'localeCode': localeCode,
     'notificationsEnabled': notificationsEnabled,
     'onboardingCompleted': onboardingCompleted,
@@ -114,6 +122,10 @@ class UserSettings {
       firstName: (data['firstName'] as String?) ?? '',
       birthDate: (data['birthDate'] as String?) ?? '',
       units: _parseUnits(data['units'] as String?),
+      doseUnitPreference: DoseUnitPreference.values.firstWhere(
+        (value) => value.name == data['doseUnitPreference'],
+        orElse: () => DoseUnitPreference.original,
+      ),
       localeCode: (data['localeCode'] as String?) ?? '',
       notificationsEnabled: (data['notificationsEnabled'] as bool?) ?? false,
       onboardingCompleted: (data['onboardingCompleted'] as bool?) ?? false,

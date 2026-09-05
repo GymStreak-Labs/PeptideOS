@@ -3253,4 +3253,21 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get investigationalProtocolEntryWarning =>
       'Für diese Prüfsubstanz gibt es kein zugelassenes Protokoll. PepMod gibt weder Menge noch Zeitplan vor; gib deine eigenen Tracking-Werte ausdrücklich ein.';
+
+  @override
+  String get doseUnitPreferenceLabel => 'Dosiseinheiten';
+
+  @override
+  String get doseUnitPreferenceDescription =>
+      'Wähle, wie Dosen in Masseneinheiten angezeigt werden. Deine Dosis bleibt gleich.';
+
+  @override
+  String get doseUnitPreferenceOriginal => 'Wie eingegeben';
+
+  @override
+  String get doseUnitPreferencePreview => '500 mcg = 0,5 mg';
+
+  @override
+  String get doseUnitPreferenceIuNote =>
+      'IU und Spritzeneinheiten bleiben unverändert.';
 }

@@ -1,3 +1,5 @@
+import '../../../core/utils/dose_units.dart';
+import '../../../core/utils/dose_presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -357,6 +359,7 @@ class _InlineReconstitutionCalculatorState
   late final TextEditingController _waterMl;
   late final TextEditingController _doseMcg;
   bool _didLocalizeInitialValues = false;
+  String _doseUnit = 'mcg';
 
   @override
   void initState() {
@@ -377,7 +380,11 @@ class _InlineReconstitutionCalculatorState
     final locale = AppLocalizations.of(context).localeName;
     _peptideMg.text = NumberFormat('0.##', locale).format(5);
     _waterMl.text = NumberFormat('0.##', locale).format(2);
-    _doseMcg.text = NumberFormat('0.#', locale).format(widget.initialDoseMcg);
+    _doseUnit = context.displayDoseUnit('mcg');
+    _doseMcg.text = formatDoseNumber(
+      convertMassDose(widget.initialDoseMcg, 'mcg', _doseUnit),
+      locale,
+    );
     _didLocalizeInitialValues = true;
   }
 
@@ -391,7 +398,8 @@ class _InlineReconstitutionCalculatorState
 
   double get _mg => parseDecimalInput(_peptideMg.text) ?? 0;
   double get _ml => parseDecimalInput(_waterMl.text) ?? 0;
-  double get _dose => parseDecimalInput(_doseMcg.text) ?? 0;
+  double get _dose =>
+      convertMassDose(parseDecimalInput(_doseMcg.text) ?? 0, _doseUnit, 'mcg');
 
   double get _concentration => _ml <= 0 ? 0 : (_mg * 1000) / _ml; // mcg per ml
   double get _drawMl => _concentration <= 0 ? 0 : _dose / _concentration;
@@ -427,7 +435,7 @@ class _InlineReconstitutionCalculatorState
               const SizedBox(width: AppSpacing.cardGap),
               Expanded(
                 child: _NumField(
-                  label: l10n.doseShort,
+                  label: l10n.doseShort.replaceAll('mcg', _doseUnit),
                   controller: _doseMcg,
                   onChanged: () => setState(() {}),
                 ),

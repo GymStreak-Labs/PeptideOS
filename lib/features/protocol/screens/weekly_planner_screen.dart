@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../core/utils/dose_presentation.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../models/protocol.dart';
@@ -485,7 +486,7 @@ class _PlannedDoseCard extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
-                  '${_amount(context, item.schedule.dosePerInjection)} ${item.schedule.doseUnit}${item.schedule.syringeUnits > 0 ? ' · ${_amount(context, item.schedule.syringeUnits)} ${context.protocolL10n.unitsLabel}' : ''}',
+                  '${context.displayDose(item.schedule.dosePerInjection, item.schedule.doseUnit)}${item.schedule.syringeUnits > 0 ? ' · ${_amount(context, item.schedule.syringeUnits)} ${context.protocolL10n.unitsLabel}' : ''}',
                   style: AppTypography.bodyMedium.copyWith(
                     color: AppColors.textPrimary,
                   ),

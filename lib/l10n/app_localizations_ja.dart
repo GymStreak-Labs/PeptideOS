@@ -3111,4 +3111,20 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get investigationalProtocolEntryWarning =>
       'この治験段階の化合物に承認されたプロトコルはありません。PepModは量やスケジュールを提示しません。記録値は自分で明示的に入力してください。';
+
+  @override
+  String get doseUnitPreferenceLabel => '投与量の単位';
+
+  @override
+  String get doseUnitPreferenceDescription =>
+      '質量で表す投与量の表示方法を選択します。実際の投与量は変わりません。';
+
+  @override
+  String get doseUnitPreferenceOriginal => '入力時の単位';
+
+  @override
+  String get doseUnitPreferencePreview => '500 mcg = 0.5 mg';
+
+  @override
+  String get doseUnitPreferenceIuNote => 'IUとシリンジの目盛り単位は変わりません。';
 }
